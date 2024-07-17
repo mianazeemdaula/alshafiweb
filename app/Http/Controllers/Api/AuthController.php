@@ -38,7 +38,7 @@ class AuthController extends Controller
         $request->validate([
             'mobile' => 'required|unique:users',
             'name' => 'required',
-            'email' => 'required',
+            'email' => 'required|unique:users',
             'password' => 'required',
             // 'fcm_token' => 'required',
         ]);
@@ -74,8 +74,8 @@ class AuthController extends Controller
         $mobile = str_replace('+', '', $mobile);
         $user = User::where('mobile', $mobile)->first();
         if (! $user) {
-            return response()->json(['message' => 'User not found'], 204); 
+            return response()->json(['status' => false]); 
         }
-        return response()->json(['message' => 'User found'], 200);
+        return response()->json(['status' => true]);
     }
 }
