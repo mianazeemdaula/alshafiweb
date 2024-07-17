@@ -22,7 +22,7 @@ class AuthController extends Controller
         $mobile = str_replace('+', '', $mobile);
         $user = User::where('mobile', $mobile)->first();
         if (! $user) {
-            return response()->json(['email' => 'The provided credentials are incorrect.'], 204); 
+            return response()->json(['mobile_register' => false], 200);
         }
         if($request->has('fcm_token')){
             $user->fcm_token = $request->fcm_token;
