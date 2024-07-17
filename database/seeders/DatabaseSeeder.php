@@ -65,15 +65,10 @@ class DatabaseSeeder extends Seeder
             'Health & Beauty',
             'Sports & Travel',
             'Automotive',
-            'Books & Stationery',
-            'Groceries',
-            'Kids & Babies',
-            'Pets',
-            'Services',
-            'Others',
         ];
-        Category::insert(array_map(fn($category) => ['name' => $category], $categories));
-
+        foreach ($categories as $category) {
+            Category::create(['name' => $category]);
+        }
         // Products
         \App\Models\Product::factory(100)->create();
     }
