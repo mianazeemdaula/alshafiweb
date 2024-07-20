@@ -42,6 +42,9 @@ class OrderController extends Controller
         $user = auth()->user();
         $order = new Order();
         $order->user_id = $user->id;
+        $order->status = 'pending';
+        $order->payment_method_id = 1;
+        $order->number  = 'ORD-'.time();
         $order->save();
         $totalPrice = 0;
         foreach ($request->products as $product) {
