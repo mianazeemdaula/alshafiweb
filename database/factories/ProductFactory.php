@@ -26,6 +26,10 @@ class ProductFactory extends Factory
             'vat' => $this->faker->randomFloat(2, 1, 100),
             'stock' => $this->faker->numberBetween(1, 100),
             'weight' => $this->faker->numberBetween(1, 100),
+            'image' => $this->faker->imageUrl(),
+            'extra_info' => $this->faker->text,
+            'referr_discount' => $this->faker->numberBetween(1, 100),
+            'referal_discount' => $this->faker->numberBetween(1, 100),
         ];
     }
 }

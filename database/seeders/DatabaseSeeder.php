@@ -58,17 +58,7 @@ class DatabaseSeeder extends Seeder
 
         // Categories 
 
-        $categories = [
-            'Electronics',
-            'Fashion',
-            'Home & Living',
-            'Health & Beauty',
-            'Sports & Travel',
-            'Automotive',
-        ];
-        foreach ($categories as $category) {
-            Category::create(['name' => $category]);
-        }
+        \App\Models\Category::factory(5)->create();
         // Products
         \App\Models\Product::factory(100)->create();
     }
