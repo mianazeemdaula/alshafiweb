@@ -17,10 +17,6 @@ return new class extends Migration
             $table->unsignedBigInteger('product_id');
             $table->unsignedInteger('qty')->default(1);
             $table->double('price')->default(0.0);
-            $table->double('delivery_charges')->default(0.0);
-            $table->enum('delivery_type', ['take_away', 'delivery'])->nullable();
-            $table->date('delivery_date')->nullable();
-            $table->string('status',20)->nullable();
             $table->timestamps();
         });
     }
