@@ -16,5 +16,5 @@ Route::get('/categories', 'App\Http\Controllers\Api\CategoryController@index');
 Route::get('/products/featured', 'App\Http\Controllers\Api\ProductController@featured');
 Route::get('/products', 'App\Http\Controllers\Api\ProductController@index');
 Route::middleware('auth:sanctum')->group(function () {
-    
+    Route::resource('/orders', 'App\Http\Controllers\Api\OrderController');
 });
