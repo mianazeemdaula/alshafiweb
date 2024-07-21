@@ -56,8 +56,10 @@ class DatabaseSeeder extends Seeder
         City::create(['state_id' => 1, 'name' => 'Rawalpindi']);
         City::create(['state_id' => 1, 'name' => 'Gujranwala']);
 
-        // Categories 
+        // Add Some Payment Methods
+        \App\Models\PaymentMethod::factory(5)->create();
 
+        // Categories 
         \App\Models\Category::factory(5)->create();
         // Products
         \App\Models\Product::factory(100)->create();
