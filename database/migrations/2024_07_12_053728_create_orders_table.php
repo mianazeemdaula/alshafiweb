@@ -21,15 +21,16 @@ return new class extends Migration
             $table->dateTime('delivery_date')->nullable();
             $table->dateTime('payment_date')->nullable();
             $table->string('payment_status')->default('pending');
-            $table->string('shipping_address')->nullable();
-            $table->string('billing_address')->nullable();
-            $table->string('shipping_method')->nullable();
+            $table->string('street_address')->nullable();
+            $table->unsignedBigInteger('city_id');
+            $table->unsignedInteger('zip_code')->default(0);
             $table->unsignedInteger('shipping_cost')->default(0);
             $table->unsignedInteger('discount')->default(0);
             $table->unsignedInteger('total')->default(0);
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('payment_method_id')->references('id')->on('payment_methods')->onDelete('cascade');
+            $table->foreign('city_id')->references('id')->on('cities')->onDelete('cascade');
         });
     }
 

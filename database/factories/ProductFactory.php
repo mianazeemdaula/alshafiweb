@@ -28,8 +28,9 @@ class ProductFactory extends Factory
             'weight' => $this->faker->numberBetween(1, 100),
             'image' => $this->faker->imageUrl(),
             'extra_info' => $this->faker->text,
-            'referr_discount' => $this->faker->numberBetween(1, 100),
+            'referrer_discount' => $this->faker->numberBetween(1, 100),
             'referal_discount' => $this->faker->numberBetween(1, 100),
+            'buyer_discount' => $this->faker->numberBetween(1, 100),
         ];
     }
 }

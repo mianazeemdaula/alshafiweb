@@ -23,15 +23,20 @@ class CategoryController extends Controller
         // Validate the request...
         $request->validate([
             'name' => 'required|unique:categories|max:255',
-            'description' => 'required',
         ]);
 
         $category = new Category;
-
         $category->name = $request->name;
-        $category->description = $request->description;
-
+        if($request->has('image')){
+            $file = $request->file('image');
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $filePath = $file->storeAs('uploads', $fileName);
+            $category->image = '/uploads/' . $filePath;
+        }else{
+            $category->image = "https://via.placeholder.com/640x480.png/000077?text=quas"; 
+        }
         $category->save();
+        return redirect('admin/categories');
     }
 
     public function show($id)
@@ -49,20 +54,27 @@ class CategoryController extends Controller
         // Validate the request...
         $request->validate([
             'name' => 'required|unique:categories|max:255',
-            'description' => 'required',
+            // 'image' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         $category = Category::findOrFail($id);
 
         $category->name = $request->name;
-        $category->description = $request->description;
+        if($request->has('image')){
+            $file = $request->file('image');
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $filePath = $file->storeAs('uploads', $fileName);
+            $category->image = '/uploads/' . $filePath;
+        }
 
         $category->save();
+        return redirect()->route('admin.categories.index');
     }
 
     public function destroy($id)
     {
         $category = Category::findOrFail($id);
         $category->delete();
+        return redirect()->route('admin.categories.index');
     }
 }

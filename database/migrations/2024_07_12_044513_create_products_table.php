@@ -23,8 +23,9 @@ return new class extends Migration
             $table->boolean('featured')->default(false);
             $table->text('description')->nullable();
             $table->string('extra_info', 200)->nullable();
-            $table->integer('referr_discount')->default(0);
+            $table->integer('referrer_discount')->default(0);
             $table->integer('referal_discount')->default(0);
+            $table->integer('buyer_discount')->default(0);
             $table->string('image');
             $table->timestamps();
         });

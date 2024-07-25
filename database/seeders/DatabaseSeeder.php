@@ -27,6 +27,13 @@ class DatabaseSeeder extends Seeder
         Role::create(['name' => 'support']);
         Role::create(['name' => 'user']);
 
+        // User Levels
+        $levels = ['Sliver', 'Gold', 'Platinum', 'Diamond'];
+        \App\Models\UserLevel::factory(count($levels))->create()->each(function ($level) use ($levels) {
+            $level->name = $levels[$level->id - 1];
+            $level->save();
+        });
+
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',

@@ -29,8 +29,9 @@
             Category Form
           </h3>
         </div>
-        <form action="{{ route('admin.categories.store') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('admin.categories.update', $category->id) }}" method="POST" enctype="multipart/form-data">
           @csrf
+          @method('PUT')
           <div class="p-6.5">
             <div class="mb-4.5">
               <label class="mb-3 block text-sm font-medium text-black dark:text-white" >
@@ -40,6 +41,7 @@
                 name="name"
                 type="text"
                 placeholder="Name"
+                value="{{ $category->name }}"
                 class="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-normal text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
               />
             </div>

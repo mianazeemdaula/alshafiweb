@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
-
+use Illuminate\Support\Str;
 class AuthController extends Controller
 {
     public function login(Request $request)
@@ -41,6 +41,7 @@ class AuthController extends Controller
             'email' => 'required|unique:users',
             'password' => 'required',
             // 'fcm_token' => 'required',
+            'referral_id' => 'nullable',
         ]);
         $mobile = $request->mobile;
         if(substr($mobile, 0, 2) == '03'){
@@ -54,6 +55,10 @@ class AuthController extends Controller
         $user->mobile = $mobile;
         $user->password = bcrypt($request->password);
         $user->fcm_token = $request->fcm_token;
+        $user->ref_code = Str::random(10);
+        if($request->has('referral_id')){
+            $user->referrer = User::whereMobile($request->referral_id)->first()->id ?? null;
+        }
         $user->save();
         $token = $user->createToken('login')->plainTextToken;
         $data['token'] = $token;

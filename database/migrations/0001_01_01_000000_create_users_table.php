@@ -17,11 +17,15 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->string('mobile',16)->unique();
+            $table->string('mobile',18)->unique();
             $table->string('fcm_token',250)->nullable();
             $table->string('ref_code',20)->unique()->nullable();
+            $table->unsignedBigInteger('level_id')->nullable();
+            $table->unsignedBigInteger('referrer')->nullable();
+            $table->unsignedInteger('extra_discount')->default(0);
             $table->rememberToken();
             $table->timestamps();
+            $table->foreign('referrer')->references('id')->on('users')->onDelete('set null');
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

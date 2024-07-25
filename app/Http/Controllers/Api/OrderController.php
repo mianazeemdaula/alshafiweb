@@ -37,6 +37,10 @@ class OrderController extends Controller
             'products' => 'required|array',
             'products.*.id' => 'required|exists:products,id',
             'products.*.qty' => 'required|integer|min:1',
+            'address' => 'required|string',
+            'zip' => 'required|string',
+            'city' => 'required|exists:cities,id',
+            // 'payment_method' => 'required|exists:payment_methods,id',
         ]);
 
         $user = auth()->user();
@@ -45,6 +49,9 @@ class OrderController extends Controller
         $order->status = 'pending';
         $order->payment_method_id = 1;
         $order->number  = 'ORD-'.time();
+        $order->street_address = $request->address;
+        $order->zip_code = $request->zip;
+        $order->city_id = $request->city;
         $order->save();
         $totalPrice = 0;
         foreach ($request->products as $product) {

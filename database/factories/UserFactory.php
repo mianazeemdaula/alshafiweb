@@ -32,6 +32,8 @@ class UserFactory extends Factory
             'mobile' => fake()->phoneNumber(),
             'fcm_token' => Str::random(10),
             'ref_code' => Str::random(10),
+            'level_id' => null,
+            'referrer' => null,
         ];
     }
 
