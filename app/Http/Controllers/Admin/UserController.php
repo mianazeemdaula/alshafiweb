@@ -21,7 +21,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.users.create');
     }
 
     /**
@@ -29,7 +29,24 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|email',
+            'mobile' => 'required',
+            'ref_code' => 'required',
+            'extra_discount' => 'required',
+            'password' => 'required|min:6|confirmed',
+        ]);
+        $user = new User();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->mobile = $request->mobile;
+        $user->ref_code = $request->ref_code;
+        $user->extra_discount = $request->extra_discount;
+        $user->password = bcrypt($request->password);
+        $user->save();
+
+        return redirect()->route('admin.users.index');
     }
 
     /**
@@ -45,7 +62,8 @@ class UserController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $user = User::find($id);
+        return view('admin.users.edit', ['user' => $user]);
     }
 
     /**
@@ -53,7 +71,21 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|email',
+            'mobile' => 'required',
+            'ref_code' => 'required',
+            'extra_discount' => 'required',
+        ]);
+        $user = User::find($id);
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->mobile = $request->mobile;
+        $user->ref_code = $request->ref_code;
+        $user->extra_discount = $request->extra_discount;
+        $user->save();
+        return redirect()->route('admin.users.index');
     }
 
     /**

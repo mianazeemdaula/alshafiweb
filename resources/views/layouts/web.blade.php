@@ -5,7 +5,7 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
    
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React</title>
+    <title>Alshaafi Online </title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @yield('head')
   </head>
@@ -17,14 +17,17 @@
           <li class="p-2 hover:bg-gray-700">
             <FaHome class="inline-block mr-2 hover:animate-pulse" /> Dashboard
           </li>
-          <li class="p-2 hover:bg-gray-700 bg-green-500">
-            <FaBox class="inline-block mr-2" /> Products
+          <li class="p-2 hover:bg-gray-700 @if(request()->routeIs('admin.categories.*')) bg-green-500 @endif">
+            <a href="{{ route('admin.categories.index') }}"><FaBox class="inline-block mr-2" /> Categories</a>
           </li>
-          <li class="p-2 hover:bg-gray-700">
-            <FaUsers class="inline-block mr-2" /> Users
+          <li class="p-2 hover:bg-gray-700 @if(request()->routeIs('admin.products.*')) bg-green-500 @endif">
+            <a href="{{ route('admin.products.index') }}"><FaBox class="inline-block mr-2" /> Products</a>
           </li>
-          <li class="p-2 hover:bg-gray-700">
-            <FaCog class="inline-block mr-2" /> Settings
+          <li class="p-2 hover:bg-gray-700 @if(request()->routeIs('admin.users.*')) bg-green-500 @endif">
+            <a href="{{ route('admin.users.index') }}"><FaUsers class="inline-block mr-2" /> Users</a>
+          </li>
+          <li class="p-2 hover:bg-gray-700 @if(request()->routeIs('admin.levels.*')) bg-green-500 @endif">
+            <a href="{{ route('admin.levels.index') }}"><FaUsers class="inline-block mr-2" /> Levels</a>
           </li>
         </ul>
       </div>

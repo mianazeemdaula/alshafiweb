@@ -23,4 +23,6 @@ Route::get('/payment-methods', 'App\Http\Controllers\Api\PaymentMethodController
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::resource('/orders', 'App\Http\Controllers\Api\OrderController');
+
+    Route::post('/suggestions', 'App\Http\Controllers\Api\SuggestionController@store');
 });
