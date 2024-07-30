@@ -4,7 +4,7 @@
 <section class="mx-auto w-full max-w-7xl px-4 py-4">
     <div class="flex flex-col space-y-4 md:flex-row md:items-center md:justify-between md:space-y-0">
         <div>
-            <h2 class="text-lg font-semibold">Products</h2>
+            <h2 class="text-lg font-semibold">Users</h2>
         </div>
     </div>
     <div class="mt-6 flex flex-col">
@@ -14,37 +14,33 @@
                 <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                     <tr>
-                        <th scope="col"class="px-4 py-3.5 text-left text-sm font-normal text-gray-700">
-                            <span>Employee</span>
-                        </th>
-                        <th scope="col" class="px-12 py-3.5 text-left text-sm font-normal text-gray-700">
-                            Title
-                        </th>
-                        <th scope="col" class="px-4 py-3.5 text-left text-sm font-normal text-gray-700" >
-                            Status
-                        </th>
-                        <th scope="col" class="px-4 py-3.5 text-left text-sm font-normal text-gray-700">
-                            Discount
-                        </th>
-                        <th scope="col" class="relative py-3.5">
-                            <span class="text-center text-sm font-normal text-gray-700">Stock</span>
-                        </th>
-                        <th scope="col" class="px-4 py-3.5 text-left text-sm font-normal text-gray-700">
-                            Referrer Discount
-                        </th>
-                        <th scope="col" class="px-4 py-3.5 text-left text-sm font-normal text-gray-700">
-                            Referrer Discount
-                        </th>
-                        <th scope="col" class="px-4 py-3.5 text-left text-sm font-normal text-gray-700">
-                            Referrer Discount
-                        </th>
-                        <th scope="col" class="px-4 py-3.5 text-left text-sm font-normal text-gray-700">
-                            Action
-                        </th>
+                    <th scope="col"
+                        class="px-4 py-3.5 text-left text-sm font-normal text-gray-700">
+                        <span>User</span>
+                    </th>
+                    <th scope="col"
+                        class="px-12 py-3.5 text-left text-sm font-normal text-gray-700" >
+                        Email
+                    </th>
+                    <th
+                        scope="col"
+                        class="px-4 py-3.5 text-left text-sm font-normal text-gray-700"
+                    >
+                        Phone
+                    </th>
+                    <th scope="col" class="px-4 py-3.5 text-left text-sm font-normal text-gray-700" >
+                        Level
+                    </th>
+                    <th  scope="col" class="px-4 py-3.5 text-left text-sm font-normal text-gray-700" >
+                        Extra Discount
+                    </th>
+                    <th scope="col" class="relative py-3.5">
+                        <span class="text-center text-sm font-normal text-gray-700">Actions</span>
+                    </th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200 bg-white">
-                    @foreach($products as $item)
+                    @foreach($users as $item)
                     <tr>
                         <td class="whitespace-nowrap px-4 py-4">
                             <div class="flex items-center">
@@ -60,34 +56,26 @@
                                 {{ $item->name }}
                                 </div>
                                 <div class="text-sm text-gray-700">
-                                {{ $item->category->name ?? '' }}
+                                {{ $item->orders()->count() }} users
                                 </div>
                             </div>
                             </div>
                         </td>
                         <td class="whitespace-nowrap px-12 py-4">
-                            <div class="text-sm text-gray-900">{{ $item->price }} </div>
-                            <p class="line-through">{{ $item->price }}</p>
+                            <div class="text-sm text-gray-900">
+                            {{ $item->email }}
+                            </div>
                         </td>
                         <td class="whitespace-nowrap px-4 py-4">
                             <span class="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800">
-                            {{ $item->is_active ?? 'Active' }}
+                            {{ $item->mobile }}
                             </span>
                         </td>
                         <td class="whitespace-nowrap px-4 py-4 text-sm text-gray-700">
-                            {{ $item->discount }}%
+                            {{ $item->level->name ?? '' }}
                         </td>
                         <td class="whitespace-nowrap px-4 py-4 text-sm text-gray-700">
-                            {{ $item->stock }}
-                        </td>
-                        <td class="whitespace-nowrap px-4 py-4 text-sm text-gray-700">
-                            {{ $item->referrer_discount }}
-                        </td>
-                        <td class="whitespace-nowrap px-4 py-4 text-sm text-gray-700">
-                            {{ $item->referal_discount }}
-                        </td>
-                        <td class="whitespace-nowrap px-4 py-4 text-sm text-gray-700">
-                            {{ $item->buyer_discount }}
+                            {{ $item->extra_discount ?? '' }}
                         </td>
                         <td class="whitespace-nowrap px-4 py-4 text-right text-sm font-medium">
                             <a href="#" class="text-gray-700 hover:text-blue-500">

@@ -8,4 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class UserLevel extends Model
 {
     use HasFactory;
+
+    protected $fillable = ['name', 'min_points', 'discount', 'cashback'];
+
+    public function users()
+    {
+        return $this->hasMany(User::class,'level_id');
+    }
 }

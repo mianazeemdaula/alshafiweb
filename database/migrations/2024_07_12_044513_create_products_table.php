@@ -27,6 +27,7 @@ return new class extends Migration
             $table->integer('referal_discount')->default(0);
             $table->integer('buyer_discount')->default(0);
             $table->string('image');
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }

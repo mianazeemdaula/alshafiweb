@@ -1,0 +1,1 @@
+<label htmlFor="name2" class="text-lg font-poppins"> {{ $slot }} </label>

@@ -1,186 +1,106 @@
-@extends('layouts.admin')
+@extends('layouts.web')
+
 @section('content')
-<div class="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
-  <!-- Breadcrumb Start -->
-  <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between" >
-    <h2 class="text-title-md2 font-bold text-black dark:text-white">
-      Category
-    </h2>
-    <nav>
-      <ol class="flex items-center gap-2">
-        <li>
-          <a class="font-medium" href="index.html">Dashboard /</a>
-        </li>
-        <li class="font-medium text-primary">Category</li>
-      </ol>
-    </nav>
-  </div>
-  <!-- Breadcrumb End -->
+<div class="mx-auto ">
+    <div class="px-4 sm:px-8 md:px-12 bg-white rounded-lg mt-7 pt-2">
+        <form action="{{ route('admin.levels.update', $product->id) }}" method="POST">
+            @csrf
+            @method('PUT')
+            <div class="main grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-4">
+                <div class="flex flex-col gap-2">
+                    <x-label>Category</x-label>
+                    <x-select name="category_id">
+                        @foreach($categories as $category)
+                            <option value="{{ $category->id }}" {{ $product->category_id == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                        @endforeach
+                    </x-select>
+                </div>
 
-  <!-- ====== Form Layout Section Start -->
-  <div class="grid grid-cols-1 gap-9 sm:grid-cols-2">
-   
-    <div class="flex flex-col gap-9">
+                <div class="flex flex-col gap-2">
+                    <x-label>Name</x-label>
+                    <x-input name="name" value="{{ $product->name }}" />
+                </div>
 
-      <!-- Sign Up Form -->
-      <div class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark" >
-        <div class="border-b border-stroke px-6.5 py-4 dark:border-strokedark" >
-          <h3 class="font-medium text-black dark:text-white">
-            Category Form
-          </h3>
-        </div>
-        <form action="{{ route('admin.products.update', $product->id) }}" method="POST" enctype="multipart/form-data">
-          @csrf
-          @method('PUT')
-          <div class="p-6.5">
-            <div class="mb-4.5">
-              <label class="mb-3 block text-sm font-medium text-black dark:text-white" >
-                Category
-              </label>
-              <select name="category_id" id="" class="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-normal text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary">
-                @foreach($categories as $category)
-                  <option value="{{ $category->id }}">{{ $category->name }}</option>
-                @endforeach
-              </select>
-              @error('category_id') <span class="text-red-500">{{ $message }}</span> @enderror
-            </div>
-            <div class="mb-4.5">
-              <label class="mb-3 block text-sm font-medium text-black dark:text-white" >
-                Name
-              </label>
-              <input
-                name="name"
-                type="text"
-                placeholder="Name"
-                value="{{ $product->name }}"
-                class="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-normal text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-              />
-              @error('name') <span class="text-red-500">{{ $message }}</span> @enderror
-            </div>
-            <div class="mb-4.5">
-              <label class="mb-3 block text-sm font-medium text-black dark:text-white" >
-                Weight
-              </label>
-              <input
-                name="weight"
-                type="number"
-                placeholder="Weight"
-                step="0.01"
-                value="{{ $product->weight }}"
-                class="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-normal text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-              />
-              @error('weight') <span class="text-red-500">{{ $message }}</span> @enderror
-            </div>
-            <div class="mb-4.5">
-              <label class="mb-3 block text-sm font-medium text-black dark:text-white" >
-                Price
-              </label>
-              <input
-                name="price"
-                type="number"
-                step="0.01"
-                placeholder="Price"
-                value="{{ $product->price }}"
-                class="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-normal text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-              />
-              @error('price') <span class="text-red-500">{{ $message }}</span> @enderror
-            </div>
-            <div class="mb-4.5">
-              <label class="mb-3 block text-sm font-medium text-black dark:text-white" >
-                Discount
-              </label>
-              <input
-                name="discount"
-                type="number"
-                step="0.01"
-                placeholder="discount"
-                value="{{ $product->discount }}"
-                class="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-normal text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-              />
-              @error('discount') <span class="text-red-500">{{ $message }}</span> @enderror
-            </div>
-            <div class="mb-4.5">
-              <label class="mb-3 block text-sm font-medium text-black dark:text-white" >
-                Tax
-              </label>
-              <input
-                name="vat"
-                type="number"
-                step="0.01"
-                placeholder="Price"
-                value="{{ $product->vat }}"
-                class="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-normal text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-              />
-              @error('vat') <span class="text-red-500">{{ $message }}</span> @enderror
-            </div>
-            <div class="mb-4.5">
-              <label class="mb-3 block text-sm font-medium text-black dark:text-white" >
-                Stock
-              </label>
-              <input
-                name="stock"
-                type="number"
-                step="1"
-                placeholder="Stock"
-                value="{{ $product->stock }}"
-                class="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-normal text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-              />
-              @error('stock') <span class="text-red-500">{{ $message }}</span> @enderror
-            </div>
-            <div class="mb-4.5">
-              <label class="mb-3 block text-sm font-medium text-black dark:text-white" >
-                Referr Discount
-              </label>
-              <input
-                name="referr_discount"
-                type="number"
-                step="0.01"
-                placeholder="Referr Discount"
-                value="{{ $product->referr_discount }}"
-                class="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-normal text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-              />
-              @error('referr_discount') <span class="text-red-500">{{ $message }}</span> @enderror
-            </div>
+                <div class="flex flex-col gap-2">
+                    <x-label>Weight</x-label>
+                    <x-input name="weight" type="number" value="{{ $product->weight }}" />
+                </div>
 
-            <div class="mb-4.5">
-              <label class="mb-3 block text-sm font-medium text-black dark:text-white" >
-                Referal Discount
-              </label>
-              <input
-                name="referal_discount"
-                type="number"
-                step="0.01"
-                placeholder="referal Discount"
-                value="{{ $product->referal_discount }}"
-                class="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-normal text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-              />
-              @error('referal_discount') <span class="text-red-500">{{ $message }}</span> @enderror
+                <div class="flex flex-col gap-2">
+                    <x-label>Price</x-label>
+                    <x-input name="price" value="{{ $product->price }}" />
+                </div>
+
+                <div class="flex flex-col gap-2">
+                    <x-label>Discount</x-label>
+                    <x-input name="discount" value="{{ $product->discount }}" />
+                </div>
+
+                <div class="flex flex-col gap-2 ">
+                    <x-label>VAT</x-label>
+                    <x-input name="vat" value="{{ $product->vat }}" />
+                </div>
+
+                <div class="flex flex-col gap-2 ">
+                    <x-label>Stock</x-label>
+                    <x-input name="stock" value="{{ $product->stock }}" />
+                </div>
+
+                <div class="flex flex-col gap-2 ">
+                    <x-label>Featured</x-label>
+                    <input type="checkbox" name="featured" id="">
+                </div>
+
+                <div class="flex flex-col gap-2 ">
+                    <x-label>Referrer Discount</x-label>
+                    <x-input name="referrer_discount" value="{{ $product->referrer_discount }}" />
+                </div>
+
+                 <div class="flex flex-col gap-2 ">
+                    <x-label>Referal Discount</x-label>
+                    <x-input name="referal_discount" value="{{ $product->referal_discount }}" />
+                </div>
+
+                 <div class="flex flex-col gap-2 ">
+                    <x-label>Buyer Discount</x-label>
+                    <x-input name="buyer_discount" value="{{ $product->buyer_discount }}" />
+                </div>
+
+                <div class="flex flex-col gap-2 ">
+                    <x-label>Active</x-label>
+                    <input type="checkbox" name="is_active" id="" @if($product->is_active ?? true) checked @endif>
+                </div>
             </div>
-            <div class="mb-4.5">
-              <label class="mb-3 block text-sm font-medium text-black dark:text-white" >
-                Description
-              </label>
-              <textarea class="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-normal text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary" name="description" id="" cols="30" rows="10">{{ $product->description }}</textarea>
-              @error('description') <span class="text-red-500">{{ $message }}</span> @enderror
+            <div>
+                <x-label>Description</x-label>
+                <textarea name="description" id="mytextarea" cols="30" rows="10" class="w-full border border-gray-300 rounded-md p-2">{{ $product->description }}</textarea>
             </div>
-            <div class="mb-4.5">
-              <label class="mb-3 block text-sm font-medium text-black dark:text-white" >
-                Image / Logo
-              </label>
-              
-              <input
-                name="image"
-                type="file"
-                class="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-normal text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary" >
+            <div>
+                <x-label>Image</x-label>
+                <input type="file" name="image" id="" class="border border-gray-300 rounded-md p-2 w-full">
             </div>
-            <button class="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90" >
-              Update
-            </button>
-          </div>
+            <div class="flex py-6 space-x-4">
+                <button
+                    type="submit"
+                    class="font-poppins py-2 px-4 rounded-md bg-green-500 text-white hover:bg-green-600 cursor-pointer"
+                >Update Level</button>
+
+                <button
+                    type="submit"
+                    class="font-poppins py-2 px-4 rounded-md bg-red-500 text-white hover:bg-green-600 cursor-pointer"
+                >Cancel</button>
+            </div>
         </form>
-      </div>
     </div>
-  </div>
-  <!-- ====== Form Layout Section End -->
-</div>    
+</div>
+@endsection
+
+@section('head')
+    <script src="https://cdn.tiny.cloud/1/kput55tw7sf7m8nadh5lth5ghsdshrjgwfbj9ju8hcdigf4a/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+    <script>
+        tinymce.init({
+        selector: '#mytextarea'
+      });
+        
+    </script>
 @endsection

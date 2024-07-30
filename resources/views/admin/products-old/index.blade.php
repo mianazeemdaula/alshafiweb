@@ -1,4 +1,4 @@
-@extends('layouts.web')
+@extends('layouts.admin')
 @section('content')
   
   <div class="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
@@ -32,16 +32,18 @@
               </tr>
             </thead>
             <tbody>
-              @foreach ($categories as $item)
+              @foreach ($products as $item)
                   <tr>
                 <td
                   class="border-b border-[#eee] px-4 py-2 pl-9 dark:border-strokedark xl:pl-11"
                 >
                   <h5 class="font-medium text-black dark:text-white">{{ $item->name }}</h5>
-                  <p class="text-sm">{{ $item->products()->count() }} products</p>
+                  <p class="text-sm">{{ $item->category->name ?? 'N/A' }}</p>
                 </td>
                 <td class="border-b border-[#eee] px-4 py-2 dark:border-strokedark">
-                  <p class="text-black dark:text-white">Jan 13,2023</p>
+                  <div class="text-black dark:text-white w-[50px] ">
+                    <img class=" w-full" src="{{ $item->image }}" alt="" srcset="">
+                  </p>
                 </td>
                 <td class="border-b border-[#eee] px-4 py-2 dark:border-strokedark">
                   <p
@@ -71,7 +73,7 @@
                         />
                       </svg>
                     </button>
-                    <form action="{{ route('admin.categories.destroy', $item->id) }}" method="post">
+                    <form action="{{ route('admin.products.destroy', $item->id) }}" method="post">
                     <button class="hover:text-primary" type="submit">
                         @csrf
                         @method('delete')
@@ -103,7 +105,7 @@
                       
                       </button>
                     </form>
-                    <a class="hover:text-primary" href="{{ route('admin.categories.edit', $item->id) }}">
+                    <a class="hover:text-primary" href="{{ route('admin.products.edit', $item->id) }}">
                       <svg
                         class="fill-current"
                         width="18"
@@ -128,6 +130,9 @@
               @endforeach
             </tbody>
           </table>
+            <div class="p-2">
+            <x-paginate :paginator="$products" />
+          </div>
         </div>
       </div>
       <!-- ====== Table End -->
