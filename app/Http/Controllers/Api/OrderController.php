@@ -16,7 +16,8 @@ class OrderController extends Controller
     public function index()
     {
         $user = auth()->user();
-        $orders = $user->orders()->with('products')->get();
+        $orders = $user->orders()->with(['details','user','paymentMethod','city'])
+        ->orderBy('id','desc')->get();
         return response()->json($orders);
     }
 
@@ -74,7 +75,8 @@ class OrderController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $order = Order::with(['details','user','paymentMethod','city'])->find($id);
+        return response()->json($order);
     }
 
     /**

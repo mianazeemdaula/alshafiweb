@@ -43,4 +43,14 @@ class Order extends Model
     {
         return $this->hasMany(OrderDetail::class);
     }
+
+    public function city()
+    {
+        return $this->belongsTo(City::class);
+    }
+
+    public function paymentMethod()
+    {
+        return $this->belongsTo(PaymentMethod::class);
+    }
 }
