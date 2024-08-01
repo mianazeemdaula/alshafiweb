@@ -29,6 +29,21 @@
           <li class="p-2 hover:bg-gray-700 @if(request()->routeIs('admin.levels.*')) bg-green-500 @endif">
             <a href="{{ route('admin.levels.index') }}"><FaUsers class="inline-block mr-2" /> Levels</a>
           </li>
+          <li class="p-2 hover:bg-gray-700 @if(request()->routeIs('admin.orders.*')) bg-green-500 @endif">
+            <a href="{{ route('admin.orders.index') }}"><FaUsers class="inline-block mr-2" /> Orders</a>
+          </li>
+
+          <li class="p-2 hover:bg-gray-700 @if(request()->routeIs('admin.news.*')) bg-green-500 @endif">
+            <a href="{{ route('admin.news.index') }}"><FaUsers class="inline-block mr-2" /> News</a>
+          </li>
+
+          <li class="p-2 hover:bg-gray-700 @if(request()->routeIs('admin.suggestions.*')) bg-green-500 @endif">
+            <a href="{{ route('admin.suggestions.index') }}"><FaUsers class="inline-block mr-2" /> Suggestions</a>
+          </li>
+
+          <li class="p-2 hover:bg-gray-700 @if(request()->routeIs('admin.posts.*')) bg-green-500 @endif">
+            <a href="{{ route('admin.posts.index') }}"><FaUsers class="inline-block mr-2" /> Posts</a>
+          </li>
         </ul>
       </div>
       <div class="flex-1 flex flex-col ">

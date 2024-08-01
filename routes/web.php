@@ -18,6 +18,10 @@ Route::middleware('auth')->group(function () {
         Route::resource('products', 'App\Http\Controllers\Admin\ProductController');
         Route::resource('levels', 'App\Http\Controllers\Admin\LevelController');
         Route::resource('users', 'App\Http\Controllers\Admin\UserController');
+        Route::resource('orders', 'App\Http\Controllers\Admin\OrderController');
+        Route::resource('news', 'App\Http\Controllers\Admin\OrderController');
+        Route::resource('suggestions', 'App\Http\Controllers\Admin\OrderController');
+        Route::resource('posts', 'App\Http\Controllers\Admin\BlogPostController');
     });
     Route::get('logout', 'App\Http\Controllers\AuthController@logout');
 });
