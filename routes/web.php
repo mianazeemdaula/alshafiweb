@@ -21,3 +21,14 @@ Route::middleware('auth')->group(function () {
     });
     Route::get('logout', 'App\Http\Controllers\AuthController@logout');
 });
+
+
+Route::get('/send-mail', function () {
+    try {
+        $order = \App\Models\Order::find(1);
+        \Mail::to('mazeemrehan@gmail.com', 'Azeem Rehan')->send(new App\Mail\OrderStatus($order));
+        return 'Mail sent successfully';
+    } catch (\Exception $e) {
+        return $e->getMessage();
+    }
+});
