@@ -9,11 +9,7 @@ export default {
     "./resources/**/*.css",
   ],
   theme: {
-    screens: {
-      '2xsm': '375px',
-      'xsm': '425px',
-      '3xl': '1500px',
-    },
+    
     fontFamily: {
       satoshi: ['Satoshi', 'sans-serif'],
     },
