@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('admin.levels.create');
+    return view('auth.login');
 });
 
 Route::get('/login', 'App\Http\Controllers\AuthController@login');
@@ -11,8 +11,8 @@ Route::post('/login', 'App\Http\Controllers\AuthController@dologin')->name('logi
 
 Route::middleware('auth')->group(function () {
     Route::get('dashboard', function () {
-        return view('dashboard');
-    });
+        return view('auth.dashboard');
+    })->name('dashboard');
     Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
         Route::resource('categories', 'App\Http\Controllers\Admin\CategoryController');
         Route::resource('products', 'App\Http\Controllers\Admin\ProductController');
@@ -23,7 +23,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('suggestions', 'App\Http\Controllers\Admin\OrderController');
         Route::resource('posts', 'App\Http\Controllers\Admin\BlogPostController');
     });
-    Route::get('logout', 'App\Http\Controllers\AuthController@logout');
+    Route::post('logout', 'App\Http\Controllers\AuthController@logout');
 });
 
 

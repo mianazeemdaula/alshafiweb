@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 class AuthController extends Controller
 {
     public function login(){
-        return view('auth.signin');
+        return view('auth.login');
     }
 
     public function logout(){
@@ -16,6 +16,7 @@ class AuthController extends Controller
     }
 
     public function dologin(Request $request){
+        return $request->all();
         $request->validate([
             'email' => 'required',
             'password' => 'required',
