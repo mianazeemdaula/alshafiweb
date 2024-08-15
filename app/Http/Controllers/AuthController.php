@@ -28,4 +28,15 @@ class AuthController extends Controller
         }
         return redirect()->intended('/dashboard');
     }
+
+    public function dashboard(){
+        $stats = [
+            'users' => \App\Models\User::count(),
+            'products' => \App\Models\Product::count(),
+            'categories' => \App\Models\Category::count(),
+            'orders' => \App\Models\Order::count(),
+            'revenue' => \App\Models\Order::sum('total'),
+        ];
+        return view('auth.dashboard', compact('stats'));
+    }
 }
