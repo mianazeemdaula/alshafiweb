@@ -25,5 +25,5 @@
             <p class="text-2xl font-bold">RS. {{ $stats['revenue'] }}</p>
         </div>
     </div>
-    </div>
+</div>
 @endsection
