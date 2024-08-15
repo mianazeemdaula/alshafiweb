@@ -9,62 +9,15 @@
         </div>
     </div>
     <div class="mt-6 flex flex-col space-y-4">
-        <!-- Card Layout for Small Screens -->
-        <div class="block lg:hidden">
-            @foreach($products as $item)
-            <div class="bg-white shadow rounded-lg p-4 mb-4">
-                <div class="flex items-center space-x-4">
-                    <img
-                        class="h-20 w-20 rounded-full object-cover"
-                        src="https://images.unsplash.com/photo-1628157588553-5eeea00af15c?ixlib=rb-4.0.3&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1160&amp;q=80"
-                        alt="Product Image"
-                    />
-                    <div>
-                        <div class="text-lg font-medium text-gray-900">
-                            {{ $item->name }}
-                        </div>
-                        <div class="text-sm text-gray-700">
-                            Category: {{ $item->category->name ?? 'N/A' }}
-                        </div>
-                        <div class="text-sm text-gray-700">
-                            Price: {{ $item->price }}
-                        </div>
-                        <div class="text-sm text-gray-700">
-                            Status: {{ $item->is_active ? 'Active' : 'Inactive' }}
-                        </div>
-                        <div class="text-sm text-gray-700">
-                            Discount: {{ $item->discount }}%
-                        </div>
-                        <div class="text-sm text-gray-700">
-                            Stock: {{ $item->stock }}
-                        </div>
-                        <div class="text-sm text-gray-700">
-                            Referrer Discount: {{ $item->referrer_discount }}
-                        </div>
-                        <div class="text-sm text-gray-700">
-                            Referral Discount: {{ $item->referal_discount }}
-                        </div>
-                        <div class="text-sm text-gray-700">
-                            Buyer Discount: {{ $item->buyer_discount }}
-                        </div>
-                    </div>
-                </div>
-                <div class="mt-4">
-                    <a href="#" class="text-blue-500 hover:text-blue-700">View Details</a>
-                </div>
-            </div>
-            @endforeach
-        </div>
-
         <!-- Table Layout for Larger Screens -->
-        <div class="hidden lg:block">
+        
             <div class="overflow-x-auto">
                 <div class="inline-block min-w-full align-middle">
                     <div class="overflow-hidden border border-gray-200 md:rounded-lg">
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-50">
                                 <tr>
-                                    <th scope="col" class="px-2 py-2 text-left text-xs font-normal text-gray-700 sm:px-4 sm:py-3.5">Employee</th>
+                                    <th scope="col" class="px-2 py-2 text-left text-xs font-normal text-gray-700 sm:px-4 sm:py-3.5">Product</th>
                                     <th scope="col" class="px-2 py-2 text-left text-xs font-normal text-gray-700 sm:px-4 sm:py-3.5">Title</th>
                                     <th scope="col" class="px-2 py-2 text-left text-xs font-normal text-gray-700 sm:px-4 sm:py-3.5">Status</th>
                                     <th scope="col" class="px-2 py-2 text-left text-xs font-normal text-gray-700 sm:px-4 sm:py-3.5">Discount</th>
@@ -143,8 +96,7 @@
                     </div>
                 </div>
             </div>
-        </div>
     </div>
-    <x-pagging />
+    <x-pagging :paginator=$products />
 </section>
 @endsection

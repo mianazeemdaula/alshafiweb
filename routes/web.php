@@ -20,7 +20,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('users', 'App\Http\Controllers\Admin\UserController');
         Route::resource('orders', 'App\Http\Controllers\Admin\OrderController');
         Route::resource('news', 'App\Http\Controllers\Admin\OrderController');
-        Route::resource('suggestions', 'App\Http\Controllers\Admin\OrderController');
+        Route::resource('suggestions', 'App\Http\Controllers\Admin\SuggustionController');
         Route::resource('posts', 'App\Http\Controllers\Admin\BlogPostController');
     });
     Route::post('logout', 'App\Http\Controllers\AuthController@logout');

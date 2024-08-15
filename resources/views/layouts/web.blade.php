@@ -24,25 +24,25 @@
           <a href="{{ route('admin.categories.index') }}" class="block"><i class="fa-solid fa-share-alt mr-2"></i> Categories</a>
         </li>
         <li class="p-2 hover:bg-gray-700 hover:animate-pulse @if(request()->routeIs('admin.products.*')) bg-green-500 @endif">
-          <a href="{{ route('admin.products.index') }}" class="block"><i class="fa-solid fa-home mr-2"></i> Products</a>
+          <a href="{{ route('admin.products.index') }}" class="block"><i class="fa-solid fa-tag mr-2"></i> Products</a>
         </li>
         <li class="p-2 hover:bg-gray-700 hover:animate-pulse @if(request()->routeIs('admin.users.*')) bg-green-500 @endif">
           <a href="{{ route('admin.users.index') }}" class="block"><i class="fa-solid fa-users mr-2"></i> Users</a>
         </li>
         <li class="p-2 hover:bg-gray-700 hover:animate-pulse @if(request()->routeIs('admin.levels.*')) bg-green-500 @endif">
-          <a href="{{ route('admin.levels.index') }}" class="block"><i class="fa-solid fa-home mr-2"></i> Levels</a>
+          <a href="{{ route('admin.levels.index') }}" class="block"><i class="fa-solid fa-chart-line mr-2"></i> Levels</a>
         </li>
         <li class="p-2 hover:bg-gray-700 hover:animate-pulse @if(request()->routeIs('admin.orders.*')) bg-green-500 @endif">
-          <a href="{{ route('admin.orders.index') }}" class="block"><i class="fa-solid fa-home mr-2"></i> Orders</a>
+          <a href="{{ route('admin.orders.index') }}" class="block"><i class="fa-solid fa-cart-shopping mr-2"></i> Orders</a>
         </li>
         <li class="p-2 hover:bg-gray-700 hover:animate-pulse @if(request()->routeIs('admin.news.*')) bg-green-500 @endif">
-          <a href="{{ route('admin.news.index') }}" class="block"><i class="fa-solid fa-home mr-2"></i> News</a>
+          <a href="{{ route('admin.news.index') }}" class="block"><i class="fa-solid fa-newspaper mr-2"></i> News</a>
         </li>
         <li class="p-2 hover:bg-gray-700 hover:animate-pulse @if(request()->routeIs('admin.suggestions.*')) bg-green-500 @endif">
-          <a href="{{ route('admin.suggestions.index') }}" class="block"><i class="fa-solid fa-home mr-2"></i> Suggestions</a>
+          <a href="{{ route('admin.suggestions.index') }}" class="block"><i class="fa-solid fa-handshake-angle mr-2"></i> Suggestions</a>
         </li>
         <li class="p-2 hover:bg-gray-700  hover:animate-pulse @if(request()->routeIs('admin.posts.*')) bg-green-500 @endif">
-          <a href="{{ route('admin.posts.index') }}" class="block"><i class="fa-solid fa-home mr-2"></i> Posts</a>
+          <a href="{{ route('admin.posts.index') }}" class="block"><i class="fa-solid fa-blog mr-2"></i> Posts</a>
         </li>
         <li class="p-2 hover:bg-gray-700  hover:animate-pulse">
           <form action="{{ url('logout') }}" method="post">
@@ -68,7 +68,7 @@
         </div>
       </header>
 
-      <main class="flex-1 p-6 bg-gray-100 overflow-y-auto">
+      <main class="flex-1 p-4 bg-gray-100">
         @yield('content')
       </main>
     </div>

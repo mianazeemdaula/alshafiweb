@@ -1,135 +1,78 @@
 @extends('layouts.web')
 
 @section('content')
-<section class="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
-  <!-- Breadcrumb Start -->
-  <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-    <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
-      Categories
-    </h2>
-    <nav>
-      <ol class="flex items-center gap-2">
-        <li>
-          <a class="font-medium text-gray-600 dark:text-gray-400" href="index.html">Dashboard /</a>
-        </li>
-        <li class="font-medium text-primary">Categories</li>
-      </ol>
-    </nav>
-  </div>
-  <!-- Breadcrumb End -->
-
-  <!-- ====== Table Start -->
-  <div class="rounded-lg border border-gray-200 bg-[#F3F4F6] shadow-lg dark:border-gray-700 dark:bg-gray-800">
-    <div class="overflow-x-auto">
-      <!-- Small Screens: Card Layout -->
-      <div class="block lg:hidden">
-        @foreach ($categories as $item)
-          <div class="bg-white shadow rounded-lg p-4 mb-4">
-            <div class="flex items-center space-x-4 mb-4 ">
-              <img
-                class="h-20 w-20 rounded-full object-cover"
-                src="https://via.placeholder.com/150"
-                alt="Category Image"
-              />
-              <div>
-                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{{ $item->name }}</h3>
-                <p class="text-sm text-gray-700 dark:text-gray-300">{{ $item->products()->count() }} products</p>
-                <p class="text-sm text-gray-500 dark:text-gray-400">Jan 13, 2023</p>
-                <p class="text-sm text-green-600 dark:text-green-400">Paid</p>
-                <div class="mt-4 flex space-x-3">
-                <button class="hover:text-primary">
-                    <svg class="fill-current" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M8.99981 14.8219C3.43106 14.8219 0.674805 9.50624 0.562305 9.28124C0.47793 9.11249 0.47793 8.88749 0.562305 8.71874C0.674805 8.49374 3.43106 3.20624 8.99981 3.20624C14.5686 3.20624 17.3248 8.49374 17.4373 8.71874C17.5217 8.88749 17.5217 9.11249 17.4373 9.28124C17.3248 9.50624 14.5686 14.8219 8.99981 14.8219ZM1.85605 8.99999C2.4748 10.0406 4.89356 13.5562 8.99981 13.5562C13.1061 13.5562 15.5248 10.0406 16.1436 8.99999C15.5248 7.95936 13.1061 4.44374 8.99981 4.44374C4.89356 4.44374 2.4748 7.95936 1.85605 8.99999Z" fill="" />
-                      <path d="M9 11.3906C7.67812 11.3906 6.60938 10.3219 6.60938 9C6.60938 7.67813 7.67812 6.60938 9 6.60938C10.3219 6.60938 11.3906 7.67813 11.3906 9C11.3906 10.3219 10.3219 11.3906 9 11.3906ZM9 7.875C8.38125 7.875 7.875 8.38125 7.875 9C7.875 9.61875 8.38125 10.125 9 10.125C9.61875 10.125 10.125 9.61875 10.125 9C10.125 8.38125 9.61875 7.875 9 7.875Z" fill="" />
-                    </svg>
-                  </button>
-                  <a class="hover:text-primary" href="{{ route('admin.categories.edit', $item->id) }}">
-                    <svg class="fill-current" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M16.8754 11.6719C16.5379 11.6719 16.2285 11.9531 16.2285 12.3187V14.8219C16.2285 15.075 16.0316 15.2719 15.7785 15.2719H2.22227C1.96914 15.2719 1.77227 15.075 1.77227 14.8219V12.3187C1.77227 11.9812 1.49102 11.6719 1.12539 11.6719C0.759766 11.6719 0.478516 11.9531 0.478516 12.3187V14.8219C0.478516 15.7781 1.23789 16.5375 2.19414 16.5375H15.7785C16.7348 16.5375 17.4941 15.7781 17.4941 14.8219V12.3187C17.5223 11.9531 17.2129 11.6719 16.8754 11.6719Z" fill="" />
-                      <path d="M8.55074 12.3469C8.66324 12.4594 8.83199 12.5156 9.00074 12.5156C9.16949 12.5156 9.31012 12.4594 9.45074 12.3469L13.4726 8.43752C13.7257 8.1844 13.7257 7.79065 13.5007 7.53752C13.2476 7.2844 12.8539 7.2844 12.6007 7.5094L9.64762 10.4063V2.1094C9.64762 1.7719 9.36637 1.46252 9.00074 1.46252C8.66324 1.46252 8.35387 1.74377 8.35387 2.1094V10.4063L5.40074 7.53752C5.14762 7.2844 4.75387 7.31252 4.50074 7.53752C4.24762 7.79065 4.27574 8.1844 4.50074 8.43752L8.55074 12.3469Z" fill="" />
-                    </svg>
-                  </a>
-                  <form action="{{ route('admin.categories.destroy', $item->id) }}" method="post">
-                    <button class="hover:text-primary" type="submit">
-                      @csrf
-                      @method('delete')
-                      <svg class="fill-current" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M13.7535 2.47502H11.5879V1.9969C11.5879 1.15315 10.9129 0.478149 10.0691 0.478149H7.90352C7.05977 0.478149 6.38477 1.15315 6.38477 1.9969V2.47502H4.21914C3.40352 2.47502 2.72852 3.15002 2.72852 3.96565V4.8094C2.72852 5.42815 3.09414 5.9344 3.62852 6.1594L4.07852 15.4688C4.13477 16.6219 5.09102 17.5219 6.24414 17.5219H11.7004C12.8535 17.5219 13.8098 16.6219 13.866 15.4688L14.3441 6.13127C14.8785 5.90627 15.2441 5.3719 15.2441 4.78127V3.93752C15.2441 3.15002 14.5691 2.47502 13.7535 2.47502ZM7.67852 1.9969C7.67852 1.85627 7.79102 1.74377 7.93164 1.74377H10.0973C10.2379 1.74377 10.3504 1.85627 10.3504 1.9969V2.47502H7.70664V1.9969H7.67852ZM4.02227 3.96565C4.02227 3.85315 4.10664 3.74065 4.24727 3.74065H13.7535C13.866 3.74065 13.9785 3.82502 13.9785 3.96565V4.8094C13.9785 4.9219 13.8941 5.0344 13.7535 5.0344H4.24727C4.13477 5.0344 4.02227 4.95002 4.02227 4.8094V3.96565ZM12.665 15.3531C12.6379 15.9938 12.1285 16.5031 11.486 16.5031H6.02977C5.38727 16.5031 4.90602 15.9938 4.87852 15.3531L4.44414 6.21565H13.0716L12.665 15.3531Z" fill="" />
-                        <path d="M9.00039 9.11255C8.63477 9.11255 8.35352 9.3938 8.35352 9.75942V13.3313C8.35352 13.6688 8.63477 13.9782 9.00039 13.9782C9.33789 13.9782 9.64727 13.6969 9.64727 13.3313V9.75942C9.64727 9.3938 9.33789 9.11255 9.00039 9.11255Z" fill="" />
-                        <path d="M11.2502 9.67504C10.8846 9.64692 10.6033 9.90004 10.5752 10.2657L10.4064 12.7407C10.3783 13.0782 10.6314 13.3875 10.9971 13.4157C11.0252 13.4157 11.0252 13.4157 11.0533 13.4157C11.3908 13.4157 11.6721 13.1625 11.6721 12.825L11.8408 10.35C11.8408 9.98442 11.5877 9.70317 11.2502 9.67504Z" fill="" />
-                        <path d="M6.72245 9.67504C6.38495 9.70317 6.1037 10.0125 6.13182 10.35L6.3287 12.825C6.35683 13.1625 6.63808 13.4157 6.94745 13.4157C6.97558 13.4157 6.97558 13.4157 7.0037 13.4157C7.3412 13.3875 7.62245 13.0782 7.59433 12.7407L7.39745 10.2657C7.39745 9.90004 7.08808 9.64692 6.72245 9.67504Z" fill="" />
-                      </svg>
-                    </button>
-                  </form>
-                </div>
-              </div>
-            </div>
-          </div>
-        @endforeach
-      </div>
-
-      <!-- Large Screens: Table Layout -->
-      <div class="hidden lg:block">
-        <table class="w-full table-auto divide-y divide-gray-200 dark:divide-gray-700">
-          <thead class="bg-gray-50 dark:bg-gray-700">
-            <tr>
-              <th class="px-4 py-2 text-left text-xs font-medium text-gray-700 dark:text-gray-300">Id</th>
-              <th class="px-4 py-2 text-left text-xs font-medium text-gray-700 dark:text-gray-300">Name</th>
-              <th class="px-4 py-2 text-left text-xs font-medium text-gray-700 dark:text-gray-300">Image</th>
-              <th class="px-4 py-2 text-left text-xs font-medium text-gray-700 dark:text-gray-300">Action</th>
-            </tr>
-          </thead>
-          <tbody class="bg-white dark:bg-gray-800">
-            @foreach ($categories as $item)
-              <tr>
-                <td class="border-b border-gray-200 px-4 py-2 text-sm text-gray-900 dark:text-gray-100">
-                  {{ $item->id }}
-                </td>
-                <td class="border-b border-gray-200 px-4 py-2 text-sm text-gray-900 dark:text-gray-100">
-                  {{ $item->name }}
-                </td>
-                <td class="border-b border-gray-200 px-4 py-2 text-sm text-gray-900 dark:text-gray-100">
-                  <img
-                    class="h-12 w-12 rounded-full object-cover"
-                    src="https://via.placeholder.com/150"
-                    alt="Category Image"
-                  />
-                </td>
-                <td class="border-b border-[#eee] px-4 py-2 text-xs sm:text-sm md:text-base dark:border-strokedark">
-                <div class="flex items-center space-x-3.5">
-                  <button class="hover:text-primary">
-                    <svg class="fill-current" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M8.99981 14.8219C3.43106 14.8219 0.674805 9.50624 0.562305 9.28124C0.47793 9.11249 0.47793 8.88749 0.562305 8.71874C0.674805 8.49374 3.43106 3.20624 8.99981 3.20624C14.5686 3.20624 17.3248 8.49374 17.4373 8.71874C17.5217 8.88749 17.5217 9.11249 17.4373 9.28124C17.3248 9.50624 14.5686 14.8219 8.99981 14.8219ZM1.85605 8.99999C2.4748 10.0406 4.89356 13.5562 8.99981 13.5562C13.1061 13.5562 15.5248 10.0406 16.1436 8.99999C15.5248 7.95936 13.1061 4.44374 8.99981 4.44374C4.89356 4.44374 2.4748 7.95936 1.85605 8.99999Z" fill="" />
-                      <path d="M9 11.3906C7.67812 11.3906 6.60938 10.3219 6.60938 9C6.60938 7.67813 7.67812 6.60938 9 6.60938C10.3219 6.60938 11.3906 7.67813 11.3906 9C11.3906 10.3219 10.3219 11.3906 9 11.3906ZM9 7.875C8.38125 7.875 7.875 8.38125 7.875 9C7.875 9.61875 8.38125 10.125 9 10.125C9.61875 10.125 10.125 9.61875 10.125 9C10.125 8.38125 9.61875 7.875 9 7.875Z" fill="" />
-                    </svg>
-                  </button>
-                  <form action="{{ route('admin.categories.destroy', $item->id) }}" method="post">
-                    <button class="hover:text-primary" type="submit">
-                      @csrf
-                      @method('delete')
-                      <svg class="fill-current" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M13.7535 2.47502H11.5879V1.9969C11.5879 1.15315 10.9129 0.478149 10.0691 0.478149H7.90352C7.05977 0.478149 6.38477 1.15315 6.38477 1.9969V2.47502H4.21914C3.40352 2.47502 2.72852 3.15002 2.72852 3.96565V4.8094C2.72852 5.42815 3.09414 5.9344 3.62852 6.1594L4.07852 15.4688C4.13477 16.6219 5.09102 17.5219 6.24414 17.5219H11.7004C12.8535 17.5219 13.8098 16.6219 13.866 15.4688L14.3441 6.13127C14.8785 5.90627 15.2441 5.3719 15.2441 4.78127V3.93752C15.2441 3.15002 14.5691 2.47502 13.7535 2.47502ZM7.67852 1.9969C7.67852 1.85627 7.79102 1.74377 7.93164 1.74377H10.0973C10.2379 1.74377 10.3504 1.85627 10.3504 1.9969V2.47502H7.70664V1.9969H7.67852ZM4.02227 3.96565C4.02227 3.85315 4.10664 3.74065 4.24727 3.74065H13.7535C13.866 3.74065 13.9785 3.82502 13.9785 3.96565V4.8094C13.9785 4.9219 13.8941 5.0344 13.7535 5.0344H4.24727C4.13477 5.0344 4.02227 4.95002 4.02227 4.8094V3.96565ZM12.665 15.3531C12.6379 15.9938 12.1285 16.5031 11.486 16.5031H6.02977C5.38727 16.5031 4.90602 15.9938 4.87852 15.3531L4.44414 6.21565H13.0716L12.665 15.3531Z" fill="" />
-                        <path d="M9.00039 9.11255C8.63477 9.11255 8.35352 9.3938 8.35352 9.75942V13.3313C8.35352 13.6688 8.63477 13.9782 9.00039 13.9782C9.33789 13.9782 9.64727 13.6969 9.64727 13.3313V9.75942C9.64727 9.3938 9.33789 9.11255 9.00039 9.11255Z" fill="" />
-                        <path d="M11.2502 9.67504C10.8846 9.64692 10.6033 9.90004 10.5752 10.2657L10.4064 12.7407C10.3783 13.0782 10.6314 13.3875 10.9971 13.4157C11.0252 13.4157 11.0252 13.4157 11.0533 13.4157C11.3908 13.4157 11.6721 13.1625 11.6721 12.825L11.8408 10.35C11.8408 9.98442 11.5877 9.70317 11.2502 9.67504Z" fill="" />
-                        <path d="M6.72245 9.67504C6.38495 9.70317 6.1037 10.0125 6.13182 10.35L6.3287 12.825C6.35683 13.1625 6.63808 13.4157 6.94745 13.4157C6.97558 13.4157 6.97558 13.4157 7.0037 13.4157C7.3412 13.3875 7.62245 13.0782 7.59433 12.7407L7.39745 10.2657C7.39745 9.90004 7.08808 9.64692 6.72245 9.67504Z" fill="" />
-                      </svg>
-                    </button>
-                  </form>
-                  <a class="hover:text-primary" href="{{ route('admin.categories.edit', $item->id) }}">
-                    <svg class="fill-current" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M16.8754 11.6719C16.5379 11.6719 16.2285 11.9531 16.2285 12.3187V14.8219C16.2285 15.075 16.0316 15.2719 15.7785 15.2719H2.22227C1.96914 15.2719 1.77227 15.075 1.77227 14.8219V12.3187C1.77227 11.9812 1.49102 11.6719 1.12539 11.6719C0.759766 11.6719 0.478516 11.9531 0.478516 12.3187V14.8219C0.478516 15.7781 1.23789 16.5375 2.19414 16.5375H15.7785C16.7348 16.5375 17.4941 15.7781 17.4941 14.8219V12.3187C17.5223 11.9531 17.2129 11.6719 16.8754 11.6719Z" fill="" />
-                      <path d="M8.55074 12.3469C8.66324 12.4594 8.83199 12.5156 9.00074 12.5156C9.16949 12.5156 9.31012 12.4594 9.45074 12.3469L13.4726 8.43752C13.7257 8.1844 13.7257 7.79065 13.5007 7.53752C13.2476 7.2844 12.8539 7.2844 12.6007 7.5094L9.64762 10.4063V2.1094C9.64762 1.7719 9.36637 1.46252 9.00074 1.46252C8.66324 1.46252 8.35387 1.74377 8.35387 2.1094V10.4063L5.40074 7.53752C5.14762 7.2844 4.75387 7.31252 4.50074 7.53752C4.24762 7.79065 4.27574 8.1844 4.50074 8.43752L8.55074 12.3469Z" fill="" />
-                    </svg>
-                  </a>
-                </div>
-              </td>
-              </tr>
-            @endforeach
-          </tbody>
-        </table>
-      </div>
+<section class="mx-auto w-full h-screen max-w-7xl px-4 py-4">
+    <div class="flex flex-col space-y-4 md:flex-row md:items-center md:justify-between md:space-y-0">
+        <div class="flex items-center justify-between min-w-full">
+            <h2 class="text-lg font-semibold">Categories</h2>
+            <a href="{{ route('admin.categories.create') }}" class="px-5 text-white bg-black py-2 rounded-lg hover:bg-gray-800" >Create</a>
+        </div>
     </div>
-  </div>
-  <!-- ====== Table End -->
+    <div class="mt-6 flex flex-col space-y-4">
+        <!-- Table Layout for Larger Screens -->
+        <div class="">
+            <div class="overflow-x-auto">
+                <div class="inline-block min-w-full align-middle">
+                    <div class="overflow-hidden border border-gray-200 md:rounded-lg">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th scope="col" class="px-2 py-2 text-left text-xs font-normal text-gray-700 sm:px-4 sm:py-3.5">Image</th>
+                                    <th scope="col" class="px-2 py-2 text-left text-xs font-normal text-gray-700 sm:px-4 sm:py-3.5">Name</th>
+                                    <th scope="col" class="px-2 py-2 text-left text-xs font-normal text-gray-700 sm:px-4 sm:py-3.5">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200 bg-white">
+                                @if($categories->isEmpty())
+                                    <tr>
+                                        <td class="whitespace nowrap px-2 py-4 text-sm sm:px-4 sm:py-4" colspan="9">No products found</td>
+                                    </tr>
+                                @endif
+                                @foreach($categories as $item)
+                                <tr>
+                                    <td class="whitespace-nowrap px-2 py-2 text-sm sm:px-4 sm:py-2">
+                                        <div class="flex items-center space-x-4">
+                                            <img
+                                                class="h-10 w-10 rounded-full object-cover"
+                                                src="{{ asset($item->image) }}"
+                                                alt="Category Image"
+                                            />
+                                        </div>
+                                    </td>
+                                    <td class="whitespace-nowrap px-2 py-4 text-sm sm:px-4 sm:py-4">
+                                        {{ $item->name }}
+                                    </td>
+                                    
+                                    <td class="whitespace-nowrap px-2 py-4 text-sm font-medium text-right sm:px-4 sm:py-4 flex">
+                                         <a href="#" class="text-gray-700 hover:text-blue-500">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0zm7.5 0c-.914 3.407-4.104 6-7.5 6s-6.586-2.593-7.5-6c.914-3.407 4.104-6 7.5-6s6.586 2.593 7.5 6z"/>
+                                        </svg>
+                                    </a>
+                                    <a href="{{ route('admin.categories.edit', $item->id) }}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1" class="w-5 h-5">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M11 19h-2a1 1 0 01-1-1v-2a1 1 0 01.293-.707l8.59-8.59a1.5 1.5 0 012.12 0l2.12 2.12a1.5 1.5 0 010 2.12l-8.59 8.59A1 1 0 0111 19z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M13 17l-3-3m0 0l1-1m-1 1l-1-1m1 1h1.5m3-5.5L14 9m-1 1L11.5 7.5" />
+                                        </svg>
+                                    </a>
+                                    <a href="#">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1" class="w-5 h-5">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </a>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- <x-pagging :paginator=$products /> --}}
+    <div class="py-4">
+        {{ $categories->links() }}
+    </div>
 </section>
 @endsection

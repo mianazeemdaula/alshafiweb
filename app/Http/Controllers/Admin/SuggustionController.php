@@ -4,18 +4,18 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\BlogPost;
-use App\Models\BlogCategory;
+use App\Models\Suggestion;
+
 use Illuminate\Support\Str;
-class BlogPostController extends Controller
+class SuggustionController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $posts = BlogPost::paginate();
-        return view('admin.blogposts.index', ['posts' => $posts]);
+        $suggestions = Suggestion::paginate();
+        return view('admin.suggestions.index', ['suggestions' => $suggestions]);
     }
 
     /**

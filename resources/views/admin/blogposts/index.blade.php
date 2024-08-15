@@ -152,6 +152,6 @@
         <!-- Add more dummy cards as needed -->
     </div>
 
-    <x-pagging />
+    <x-pagging :paginator=$posts />
 </section>
 @endsection

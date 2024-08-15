@@ -125,6 +125,6 @@
 
        
     </div>
-    <x-pagging />
+    <x-pagging :paginator=$orders />
 </section>
 @endsection

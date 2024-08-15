@@ -153,6 +153,6 @@
         @endforeach
     </div>
 
-    <x-pagging />
+    <x-pagging :paginator=$users />
 </section>
 @endsection
