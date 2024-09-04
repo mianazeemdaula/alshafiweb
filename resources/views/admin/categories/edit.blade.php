@@ -1,67 +1,43 @@
-@extends('layouts.admin')
+@extends('layouts.web')
+
 @section('content')
-<div class="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
-  <!-- Breadcrumb Start -->
-  <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between" >
-    <h2 class="text-title-md2 font-bold text-black dark:text-white">
-      Category
-    </h2>
-    <nav>
-      <ol class="flex items-center gap-2">
-        <li>
-          <a class="font-medium" href="index.html">Dashboard /</a>
-        </li>
-        <li class="font-medium text-primary">Category</li>
-      </ol>
-    </nav>
-  </div>
-  <!-- Breadcrumb End -->
+    <div class="mx-auto">
+        <div class="px-4 sm:px-8 md:px-12 bg-white rounded-lg mt-7 pt-2">
+            @if ($errors->any())
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                    <strong class="font-bold">Holy smokes!</strong>
+                    <span class="block sm:inline">Something seriously bad happened.</span>
+                    <ul class="mt-3 list-disc list-inside text-sm text-red-600">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+            <form action="{{ route('admin.categories.update', $category->id) }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                @method('PUT')
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
 
-  <!-- ====== Form Layout Section Start -->
-  <div class="grid grid-cols-1 gap-9 sm:grid-cols-2">
-   
-    <div class="flex flex-col gap-9">
+                    <div class="flex flex-col gap-2">
+                        <x-label>Name</x-label>
+                        <x-input name="name" value="{{ $category->name }}" />
+                    </div>
+                </div>
 
-      <!-- Sign Up Form -->
-      <div class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark" >
-        <div class="border-b border-stroke px-6.5 py-4 dark:border-strokedark" >
-          <h3 class="font-medium text-black dark:text-white">
-            Category Form
-          </h3>
+                <div>
+                    <x-label>Image</x-label>
+                    <input type="file" name="image" id=""
+                        class="border border-gray-300 rounded-md p-2 w-full">
+                </div>
+                <div class="flex py-6 space-x-4">
+                    <button type="submit"
+                        class="font-poppins py-2 px-4 rounded-md bg-green-500 text-white hover:bg-green-600 cursor-pointer">Update</button>
+
+                    <button type="submit"
+                        class="font-poppins py-2 px-4 rounded-md bg-red-500 text-white hover:bg-green-600 cursor-pointer">Cancel</button>
+                </div>
+            </form>
         </div>
-        <form action="{{ route('admin.categories.update', $category->id) }}" method="POST" enctype="multipart/form-data">
-          @csrf
-          @method('PUT')
-          <div class="p-6.5">
-            <div class="mb-4.5">
-              <label class="mb-3 block text-sm font-medium text-black dark:text-white" >
-                Name
-              </label>
-              <input
-                name="name"
-                type="text"
-                placeholder="Name"
-                value="{{ $category->name }}"
-                class="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-normal text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-              />
-            </div>
-            <div class="mb-4.5">
-              <label class="mb-3 block text-sm font-medium text-black dark:text-white" >
-                Image / Logo
-              </label>
-              <input
-                name="image"
-                type="file"
-                class="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-normal text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary" >
-            </div>
-            <button class="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90" >
-              Register
-            </button>
-          </div>
-        </form>
-      </div>
     </div>
-  </div>
-  <!-- ====== Form Layout Section End -->
-</div>    
 @endsection
