@@ -3,10 +3,21 @@
 @section('content')
     <section class="mx-auto w-full h-screen max-w-7xl px-4 py-4">
         <div class="flex flex-col space-y-4 md:flex-row md:items-center md:justify-between md:space-y-0">
-            <div class="flex items-center justify-between min-w-full">
+            <div class="flex flex-col md:flex-row items-center justify-between min-w-full">
                 <h2 class="text-lg font-semibold">Categories</h2>
-                <a href="{{ route('admin.categories.create') }}"
-                    class="px-5 text-white bg-black py-2 rounded-lg hover:bg-gray-800">Create</a>
+                <div class="flex flex-col space-y-2 md:flex-row md:space-y-0 items-center space-x-2">
+                    <form action="" method="post">
+                        @csrf
+                        <input type="text" name="search" id="search"
+                            class="px-2 py-2 text-sm border border-gray-200 rounded-lg" placeholder="Search" />
+                        <button type="submit"
+                            class="px-5 text-white bg-primary py-2 rounded-lg hover:bg-primary-dark">Search</button>
+                    </form>
+                    <a href="{{ route('admin.categories.create') }}"
+                        class="px-5 text-white bg-primary py-2 rounded-lg hover:bg-primary-dark">
+                        <i class="fa-solid fa-add"></i> Create
+                    </a>
+                </div>
             </div>
         </div>
         <div class="mt-6 flex flex-col space-y-4">
@@ -38,27 +49,31 @@
                                     @endif
                                     @foreach ($categories as $item)
                                         <tr>
-                                            <td class="whitespace-nowrap px-2 py-2 text-sm sm:px-4 sm:py-2">
+                                            <td class="whitespace-nowrap px-2 py-1 text-sm sm:px-4 sm:py-1">
                                                 <div class="flex items-center space-x-4">
                                                     <img class="h-10 w-10 rounded-full object-cover"
                                                         src="{{ asset($item->image) }}" alt="Category Image" />
                                                 </div>
                                             </td>
-                                            <td class="whitespace-nowrap px-2 py-4 text-sm sm:px-4 sm:py-4">
+                                            <td class="whitespace-nowrap px-2 py-1 text-sm sm:px-4 sm:py-1">
                                                 {{ $item->name }}
                                             </td>
 
                                             <td
-                                                class="whitespace-nowrap px-2 py-4 text-sm font-medium text-right sm:px-4 sm:py-4 flex space-x-2">
+                                                class="px-2 py-1 text-xs font-medium text-right sm:px-4 sm:py-1 flex space-x-2">
                                                 <a href="#" class="">
                                                     <i class="fa fa-eye"></i>
                                                 </a>
                                                 <a href="{{ route('admin.categories.edit', $item->id) }}">
-                                                    <i class="fa fa-wrench"></i>
+                                                    <i class="fa fa-pencil"></i>
                                                 </a>
-                                                <a href="#">
-                                                    <i class="fa fa-trash"></i>
-                                                </a>
+                                                <form action="{{ route('admin.categories.destroy', $item->id) }}"
+                                                    method="post">
+                                                    @csrf
+                                                    @method('delete')
+                                                    <button type="submit">
+                                                        <i class="fa fa-trash"></i></button>
+                                                </form>
                                             </td>
                                         </tr>
                                     @endforeach

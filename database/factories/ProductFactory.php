@@ -22,6 +22,7 @@ class ProductFactory extends Factory
             'description' => $this->faker->text,
             'featured' => $this->faker->boolean,
             'category_id' => $this->faker->numberBetween(1, 10),
+            'country_id' => $this->faker->numberBetween(1, 2),
             'discount' => $this->faker->randomFloat(2, 1, 100),
             'vat' => $this->faker->randomFloat(2, 1, 100),
             'stock' => $this->faker->numberBetween(1, 100),

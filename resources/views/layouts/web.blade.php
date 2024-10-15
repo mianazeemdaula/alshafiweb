@@ -14,12 +14,12 @@
     <div class="flex bg-gray-100 min-h-screen">
         <!-- Sidebar -->
         <div id="sidebar"
-            class="lg:flex flex-col lg:relative fixed  top-0 left-0 h-screen bg-gray-800 text-white w-64 transform -translate-x-full lg:translate-x-0 transition-transform duration-300">
+            class="lg:flex flex-col lg:relative fixed top-0 left-0 min-h-full bg-gray-800 text-white w-64 transform -translate-x-full lg:translate-x-0 transition-transform duration-300">
             <div class="flex justify-between">
                 <div class="p-4 font-bold text-lg">Admin Panel</div>
                 <button class="p-4 lg:hidden" id="close-sidebar">✕</button>
             </div>
-            <ul class="space-y-2">
+            <ul class="space-y-2 text-sm">
                 <li class="p-2 hover:bg-gray-700  hover:animate-pulse">
                     <a href="{{ route('dashboard') }}" class="block"><i class="fa-solid fa-home mr-2"></i>
                         Dashboard</a>
@@ -63,6 +63,12 @@
                     class="p-2 hover:bg-gray-700  hover:animate-pulse @if (request()->routeIs('admin.posts.*')) bg-green-500 @endif">
                     <a href="{{ route('admin.posts.index') }}" class="block"><i class="fa-solid fa-blog mr-2"></i>
                         Posts</a>
+                </li>
+
+                <li
+                    class="p-2 hover:bg-gray-700  hover:animate-pulse @if (request()->routeIs('admin.banners.*')) bg-green-500 @endif">
+                    <a href="{{ route('admin.banners.index') }}" class="block"><i class="fa-solid fa-image mr-2"></i>
+                        Banners</a>
                 </li>
                 <li class="p-2 hover:bg-gray-700  hover:animate-pulse">
                     <form action="{{ url('logout') }}" method="post">

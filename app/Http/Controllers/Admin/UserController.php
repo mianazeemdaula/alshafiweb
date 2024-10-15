@@ -12,7 +12,11 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::paginate();
+        $users = User::query();
+        if(request()->has('role') && request()->role != ''){
+            $users = $users->role(request()->role);
+        }
+        $users = $users->paginate();
         return view('admin.users.index', ['users' => $users]);
     }
 

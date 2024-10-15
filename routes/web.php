@@ -14,12 +14,14 @@ Route::middleware('auth')->group(function () {
     Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
         Route::resource('categories', 'App\Http\Controllers\Admin\CategoryController');
         Route::resource('products', 'App\Http\Controllers\Admin\ProductController');
+        Route::post('products/filter', 'App\Http\Controllers\Admin\ProductController@filter')->name('products.filter');
         Route::resource('levels', 'App\Http\Controllers\Admin\LevelController');
         Route::resource('users', 'App\Http\Controllers\Admin\UserController');
         Route::resource('orders', 'App\Http\Controllers\Admin\OrderController');
         Route::resource('news', 'App\Http\Controllers\Admin\OrderController');
         Route::resource('suggestions', 'App\Http\Controllers\Admin\SuggustionController');
         Route::resource('posts', 'App\Http\Controllers\Admin\BlogPostController');
+        Route::resource('banners', 'App\Http\Controllers\Admin\BlogPostController');
     });
     Route::post('logout', 'App\Http\Controllers\AuthController@logout');
 });

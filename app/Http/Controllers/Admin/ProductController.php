@@ -14,8 +14,11 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::paginate();
-        // dd($products);
+        $products = Product::query();
+        if(request()->has('country') && request()->country != ''){
+            $products = $products->where('country_id', request()->country);
+        }
+        $products = $products->paginate();
         return view('admin.products.index', ['products' => $products]);
     }
 
@@ -130,5 +133,18 @@ class ProductController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function filter(Request $request)
+    {
+        $products = Product::query();
+        if($request->has('country') && $request->country != ''){
+            $products = $products->where('country_id', $request->country);
+        }
+        if($request->has('search') && $request->search != ''){
+            $products = $products->where('name', 'like', '%' . $request->search . '%');
+        }
+        $products = $products->paginate();
+        return view('admin.products.index', ['products' => $products]);
     }
 }

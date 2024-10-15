@@ -1,16 +1,18 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   theme: {
-    extend: {},
-    screens: {
-      'sm': '640px',
-      'md': '768px',
-      'lg': '1024px',
-      'xl': '1280px',
-      '2xl': '1536px',
+    extend: {
+      colors: {
+        "primary": "#22c55e",
+        "primary-light": "#3c9c5e",
+        "primary-dark": "#1f4d2b",
+        "secondary": {
+          100: "#E2E2D5",
+          200: "#888883",
+        },
+      },
     },
   },
-  darkMode: 'class',
   content: [
     "./resources/**/*.blade.php",
     "./resources/**/*.js",

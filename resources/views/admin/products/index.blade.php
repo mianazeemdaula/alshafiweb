@@ -4,14 +4,33 @@
     <section class="mx-auto w-full h-screen max-w-7xl px-4 py-4">
         <div class="flex flex-col space-y-4 md:flex-row md:items-center md:justify-between md:space-y-0">
             <div class="flex items-center justify-between min-w-full">
-                <h2 class="text-lg font-semibold">Products</h2>
-                <a href="{{ route('admin.products.create') }}"
-                    class="px-5 text-white bg-black py-2 rounded-lg hover:bg-gray-800">Create</a>
+                <div>
+                    <h2 class="text-lg font-semibold">Products</h2>
+                    <div class="flex items-center">
+                        @foreach (\App\Models\Country::get() as $item)
+                            <div class="px-1 @if (!$loop->last) border-r @endif">
+                                <a href="{{ route('admin.products.index', ['country' => $item->id]) }}"
+                                    class="text-xs text-primary hover:text-gray-900">{{ $item->name }}</a>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <form action="{{ route('admin.products.filter') }}" method="post">
+                        @csrf
+                        <input type="text" name="search" id="search"
+                            class="border border-gray-200 rounded-lg px-2 py-1 focus:outline-none focus:ring-2 focus:ring-gray-200"
+                            placeholder="Search" value="{{ request()->search }}" />
+                        <button type="submit"
+                            class="text-white bg-black px-5 py-2 rounded-lg hover:bg-gray-800">Search</button>
+                    </form>
+                    <a href="{{ route('admin.products.create') }}"
+                        class="px-5 text-white bg-black py-2 rounded-lg hover:bg-gray-800">Create</a>
+                </div>
             </div>
         </div>
         <div class="mt-6 flex flex-col space-y-4">
             <!-- Table Layout for Larger Screens -->
-
             <div class="overflow-x-auto">
                 <div class="inline-block min-w-full align-middle">
                     <div class="overflow-hidden border border-gray-200 md:rounded-lg">
@@ -48,7 +67,7 @@
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-200 bg-white">
-                                @foreach ($products as $item)
+                                @forelse ($products as $item)
                                     <tr>
                                         <td class="whitespace-nowrap px-2 py-4 text-sm sm:px-4 sm:py-4">
                                             <div class="flex items-center space-x-4">
@@ -65,30 +84,29 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td class="whitespace-nowrap px-2 py-4 text-sm sm:px-4 sm:py-4">
+                                        <td class="whitespace-nowrap px-2 py-2 text-sm sm:px-4 sm:py-4">
                                             {{ $item->price }}
                                         </td>
-                                        <td class="whitespace-nowrap px-2 py-4 text-sm sm:px-4 sm:py-4">
+                                        <td class="whitespace-nowrap px-2 py-2 text-sm sm:px-4 sm:py-4">
                                             <x-status-chip status="{{ $item->is_active ? 'Active' : 'Inactive' }}" />
                                         </td>
-                                        <td class="whitespace-nowrap px-2 py-4 text-sm sm:px-4 sm:py-4">
+                                        <td class="whitespace-nowrap px-2 py-2 text-sm sm:px-4 sm:py-4">
                                             {{ $item->discount }}%
                                         </td>
-                                        <td class="whitespace-nowrap px-2 py-4 text-sm sm:px-4 sm:py-4">
+                                        <td class="whitespace-nowrap px-2 py-2 text-sm sm:px-4 sm:py-4">
                                             {{ $item->stock }}
                                         </td>
-                                        <td class="whitespace-nowrap px-2 py-4 text-sm sm:px-4 sm:py-4">
+                                        <td class="whitespace-nowrap px-2 py-2 text-sm sm:px-4 sm:py-4">
                                             {{ $item->referrer_discount }}
                                         </td>
-                                        <td class="whitespace-nowrap px-2 py-4 text-sm sm:px-4 sm:py-4">
+                                        <td class="whitespace-nowrap px-2 py-2 text-sm sm:px-4 sm:py-4">
                                             {{ $item->referal_discount }}
                                         </td>
-                                        <td class="whitespace-nowrap px-2 py-4 text-sm sm:px-4 sm:py-4">
+                                        <td class="whitespace-nowrap px-2 py-2 text-sm sm:px-4 sm:py-4">
                                             {{ $item->buyer_discount }}
                                         </td>
-                                        <td
-                                            class="whitespace-nowrap px-2 py-4 text-sm font-medium text-right sm:px-4 sm:py-4 flex space-x-2">
-                                            <a href="#" class="text-gray-700 hover:text-blue-500">
+                                        <td class="px-2 py-2 text-xs text-right sm:px-4 sm:py-4 flex space-x-2">
+                                            <a href="#" class="text-primary hover:text-primary-dark">
                                                 <i class="fa fa-eye"></i>
                                             </a>
                                             <a href="{{ route('admin.products.edit', $item->id) }}">
@@ -99,7 +117,12 @@
                                             </a>
                                         </td>
                                     </tr>
-                                @endforeach
+                                @empty
+                                    <tr>
+                                        <td class="whitespace nowrap px-2 py-4 text-sm sm:px-4 sm:py-4" colspan="9">
+                                            No products found</td>
+                                    </tr>
+                                @endforelse
                             </tbody>
                         </table>
                     </div>
