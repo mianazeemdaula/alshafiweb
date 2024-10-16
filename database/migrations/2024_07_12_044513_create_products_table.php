@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('category_id');
             $table->unsignedBigInteger('country_id');
             $table->string('name', 100);
+            $table->string('sku', 100)->unique();
             $table->integer('weight')->default(0);
             $table->float('price')->default(0.0);
             $table->float('discount')->default(0.0);

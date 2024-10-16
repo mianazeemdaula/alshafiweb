@@ -1,1 +1,1 @@
-<label htmlFor="name2" class="text-lg font-poppins"> {{ $slot }} </label>
+<label htmlFor="name2" class="font-poppins text-sm"> {{ $slot }} </label>

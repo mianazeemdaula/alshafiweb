@@ -61,7 +61,15 @@ class LevelController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:50',
+            'min_points' => 'required|integer',
+            'discount' => 'required|integer',
+            'cashback' => 'required|integer',
+        ]);
+        $level = UserLevel::find($id);
+        $level->update($request->all());
+        return redirect()->route('admin.levels.index');
     }
 
     /**

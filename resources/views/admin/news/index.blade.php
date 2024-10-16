@@ -5,7 +5,21 @@
         <!-- Header Section -->
         <div class="flex flex-col space-y-4 md:flex-row md:items-center md:justify-between md:space-y-0">
             <div>
-                <h2 class="text-lg font-semibold">Items</h2>
+                <h2 class="text-lg font-semibold">News</h2>
+            </div>
+            <div class="flex items-center space-x-2">
+                <form action="{{ route('admin.news.filter') }}" method="post">
+                    @csrf
+                    <input type="text" name="search" id="search"
+                        class="border border-gray-200 rounded-lg px-2 py-1 focus:outline-none focus:ring-2 focus:ring-gray-200"
+                        placeholder="Search" value="{{ request()->search }}" />
+                    <button type="submit"
+                        class="text-white bg-black px-5 py-2 rounded-lg hover:bg-gray-800">Search</button>
+                </form>
+                <a href="{{ route('admin.news.create') }}"
+                    class="px-5 text-white bg-black py-2 rounded-lg hover:bg-gray-800">
+                    <i class="fa fa-add"></i> Create
+                </a>
             </div>
         </div>
 
@@ -18,57 +32,49 @@
                             <thead class="bg-gray-50">
                                 <tr>
                                     <th scope="col" class="px-4 py-3.5 text-left text-sm font-normal text-gray-700">
-                                        <span>Name/Title</span>
+                                        <span>Title</span>
                                     </th>
-                                    <th scope="col" class="px-12 py-3.5 text-left text-sm font-normal text-gray-700">
-                                        Points
-                                    </th>
-                                    <th scope="col" class="px-4 py-3.5 text-left text-sm font-normal text-gray-700">
-                                        Off (%)
+                                    <th scope="col" class="px-6 py-3.5 text-left text-sm font-normal text-gray-700">
+                                        Status
                                     </th>
                                     <th scope="col" class="px-4 py-3.5 text-left text-sm font-normal text-gray-700">
-                                        Cashback
+                                        Link
                                     </th>
                                     <th scope="col" class="relative py-3.5">
-                                        <span class="text-center text-sm font-normal text-gray-700">View</span>
+                                        <span class="text-center text-sm font-normal text-gray-700">Actions</span>
                                     </th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-200 bg-white">
-                                @foreach ($levels as $item)
+                                @foreach ($news as $item)
                                     <tr>
-                                        <td class="whitespace-nowrap px-4 py-1">
+                                        <td class="whitespace-normal px-4 py-2">
                                             <div class="flex items-center">
-                                                <div class="">
+                                                <div class="h-10 w-10 flex-shrink-0">
+                                                    <img class="h-10 w-10 rounded-full object-cover"
+                                                        src="{{ asset($item->image) }}" alt="User Image" />
+                                                </div>
+                                                <div class="ml-4">
                                                     <div class="text-sm font-medium text-gray-900">
-                                                        {{ $item->name }}
-                                                    </div>
-                                                    <div class="text-sm text-gray-700">
-                                                        {{ $item->users()->count() }} users
+                                                        {{ $item->title }}
                                                     </div>
                                                 </div>
                                             </div>
                                         </td>
-                                        <td class="whitespace-nowrap px-12 py-1">
-                                            <div class="text-sm text-gray-900">
-                                                {{ $item->min_points }} points
-                                            </div>
+                                        <td class="whitespace-nowrap px-6 py-2 text-sm text-gray-900">
+                                            <x-status-chip :status="$item->is_active ? 'Active' : 'inactive'" />
                                         </td>
-                                        <td class="whitespace-nowrap px-4 py-1 text-sm text-gray-700">
-                                            {{ $item->discount }}%
+                                        <td class="whitespace-nowrap px-4 py-2 text-sm text-gray-700">
+                                            <a href="#">read</a>
                                         </td>
-                                        <td class="whitespace-nowrap px-4 py-1 text-sm text-gray-700">
-                                            {{ $item->cashback }}
-                                        </td>
-                                        <td
-                                            class="px-4 py-2 text-right text-xs font-medium flex items-center justify-center space-x-2">
+                                        <td class="px-4 py-2 text-right text-xs font-medium flex space-x-2">
                                             <a href="#" class="">
                                                 <i class="fa fa-eye"></i>
                                             </a>
-                                            <a href="{{ route('admin.levels.edit', $item->id) }}">
+                                            <a href="{{ route('admin.posts.edit', $item->id) }}">
                                                 <i class="fa fa-pencil"></i>
                                             </a>
-                                            <form action="{{ route('admin.levels.destroy', $item->id) }}" method="post">
+                                            <form action="{{ route('admin.posts.destroy', $item->id) }}" method="post">
                                                 @csrf
                                                 @method('delete')
                                                 <button type="submit">
@@ -83,6 +89,6 @@
                 </div>
             </div>
         </div>
-        <x-pagging :paginator=$levels />
+        <x-pagging :paginator=$news />
     </section>
 @endsection

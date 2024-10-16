@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-
+use Illuminate\Support\Str;
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Product>
  */
@@ -19,6 +19,7 @@ class ProductFactory extends Factory
         return [
             'name' => $this->faker->name,
             'price' => $this->faker->randomFloat(2, 1, 1000),
+            'sku' => "SKU-".Str::upper($this->faker->unique()->word),
             'description' => $this->faker->text,
             'featured' => $this->faker->boolean,
             'category_id' => $this->faker->numberBetween(1, 10),

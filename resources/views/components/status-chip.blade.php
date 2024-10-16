@@ -2,6 +2,7 @@
     @php
         $color = 'gray';
         switch (strtolower($status)) {
+            case 1:
             case 'active':
             case 'completed':
                 $color = 'green';

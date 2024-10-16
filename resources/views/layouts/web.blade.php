@@ -6,6 +6,7 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Alshaafi Online</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @yield('head')
 </head>
@@ -62,7 +63,7 @@
                 <li
                     class="p-2 hover:bg-gray-700  hover:animate-pulse @if (request()->routeIs('admin.posts.*')) bg-green-500 @endif">
                     <a href="{{ route('admin.posts.index') }}" class="block"><i class="fa-solid fa-blog mr-2"></i>
-                        Posts</a>
+                        Blog</a>
                 </li>
 
                 <li
@@ -133,6 +134,7 @@
             sidebar.classList.remove('translate-x-0');
         });
     </script>
+    @yield('js')
 </body>
 
 </html>

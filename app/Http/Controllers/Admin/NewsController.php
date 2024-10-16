@@ -4,21 +4,20 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\BlogPost;
-use App\Models\BlogCategory;
 use Illuminate\Support\Str;
 use App\Helper\MediaHelper;
 use Illuminate\Support\Facades\File;
+use App\Models\News;
 
-class BlogPostController extends Controller
+class NewsController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $posts = BlogPost::paginate();
-        return view('admin.blogposts.index', ['posts' => $posts]);
+        $news = News::paginate();
+        return view('admin.news.index', ['news' => $news]);
     }
 
     /**
@@ -26,8 +25,7 @@ class BlogPostController extends Controller
      */
     public function create()
     {
-        $categories = BlogCategory::all();
-        return view('admin.blogposts.create', compact('categories'));
+        return view('admin.news.create');
     }
 
     /**
@@ -38,23 +36,16 @@ class BlogPostController extends Controller
         $request->validate([
             'title' => 'required',
             'content' => 'required',
-            'category_id' => 'required',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
         ]);
-        $post = new BlogPost();
-        $post->title = $request->title;
-        $post->slug = Str::slug($request->title);
-        $post->content = $request->content;
-        $post->blog_category_id = $request->category_id;
-        $post->user_id = auth()->user()->id;
-        $post->status = 'published';
-        $post->meta_title = $request->title;
-        $post->meta_description = $request->title;
-        $post->meta_keywords = "blog, alshaafi, health";
+        $news = new News();
+        $news->title = $request->title;
+        $news->content = $request->content;
         if($request->hasFile('image')) {
-            $post->image = MediaHelper::upload($request->file('image'));
+            $news->image = MediaHelper::upload($request->file('image'));
         }
-        $post->save();
-        return redirect()->route('admin.posts.index')->with('success', 'Post created successfully');
+        $news->save();
+        return redirect()->route('admin.news.index')->with('success', 'News created successfully');
     }
 
     /**
@@ -115,8 +106,8 @@ class BlogPostController extends Controller
 
     public function filter(Request $request)
     {
-        $posts = BlogPost::where('title', 'like', '%' . $request->search . '%')
+        $news = News::where('title', 'like', '%' . $request->search . '%')
         ->where('content', 'like', '%' . $request->search . '%')->paginate();
-        return view('admin.blogposts.index', ['posts' => $posts]);
+        return view('admin.news.index', ['news' => $news]);
     }
 }

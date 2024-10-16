@@ -15,13 +15,20 @@ Route::middleware('auth')->group(function () {
         Route::resource('categories', 'App\Http\Controllers\Admin\CategoryController');
         Route::resource('products', 'App\Http\Controllers\Admin\ProductController');
         Route::post('products/filter', 'App\Http\Controllers\Admin\ProductController@filter')->name('products.filter');
+        Route::post('products/sortmedia', 'App\Http\Controllers\Admin\ProductController@sortmedia')->name('products.sortmedia');
+        Route::post('products/defaultimage', 'App\Http\Controllers\Admin\ProductController@defaultimage')->name('products.defaultimage');
+        // 
         Route::resource('levels', 'App\Http\Controllers\Admin\LevelController');
         Route::resource('users', 'App\Http\Controllers\Admin\UserController');
         Route::resource('orders', 'App\Http\Controllers\Admin\OrderController');
-        Route::resource('news', 'App\Http\Controllers\Admin\OrderController');
+        Route::resource('news', 'App\Http\Controllers\Admin\NewsController');
+        Route::post('news/filter', 'App\Http\Controllers\Admin\NewsController@filter')->name('news.filter');
         Route::resource('suggestions', 'App\Http\Controllers\Admin\SuggustionController');
         Route::resource('posts', 'App\Http\Controllers\Admin\BlogPostController');
-        Route::resource('banners', 'App\Http\Controllers\Admin\BlogPostController');
+        Route::post('posts/filter', 'App\Http\Controllers\Admin\BlogPostController@filter')->name('posts.filter');
+        Route::resource('banners', 'App\Http\Controllers\Admin\BannerController');
+        Route::post('banners/filter', 'App\Http\Controllers\Admin\BannerController@filter')->name('banners.filter');
+        Route::resource('media', 'App\Http\Controllers\Admin\BlogPostController');
     });
     Route::post('logout', 'App\Http\Controllers\AuthController@logout');
 });

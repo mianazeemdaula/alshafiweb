@@ -99,6 +99,8 @@ class DatabaseSeeder extends Seeder
         $this->call([
             BlogCategorySeeder::class,
         ]);
+
+        \App\Models\BlogPost::factory(100)->create();
         
     }
 }

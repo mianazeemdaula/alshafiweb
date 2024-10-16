@@ -9,7 +9,19 @@ class BlogPost extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'slug', 'content', 'blog_category_id'];
+    protected $fillable = [
+        'user_id',
+        'blog_category_id',
+        'title',
+        'slug',
+        'content',
+        'status',
+        'image',
+        'meta_description',
+        'meta_keywords',
+        'meta_title',
+        'meta_image',
+    ];
 
     public function category()
     {

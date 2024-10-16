@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\Country;
+use App\Helper\MediaHelper;
+use App\Models\Media;
 
 class ProductController extends Controller
 {
@@ -28,7 +31,8 @@ class ProductController extends Controller
     public function create()
     {
         $categories = Category::all();
-        return view('admin.products.create', ['categories' => $categories]);
+        $countries = Country::all();
+        return view('admin.products.create', ['categories' => $categories, 'countries' => $countries]);
     }
 
     /**
@@ -38,32 +42,49 @@ class ProductController extends Controller
     {
         // Validate the request...
         $request->validate([
+            'category_id' => 'required|exists:categories,id',
+            'country_id' => 'required|exists:countries,id',
             'name' => 'required|max:255',
             'price' => 'required|numeric',
-            'category_id' => 'required|exists:categories,id',
-            'image' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'sku' => 'required|unique:products,sku',
             'discount' => 'required|numeric',
             'description' => 'required',
             'vat' => 'required|numeric',
             'stock' => 'required|numeric',
-            'referr_discount' => 'required|numeric',
+            'referrer_discount' => 'required|numeric',
             'referal_discount' => 'required|numeric',
+            'buyer_discount' => 'required|numeric',
+            'image.*' => 'image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
         ]);
 
         $product = new Product;
         $product->name = $request->name;
         $product->price = $request->price;
+        $product->sku = $request->sku;
         $product->category_id = $request->category_id;
-        if($request->has('image')){
-            $file = $request->file('image');
-            $fileName = time() . '_' . $file->getClientOriginalName();
-            $filePath = $file->storeAs('uploads', $fileName);
-            $product->image = '/uploads/' . $filePath;
-        }else{
-            $product->image = "https://via.placeholder.com/640x480.png/000077?text=quas"; 
-        }
+        $product->country_id = $request->country_id;
+        $product->description = $request->description;
+        $product->discount = $request->discount;
+        $product->vat = $request->vat;
+        $product->stock = $request->stock;
+        $product->referrer_discount = $request->referrer_discount;
+        $product->referal_discount = $request->referal_discount;
+        $product->buyer_discount = $request->buyer_discount;
+        $product->earn_points = $request->earn_points;
+        $product->featured = $request->featured;
+        $product->is_active = $request->is_active;
+        $product->image = "https://via.placeholder.com/640x480.png/000077?text=quas";
         $product->save();
-        return redirect('admin/products');
+        if($request->has('image')){
+            $files = $request->file('image');
+            $sortIndex = 1;
+            foreach($files as $file){
+                $media = MediaHelper::store($file, $product->id, Product::class);
+                $media->sort = $sortIndex++;
+                $media->save();
+            }
+        }
+        return redirect()->route('admin.products.index')->with('success', 'Product updated successfully');
     }
 
     /**
@@ -82,8 +103,9 @@ class ProductController extends Controller
     public function edit(string $id)
     {
         $categories = Category::all();
+        $countries = Country::all();
         $product = Product::findOrFail($id);
-        return view('admin.products.edit', ['product' => $product, 'categories' => $categories]);
+        return view('admin.products.edit', ['product' => $product, 'categories' => $categories, 'countries' => $countries]);
     }
 
     /**
@@ -96,35 +118,44 @@ class ProductController extends Controller
             'name' => 'required|max:255',
             'price' => 'required|numeric',
             'category_id' => 'required|exists:categories,id',
-            'image' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'country_id' => 'required|exists:countries,id',
             'discount' => 'required|numeric',
             'description' => 'required',
             'vat' => 'required|numeric',
             'stock' => 'required|numeric',
-            'referr_discount' => 'required|numeric',
+            'referrer_discount' => 'required|numeric',
             'referal_discount' => 'required|numeric',
+            'buyer_discount' => 'required|numeric',
+            'earn_points' => 'required|numeric',
+            'image.*' => 'image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
         ]);
 
         $product = Product::findOrFail($id);
         $product->name = $request->name;
         $product->price = $request->price;
         $product->category_id = $request->category_id;
+        $product->country_id = $request->country_id;
         $product->discount = $request->discount;
         $product->description = $request->description;
         $product->vat = $request->vat;
         $product->stock = $request->stock;
-        $product->referr_discount = $request->referr_discount;
+        $product->referrer_discount = $request->referrer_discount;
         $product->referal_discount = $request->referal_discount;
-        if($request->has('image')){
-            $file = $request->file('image');
-            $fileName = time() . '_' . $file->getClientOriginalName();
-            $filePath = $file->storeAs('uploads', $fileName);
-            $product->image = '/uploads/' . $filePath;
-        }else if($request->has('remove_image')){
-            $product->image = "https://via.placeholder.com/640x480.png/000077?text=quas"; 
-        }
+        $product->buyer_discount = $request->buyer_discount;
+        $product->earn_points = $request->earn_points;
+        $product->featured = $request->featured;
+        $product->is_active = $request->is_active;
         $product->save();
-        return redirect('admin/products');
+        if($request->has('image')){
+            $files = $request->file('image');
+            $sortIndex = $product->media->count() + 1;
+            foreach($files as $file){
+                $media = MediaHelper::store($file, $product->id, Product::class);
+                $media->sort = $sortIndex++;
+                $media->save();
+            }
+        }
+        return redirect()->route('admin.products.index')->with('success', 'Product updated successfully');
     }
 
     /**
@@ -146,5 +177,24 @@ class ProductController extends Controller
         }
         $products = $products->paginate();
         return view('admin.products.index', ['products' => $products]);
+    }
+
+    public function defaultimage(Request $request){
+        $product = Product::find($request->product_id);
+        $product->image = $request->image;
+        $product->save();
+        return redirect()->back()->with('success', 'Default image set successfully');
+    }
+
+    public function sortmedia(Request $request)
+    {
+        $productId = $request->productId;
+        $mediaIds = $request->mediaIds;
+        $pro = Product::find($productId);
+        $sortNo = 1;
+        foreach ($mediaIds as $media) {
+            Media::find($media)->update(['sort' => $sortNo++]);
+        }
+        return response()->json($request->all());
     }
 }
