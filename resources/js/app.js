@@ -6,13 +6,11 @@ import Chart from 'chart.js/auto';
 import Sortable from 'sortablejs';
 
 window.jQuery = window.$ = $
-Alpine.plugin(persist);
-window.Alpine = Alpine;
+// Alpine.plugin(persist);
+// window.Alpine = Alpine;
 window.Chart = Chart;
 window.Sortable = Sortable;
-Alpine.start();
-select2();
-
+// Alpine.start();
 import flatpickr from "flatpickr";
 
 // Init flatpickr

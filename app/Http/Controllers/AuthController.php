@@ -23,9 +23,24 @@ class AuthController extends Controller
             'email' => 'required',
             'password' => 'required',
         ]);
+        
         if (!auth()->attempt($request->only('email', 'password'))) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Invalid credentials'
+                ], 401);
+            }
             return redirect()->back()->withErrors(['password' => 'Invalid Credentials']);
         }
+        
+        if ($request->expectsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Login successful'
+            ]);
+        }
+        
         return redirect()->intended('/dashboard');
     }
 
@@ -38,5 +53,39 @@ class AuthController extends Controller
             'revenue' => \App\Models\Order::sum('total'),
         ];
         return view('auth.dashboard', compact('stats'));
+    }
+
+    public function register(){
+        if(auth()->check()){
+            return redirect('/dashboard');
+        }
+        return view('auth.register');
+    }
+
+    public function doregister(Request $request){
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'mobile' => 'required|string|max:18|unique:users',
+            'password' => 'required|string|min:8|confirmed',
+        ]);
+
+        $user = \App\Models\User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'mobile' => $request->mobile,
+            'password' => \Hash::make($request->password),
+        ]);
+
+        auth()->login($user);
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Account created successfully'
+            ]);
+        }
+
+        return redirect()->intended('/dashboard');
     }
 }

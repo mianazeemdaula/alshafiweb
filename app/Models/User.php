@@ -21,6 +21,12 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'mobile',
+        'fcm_token',
+        'ref_code',
+        'level_id',
+        'referrer',
+        'extra_discount',
     ];
 
     /**

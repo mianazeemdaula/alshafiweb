@@ -2,12 +2,32 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('auth.login');
-});
+Route::get('/', 'App\Http\Controllers\WebController@index');
+Route::get('/products', 'App\Http\Controllers\WebController@products');
+Route::get('/contact-us', 'App\Http\Controllers\WebController@contactus');
+Route::get('/cart', 'App\Http\Controllers\WebController@cart');
+Route::get('/checkout', 'App\Http\Controllers\CheckoutController@index');
+Route::get('/track-order', 'App\Http\Controllers\WebController@trackOrder')->name('track.order');
+Route::get('/news', 'App\\Http\\Controllers\\WebController@news')->name('news');
+Route::get('/categories', 'App\\Http\\Controllers\\WebController@categories')->name('categories');
+Route::get('/services', 'App\\Http\\Controllers\\WebController@services')->name('services');
+
+// Cart routes
+Route::post('/cart/add', 'App\Http\Controllers\CartController@add')->name('cart.add');
+Route::post('/cart/update', 'App\Http\Controllers\CartController@update')->name('cart.update');
+Route::delete('/cart/remove', 'App\Http\Controllers\CartController@remove')->name('cart.remove');
+Route::get('/cart/contents', 'App\Http\Controllers\CartController@contents')->name('cart.contents');
+Route::delete('/cart/clear', 'App\Http\Controllers\CartController@clear')->name('cart.clear');
+
+// Checkout routes
+Route::post('/checkout/place-order', 'App\Http\Controllers\CheckoutController@placeOrder')->name('checkout.place-order');
+Route::get('/order-confirmation/{orderId}', 'App\Http\Controllers\CheckoutController@orderConfirmation')->name('order.confirmation');
 
 Route::get('/login', 'App\Http\Controllers\AuthController@login');
 Route::post('/login', 'App\Http\Controllers\AuthController@dologin')->name('login');
+Route::get('/register', 'App\Http\Controllers\AuthController@register');
+Route::post('/register', 'App\Http\Controllers\AuthController@doregister')->name('register');
+
 
 Route::middleware('auth')->group(function () {
     Route::get('dashboard', 'App\Http\Controllers\AuthController@dashboard')->name('dashboard');

@@ -11,7 +11,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->singleton(\App\Services\CartService::class, function ($app) {
+            return new \App\Services\CartService($app['session']);
+        });
+        
+        $this->app->alias(\App\Services\CartService::class, 'cart');
     }
 
     /**

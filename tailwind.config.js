@@ -6,6 +6,7 @@ export default {
         "primary": "#22c55e",
         "primary-light": "#3c9c5e",
         "primary-dark": "#1f4d2b",
+        "hover": "#e2e8f0",
         "secondary": {
           100: "#E2E2D5",
           200: "#888883",

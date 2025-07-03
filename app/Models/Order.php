@@ -10,33 +10,39 @@ class Order extends Model
     use HasFactory;
 
     protected $fillable = [
+        'number',
         'user_id',
-        'order_number',
-        'total_amount',
-        'discount',
-        'vat',
-        'shipping_cost',
+        'payment_method_id',
+        'extra_note',
         'status',
-        'payment_status',
-        'payment_method',
-        'shipping_address',
-        'billing_address',
-        'shipping_method',
-        'shipping_date',
         'delivery_date',
         'payment_date',
-        'payment_ref',
-        'payment_info',
         'payment_status',
-        'payment_method',
-        'payment_date',
-        'payment_ref',
-        'payment_info',
+        'street_address',
+        'city_id',
+        'zip_code',
+        'shipping_cost',
+        'discount',
+        'total',
+    ];
+
+    protected $casts = [
+        'delivery_date' => 'datetime',
+        'payment_date' => 'datetime',
+        'total' => 'integer',
+        'discount' => 'integer',
+        'shipping_cost' => 'integer',
+        'zip_code' => 'integer',
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function orderDetails()
+    {
+        return $this->hasMany(OrderDetail::class);
     }
 
     public function details()
