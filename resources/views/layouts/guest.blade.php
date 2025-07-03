@@ -11,7 +11,6 @@
     </title>
     <meta name="description" content="{{ config('global.description_' . App::getLocale(), 'eCommerce') }}">
     <meta name="keywords" content="{{ config('global.keywords_' . App::getLocale(), 'eCommerce') }}">
-    @livewireStyles
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
@@ -21,7 +20,6 @@
     </div>
     @yield('content')
     @include('layouts.partials.footer')
-    @livewireScripts
     @yield('jsscript')
     <script>
         // add class when scroll on screen is more then 20%

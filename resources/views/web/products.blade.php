@@ -17,7 +17,7 @@
     </div>
     <div class="flex">
         <div class="w-3/12 bg-slate-200">
-            <div class="px-4 py-1">
+            <div class="px-4 py-4 ">
                 <div class="flex flex-col gap-2">
                     <div class="flex flex-col gap-2 items-start">
                         <form action="{{ request()->fullUrlWithQuery([]) }}" method="get"

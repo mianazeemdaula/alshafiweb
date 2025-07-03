@@ -12,7 +12,29 @@
     @endif
     <div class="p-4">
         <div class="text-sm font-light mt-2">{{ $product->name }}</div>
-        <div class="text-sm font-light mb-3">Price: {{ $product->currency }} {{ $product->price }}</div>
+        <div class="flex items-center mb-1">
+            @php
+                $rating = $product->rating ?? 0;
+            @endphp
+            @for ($i = 1; $i <= 5; $i++)
+                <i
+                    class="fa-solid fa-star {{ $i <= $rating ? 'text-yellow-400' : 'text-gray-300' }} text-xs mr-0.5"></i>
+            @endfor
+            <span class="ml-1 text-xs text-gray-500">({{ number_format($rating, 1) }})</span>
+        </div>
+        <div class="flex items-center mb-2">
+            @if (isset($product->original_price) && $product->original_price > $product->price)
+                <span class="text-gray-400 text-xs line-through mr-2">{{ $product->currency }}
+                    {{ number_format($product->original_price, 2) }}</span>
+                <span class="text-red-500 text-sm font-semibold mr-2">{{ $product->currency }}
+                    {{ number_format($product->price, 2) }}</span>
+                <span
+                    class="bg-red-100 text-red-600 text-xs px-2 py-0.5 rounded-full font-bold">-{{ round((($product->original_price - $product->price) / $product->original_price) * 100) }}%</span>
+            @else
+                <span class="text-gray-800 text-sm font-semibold">{{ $product->currency }}
+                    {{ number_format($product->price, 2) }}</span>
+            @endif
+        </div>
 
         <div class="flex items-center justify-between">
             <div class="flex items-center space-x-2">
