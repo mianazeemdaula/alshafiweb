@@ -11,10 +11,16 @@
     </title>
     <meta name="description" content="{{ config('global.description_' . App::getLocale(), 'eCommerce') }}">
     <meta name="keywords" content="{{ config('global.keywords_' . App::getLocale(), 'eCommerce') }}">
+
+    {{-- Font Awesome CDN --}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body>
+<body class="{{ App::isLocale('ar') ? 'arabic-text' : '' }}">
     <div class="z-50 w-full bg-white">
         @include('layouts.partials.header')
     </div>
@@ -60,6 +66,19 @@
                 element.style.display = count > 0 ? 'flex' : 'none';
             });
         }
+
+        // Country and Language Selector JavaScript
+        document.getElementById('country-selector').addEventListener('change', function() {
+            const selectedCountry = this.value;
+            window.location.href = window.location.pathname + '?country=' + selectedCountry;
+        });
+
+        document.getElementById('locale-selector').addEventListener('change', function() {
+            const selectedLocale = this.value;
+            const currentUrl = new URL(window.location);
+            currentUrl.searchParams.set('locale', selectedLocale);
+            window.location.href = currentUrl.toString();
+        });
     </script>
 </body>
 

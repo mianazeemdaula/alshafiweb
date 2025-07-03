@@ -13,7 +13,8 @@
                 <div class="text-gray-500 text-6xl mb-4">🛒</div>
                 <h2 class="text-2xl font-bold text-gray-700 mb-2">Your cart is empty</h2>
                 <p class="text-gray-500 mb-6">Add some products to get started!</p>
-                <a href="/products" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium">
+                <a href="{{ route('web.products') }}"
+                    class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium">
                     Continue Shopping
                 </a>
             </div>
@@ -42,7 +43,7 @@
                     </div>
 
                     <div class="mt-6 flex space-x-4">
-                        <a href="/products"
+                        <a href="{{ route('web.products') }}"
                             class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 px-6 py-3 rounded-lg font-medium text-center">
                             Continue Shopping
                         </a>

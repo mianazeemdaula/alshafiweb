@@ -2,15 +2,29 @@
 @section('content')
     <div class="bg-gray-100 flex items-center justify-between px-4 py-2">
         <div>
-            Showing {{ $products->firstItem() }} to {{ $products->lastItem() }} of {{ $products->total() }} entries
+            {{ __('showing_entries', [
+                'first' => $products->firstItem(),
+                'last' => $products->lastItem(),
+                'total' => $products->total(),
+            ]) }}
         </div>
         <div>
-            <form action="" method="get" class="flex space-x-2 items-center">
-                <div class="text-xs">Sort by</div>
-                <select name="" id="" class="p-1 rounded w-40">
-                    <option value="">Price</option>
-                    <option value="">Name</option>
-                    <option value="">Rating</option>
+            <form action="{{ route('web.products') }}" method="get" class="flex space-x-2 items-center">
+                {{-- Preserve existing filters --}}
+                @foreach (collect(request()->query())->except(['sort', 'order']) as $key => $value)
+                    <input type="hidden" name="{{ $key }}" value="{{ $value }}">
+                @endforeach
+
+                <div class="text-xs">{{ __('sort_by') }}</div>
+                <select name="sort" class="p-1 rounded w-40" onchange="this.form.submit()">
+                    <option value="newest" {{ request('sort') == 'newest' ? 'selected' : '' }}>{{ __('Newest') }}</option>
+                    <option value="price_low" {{ request('sort') == 'price_low' ? 'selected' : '' }}>
+                        {{ __('Price: Low to High') }}</option>
+                    <option value="price_high" {{ request('sort') == 'price_high' ? 'selected' : '' }}>
+                        {{ __('Price: High to Low') }}</option>
+                    <option value="name" {{ request('sort') == 'name' ? 'selected' : '' }}>{{ __('name') }}</option>
+                    <option value="rating" {{ request('sort') == 'rating' ? 'selected' : '' }}>{{ __('rating') }}
+                    </option>
                 </select>
             </form>
         </div>
@@ -19,54 +33,71 @@
         <div class="w-3/12 bg-slate-200">
             <div class="px-4 py-4 ">
                 <div class="flex flex-col gap-2">
+                    {{-- Price Range Filter --}}
                     <div class="flex flex-col gap-2 items-start">
-                        <form action="{{ request()->fullUrlWithQuery([]) }}" method="get"
-                            class="flex gap-1 items-center mb-0">
-                            @foreach (collect(request()->query())->except(['min', 'max', 'start', 'category']) as $key => $value)
+                        <h3 class="font-medium text-sm">{{ __('Price Range') }}</h3>
+                        <form action="{{ route('web.products') }}" method="get" class="flex gap-1 items-center mb-0">
+                            {{-- Preserve other filters --}}
+                            @foreach (collect(request()->query())->except(['min', 'max']) as $key => $value)
                                 <input type="hidden" name="{{ $key }}" value="{{ $value }}">
                             @endforeach
                             <input type="number" name="min" class="rounded p-1 w-28 text-xs" min="0"
-                                placeholder="Min" value="{{ request('min') }}">
+                                placeholder="{{ __('min') }}" value="{{ request('min') }}">
                             <span class="text-xs">-</span>
                             <input type="number" name="max" class="rounded p-1 w-28 text-xs" min="0"
-                                placeholder="Max" value="{{ request('max') }}">
-                            <button type="submit" class="bg-blue-500 text-white px-2 py-1 rounded text-xs">Go</button>
+                                placeholder="{{ __('max') }}" value="{{ request('max') }}">
+                            <button type="submit"
+                                class="bg-blue-500 text-white px-2 py-1 rounded text-xs">{{ __('go') }}</button>
                         </form>
+
+                        {{-- Clear price filter --}}
+                        @if (request('min') || request('max'))
+                            <a href="{{ request()->fullUrlWithQuery(['min' => null, 'max' => null]) }}"
+                                class="text-xs text-red-600 hover:underline">{{ __('Clear Price Filter') }}</a>
+                        @endif
+                    </div>
+
+                    {{-- Rating Filter --}}
+                    <div class="flex flex-col gap-2 items-start mt-4">
+                        <h3 class="font-medium text-sm">{{ __('Minimum Rating') }}</h3>
                         <div class="flex flex-wrap gap-1 w-full">
                             @for ($i = 1; $i <= 5; $i++)
-                                <form action="" method="get" class="inline">
-                                    @foreach (collect(request()->query())->except(['category', 'start', 'min', 'max']) as $key => $value)
-                                        <input type="hidden" name="{{ $key }}" value="{{ $value }}">
-                                    @endforeach
-                                    <input type="hidden" name="start" value="{{ $i }}">
-                                    <button type="submit"
-                                        class="inline-flex items-center px-2 py-0.5 rounded-full border transition text-xs font-medium mb-1 {{ request('start') == $i ? 'bg-green-500 text-white border-green-500' : 'bg-white text-blue-600 border-blue-400 hover:bg-blue-50' }}">
-                                        @for ($j = 1; $j <= 5; $j++)
-                                            <i
-                                                class="fa-solid fa-star {{ $i >= $j ? 'text-yellow-400' : 'text-gray-300' }} text-[9px] mr-0.5"></i>
-                                        @endfor
-                                        <span class="ml-0.5">{{ $i }}</span>
-                                    </button>
-                                </form>
+                                <a href="{{ request()->fullUrlWithQuery(['rating' => $i]) }}"
+                                    class="inline-flex items-center px-2 py-0.5 rounded-full border transition text-xs font-medium mb-1 {{ request('rating') == $i ? 'bg-green-500 text-white border-green-500' : 'bg-white text-blue-600 border-blue-400 hover:bg-blue-50' }}">
+                                    @for ($j = 1; $j <= 5; $j++)
+                                        <i
+                                            class="fa-solid fa-star {{ $i >= $j ? 'text-yellow-400' : 'text-gray-300' }} text-[9px] mr-0.5"></i>
+                                    @endfor
+                                    <span class="ml-0.5">{{ $i }}+</span>
+                                </a>
                             @endfor
                         </div>
+
+                        {{-- Clear rating filter --}}
+                        @if (request('rating'))
+                            <a href="{{ request()->fullUrlWithQuery(['rating' => null]) }}"
+                                class="text-xs text-red-600 hover:underline">{{ __('Clear Rating Filter') }}</a>
+                        @endif
                     </div>
                 </div>
             </div>
             <div class="px-4 py-1 mt-2">
+                <h3 class="font-medium text-sm mb-2">{{ __('Categories') }}</h3>
                 <div class="flex flex-wrap gap-1 w-full">
-                    @foreach (App\Models\Category::all() as $item)
-                        <form action="" method="get" class="inline">
-                            @foreach (collect(request()->query())->except(['category', 'start', 'min', 'max']) as $key => $value)
-                                <input type="hidden" name="{{ $key }}" value="{{ $value }}">
-                            @endforeach
-                            <input type="hidden" name="category" value="{{ $item->slug }}">
-                            <button type="submit"
+                    {{-- All categories option --}}
+                    <a href="{{ request()->fullUrlWithQuery(['category' => null]) }}"
+                        class="inline-flex items-center px-2 py-0.5 rounded-full border transition text-xs font-medium mb-1 {{ !request('category') ? 'bg-green-500 text-white border-green-500' : 'bg-white text-blue-600 border-blue-400 hover:bg-blue-50' }}">
+                        {{ __('All Categories') }}
+                    </a>
+
+                    @if (isset($categories))
+                        @foreach ($categories as $item)
+                            <a href="{{ request()->fullUrlWithQuery(['category' => $item->slug]) }}"
                                 class="inline-flex items-center px-2 py-0.5 rounded-full border transition text-xs font-medium mb-1 {{ request('category') == $item->slug ? 'bg-green-500 text-white border-green-500' : 'bg-white text-blue-600 border-blue-400 hover:bg-blue-50' }}">
                                 {{ $item->name }}
-                            </button>
-                        </form>
-                    @endforeach
+                            </a>
+                        @endforeach
+                    @endif
                 </div>
             </div>
         </div>

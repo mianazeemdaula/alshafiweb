@@ -14,22 +14,32 @@
         <div class="text-sm font-light mt-2">{{ $product->name }}</div>
         <div class="flex items-center mb-1">
             @php
-                $rating = $product->rating ?? 0;
+                $rating = $product->average_rating ?? 0;
+                $fullStars = floor($rating);
+                $hasHalfStar = $rating - $fullStars >= 0.5;
             @endphp
             @for ($i = 1; $i <= 5; $i++)
-                <i
-                    class="fa-solid fa-star {{ $i <= $rating ? 'text-yellow-400' : 'text-gray-300' }} text-xs mr-0.5"></i>
+                @if ($i <= $fullStars)
+                    <i class="fa-solid fa-star text-yellow-400 text-xs mr-0.5"></i>
+                @elseif ($i == $fullStars + 1 && $hasHalfStar)
+                    <i class="fa-solid fa-star-half-stroke text-yellow-400 text-xs mr-0.5"></i>
+                @else
+                    <i class="fa-regular fa-star text-gray-300 text-xs mr-0.5"></i>
+                @endif
             @endfor
             <span class="ml-1 text-xs text-gray-500">({{ number_format($rating, 1) }})</span>
         </div>
         <div class="flex items-center mb-2">
-            @if (isset($product->original_price) && $product->original_price > $product->price)
+            @if (isset($product->discount) && $product->discount > 0)
+                @php
+                    $originalPrice = $product->price + $product->discount;
+                @endphp
                 <span class="text-gray-400 text-xs line-through mr-2">{{ $product->currency }}
-                    {{ number_format($product->original_price, 2) }}</span>
+                    {{ number_format($originalPrice, 2) }}</span>
                 <span class="text-red-500 text-sm font-semibold mr-2">{{ $product->currency }}
                     {{ number_format($product->price, 2) }}</span>
                 <span
-                    class="bg-red-100 text-red-600 text-xs px-2 py-0.5 rounded-full font-bold">-{{ round((($product->original_price - $product->price) / $product->original_price) * 100) }}%</span>
+                    class="bg-red-100 text-red-600 text-xs px-2 py-0.5 rounded-full font-bold">-{{ round(($product->discount / $originalPrice) * 100) }}%</span>
             @else
                 <span class="text-gray-800 text-sm font-semibold">{{ $product->currency }}
                     {{ number_format($product->price, 2) }}</span>
@@ -41,7 +51,7 @@
                 <button type="button"
                     class="quantity-btn bg-gray-200 hover:bg-gray-300 text-gray-700 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold"
                     data-action="minus" data-product-card="{{ $product->id }}">
-                    -
+                    <i class="fa-solid fa-minus text-xs"></i>
                 </button>
                 <input type="number"
                     class="quantity-input w-12 text-center border border-gray-300 rounded px-1 py-1 text-sm"
@@ -49,7 +59,7 @@
                 <button type="button"
                     class="quantity-btn bg-gray-200 hover:bg-gray-300 text-gray-700 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold"
                     data-action="plus" data-product-card="{{ $product->id }}">
-                    +
+                    <i class="fa-solid fa-plus text-xs"></i>
                 </button>
             </div>
 

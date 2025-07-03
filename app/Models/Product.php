@@ -31,7 +31,36 @@ class Product extends Model
 
     public function getCurrencyAttribute()
     {
-        return $this->country->currency;
+        return $this->country ? $this->country->currency_symbol : '$';
+    }
+
+    public function getFormattedPriceAttribute()
+    {
+        return $this->currency . ' ' . number_format($this->price, 2);
+    }
+
+    public function getFormattedOriginalPriceAttribute()
+    {
+        if (isset($this->discount) && $this->discount > 0) {
+            $originalPrice = $this->price + $this->discount;
+            return $this->currency . ' ' . number_format($originalPrice, 2);
+        }
+        return null;
+    }
+
+    public function getRatingAttribute()
+    {
+        return $this->reviews()->avg('rating') ?? 0;
+    }
+
+    public function getAverageRatingAttribute()
+    {
+        return round($this->reviews()->avg('rating') ?? 0, 1);
+    }
+
+    public function getReviewsCountAttribute()
+    {
+        return $this->reviews()->count();
     }
 
     public function category()

@@ -19,6 +19,7 @@ class Order extends Model
         'payment_date',
         'payment_status',
         'street_address',
+        'shipping_address',
         'city_id',
         'zip_code',
         'shipping_cost',
@@ -33,6 +34,7 @@ class Order extends Model
         'discount' => 'integer',
         'shipping_cost' => 'integer',
         'zip_code' => 'integer',
+        'shipping_address' => 'array',
     ];
 
     public function user()
@@ -58,5 +60,13 @@ class Order extends Model
     public function paymentMethod()
     {
         return $this->belongsTo(PaymentMethod::class);
+    }
+
+    /**
+     * Get the total amount in decimal format
+     */
+    public function getTotalAmountAttribute()
+    {
+        return $this->total / 100;
     }
 }

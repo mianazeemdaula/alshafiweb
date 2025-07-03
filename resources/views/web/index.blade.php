@@ -12,14 +12,92 @@
 
     <div class="p-4 bg-slate-100">
         <div class="mb-2 flex items-center justify-between">
-            <h1 class="text-xl font-light">Our Products</h1>
-            <a href="#" class="text-base font-light">View All</a>
+            <h1 class="text-xl font-light">{{ __('Our Products') }}</h1>
+            <a href="{{ route('web.products') }}" class="text-base font-light">{{ __('View All') }}</a>
         </div>
         <div class="grid grid-cols-5 gap-4 ">
-            @foreach (App\Models\Product::take(10)->get() as $item)
-                <x-product-card1 :product="$item" />
-            @endforeach
+            @if (isset($products) && $products->count() > 0)
+                @foreach ($products as $item)
+                    <x-product-card1 :product="$item" />
+                @endforeach
+            @else
+                <div class="col-span-5 text-center py-8">
+                    <p class="text-gray-500">{{ __('No products available for your country') }}</p>
+                    <a href="{{ route('web.products') }}"
+                        class="text-blue-600 hover:underline">{{ __('Browse all products') }}</a>
+                </div>
+            @endif
         </div>
+    </div>
+
+    <!-- Blog Section -->
+    <div class="p-4 bg-white">
+        <div class="mb-4 flex items-center justify-between">
+            <h2 class="text-xl font-light">{{ __('Latest Articles') }}</h2>
+            <a href="{{ route('blog.index') }}"
+                class="text-base font-light text-blue-600 hover:text-blue-700">{{ __('View All') }}</a>
+        </div>
+
+        @if (isset($blogPosts) && $blogPosts->count() > 0)
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                @foreach ($blogPosts as $post)
+                    <article class="bg-gray-50 rounded-lg overflow-hidden hover:shadow-md transition-shadow">
+                        <!-- Post Image -->
+                        <div class="h-32 bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center">
+                            @if ($post->image)
+                                <img src="{{ asset('storage/' . $post->image) }}" alt="{{ $post->title }}"
+                                    class="w-full h-full object-cover">
+                            @else
+                                <div class="text-white text-center">
+                                    <i class="fa-solid fa-newspaper text-2xl mb-1"></i>
+                                    <p class="text-xs">{{ $post->category->name }}</p>
+                                </div>
+                            @endif
+                        </div>
+
+                        <!-- Post Content -->
+                        <div class="p-4">
+                            <!-- Category and Date -->
+                            <div class="flex items-center justify-between mb-2">
+                                <span
+                                    class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                    {{ $post->category->name }}
+                                </span>
+                                <span class="text-xs text-gray-500">
+                                    {{ $post->created_at->format('M d') }}
+                                </span>
+                            </div>
+
+                            <!-- Title -->
+                            <h3 class="text-sm font-medium text-gray-800 mb-2 line-clamp-2">
+                                <a href="{{ route('blog.post', $post->slug) }}" class="hover:text-blue-600 transition">
+                                    {{ $post->title }}
+                                </a>
+                            </h3>
+
+                            <!-- Excerpt -->
+                            <p class="text-gray-600 text-xs mb-3 line-clamp-2">
+                                {{ Str::limit(strip_tags($post->content), 80) }}
+                            </p>
+
+                            <!-- Read More -->
+                            <a href="{{ route('blog.post', $post->slug) }}"
+                                class="inline-flex items-center text-blue-600 hover:text-blue-700 text-xs font-medium transition">
+                                {{ __('Read More') }}
+                                <i class="fa-solid fa-arrow-right ml-1 text-xs"></i>
+                            </a>
+                        </div>
+                    </article>
+                @endforeach
+            </div>
+        @else
+            <div class="text-center py-8">
+                <i class="fa-solid fa-newspaper text-4xl text-gray-300 mb-3"></i>
+                <p class="text-gray-500 mb-2">{{ __('No articles available for your region') }}</p>
+                <a href="{{ route('blog.index') }}"
+                    class="text-blue-600 hover:underline">{{ __('View All Articles') }}</a>
+            </div>
+        @endif
     </div>
 
     <div class="mt-3 p-4">

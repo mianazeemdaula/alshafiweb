@@ -2,15 +2,19 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', 'App\Http\Controllers\WebController@index');
-Route::get('/products', 'App\Http\Controllers\WebController@products');
-Route::get('/contact-us', 'App\Http\Controllers\WebController@contactus');
-Route::get('/cart', 'App\Http\Controllers\WebController@cart');
-Route::get('/checkout', 'App\Http\Controllers\CheckoutController@index');
+Route::get('/', 'App\Http\Controllers\WebController@index')->name('web.home');
+Route::get('/products', 'App\Http\Controllers\WebController@products')->name('web.products');
+Route::get('/contact-us', 'App\Http\Controllers\WebController@contactus')->name('web.contact');
+Route::get('/cart', 'App\Http\Controllers\WebController@cart')->name('web.cart');
+Route::get('/checkout', 'App\Http\Controllers\CheckoutController@index')->name('web.checkout');
 Route::get('/track-order', 'App\Http\Controllers\WebController@trackOrder')->name('track.order');
 Route::get('/news', 'App\\Http\\Controllers\\WebController@news')->name('news');
 Route::get('/categories', 'App\\Http\\Controllers\\WebController@categories')->name('categories');
 Route::get('/services', 'App\\Http\\Controllers\\WebController@services')->name('services');
+
+// Blog routes
+Route::get('/blog', 'App\Http\Controllers\WebController@blog')->name('blog.index');
+Route::get('/blog/{slug}', 'App\Http\Controllers\WebController@blogPost')->name('blog.post');
 
 // Cart routes
 Route::post('/cart/add', 'App\Http\Controllers\CartController@add')->name('cart.add');
@@ -63,3 +67,13 @@ Route::get('/send-mail', function () {
         return $e->getMessage();
     }
 });
+
+Route::get('/change-country/{country}', function($country) {
+    session(['country' => $country]);
+    return redirect()->back();
+})->name('change.country');
+
+Route::get('/change-locale/{locale}', function($locale) {
+    session(['locale' => $locale]);
+    return redirect()->back();
+})->name('change.locale');

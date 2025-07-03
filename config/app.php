@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Application Name
@@ -86,6 +85,38 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Available Locales
+    |--------------------------------------------------------------------------
+    |
+    | These are the available locales for the application
+    |
+    */
+
+    'available_locales' => [
+        'en' => ['name' => 'English', 'flag' => '🇺🇸'],
+        'ar' => ['name' => 'Arabic', 'flag' => '🇸🇦'],
+        'es' => ['name' => 'Spanish', 'flag' => '🇪🇸'],
+        'fr' => ['name' => 'French', 'flag' => '🇫🇷'],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Available Countries
+    |--------------------------------------------------------------------------
+    |
+    | These are the available countries for the application
+    |
+    */
+
+    'available_countries' => [
+        'US' => ['name' => 'United States', 'currency' => 'USD', 'locale' => 'en'],
+        'SA' => ['name' => 'Saudi Arabia', 'currency' => 'SAR', 'locale' => 'ar'],
+        'ES' => ['name' => 'Spain', 'currency' => 'EUR', 'locale' => 'es'],
+        'FR' => ['name' => 'France', 'currency' => 'EUR', 'locale' => 'fr'],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Encryption Key
     |--------------------------------------------------------------------------
     |
@@ -122,5 +153,4 @@ return [
         'driver' => env('APP_MAINTENANCE_DRIVER', 'file'),
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
-
 ];

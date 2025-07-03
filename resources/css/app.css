@@ -1,4 +1,187 @@
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
 @import "@fortawesome/fontawesome-free/css/all.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Global Font Awesome icon styles - ensures icons work everywhere */
+.fa,
+.fas,
+.far,
+.fab,
+.fad,
+.fal,
+[class^="fa-"],
+[class*=" fa-"] {
+    font-family: "Font Awesome 6 Free", "Font Awesome 6 Pro", "Font Awesome 6 Brands" !important;
+    font-weight: 900 !important;
+    speak: none;
+    font-style: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Brand icons specific weight */
+.fa-brands,
+.fab {
+    font-weight: 400 !important;
+}
+
+/* Regular icons specific weight */
+.fa-regular,
+.far {
+    font-weight: 400 !important;
+}
+
+/* Base font family configuration */
+body {
+    font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Arabic language font configuration */
+html[lang="ar"] body,
+html[lang="ar"] p,
+html[lang="ar"] div,
+html[lang="ar"] span,
+html[lang="ar"] h1,
+html[lang="ar"] h2,
+html[lang="ar"] h3,
+html[lang="ar"] h4,
+html[lang="ar"] h5,
+html[lang="ar"] h6,
+html[lang="ar"] a,
+html[lang="ar"] button,
+html[lang="ar"] input,
+html[lang="ar"] textarea,
+html[lang="ar"] select,
+html[lang="ar"] label,
+html[lang="ar"] .text-sm,
+html[lang="ar"] .text-base,
+html[lang="ar"] .text-lg,
+html[lang="ar"] .text-xl,
+html[lang="ar"] .text-2xl {
+    font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+}
+
+/* Ensure Font Awesome icons maintain their font family even in Arabic */
+html[lang="ar"] .fa,
+html[lang="ar"] .fas,
+html[lang="ar"] .far,
+html[lang="ar"] .fab,
+html[lang="ar"] .fad,
+html[lang="ar"] .fal,
+html[lang="ar"] [class^="fa-"],
+html[lang="ar"] [class*=" fa-"] {
+    font-family: "Font Awesome 6 Free", "Font Awesome 6 Pro", "Font Awesome 6 Brands" !important;
+}
+
+/* Arabic text styling */
+html[lang="ar"] .arabic-text {
+    font-weight: 400;
+    line-height: 1.6;
+}
+
+html[lang="ar"] .arabic-heading {
+    font-weight: 600;
+}
+
+/* RTL text alignment */
+html[lang="ar"] .rtl-text {
+    text-align: right;
+}
+
+/* RTL flex direction */
+html[lang="ar"] .rtl-flex {
+    flex-direction: row-reverse;
+}
+
+/* Ensure icons display properly in all contexts */
+i[class^="fa-"],
+i[class*=" fa-"] {
+    display: inline-block;
+    width: auto;
+    height: 1em;
+    vertical-align: -0.125em;
+}
+
+/* Fix icon alignment in buttons and links */
+button i,
+a i {
+    margin-right: 0.5rem;
+}
+
+/* RTL icon spacing */
+html[lang="ar"] button i,
+html[lang="ar"] a i {
+    margin-right: 0;
+    margin-left: 0.5rem;
+}
+
+/* Social media icons specific styling */
+.social-icon {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.social-icon i {
+    width: 1.2em;
+    text-align: center;
+}
+
+/* Product card button icon centering */
+.quantity-btn,
+.add-to-cart-btn {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.quantity-btn i,
+.add-to-cart-btn i {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    margin: 0 !important;
+}
+
+/* Additional Font Awesome CDN fallback styles */
+@supports not (font-family: "Font Awesome 6 Free") {
+    .fa,
+    .fas,
+    .far,
+    .fab,
+    .fad,
+    .fal,
+    [class^="fa-"],
+    [class*=" fa-"] {
+        font-family: "Font Awesome 5 Free", "Font Awesome 5 Pro", "Font Awesome 5 Brands", "FontAwesome" !important;
+    }
+}
+
+/* Text truncation utilities */
+.line-clamp-1 {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}

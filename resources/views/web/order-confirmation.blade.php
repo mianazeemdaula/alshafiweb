@@ -25,7 +25,7 @@
                             <div class="space-y-1">
                                 <p><span class="font-medium">Order ID:</span> #{{ $order->id }}</p>
                                 <p><span class="font-medium">Order Date:</span>
-                                    {{ $order->order_date->format('M d, Y h:i A') }}</p>
+                                    {{ $order->created_at->format('M d, Y h:i A') }}</p>
                                 <p><span class="font-medium">Payment Method:</span>
                                     <span
                                         class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
@@ -43,16 +43,23 @@
 
                         <div>
                             <h3 class="text-sm font-medium text-gray-500 uppercase tracking-wide mb-2">Shipping Address</h3>
-                            @php
-                                $shipping = json_decode($order->shipping_address, true);
-                            @endphp
-                            <div class="text-sm">
-                                <p class="font-medium">{{ $shipping['first_name'] }} {{ $shipping['last_name'] }}</p>
-                                <p>{{ $shipping['phone'] }}</p>
-                                <p>{{ $shipping['address'] }}</p>
-                                <p>{{ $shipping['city'] }}{{ $shipping['postal_code'] ? ', ' . $shipping['postal_code'] : '' }}
-                                </p>
-                            </div>
+                            @if ($order->shipping_address)
+                                <div class="text-sm">
+                                    <p class="font-medium">{{ $order->shipping_address['first_name'] ?? '' }}
+                                        {{ $order->shipping_address['last_name'] ?? '' }}</p>
+                                    <p>{{ $order->shipping_address['phone'] ?? '' }}</p>
+                                    <p>{{ $order->shipping_address['address'] ?? $order->street_address }}</p>
+                                    <p>{{ $order->shipping_address['city'] ?? '' }}{{ $order->shipping_address['postal_code'] ?? '' ? ', ' . $order->shipping_address['postal_code'] : '' }}
+                                    </p>
+                                </div>
+                            @else
+                                <div class="text-sm">
+                                    <p>{{ $order->street_address }}</p>
+                                    @if ($order->zip_code)
+                                        <p>{{ $order->zip_code }}</p>
+                                    @endif
+                                </div>
+                            @endif
                         </div>
                     </div>
 
@@ -74,12 +81,12 @@
                                     </div>
                                     <div class="flex-1">
                                         <h4 class="text-sm font-medium text-gray-900">{{ $detail->product->name }}</h4>
-                                        <p class="text-sm text-gray-500">Quantity: {{ $detail->quantity }}</p>
+                                        <p class="text-sm text-gray-500">Quantity: {{ $detail->qty }}</p>
                                         <p class="text-sm text-gray-500">Price: ${{ number_format($detail->price, 2) }}
                                             each</p>
                                     </div>
                                     <div class="text-sm font-medium text-gray-900">
-                                        ${{ number_format($detail->total, 2) }}
+                                        ${{ number_format($detail->price * $detail->qty, 2) }}
                                     </div>
                                 </div>
                             @endforeach
@@ -120,16 +127,16 @@
                 </ul>
             </div>
 
-            @if ($order->notes)
+            @if ($order->extra_note)
                 <div class="bg-gray-50 rounded-lg p-6 mb-6">
                     <h3 class="text-lg font-medium text-gray-900 mb-2">Order Notes</h3>
-                    <p class="text-gray-700">{{ $order->notes }}</p>
+                    <p class="text-gray-700">{{ $order->extra_note }}</p>
                 </div>
             @endif
 
             <!-- Action Buttons -->
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <a href="/products"
+                <a href="{{ route('web.products') }}"
                     class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium text-center">
                     Continue Shopping
                 </a>

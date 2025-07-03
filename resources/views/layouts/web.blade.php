@@ -7,11 +7,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Alshaafi Online</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    {{-- Font Awesome CDN --}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @yield('head')
 </head>
 
-<body>
+<body class="{{ App::isLocale('ar') ? 'arabic-text' : '' }}">
     <div class="flex bg-gray-100 min-h-screen">
         <!-- Sidebar -->
         <div id="sidebar"

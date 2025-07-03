@@ -13,6 +13,33 @@ window.Sortable = Sortable;
 // Alpine.start();
 import flatpickr from "flatpickr";
 
+// Font Awesome CDN loader - ensures icons load properly
+function loadFontAwesome() {
+    if (!document.querySelector('link[href*="font-awesome"]')) {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css';
+        link.integrity = 'sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==';
+        link.crossOrigin = 'anonymous';
+        link.referrerPolicy = 'no-referrer';
+        document.head.appendChild(link);
+    }
+}
+
+// Load Font Awesome when DOM is ready
+document.addEventListener('DOMContentLoaded', function () {
+    loadFontAwesome();
+
+    // Ensure all Font Awesome icons have proper classes
+    const icons = document.querySelectorAll('[class*="fa-"]');
+    icons.forEach(icon => {
+        if (!icon.classList.contains('fa') && !icon.classList.contains('fas') &&
+            !icon.classList.contains('far') && !icon.classList.contains('fab')) {
+            icon.classList.add('fa');
+        }
+    });
+});
+
 // Init flatpickr
 flatpickr(".datepicker", {
     mode: "range",
