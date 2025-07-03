@@ -60,5 +60,10 @@
     "Back to Blog": "Retour au Blog",
     "Related Articles": "Articles Liés",
     "Latest Articles": "Derniers Articles",
-    "No articles available for your region": "Aucun article disponible pour votre région"
+    "No articles available for your region": "Aucun article disponible pour votre région",
+    "Toggle Theme": "Basculer le Thème",
+    "Switch to dark mode": "Passer en mode sombre",
+    "Switch to light mode": "Passer en mode clair",
+    "Dark": "Sombre",
+    "Light": "Clair"
 }

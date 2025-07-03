@@ -12,7 +12,7 @@ class SetLocaleAndCountry
     public function handle(Request $request, Closure $next)
     {
         // Get country from URL parameter, session, or default
-        $country = $request->get('country', Session::get('country', 'US'));
+        $country = $request->get('country', Session::get('country', 'PK'));
         $locale = $request->get('locale', Session::get('locale'));
         
         // Get available countries and locales
@@ -21,17 +21,17 @@ class SetLocaleAndCountry
         
         // Validate country
         if (!array_key_exists($country, $availableCountries)) {
-            $country = 'US';
+            $country = 'PK';
         }
         
         // Set locale based on country if not explicitly set
         if (!$locale) {
-            $locale = $availableCountries[$country]['locale'] ?? 'en';
+            $locale = $availableCountries[$country]['locale'] ?? 'ur';
         }
         
         // Validate locale
         if (!array_key_exists($locale, $availableLocales)) {
-            $locale = 'en';
+            $locale = 'ur';
         }
         
         // Store in session

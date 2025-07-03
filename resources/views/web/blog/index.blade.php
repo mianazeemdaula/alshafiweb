@@ -1,16 +1,17 @@
 @extends('layouts.guest')
 
 @section('content')
-    <div class="bg-gray-100 py-8">
+    <div class="bg-gray-100 dark:bg-gray-900 py-8 min-h-screen">
         <div class="container mx-auto px-4">
             <!-- Page Header -->
-            <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
-                <h1 class="text-3xl font-bold text-gray-800 mb-2">{{ __('Blog') }}</h1>
-                <p class="text-gray-600">{{ __('Stay updated with our latest articles and insights') }}</p>
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 mb-6 border border-gray-200 dark:border-gray-700">
+                <h1 class="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-2">{{ __('Blog') }}</h1>
+                <p class="text-gray-600 dark:text-gray-400">{{ __('Stay updated with our latest articles and insights') }}
+                </p>
             </div>
 
             <!-- Filters and Search -->
-            <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 mb-6 border border-gray-200 dark:border-gray-700">
                 <div class="flex flex-col md:flex-row gap-4 items-center justify-between">
                     <!-- Search -->
                     <div class="flex-1 max-w-md">
@@ -19,10 +20,10 @@
                                 <input type="hidden" name="{{ $key }}" value="{{ $value }}">
                             @endforeach
                             <input type="text" name="search"
-                                class="flex-1 border border-gray-300 rounded-l-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                class="flex-1 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-l-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
                                 placeholder="{{ __('Search articles...') }}" value="{{ request('search') }}">
                             <button type="submit"
-                                class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-r-lg transition">
+                                class="bg-blue-500 dark:bg-blue-600 hover:bg-blue-600 dark:hover:bg-blue-700 text-white px-6 py-2 rounded-r-lg transition">
                                 <i class="fa-solid fa-search"></i>
                             </button>
                         </form>
@@ -30,14 +31,14 @@
 
                     <!-- Category Filter -->
                     <div class="flex gap-2 items-center">
-                        <span class="text-sm text-gray-600">{{ __('Category') }}:</span>
+                        <span class="text-sm text-gray-600 dark:text-gray-400">{{ __('Category') }}:</span>
                         <a href="{{ request()->fullUrlWithQuery(['category' => null]) }}"
-                            class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium transition {{ !request('category') ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }}">
+                            class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium transition {{ !request('category') ? 'bg-blue-500 dark:bg-blue-600 text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600' }}">
                             {{ __('All') }}
                         </a>
                         @foreach ($categories as $category)
                             <a href="{{ request()->fullUrlWithQuery(['category' => $category->slug]) }}"
-                                class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium transition {{ request('category') == $category->slug ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }}">
+                                class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium transition {{ request('category') == $category->slug ? 'bg-blue-500 dark:bg-blue-600 text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600' }}">
                                 {{ $category->name }}
                             </a>
                         @endforeach
@@ -45,7 +46,7 @@
 
                     <!-- Sort -->
                     <div class="flex gap-2 items-center">
-                        <span class="text-sm text-gray-600">{{ __('sort_by') }}:</span>
+                        <span class="text-sm text-gray-600 dark:text-gray-400">{{ __('sort_by') }}:</span>
                         <form action="{{ route('blog.index') }}" method="get" class="inline">
                             @foreach (collect(request()->query())->except(['sort']) as $key => $value)
                                 <input type="hidden" name="{{ $key }}" value="{{ $value }}">

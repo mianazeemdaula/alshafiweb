@@ -60,5 +60,10 @@
     "Back to Blog": "Volver al Blog",
     "Related Articles": "Artículos Relacionados",
     "Latest Articles": "Últimos Artículos",
-    "No articles available for your region": "No hay artículos disponibles para tu región"
+    "No articles available for your region": "No hay artículos disponibles para tu región",
+    "Toggle Theme": "Cambiar Tema",
+    "Switch to dark mode": "Cambiar a modo oscuro",
+    "Switch to light mode": "Cambiar a modo claro",
+    "Dark": "Oscuro",
+    "Light": "Claro"
 }

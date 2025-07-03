@@ -1,9 +1,202 @@
 /* Import Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Urdu:wght@300;400;500;600;700&display=swap');
 @import "@fortawesome/fontawesome-free/css/all.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Theme variables */
+:root {
+    /* Light theme variables */
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8fafc;
+    --bg-tertiary: #f1f5f9;
+    --bg-hover: #e2e8f0;
+    --text-primary: #1f2937;
+    --text-secondary: #6b7280;
+    --text-muted: #9ca3af;
+    --border-color: #e5e7eb;
+    --border-light: #f3f4f6;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --shadow-hover: rgba(0, 0, 0, 0.15);
+    --accent-blue: #3b82f6;
+    --accent-blue-hover: #2563eb;
+    --accent-green: #059669;
+    --accent-green-hover: #047857;
+    --accent-red: #dc2626;
+    --accent-orange: #ea580c;
+}
+
+/* Dark theme variables */
+.dark {
+    --bg-primary: #111827;
+    --bg-secondary: #1f2937;
+    --bg-tertiary: #374151;
+    --bg-hover: #4b5563;
+    --text-primary: #f9fafb;
+    --text-secondary: #d1d5db;
+    --text-muted: #9ca3af;
+    --border-color: #374151;
+    --border-light: #4b5563;
+    --shadow-color: rgba(0, 0, 0, 0.3);
+    --shadow-hover: rgba(0, 0, 0, 0.4);
+    --accent-blue: #60a5fa;
+    --accent-blue-hover: #3b82f6;
+    --accent-green: #10b981;
+    --accent-green-hover: #059669;
+    --accent-red: #f87171;
+    --accent-orange: #fb923c;
+}
+
+/* Base theme styles */
+body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Enhanced theme toggle styles */
+.theme-toggle {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 1px solid;
+    border-radius: 0.5rem;
+    background: transparent;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.theme-toggle {
+    border-color: #e5e7eb;
+    color: #6b7280;
+}
+
+.dark .theme-toggle {
+    border-color: #374151;
+    color: #9ca3af;
+}
+
+.theme-toggle:hover {
+    border-color: #3b82f6;
+    color: #3b82f6;
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+}
+
+.dark .theme-toggle:hover {
+    border-color: #60a5fa;
+    color: #60a5fa;
+    box-shadow: 0 4px 12px rgba(96, 165, 250, 0.15);
+}
+
+.theme-toggle i {
+    font-size: 1.1rem;
+    transition: transform 0.3s ease;
+}
+
+.theme-toggle:hover i {
+    transform: rotate(180deg);
+}
+
+/* Smooth transitions for all theme changes */
+*, *::before, *::after {
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+/* Header theming */
+.header-section {
+    background-color: var(--bg-primary);
+    border-color: var(--border-color);
+    color: var(--text-primary);
+}
+
+.header-link {
+    color: var(--text-secondary);
+    transition: color 0.2s ease;
+}
+
+.header-link:hover {
+    color: var(--text-primary);
+    background-color: var(--bg-hover);
+}
+
+/* Product card theming */
+.product-card {
+    background-color: var(--bg-primary);
+    border-color: var(--border-light);
+    box-shadow: 0 1px 3px var(--shadow-color);
+    transition: all 0.3s ease;
+}
+
+.product-card:hover {
+    box-shadow: 0 4px 12px var(--shadow-hover);
+    transform: translateY(-2px);
+}
+
+.product-price {
+    color: var(--accent-green);
+}
+
+.product-original-price {
+    color: var(--text-muted);
+}
+
+/* Blog card theming */
+.blog-card {
+    background-color: var(--bg-secondary);
+    border-color: var(--border-light);
+    transition: all 0.3s ease;
+}
+
+.blog-card:hover {
+    box-shadow: 0 4px 12px var(--shadow-hover);
+}
+
+/* Form elements theming */
+input, select, textarea {
+    background-color: var(--bg-secondary);
+    border-color: var(--border-color);
+    color: var(--text-primary);
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: var(--accent-blue);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Button theming */
+.btn-primary {
+    background-color: var(--accent-blue);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: var(--accent-blue-hover);
+}
+
+.btn-success {
+    background-color: var(--accent-green);
+    color: white;
+}
+
+.btn-success:hover {
+    background-color: var(--accent-green-hover);
+}
+
+/* Section backgrounds */
+.section-bg {
+    background-color: var(--bg-secondary);
+}
+
+.section-bg-alt {
+    background-color: var(--bg-tertiary);
+}
 
 /* Global Font Awesome icon styles - ensures icons work everywhere */
 .fa,
@@ -37,11 +230,6 @@
     font-weight: 400 !important;
 }
 
-/* Base font family configuration */
-body {
-    font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
 /* Arabic language font configuration */
 html[lang="ar"] body,
 html[lang="ar"] p,
@@ -67,7 +255,32 @@ html[lang="ar"] .text-2xl {
     font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
 }
 
-/* Ensure Font Awesome icons maintain their font family even in Arabic */
+/* Urdu language font configuration */
+html[lang="ur"] body,
+html[lang="ur"] p,
+html[lang="ur"] div,
+html[lang="ur"] span,
+html[lang="ur"] h1,
+html[lang="ur"] h2,
+html[lang="ur"] h3,
+html[lang="ur"] h4,
+html[lang="ur"] h5,
+html[lang="ur"] h6,
+html[lang="ur"] a,
+html[lang="ur"] button,
+html[lang="ur"] input,
+html[lang="ur"] textarea,
+html[lang="ur"] select,
+html[lang="ur"] label,
+html[lang="ur"] .text-sm,
+html[lang="ur"] .text-base,
+html[lang="ur"] .text-lg,
+html[lang="ur"] .text-xl,
+html[lang="ur"] .text-2xl {
+    font-family: 'Noto Sans Urdu', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+}
+
+/* Ensure Font Awesome icons maintain their font family even in Arabic and Urdu */
 html[lang="ar"] .fa,
 html[lang="ar"] .fas,
 html[lang="ar"] .far,
@@ -75,27 +288,39 @@ html[lang="ar"] .fab,
 html[lang="ar"] .fad,
 html[lang="ar"] .fal,
 html[lang="ar"] [class^="fa-"],
-html[lang="ar"] [class*=" fa-"] {
+html[lang="ar"] [class*=" fa-"],
+html[lang="ur"] .fa,
+html[lang="ur"] .fas,
+html[lang="ur"] .far,
+html[lang="ur"] .fab,
+html[lang="ur"] .fad,
+html[lang="ur"] .fal,
+html[lang="ur"] [class^="fa-"],
+html[lang="ur"] [class*=" fa-"] {
     font-family: "Font Awesome 6 Free", "Font Awesome 6 Pro", "Font Awesome 6 Brands" !important;
 }
 
 /* Arabic text styling */
-html[lang="ar"] .arabic-text {
+html[lang="ar"] .arabic-text,
+html[lang="ur"] .arabic-text {
     font-weight: 400;
     line-height: 1.6;
 }
 
-html[lang="ar"] .arabic-heading {
+html[lang="ar"] .arabic-heading,
+html[lang="ur"] .arabic-heading {
     font-weight: 600;
 }
 
 /* RTL text alignment */
-html[lang="ar"] .rtl-text {
+html[lang="ar"] .rtl-text,
+html[lang="ur"] .rtl-text {
     text-align: right;
 }
 
 /* RTL flex direction */
-html[lang="ar"] .rtl-flex {
+html[lang="ar"] .rtl-flex,
+html[lang="ur"] .rtl-flex {
     flex-direction: row-reverse;
 }
 
@@ -116,7 +341,9 @@ a i {
 
 /* RTL icon spacing */
 html[lang="ar"] button i,
-html[lang="ar"] a i {
+html[lang="ar"] a i,
+html[lang="ur"] button i,
+html[lang="ur"] a i {
     margin-right: 0;
     margin-left: 0.5rem;
 }
@@ -184,4 +411,112 @@ html[lang="ar"] a i {
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
+}
+
+/* Responsive product card improvements */
+@media (max-width: 640px) {
+    .product-card-mobile {
+        min-height: auto;
+    }
+    
+    .product-card-image {
+        height: 8rem; /* 128px */
+    }
+}
+
+/* Custom scrollbar for dark mode */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted);
+}
+
+/* Notification styles for dark mode */
+.cart-notification {
+    backdrop-filter: blur(10px);
+    border: 1px solid;
+}
+
+.cart-notification.bg-green-500 {
+    border-color: rgba(34, 197, 94, 0.3);
+}
+
+.cart-notification.bg-red-500 {
+    border-color: rgba(239, 68, 68, 0.3);
+}
+
+.cart-notification.bg-blue-500 {
+    border-color: rgba(59, 130, 246, 0.3);
+}
+
+/* Loading states for dark mode */
+.add-to-cart-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.dark .add-to-cart-btn:disabled {
+    opacity: 0.5;
+}
+
+/* Pagination styles for dark mode */
+.dark .pagination {
+    background-color: var(--bg-secondary);
+    border-color: var(--border-color);
+}
+
+.dark .pagination a,
+.dark .pagination span {
+    background-color: var(--bg-primary);
+    border-color: var(--border-color);
+    color: var(--text-primary);
+}
+
+.dark .pagination a:hover {
+    background-color: var(--bg-hover);
+}
+
+/* Line clamp utilities for text truncation */
+.line-clamp-1 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+}
+
+.line-clamp-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+
+.line-clamp-3 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+}
+
+/* Responsive product card improvements */
+@media (max-width: 640px) {
+    .product-card-mobile {
+        min-height: auto;
+    }
+    
+    .product-card-image {
+        height: 8rem; /* 128px */
+    }
 }

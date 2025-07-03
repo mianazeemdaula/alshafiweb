@@ -55,10 +55,10 @@ class DatabaseSeeder extends Seeder
         $user = User::find(3);
         $user->assignRole('user');
 
-
-        // add countries and states
-        Country::create(['name' => 'Pakistan', 'iso2' => 'PK', 'iso3' => 'PAK', 'phone_code' => '+92', 'currency' => 'PKR', 'currency_symbol' => 'Rs']);
-        Country::create(['name' => 'United Arab Emirates', 'iso2' => 'AE', 'iso3' => 'UAE', 'phone_code' => '+971', 'currency' => 'AED', 'currency_symbol' => 'AED']);
+        // Call the CountrySeeder to add our restricted countries
+        $this->call([
+            CountrySeeder::class,
+        ]);
 
         // Add states for Pakistan
         State::create(['country_id' => 1, 'name' => 'Punjab']);
@@ -67,12 +67,23 @@ class DatabaseSeeder extends Seeder
         State::create(['country_id' => 1, 'name' => 'Balochistan']);
         State::create(['country_id' => 1, 'name' => 'GB']);
 
+        // Add states for Bahrain
+        State::create(['country_id' => 2, 'name' => 'Capital']);
+        State::create(['country_id' => 2, 'name' => 'Muharraq']);
+        State::create(['country_id' => 2, 'name' => 'Northern']);
+        State::create(['country_id' => 2, 'name' => 'Southern']);
+
+        // Add states for Kuwait
+        State::create(['country_id' => 3, 'name' => 'Kuwait City']);
+        State::create(['country_id' => 3, 'name' => 'Hawalli']);
+        State::create(['country_id' => 3, 'name' => 'Ahmadi']);
+
         // Add states for UAE
-        State::create(['country_id' => 2, 'name' => 'Dubai']);
-        State::create(['country_id' => 2, 'name' => 'Abu Dhabi']);
-        State::create(['country_id' => 2, 'name' => 'Sharjah']);
-        State::create(['country_id' => 2, 'name' => 'Ajman']);
-        State::create(['country_id' => 2, 'name' => 'Fujairah']);
+        State::create(['country_id' => 7, 'name' => 'Dubai']);
+        State::create(['country_id' => 7, 'name' => 'Abu Dhabi']);
+        State::create(['country_id' => 7, 'name' => 'Sharjah']);
+        State::create(['country_id' => 7, 'name' => 'Ajman']);
+        State::create(['country_id' => 7, 'name' => 'Fujairah']);
         
         // Add Some Cities for Pakistan
         City::create(['state_id' => 1, 'name' => 'Lahore']);
@@ -81,12 +92,12 @@ class DatabaseSeeder extends Seeder
         City::create(['state_id' => 1, 'name' => 'Rawalpindi']);
         City::create(['state_id' => 1, 'name' => 'Gujranwala']);
 
-        // Add Some ciites for UAE
-        City::create(['state_id' => 6, 'name' => 'Dubai']);
-        City::create(['state_id' => 6, 'name' => 'Sharjah']);
-        City::create(['state_id' => 6, 'name' => 'Ajman']);
-        City::create(['state_id' => 6, 'name' => 'Fujairah']);
-        City::create(['state_id' => 6, 'name' => 'Ras Al Khaimah']);
+        // Add Some cities for UAE
+        City::create(['state_id' => 13, 'name' => 'Dubai']);
+        City::create(['state_id' => 14, 'name' => 'Abu Dhabi']);
+        City::create(['state_id' => 15, 'name' => 'Sharjah']);
+        City::create(['state_id' => 16, 'name' => 'Ajman']);
+        City::create(['state_id' => 17, 'name' => 'Fujairah']);
         
         // Add Some Payment Methods
         \App\Models\PaymentMethod::factory(5)->create();

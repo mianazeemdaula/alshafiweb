@@ -4,6 +4,7 @@ import persist from '@alpinejs/persist'
 import $ from 'jquery';
 import Chart from 'chart.js/auto';
 import Sortable from 'sortablejs';
+import './theme';  // Import theme functionality
 
 window.jQuery = window.$ = $
 // Alpine.plugin(persist);

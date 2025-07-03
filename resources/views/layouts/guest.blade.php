@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" dir="{{ App::isLocale('ar') ? 'rtl' : 'ltr' }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}"
+    dir="{{ in_array(App::getLocale(), ['ar', 'ur']) ? 'rtl' : 'ltr' }}" class="">
 
 <head>
     <meta charset="UTF-8" />
@@ -17,11 +18,23 @@
         integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 
+    <!-- Theme initialization script (must be in head to prevent flash) -->
+    <script>
+        (function() {
+            const theme = localStorage.getItem('theme') ||
+                (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            if (theme === 'dark') {
+                document.documentElement.classList.add('dark');
+            }
+        })();
+    </script>
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="{{ App::isLocale('ar') ? 'arabic-text' : '' }}">
-    <div class="z-50 w-full bg-white">
+<body
+    class="{{ in_array(App::getLocale(), ['ar', 'ur']) ? 'arabic-text' : '' }} bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
+    <div class="z-50 w-full bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
         @include('layouts.partials.header')
     </div>
     @yield('content')
@@ -79,6 +92,22 @@
             currentUrl.searchParams.set('locale', selectedLocale);
             window.location.href = currentUrl.toString();
         });
+
+        // Mobile Menu Toggle
+        const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        if (mobileMenuToggle && mobileMenu) {
+            mobileMenuToggle.addEventListener('click', function() {
+                mobileMenu.classList.toggle('hidden');
+                const icon = this.querySelector('i');
+                if (mobileMenu.classList.contains('hidden')) {
+                    icon.className = 'fa fa-bars text-xl';
+                } else {
+                    icon.className = 'fa fa-times text-xl';
+                }
+            });
+        }
     </script>
 </body>
 

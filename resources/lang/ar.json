@@ -60,5 +60,12 @@
     "Back to Blog": "العودة للمدونة",
     "Related Articles": "مقالات ذات صلة",
     "Latest Articles": "أحدث المقالات",
-    "No articles available for your region": "لا توجد مقالات متاحة لمنطقتك"
+    "No articles available for your region": "لا توجد مقالات متاحة لمنطقتك",
+    "Toggle Theme": "تبديل الثيم",
+    "Switch to dark mode": "التبديل للوضع المظلم",
+    "Switch to light mode": "التبديل للوضع الفاتح",
+    "Dark": "مظلم",
+    "Light": "فاتح",
+    "No Products Found": "لم يتم العثور على منتجات",
+    "No products match your current filters.": "لا توجد منتجات تطابق المرشحات الحالية."
 }

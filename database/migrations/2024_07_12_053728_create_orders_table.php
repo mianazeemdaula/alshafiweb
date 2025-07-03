@@ -22,7 +22,9 @@ return new class extends Migration
             $table->dateTime('payment_date')->nullable();
             $table->string('payment_status')->default('pending');
             $table->string('street_address')->nullable();
+            $table->json('shipping_address')->nullable();
             $table->unsignedBigInteger('city_id');
+            $table->unsignedBigInteger('country_id')->nullable();
             $table->unsignedInteger('zip_code')->default(0);
             $table->unsignedInteger('shipping_cost')->default(0);
             $table->unsignedInteger('discount')->default(0);
@@ -31,6 +33,7 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('payment_method_id')->references('id')->on('payment_methods')->onDelete('cascade');
             $table->foreign('city_id')->references('id')->on('cities')->onDelete('cascade');
+            $table->foreign('country_id')->references('id')->on('countries')->onDelete('set null');
         });
     }
 

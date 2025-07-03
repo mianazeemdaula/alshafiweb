@@ -1,42 +1,46 @@
 @extends('layouts.guest')
 @section('content')
-    <div class="container mx-auto px-4 py-8">
-        <h1 class="text-3xl font-bold mb-8">Shopping Cart</h1>
+    <div class="container mx-auto px-4 py-8 bg-white dark:bg-gray-900 min-h-screen">
+        <h1 class="text-3xl font-bold mb-8 text-gray-900 dark:text-gray-100">Shopping Cart</h1>
 
         <div id="cart-container">
             <div id="loading" class="text-center py-8">
-                <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-                <p class="mt-2">Loading cart...</p>
+                <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 dark:border-blue-400">
+                </div>
+                <p class="mt-2 text-gray-700 dark:text-gray-300">Loading cart...</p>
             </div>
 
             <div id="empty-cart" class="text-center py-12 hidden">
-                <div class="text-gray-500 text-6xl mb-4">🛒</div>
-                <h2 class="text-2xl font-bold text-gray-700 mb-2">Your cart is empty</h2>
-                <p class="text-gray-500 mb-6">Add some products to get started!</p>
+                <div class="text-gray-500 dark:text-gray-400 text-6xl mb-4">🛒</div>
+                <h2 class="text-2xl font-bold text-gray-700 dark:text-gray-300 mb-2">Your cart is empty</h2>
+                <p class="text-gray-500 dark:text-gray-400 mb-6">Add some products to get started!</p>
                 <a href="{{ route('web.products') }}"
-                    class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium">
+                    class="bg-blue-600 dark:bg-blue-500 hover:bg-blue-700 dark:hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-medium transition-colors">
                     Continue Shopping
                 </a>
             </div>
 
             <div id="cart-items" class="hidden">
-                <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                    <div class="px-6 py-4 bg-gray-50 border-b">
-                        <h3 class="text-lg font-semibold">Cart Items</h3>
+                <div
+                    class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden border border-gray-200 dark:border-gray-700">
+                    <div class="px-6 py-4 bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600">
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Cart Items</h3>
                     </div>
                     <div id="items-list"></div>
                 </div>
 
-                <div class="mt-6 bg-white rounded-lg shadow-md p-6">
+                <div
+                    class="mt-6 bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700">
                     <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-xl font-semibold">Cart Summary</h3>
-                        <button id="clear-cart" class="text-red-600 hover:text-red-800 text-sm">
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-100">Cart Summary</h3>
+                        <button id="clear-cart"
+                            class="text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 text-sm transition-colors">
                             Clear Cart
                         </button>
                     </div>
 
-                    <div class="border-t pt-4">
-                        <div class="flex justify-between items-center text-xl font-bold">
+                    <div class="border-t border-gray-200 dark:border-gray-600 pt-4">
+                        <div class="flex justify-between items-center text-xl font-bold text-gray-900 dark:text-gray-100">
                             <span>Total:</span>
                             <span id="cart-total">$0.00</span>
                         </div>
@@ -44,10 +48,11 @@
 
                     <div class="mt-6 flex space-x-4">
                         <a href="{{ route('web.products') }}"
-                            class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 px-6 py-3 rounded-lg font-medium text-center">
+                            class="flex-1 bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 text-gray-800 dark:text-gray-200 px-6 py-3 rounded-lg font-medium text-center transition-colors">
                             Continue Shopping
                         </a>
-                        <button class="flex-1 bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium">
+                        <button
+                            class="flex-1 bg-green-600 dark:bg-green-500 hover:bg-green-700 dark:hover:bg-green-600 text-white px-6 py-3 rounded-lg font-medium transition-colors">
                             <a href="/checkout" class="block">Proceed to Checkout</a>
                         </button>
                     </div>

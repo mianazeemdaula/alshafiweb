@@ -6,7 +6,14 @@
             <form action="{{ route('admin.posts.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="main grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-4">
-
+                    <div class="flex flex-col gap-2">
+                        <x-label>Country</x-label>
+                        <x-select name="country_id">
+                            @foreach ($countries as $country)
+                                <option value="{{ $country->id }}">{{ $country->name }}</option>
+                            @endforeach
+                        </x-select>
+                    </div>
                     <div class="flex flex-col gap-2">
                         <x-label>Category</x-label>
                         <x-select name="category_id">

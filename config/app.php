@@ -93,10 +93,9 @@ return [
     */
 
     'available_locales' => [
-        'en' => ['name' => 'English', 'flag' => '🇺🇸'],
+        'en' => ['name' => 'English', 'flag' => '��'],
         'ar' => ['name' => 'Arabic', 'flag' => '🇸🇦'],
-        'es' => ['name' => 'Spanish', 'flag' => '🇪🇸'],
-        'fr' => ['name' => 'French', 'flag' => '🇫🇷'],
+        'ur' => ['name' => 'Urdu', 'flag' => '��'],
     ],
 
     /*
@@ -109,10 +108,14 @@ return [
     */
 
     'available_countries' => [
-        'US' => ['name' => 'United States', 'currency' => 'USD', 'locale' => 'en'],
+        'PK' => ['name' => 'Pakistan', 'currency' => 'PKR', 'locale' => 'ur'],
+        'BH' => ['name' => 'Bahrain', 'currency' => 'BHD', 'locale' => 'ar'],
+        'KW' => ['name' => 'Kuwait', 'currency' => 'KWD', 'locale' => 'ar'],
+        'OM' => ['name' => 'Oman', 'currency' => 'OMR', 'locale' => 'ar'],
+        'QA' => ['name' => 'Qatar', 'currency' => 'QAR', 'locale' => 'ar'],
         'SA' => ['name' => 'Saudi Arabia', 'currency' => 'SAR', 'locale' => 'ar'],
-        'ES' => ['name' => 'Spain', 'currency' => 'EUR', 'locale' => 'es'],
-        'FR' => ['name' => 'France', 'currency' => 'EUR', 'locale' => 'fr'],
+        'AE' => ['name' => 'United Arab Emirates', 'currency' => 'AED', 'locale' => 'ar'],
+        'WW' => ['name' => 'Rest of the World', 'currency' => 'USD', 'locale' => 'en'],
     ],
 
     /*

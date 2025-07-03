@@ -189,6 +189,7 @@ class CheckoutController extends Controller
                 'street_address' => $request->shipping['address'],
                 'shipping_address' => $request->shipping,
                 'city_id' => $city->id, // You might want to make this dynamic based on user selection
+                'country_id' => session('country_id'),
                 'zip_code' => $request->shipping['postal_code'] ? (int)$request->shipping['postal_code'] : 0,
                 'shipping_cost' => 0, // Free shipping
                 'discount' => 0,

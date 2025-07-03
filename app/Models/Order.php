@@ -21,6 +21,7 @@ class Order extends Model
         'street_address',
         'shipping_address',
         'city_id',
+        'country_id',
         'zip_code',
         'shipping_cost',
         'discount',
@@ -55,6 +56,11 @@ class Order extends Model
     public function city()
     {
         return $this->belongsTo(City::class);
+    }
+
+    public function country()
+    {
+        return $this->belongsTo(Country::class);
     }
 
     public function paymentMethod()
