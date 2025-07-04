@@ -173,32 +173,70 @@
     </div>
 
     {{-- reviews section --}}
-    <div class="p-4 bg-slate-100 dark:bg-gray-800">
-        <div class="grid grid-cols-5 gap-4">
+    <div class="p-2 sm:p-4 bg-slate-100 dark:bg-gray-800">
+        <div class="mb-4 text-center">
+            <h2 class="text-lg sm:text-xl font-light text-gray-900 dark:text-gray-100">{{ __('Customer Reviews') }}</h2>
+            <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">{{ __('What our customers say about us') }}</p>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4">
             @foreach (range(1, 5) as $item)
-                <div class="bg-white dark:bg-gray-700 p-4 rounded-lg border border-gray-200 dark:border-gray-600">
-                    <div class="">
-                        <div class="flex items-center">
-                            <div class="w-12 h-12 bg-gray-200 dark:bg-gray-600 rounded-full"></div>
-                            <div class="ml-2">
-                                <div class="text-sm font-light text-gray-900 dark:text-gray-100">User Name</div>
-                                <div class="text-xs font-light text-gray-500 dark:text-gray-400">
-                                    {{ now()->format('d-m-Y') }}</div>
+                <div
+                    class="bg-white dark:bg-gray-700 p-3 sm:p-4 rounded-lg border border-gray-200 dark:border-gray-600 hover:shadow-md transition-shadow">
+                    <div class="flex flex-col h-full">
+                        <div class="flex items-center mb-3">
+                            <div
+                                class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">
+                                U{{ $item }}
+                            </div>
+                            <div class="ml-2 sm:ml-3 flex-1 min-w-0">
+                                <div class="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">User Name
+                                    {{ $item }}</div>
+                                <div class="text-xs text-gray-500 dark:text-gray-400">
+                                    {{ now()->subDays(rand(1, 30))->format('M d, Y') }}
+                                </div>
                             </div>
                         </div>
-                        <div class="flex items-center text-gray-600 dark:text-gray-300 text-sm my-2">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis animi consequatur itaque
-                            hic fugit obcaecati nisi, maxime eveniet ut corporis fugiat quidem sapiente sequi eligendi
-                            quis numquam dicta placeat id!
+
+                        <div class="flex-1 mb-3">
+                            <div class="text-xs sm:text-sm text-gray-600 dark:text-gray-300 line-clamp-4">
+                                @php
+                                    $reviews = [
+                                        'Excellent quality products and fast delivery! Highly recommend.',
+                                        'Great customer service and affordable prices. Will shop again.',
+                                        'Amazing experience! The products exceeded my expectations.',
+                                        'Fast shipping and authentic products. Very satisfied!',
+                                        'Outstanding service and quality. Best online shopping experience.',
+                                    ];
+                                @endphp
+                                {{ $reviews[$item - 1] }}
+                            </div>
                         </div>
-                        <div class="text-xs">
-                            @php
-                                echo str_repeat('⭐', 5);
-                            @endphp
+
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center text-yellow-400 text-sm">
+                                @for ($i = 1; $i <= 5; $i++)
+                                    @if ($i <= 6 - $item)
+                                        <i class="fa-solid fa-star"></i>
+                                    @else
+                                        <i class="fa-regular fa-star"></i>
+                                    @endif
+                                @endfor
+                            </div>
+                            <span class="text-xs text-gray-500 dark:text-gray-400 font-medium">
+                                {{ 6 - $item }}.0
+                            </span>
                         </div>
                     </div>
                 </div>
             @endforeach
+        </div>
+
+        <!-- View All Reviews Button -->
+        <div class="text-center mt-6">
+            <button
+                class="bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-medium transition-colors text-sm sm:text-base">
+                {{ __('View All Reviews') }}
+            </button>
         </div>
     </div>
 @endsection
