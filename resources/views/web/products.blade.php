@@ -120,7 +120,7 @@
         <!-- Main Content -->
         <div class="px-2 sm:px-4 bg-slate-100 dark:bg-gray-900 flex-1 min-h-screen">
             <div class="py-4">
-                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-2 sm:gap-4">
+                <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-2 sm:gap-4">
                     @foreach ($products as $product)
                         <x-product-card1 :product="$product" />
                     @endforeach

@@ -77,6 +77,9 @@ class AuthController extends Controller
             'password' => \Hash::make($request->password),
         ]);
 
+        // Assign the 'user' role to the newly registered user
+        $user->assignRole('user');
+
         auth()->login($user);
 
         if ($request->expectsJson()) {

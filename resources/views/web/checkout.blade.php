@@ -2,23 +2,23 @@
 @section('content')
     <div class="container mx-auto px-4 py-8">
         <div class="max-w-6xl mx-auto">
-            <h1 class="text-3xl font-bold mb-8">Checkout</h1>
+            <h1 class="text-3xl font-bold mb-8">{{ __('Checkout') }}</h1>
 
             <div id="checkout-container">
                 <!-- Loading State -->
                 <div id="loading" class="text-center py-8">
                     <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-                    <p class="mt-2">Loading checkout...</p>
+                    <p class="mt-2">{{ __('Loading checkout...') }}</p>
                 </div>
 
                 <!-- Empty Cart -->
                 <div id="empty-cart" class="text-center py-12 hidden">
                     <div class="text-gray-500 text-6xl mb-4">🛒</div>
-                    <h2 class="text-2xl font-bold text-gray-700 mb-2">Your cart is empty</h2>
-                    <p class="text-gray-500 mb-6">Add some products before checkout!</p>
+                    <h2 class="text-2xl font-bold text-gray-700 mb-2">{{ __('Your cart is empty') }}</h2>
+                    <p class="text-gray-500 mb-6">{{ __('Add some products before checkout!') }}</p>
                     <a href="{{ route('web.products') }}"
                         class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium">
-                        Continue Shopping
+                        {{ __('Continue Shopping') }}
                     </a>
                 </div>
 
@@ -31,36 +31,38 @@
                             <!-- Authentication Section -->
                             @guest
                                 <div class="bg-white rounded-lg shadow-md p-6">
-                                    <h3 class="text-lg font-semibold mb-4">Account Information</h3>
+                                    <h3 class="text-lg font-semibold mb-4">{{ __('Account Information') }}</h3>
                                     <div class="space-y-4">
                                         <div class="flex space-x-4">
                                             <button type="button" id="existing-customer-btn"
                                                 class="flex-1 bg-blue-600 text-white px-4 py-2 rounded font-medium">
-                                                Existing Customer
+                                                {{ __('Existing Customer') }}
                                             </button>
                                             <button type="button" id="new-customer-btn"
                                                 class="flex-1 bg-gray-200 text-gray-700 px-4 py-2 rounded font-medium">
-                                                New Customer
+                                                {{ __('New Customer') }}
                                             </button>
                                         </div>
 
                                         <!-- Login Form -->
                                         <div id="login-form" class="space-y-4">
                                             <div>
-                                                <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                                                <label
+                                                    class="block text-sm font-medium text-gray-700 mb-1">{{ __('Email') }}</label>
                                                 <input type="email" id="login-email"
                                                     class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                                     required>
                                             </div>
                                             <div>
-                                                <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                                                <label
+                                                    class="block text-sm font-medium text-gray-700 mb-1">{{ __('Password') }}</label>
                                                 <input type="password" id="login-password"
                                                     class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                                     required>
                                             </div>
                                             <button type="button" id="login-btn"
                                                 class="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded font-medium">
-                                                Login
+                                                {{ __('Login') }}
                                             </button>
                                         </div>
 
@@ -68,29 +70,30 @@
                                         <div id="register-form" class="space-y-4 hidden">
                                             <div class="grid grid-cols-2 gap-4">
                                                 <div>
-                                                    <label class="block text-sm font-medium text-gray-700 mb-1">First
-                                                        Name</label>
+                                                    <label
+                                                        class="block text-sm font-medium text-gray-700 mb-1">{{ __('First Name') }}</label>
                                                     <input type="text" id="register-first-name"
                                                         class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                                         required>
                                                 </div>
                                                 <div>
-                                                    <label class="block text-sm font-medium text-gray-700 mb-1">Last
-                                                        Name</label>
+                                                    <label
+                                                        class="block text-sm font-medium text-gray-700 mb-1">{{ __('Last Name') }}</label>
                                                     <input type="text" id="register-last-name"
                                                         class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                                         required>
                                                 </div>
                                             </div>
                                             <div>
-                                                <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                                                <label
+                                                    class="block text-sm font-medium text-gray-700 mb-1">{{ __('Email') }}</label>
                                                 <input type="email" id="register-email"
                                                     class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                                     required>
                                             </div>
                                             <div>
-                                                <label class="block text-sm font-medium text-gray-700 mb-1">Mobile
-                                                    Number</label>
+                                                <label
+                                                    class="block text-sm font-medium text-gray-700 mb-1">{{ __('Mobile Number') }}</label>
                                                 <input type="tel" id="register-mobile"
                                                     class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                                     required>
@@ -102,15 +105,15 @@
                                                     required>
                                             </div>
                                             <div>
-                                                <label class="block text-sm font-medium text-gray-700 mb-1">Confirm
-                                                    Password</label>
+                                                <label
+                                                    class="block text-sm font-medium text-gray-700 mb-1">{{ __('Confirm Password') }}</label>
                                                 <input type="password" id="register-password-confirm"
                                                     class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                                     required>
                                             </div>
                                             <button type="button" id="register-btn"
                                                 class="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded font-medium">
-                                                Create Account
+                                                {{ __('Create Account') }}
                                             </button>
                                         </div>
                                     </div>
@@ -119,13 +122,15 @@
 
                             <!-- Shipping Information -->
                             <div class="bg-white rounded-lg shadow-md p-6">
-                                <h3 class="text-lg font-semibold mb-4">Shipping Information</h3>
+                                <h3 class="text-lg font-semibold mb-4">{{ __('Shipping Information') }}</h3>
                                 <form id="shipping-form" class="space-y-4">
                                     @auth
                                         <div class="grid grid-cols-2 gap-4">
                                             <div>
-                                                <label class="block text-sm font-medium text-gray-700 mb-1">First Name</label>
-                                                <input type="text" name="first_name" value="{{ auth()->user()->name ?? '' }}"
+                                                <label
+                                                    class="block text-sm font-medium text-gray-700 mb-1">{{ __('First Name') }}</label>
+                                                <input type="text" name="first_name"
+                                                    value="{{ auth()->user()->name ?? '' }}"
                                                     class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                                     required>
                                             </div>
@@ -154,14 +159,16 @@
                                     @endauth
 
                                     <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                                        <label
+                                            class="block text-sm font-medium text-gray-700 mb-1">{{ __('Phone') }}</label>
                                         <input type="tel" name="phone"
                                             class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                             required>
                                     </div>
 
                                     <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-1">Address</label>
+                                        <label
+                                            class="block text-sm font-medium text-gray-700 mb-1">{{ __('Address') }}</label>
                                         <textarea name="address" rows="3"
                                             class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                             required></textarea>
@@ -169,24 +176,27 @@
 
                                     <div class="grid grid-cols-2 gap-4">
                                         <div>
-                                            <label class="block text-sm font-medium text-gray-700 mb-1">City</label>
+                                            <label
+                                                class="block text-sm font-medium text-gray-700 mb-1">{{ __('City') }}</label>
                                             <input type="text" name="city"
                                                 class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                                 required>
                                         </div>
                                         <div>
-                                            <label class="block text-sm font-medium text-gray-700 mb-1">Postal Code</label>
+                                            <label
+                                                class="block text-sm font-medium text-gray-700 mb-1">{{ __('Postal Code') }}</label>
                                             <input type="text" name="postal_code"
                                                 class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
                                         </div>
                                     </div>
 
                                     <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-1">Order Notes
-                                            (Optional)</label>
+                                        <label
+                                            class="block text-sm font-medium text-gray-700 mb-1">{{ __('Order Notes') }}
+                                            ({{ __('Optional') }})</label>
                                         <textarea name="notes" rows="3"
                                             class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                            placeholder="Any special instructions for your order"></textarea>
+                                            placeholder="{{ __('Any special instructions?') }}"></textarea>
                                     </div>
                                 </form>
                             </div>
@@ -195,7 +205,7 @@
                         <!-- Right Column - Order Summary -->
                         <div class="lg:col-span-1">
                             <div class="bg-white rounded-lg shadow-md p-6 sticky top-4">
-                                <h3 class="text-lg font-semibold mb-4">Order Summary</h3>
+                                <h3 class="text-lg font-semibold mb-4">{{ __('Order Summary') }}</h3>
 
                                 <!-- Cart Items -->
                                 <div id="checkout-items" class="space-y-3 mb-4 max-h-60 overflow-y-auto">

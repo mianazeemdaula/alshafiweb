@@ -188,7 +188,7 @@
                                 class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">
                                 U{{ $item }}
                             </div>
-                            <div class="ml-2 sm:ml-3 flex-1 min-w-0">
+                            <div class="ml-2 sm:ml-3 flex-1 min-w-0 mx-2">
                                 <div class="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">User Name
                                     {{ $item }}</div>
                                 <div class="text-xs text-gray-500 dark:text-gray-400">

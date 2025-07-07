@@ -35,6 +35,40 @@ Route::post('/register', 'App\Http\Controllers\AuthController@doregister')->name
 
 Route::middleware('auth')->group(function () {
     Route::get('dashboard', 'App\Http\Controllers\AuthController@dashboard')->name('dashboard');
+    
+    // User Backend Routes (protected by auth and role:user middleware)
+    Route::middleware('role:user')->prefix('user')->name('user.')->group(function () {
+        // Dashboard
+        Route::get('/dashboard', 'App\Http\Controllers\User\DashboardController@index')->name('dashboard');
+        
+        // Profile Management
+        Route::prefix('profile')->name('profile.')->group(function () {
+            Route::get('/', 'App\Http\Controllers\User\ProfileController@show')->name('show');
+            Route::get('/edit', 'App\Http\Controllers\User\ProfileController@edit')->name('edit');
+            Route::put('/update', 'App\Http\Controllers\User\ProfileController@update')->name('update');
+            Route::get('/change-password', 'App\Http\Controllers\User\ProfileController@changePassword')->name('change-password');
+            Route::put('/update-password', 'App\Http\Controllers\User\ProfileController@updatePassword')->name('update-password');
+        });
+        
+        // Order Management
+        Route::prefix('orders')->name('orders.')->group(function () {
+            Route::get('/', 'App\Http\Controllers\User\OrderController@index')->name('index');
+            Route::get('/{order}', 'App\Http\Controllers\User\OrderController@show')->name('show');
+            Route::get('/{order}/track', 'App\Http\Controllers\User\OrderController@track')->name('track');
+            Route::put('/{order}/cancel', 'App\Http\Controllers\User\OrderController@cancel')->name('cancel');
+        });
+        
+        // Review Management
+        Route::prefix('reviews')->name('reviews.')->group(function () {
+            Route::get('/', 'App\Http\Controllers\User\ReviewController@index')->name('index');
+            Route::get('/create', 'App\Http\Controllers\User\ReviewController@create')->name('create');
+            Route::post('/', 'App\Http\Controllers\User\ReviewController@store')->name('store');
+            Route::get('/{review}/edit', 'App\Http\Controllers\User\ReviewController@edit')->name('edit');
+            Route::put('/{review}', 'App\Http\Controllers\User\ReviewController@update')->name('update');
+            Route::delete('/{review}', 'App\Http\Controllers\User\ReviewController@destroy')->name('destroy');
+        });
+    });
+    
     Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
         Route::resource('categories', 'App\Http\Controllers\Admin\CategoryController');
         Route::resource('products', 'App\Http\Controllers\Admin\ProductController');

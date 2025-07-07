@@ -40,17 +40,70 @@
             </button>
         </div>
         <div class="border border-slate-100 dark:border-gray-700 h-4 hidden sm:block"></div>
-        <a href="{{ url('/login') }}"
-            class="flex items-center text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
-            <i class="fa fa-user-lock mx-1"></i>
-            <div class="hidden sm:block">{{ __('login') }}</div>
-        </a>
-        <div class="border border-slate-100 dark:border-gray-700 h-4 hidden sm:block"></div>
-        <a href="{{ url('/register') }}"
-            class="flex items-center text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
-            <i class="fa fa-user-plus mx-1"></i>
-            <div class="hidden sm:block">{{ __('register') }}</div>
-        </a>
+
+        @auth
+            <!-- Authenticated User Menu -->
+            <div class="relative group">
+                <button
+                    class="flex items-center text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
+                    <i class="fa fa-user mx-1"></i>
+                    <div class="hidden sm:block">{{ auth()->user()->name }}</div>
+                    <i class="fa fa-chevron-down ml-1 text-xs"></i>
+                </button>
+
+                <!-- Dropdown Menu -->
+                <div
+                    class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg py-1 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                    @if (auth()->user()->hasRole('admin'))
+                        <a href="{{ route('dashboard') }}"
+                            class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <i class="fa fa-tachometer-alt mr-2"></i>Admin Dashboard
+                        </a>
+                    @endif
+
+                    @if (auth()->user()->hasRole('user'))
+                        <a href="{{ route('user.dashboard') }}"
+                            class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <i class="fa fa-tachometer-alt mr-2"></i>My Dashboard
+                        </a>
+                        <a href="{{ route('user.profile.show') }}"
+                            class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <i class="fa fa-user mr-2"></i>My Profile
+                        </a>
+                        <a href="{{ route('user.orders.index') }}"
+                            class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <i class="fa fa-shopping-bag mr-2"></i>My Orders
+                        </a>
+                        <a href="{{ route('user.reviews.index') }}"
+                            class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <i class="fa fa-star mr-2"></i>My Reviews
+                        </a>
+                    @endif
+
+                    <div class="border-t border-gray-200 dark:border-gray-600 my-1"></div>
+                    <form action="/logout" method="POST" class="block">
+                        @csrf
+                        <button type="submit"
+                            class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <i class="fa fa-sign-out-alt mr-2"></i>Logout
+                        </button>
+                    </form>
+                </div>
+            </div>
+        @else
+            <!-- Guest User Links -->
+            <a href="{{ url('/login') }}"
+                class="flex items-center text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
+                <i class="fa fa-user-lock mx-1"></i>
+                <div class="hidden sm:block">{{ __('login') }}</div>
+            </a>
+            <div class="border border-slate-100 dark:border-gray-700 h-4 hidden sm:block"></div>
+            <a href="{{ url('/register') }}"
+                class="flex items-center text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
+                <i class="fa fa-user-plus mx-1"></i>
+                <div class="hidden sm:block">{{ __('register') }}</div>
+            </a>
+        @endauth
     </div>
 </div>
 <div class="bg-white dark:bg-gray-900 w-full z-50" id="header">
@@ -73,10 +126,7 @@
                 </form>
             </div>
             <div class="w-full lg:w-2/12 flex items-center justify-center space-x-2">
-                <div class="text-sm hidden lg:block">
-                    <a href="#"
-                        class="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">{{ __('my_account') }}</a>
-                </div>
+
                 <div class="border border-slate-100 dark:border-gray-700 h-4 hidden lg:block"></div>
                 <a href="{{ url('/cart') }}" class="relative">
                     <i
@@ -150,21 +200,61 @@
 
                     <!-- Mobile-only links -->
                     <div class="border-t border-gray-200 dark:border-gray-700 pt-2 mt-2">
-                        <a href="#"
-                            class="block text-sm text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100 px-3 py-2 rounded transition-colors">
-                            <i class="fa fa-user mr-2"></i>{{ __('my_account') }}
-                        </a>
-                        <a href="{{ url('/login') }}"
-                            class="block text-sm text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100 px-3 py-2 rounded transition-colors">
-                            <i class="fa fa-user-lock mr-2"></i>{{ __('login') }}
-                        </a>
-                        <a href="{{ url('/register') }}"
-                            class="block text-sm text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100 px-3 py-2 rounded transition-colors">
-                            <i class="fa fa-user-plus mr-2"></i>{{ __('register') }}
-                        </a>
+                        @auth
+                            <!-- Authenticated User Mobile Menu -->
+                            @if (auth()->user()->hasRole('admin'))
+                                <a href="{{ route('dashboard') }}"
+                                    class="block text-sm text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100 px-3 py-2 rounded transition-colors">
+                                    <i class="fa fa-tachometer-alt mr-2"></i>Admin Dashboard
+                                </a>
+                            @endif
+
+                            @if (auth()->user()->hasRole('user'))
+                                <a href="{{ route('user.dashboard') }}"
+                                    class="block text-sm text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100 px-3 py-2 rounded transition-colors">
+                                    <i class="fa fa-tachometer-alt mr-2"></i>My Dashboard
+                                </a>
+                                <a href="{{ route('user.profile.show') }}"
+                                    class="block text-sm text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100 px-3 py-2 rounded transition-colors">
+                                    <i class="fa fa-user mr-2"></i>My Profile
+                                </a>
+                                <a href="{{ route('user.orders.index') }}"
+                                    class="block text-sm text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100 px-3 py-2 rounded transition-colors">
+                                    <i class="fa fa-shopping-bag mr-2"></i>My Orders
+                                </a>
+                                <a href="{{ route('user.reviews.index') }}"
+                                    class="block text-sm text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100 px-3 py-2 rounded transition-colors">
+                                    <i class="fa fa-star mr-2"></i>My Reviews
+                                </a>
+                            @endif
+
+                            <div class="border-t border-gray-200 dark:border-gray-700 pt-2 mt-2">
+                                <span class="block text-xs text-gray-400 px-3 py-1">{{ auth()->user()->name }}</span>
+                                <form action="/logout" method="POST" class="block">
+                                    @csrf
+                                    <button type="submit"
+                                        class="w-full text-left text-sm text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100 px-3 py-2 rounded transition-colors">
+                                        <i class="fa fa-sign-out-alt mr-2"></i>{{ __('Logout') }}
+                                    </button>
+                                </form>
+                            </div>
+                        @else
+                            <!-- Guest User Mobile Menu -->
+                            <a href="#"
+                                class="block text-sm text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100 px-3 py-2 rounded transition-colors">
+                                <i class="fa fa-user mr-2"></i>{{ __('my_account') }}
+                            </a>
+                            <a href="{{ url('/login') }}"
+                                class="block text-sm text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100 px-3 py-2 rounded transition-colors">
+                                <i class="fa fa-user-lock mr-2"></i>{{ __('login') }}
+                            </a>
+                            <a href="{{ url('/register') }}"
+                                class="block text-sm text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100 px-3 py-2 rounded transition-colors">
+                                <i class="fa fa-user-plus mr-2"></i>{{ __('register') }}
+                            </a>
+                        @endauth
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>

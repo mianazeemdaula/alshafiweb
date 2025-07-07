@@ -69,5 +69,8 @@ class User extends Authenticatable
         return $this->hasMany(ReferrProduct::class);
     }
     
-
+    public function userLevel()
+    {
+        return $this->belongsTo(UserLevel::class, 'level_id');
+    }
 }

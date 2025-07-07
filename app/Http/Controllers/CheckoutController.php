@@ -51,6 +51,9 @@ class CheckoutController extends Controller
 
         Auth::login($user);
 
+        // assign user role
+        $user->assignRole('user');
+
         return response()->json([
             'success' => true,
             'message' => 'Account created successfully'
