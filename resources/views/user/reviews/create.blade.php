@@ -1,7 +1,6 @@
-@extends('layouts.guest')
+@extends('layouts.user')
 
-@section('content')
-    @include('components.user-nav')
+@section('main')
 
     <div class="container mx-auto px-4 py-8">
         <div class="max-w-2xl mx-auto">
@@ -195,7 +194,7 @@
         function validateForm() {
             const submitBtn = document.getElementById('submit-btn');
             const productId = document.getElementById('product_id')?.value ||
-            {{ isset($product) ? $product->id : 'null' }};
+                {{ isset($product) ? $product->id : 'null' }};
             const hasRating = currentRating > 0;
 
             if (productId && hasRating) {

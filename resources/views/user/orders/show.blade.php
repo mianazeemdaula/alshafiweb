@@ -1,8 +1,6 @@
-@extends('layouts.guest')
+@extends('layouts.user')
 
-@section('content')
-    @include('components.user-nav')
-
+@section('main')
     <div class="container mx-auto px-4 py-8">
         <div class="max-w-4xl mx-auto">
             <div class="bg-white rounded-lg shadow-md p-6">

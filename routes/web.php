@@ -9,7 +9,7 @@ Route::get('/cart', 'App\Http\Controllers\WebController@cart')->name('web.cart')
 Route::get('/checkout', 'App\Http\Controllers\CheckoutController@index')->name('web.checkout');
 Route::get('/track-order', 'App\Http\Controllers\WebController@trackOrder')->name('track.order');
 Route::get('/news', 'App\\Http\\Controllers\\WebController@news')->name('news');
-Route::get('/categories', 'App\\Http\\Controllers\\WebController@categories')->name('categories');
+Route::get('/categories', [App\Http\Controllers\CategoryController::class, 'index'])->name('categories');
 Route::get('/services', 'App\\Http\\Controllers\\WebController@services')->name('services');
 
 // Blog routes
@@ -67,6 +67,9 @@ Route::middleware('auth')->group(function () {
             Route::put('/{review}', 'App\Http\Controllers\User\ReviewController@update')->name('update');
             Route::delete('/{review}', 'App\Http\Controllers\User\ReviewController@destroy')->name('destroy');
         });
+        
+        // Referrals Management
+        Route::get('/referrals', [App\Http\Controllers\AuthController::class, 'referrals'])->name('referrals');
     });
     
     Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {

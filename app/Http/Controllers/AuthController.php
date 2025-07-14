@@ -40,7 +40,12 @@ class AuthController extends Controller
                 'message' => 'Login successful'
             ]);
         }
-        
+
+        // Redirect based on user role
+        $user = auth()->user();
+        if ($user && $user->hasRole('user')) {
+            return redirect()->intended('/user/dashboard');
+        }
         return redirect()->intended('/dashboard');
     }
 
@@ -63,6 +68,7 @@ class AuthController extends Controller
     }
 
     public function doregister(Request $request){
+
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
@@ -70,11 +76,29 @@ class AuthController extends Controller
             'password' => 'required|string|min:8|confirmed',
         ]);
 
+        $referrerId = null;
+        if ($request->filled('ref_code')) {
+            $refUser = \App\Models\User::where('ref_code', $request->ref_code)->first();
+            if ($refUser) {
+                $referrerId = $refUser->id;
+            }
+        }
+
+        // Generate a unique random ref_code if not provided
+        $ref_code = $request->input('ref_code');
+        if (empty($ref_code)) {
+            do {
+                $ref_code = strtoupper(substr(bin2hex(random_bytes(4)), 0, 8));
+            } while (\App\Models\User::where('ref_code', $ref_code)->exists());
+        }
+
         $user = \App\Models\User::create([
             'name' => $request->name,
             'email' => $request->email,
             'mobile' => $request->mobile,
             'password' => \Hash::make($request->password),
+            'referrer' => $referrerId,
+            'ref_code' => $ref_code,
         ]);
 
         // Assign the 'user' role to the newly registered user
@@ -90,5 +114,25 @@ class AuthController extends Controller
         }
 
         return redirect()->intended('/dashboard');
+    }
+
+    public function referrals()
+    {
+        $user = auth()->user();
+        $referrals = \App\Models\User::where('referrer', $user->id)
+            ->with(['orders' => function($q) { $q->select('user_id', 'total'); }])
+            ->get()
+            ->map(function($ref) use ($user) {
+                $totalShopping = $ref->orders->sum('total');
+                // Example: 5% earning on referral's shopping
+                $earning = round($totalShopping * 0.05, 2);
+                return (object) [
+                    'name' => $ref->name,
+                    'email' => $ref->email,
+                    'total_shopping' => $totalShopping,
+                    'earning' => $earning,
+                ];
+            });
+        return view('user.referrals', compact('referrals'));
     }
 }

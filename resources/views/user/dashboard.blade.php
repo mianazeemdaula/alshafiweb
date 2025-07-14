@@ -1,8 +1,5 @@
-@extends('layouts.guest')
-
-@section('content')
-    @include('components.user-nav')
-
+@extends('layouts.user')
+@section('main')
     <div class="container mx-auto px-4 py-8">
         <div class="bg-white rounded-lg shadow-md p-6">
             <h1 class="text-3xl font-bold text-gray-800 mb-6">{{ __('My Dashboard') }}</h1>

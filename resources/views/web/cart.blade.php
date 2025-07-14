@@ -1,22 +1,23 @@
 @extends('layouts.guest')
 @section('content')
     <div class="container mx-auto px-4 py-8 bg-white dark:bg-gray-900 min-h-screen">
-        <h1 class="text-3xl font-bold mb-8 text-gray-900 dark:text-gray-100">Shopping Cart</h1>
+        <h1 class="text-3xl font-bold mb-8 text-gray-900 dark:text-gray-100">{{ __('cart.title') }}</h1>
 
         <div id="cart-container">
             <div id="loading" class="text-center py-8">
                 <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 dark:border-blue-400">
                 </div>
-                <p class="mt-2 text-gray-700 dark:text-gray-300">Loading cart...</p>
+                <p class="mt-2 text-gray-700 dark:text-gray-300 font-bold">Alshaafi</p>
+                <p class="mt-2 text-gray-700 dark:text-gray-300">{{ __('cart.loading') }}</p>
             </div>
 
             <div id="empty-cart" class="text-center py-12 hidden">
                 <div class="text-gray-500 dark:text-gray-400 text-6xl mb-4">🛒</div>
-                <h2 class="text-2xl font-bold text-gray-700 dark:text-gray-300 mb-2">Your cart is empty</h2>
-                <p class="text-gray-500 dark:text-gray-400 mb-6">Add some products to get started!</p>
+                <h2 class="text-2xl font-bold text-gray-700 dark:text-gray-300 mb-2">{{ __('cart.empty_title') }}</h2>
+                <p class="text-gray-500 dark:text-gray-400 mb-6">{{ __('cart.empty_subtitle') }}</p>
                 <a href="{{ route('web.products') }}"
                     class="bg-blue-600 dark:bg-blue-500 hover:bg-blue-700 dark:hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-medium transition-colors">
-                    Continue Shopping
+                    {{ __('cart.continue_shopping') }}
                 </a>
             </div>
 
@@ -24,7 +25,7 @@
                 <div
                     class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden border border-gray-200 dark:border-gray-700">
                     <div class="px-6 py-4 bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600">
-                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Cart Items</h3>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">{{ __('cart.items') }}</h3>
                     </div>
                     <div id="items-list"></div>
                 </div>
@@ -32,16 +33,16 @@
                 <div
                     class="mt-6 bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700">
                     <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-100">Cart Summary</h3>
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-100">{{ __('cart.summary') }}</h3>
                         <button id="clear-cart"
                             class="text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 text-sm transition-colors">
-                            Clear Cart
+                            {{ __('cart.clear') }}
                         </button>
                     </div>
 
                     <div class="border-t border-gray-200 dark:border-gray-600 pt-4">
                         <div class="flex justify-between items-center text-xl font-bold text-gray-900 dark:text-gray-100">
-                            <span>Total:</span>
+                            <span>{{ __('cart.total') }}</span>
                             <span id="cart-total">$0.00</span>
                         </div>
                     </div>
@@ -49,11 +50,11 @@
                     <div class="mt-6 flex space-x-4">
                         <a href="{{ route('web.products') }}"
                             class="flex-1 bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 text-gray-800 dark:text-gray-200 px-6 py-3 rounded-lg font-medium text-center transition-colors">
-                            Continue Shopping
+                            {{ __('cart.continue_shopping') }}
                         </a>
                         <button
                             class="flex-1 bg-green-600 dark:bg-green-500 hover:bg-green-700 dark:hover:bg-green-600 text-white px-6 py-3 rounded-lg font-medium transition-colors">
-                            <a href="/checkout" class="block">Proceed to Checkout</a>
+                            <a href="/checkout" class="block">{{ __('cart.checkout') }}</a>
                         </button>
                     </div>
                 </div>
@@ -66,6 +67,20 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+            // Cart localization object
+            const cartLang = {
+                each: "{{ __('cart.each') }}",
+                remove_confirm: "{{ __('cart.remove_confirm') }}",
+                clear_confirm: "{{ __('cart.clear_confirm') }}",
+                cart_updated: "{{ __('cart.updated') }}",
+                item_removed: "{{ __('cart.item_removed') }}",
+                cart_cleared: "{{ __('cart.cleared') }}",
+                error_updating: "{{ __('cart.error_updating') }}",
+                error_removing: "{{ __('cart.error_removing') }}",
+                error_clearing: "{{ __('cart.error_clearing') }}",
+                error_loading: "{{ __('cart.error_loading') }}"
+            };
 
             // Load cart contents on page load
             loadCart();
@@ -86,7 +101,7 @@
                     .catch(error => {
                         console.error('Error loading cart:', error);
                         document.getElementById('loading').innerHTML =
-                            '<p class="text-red-500">Error loading cart</p>';
+                            `<p class="text-red-500">${cartLang.error_loading}</p>`;
                     });
             } // Display cart function
             function displayCart(data) {
@@ -132,7 +147,7 @@
                     </div>
                     <div>
                         <h4 class="font-medium">${item.name[0]}</h4>
-                        <p class="text-gray-600">$${item.price.toFixed(2)} each</p>
+                        <p class="text-gray-600">$${item.price.toFixed(2)} ${cartLang.each}</p>
                     </div>
                 </div>
                 
@@ -184,11 +199,11 @@
                         .then(data => {
                             if (data.success) {
                                 loadCart(); // Reload cart
-                                showNotification('Cart updated', 'success');
+                                showNotification(cartLang.cart_updated, 'success');
                             }
                         })
                         .catch(error => {
-                            showNotification('Error updating cart', 'error');
+                            showNotification(cartLang.error_updating, 'error');
                         });
                 }
             });
@@ -198,7 +213,7 @@
                 if (e.target.classList.contains('remove-item')) {
                     const productId = e.target.getAttribute('data-id');
 
-                    if (confirm('Remove this item from cart?')) {
+                    if (confirm(cartLang.remove_confirm)) {
                         fetch('/cart/remove', {
                                 method: 'DELETE',
                                 headers: {
@@ -214,11 +229,11 @@
                             .then(data => {
                                 if (data.success) {
                                     loadCart(); // Reload cart
-                                    showNotification('Item removed from cart', 'success');
+                                    showNotification(cartLang.item_removed, 'success');
                                 }
                             })
                             .catch(error => {
-                                showNotification('Error removing item', 'error');
+                                showNotification(cartLang.error_removing, 'error');
                             });
                     }
                 }
@@ -226,7 +241,7 @@
 
             // Handle clear cart
             document.getElementById('clear-cart').addEventListener('click', function() {
-                if (confirm('Clear all items from cart?')) {
+                if (confirm(cartLang.clear_confirm)) {
                     fetch('/cart/clear', {
                             method: 'DELETE',
                             headers: {
@@ -238,11 +253,11 @@
                         .then(data => {
                             if (data.success) {
                                 loadCart(); // Reload cart
-                                showNotification('Cart cleared', 'success');
+                                showNotification(cartLang.cart_cleared, 'success');
                             }
                         })
                         .catch(error => {
-                            showNotification('Error clearing cart', 'error');
+                            showNotification(cartLang.error_clearing, 'error');
                         });
                 }
             });

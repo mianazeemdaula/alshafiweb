@@ -62,7 +62,7 @@
                                             </div>
                                             <button type="button" id="login-btn"
                                                 class="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded font-medium">
-                                                {{ __('Login') }}
+                                                {{ __('login.title') }}
                                             </button>
                                         </div>
 

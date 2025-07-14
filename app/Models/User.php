@@ -73,4 +73,38 @@ class User extends Authenticatable
     {
         return $this->belongsTo(UserLevel::class, 'level_id');
     }
+    protected static function booted()
+    {
+        static::creating(function ($user) {
+            if (empty($user->ref_code)) {
+                do {
+                    $code = strtoupper(substr(md5(uniqid(mt_rand(), true)), 0, 8));
+                } while (self::where('ref_code', $code)->exists());
+                $user->ref_code = $code;
+            }
+        });
+    }
+
+    public function getTotalShoppingAttribute()
+    {
+        return $this->orders()->sum('total');
+    }
+
+    public function getLevelByShopping()
+    {
+        $shopping = $this->total_shopping;
+        return UserLevel::where('min_points', '<=', $shopping)
+            ->orderByDesc('min_points')
+            ->first();
+    }
+    
+    public function getLevelBenefitsAttribute()
+    {
+        $level = $this->getLevelByShopping();
+        if (!$level) return null;
+        return [
+            'discount' => $level->discount,
+            'cashback' => $level->cashback,
+        ];
+    }
 }

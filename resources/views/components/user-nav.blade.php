@@ -41,6 +41,11 @@
                         <i class="fas fa-star mr-1"></i>
                         {{ __('Reviews') }}
                     </a>
+                    <a href="{{ route('user.referrals') }}"
+                        class="px-3 py-2 rounded-md text-sm font-medium {{ request()->routeIs('user.referrals') ? 'bg-blue-700' : 'hover:bg-blue-500' }} transition-colors">
+                        <i class="fas fa-users mr-1"></i>
+                        {{ __('Referrals') }}
+                    </a>
                 </nav>
 
                 <!-- Mobile menu button and logout -->
@@ -86,6 +91,11 @@
                         class="block px-3 py-2 rounded-md text-base font-medium {{ request()->routeIs('user.reviews.*') ? 'bg-blue-700' : 'hover:bg-blue-500' }} transition-colors">
                         <i class="fas fa-star mr-2"></i>
                         Reviews
+                    </a>
+                    <a href="{{ route('user.referrals') }}"
+                        class="block px-3 py-2 rounded-md text-base font-medium {{ request()->routeIs('user.referrals') ? 'bg-blue-700' : 'hover:bg-blue-500' }} transition-colors">
+                        <i class="fas fa-users mr-2"></i>
+                        Referrals
                     </a>
                     <form action="/logout" method="POST" class="mt-4">
                         @csrf

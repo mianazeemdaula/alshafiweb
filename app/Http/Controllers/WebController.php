@@ -23,7 +23,7 @@ class WebController extends Controller
             }
         }
         
-        $products = $products->take(8)->get();
+        $products = $products->take(10)->inRandomOrder()->get();
         
         // Get recent blog posts for current country
         $blogPosts = \App\Models\BlogPost::with(['country', 'category']);

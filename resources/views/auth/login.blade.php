@@ -1,52 +1,54 @@
 @extends('layouts.guest')
 @section('content')
-<section class="">
-  <div class="grid grid-cols-1 lg:grid-cols-2">
-    <div class="flex items-center justify-center px-4 py-10 sm:px-6 sm:py-16 lg:px-8 lg:py-24">
-      <div class="xl:mx-auto xl:w-full xl:max-w-sm 2xl:max-w-md">
-        <h2 class="text-3xl font-bold leading-tight text-black sm:text-4xl">
-          Sign in
-        </h2>
-        <p class="mt-2 text-base text-gray-600">
-          Don't have an account?
-          <a
-            href="{{ url('signup') }}"
-            title=""
-            class="font-medium text-black transition-all duration-200 hover:underline"
-          >
-            Sign Up
-          </a>
-        </p>
-        <form action="{{ url('login') }}" method="POST" class="mt-8">
-          @csrf
-          <div class="space-y-5">
-            <div>
-              <x-label>Email</x-label>
-              <div class="mt-2">
-                <x-input name="email" type="email" placeholder="Email" />
-              </div>
-            </div>
-            <div>
-              <div class="flex items-center justify-between">
-                <x-label>Password</x-label>
-                <a
-                  href="#"
-                  title=""
-                  class="text-sm font-medium text-black transition-all duration-200 hover:underline"
-                >
-                  Forgot Password?
-                </a>
-              </div>
-              <div class="mt-2">
-                <x-input name="password" type="password" placeholder="Password" />
-              </div>
-            </div>
-            <div>
-              <x-primary-button type="submit">Signin</x-primary-button>
-            </div>
-          </div>
-        </form>
-        {{-- <div class="mt-3 space-y-3">
+    <section class="">
+        <div class="grid grid-cols-1 lg:grid-cols-2">
+            <div
+                class="flex items-center justify-center px-4 py-10 sm:px-6 sm:py-16 lg:px-8 lg:py-24 bg-white dark:bg-gray-900 transition-colors duration-300">
+                <div class="xl:mx-auto xl:w-full xl:max-w-sm 2xl:max-w-md">
+                    <h2 class="text-3xl font-bold leading-tight text-black dark:text-white sm:text-4xl">
+                        {{ __('login.title') }}
+                    </h2>
+                    <p class="mt-2 text-base text-gray-600 dark:text-gray-300">
+                        {{ __('login.no_account') }}
+                        <a href="{{ url('signup') }}" title=""
+                            class="font-medium text-black dark:text-white transition-all duration-200 hover:underline">
+                            {{ __('login.signup') }}
+                        </a>
+                    </p>
+                    <form action="{{ url('login') }}" method="POST" class="mt-8">
+                        @csrf
+                        <div class="space-y-5">
+                            <div>
+                                <x-label class="text-black dark:text-white">{{ __('login.email') }}</x-label>
+                                <div class="mt-2">
+                                    <x-input name="email" type="email"
+                                        class="bg-gray-100 dark:bg-gray-800 text-black dark:text-white border-gray-300 dark:border-gray-700 placeholder-gray-400 dark:placeholder-gray-500 focus:ring-indigo-500 focus:border-indigo-500 dark:focus:ring-indigo-400 dark:focus:border-indigo-400"
+                                        placeholder="{{ __('login.email_placeholder') }}" />
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex items-center justify-between">
+                                    <x-label class="text-black dark:text-white">{{ __('login.password') }}</x-label>
+                                    <a href="#" title=""
+                                        class="text-sm font-medium text-black dark:text-white transition-all duration-200 hover:underline">
+                                        {{ __('login.forgot_password') }}
+                                    </a>
+                                </div>
+                                <div class="mt-2">
+                                    <x-input name="password" type="password"
+                                        class="bg-gray-100 dark:bg-gray-800 text-black dark:text-white border-gray-300 dark:border-gray-700 placeholder-gray-400 dark:placeholder-gray-500 focus:ring-indigo-500 focus:border-indigo-500 dark:focus:ring-indigo-400 dark:focus:border-indigo-400"
+                                        placeholder="{{ __('login.password_placeholder') }}" />
+                                </div>
+                            </div>
+                            <div>
+                                <x-primary-button type="submit"
+                                    class="w-full bg-indigo-600 dark:bg-indigo-500 hover:bg-indigo-700 dark:hover:bg-indigo-600 text-white dark:text-white">
+                                    {{ __('login.signin') }}
+                                </x-primary-button>
+                            </div>
+                        </div>
+                    </form>
+                    {{-- <div class="mt-3 space-y-3">
           <button
             type="button"
             class="relative inline-flex w-full items-center justify-center rounded-md border border-gray-400 bg-white px-3.5 py-2.5 font-semibold text-gray-700 transition-all duration-200 hover:bg-gray-100 hover:text-black focus:bg-gray-100 focus:text-black focus:outline-none"
@@ -80,15 +82,13 @@
             Sign up with Facebook
           </button>
         </div> --}}
-      </div>
-    </div>
-    <div class=" hidden h-screen  lg:flex">
-      <img
-        class="mx-auto h-full w-full rounded-md object-cover"
-        src="https://images.unsplash.com/photo-1559526324-4b87b5e36e44?ixlib=rb-4.0.3&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1742&amp;q=80"
-        alt=""
-      />
-    </div>
-  </div>
-</section>
+                </div>
+            </div>
+            <div class="hidden h-screen lg:flex bg-gray-100 dark:bg-gray-800 transition-colors duration-300">
+                <img class="mx-auto h-full w-full rounded-md object-cover"
+                    src="https://images.unsplash.com/photo-1559526324-4b87b5e36e44?ixlib=rb-4.0.3&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1742&amp;q=80"
+                    alt="" />
+            </div>
+        </div>
+    </section>
 @endsection

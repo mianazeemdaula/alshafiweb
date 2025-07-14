@@ -1,7 +1,6 @@
-@extends('layouts.guest')
+@extends('layouts.user')
 
-@section('content')
-    @include('components.user-nav')
+@section('main')
 
     <div class="container mx-auto px-4 py-8">
         <div class="max-w-4xl mx-auto">
@@ -157,7 +156,7 @@
                             <div class="text-sm text-gray-600">Product Reviews</div>
                         </div>
                         <div class="text-center">
-                            <div class="text-3xl font-bold text-purple-600">{{ $stats['days_member'] }}</div>
+                            <div class="text-3xl font-bold text-purple-600">{{ (int) $stats['days_member'] }}</div>
                             <div class="text-sm text-gray-600">Days as Member</div>
                         </div>
                     </div>
