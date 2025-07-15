@@ -40,16 +40,17 @@ class AuthController extends Controller
                 'message' => 'Login successful'
             ]);
         }
-
-        // Redirect based on user role
-        $user = auth()->user();
-        if ($user && $user->hasRole('user')) {
-            return redirect()->intended('/user/dashboard');
-        }
         return redirect()->intended('/dashboard');
     }
 
     public function dashboard(){
+        if(!auth()->check()){
+            return redirect('/login');
+        }
+        $user = auth()->user();
+        if($user->hasRole('user')) {
+            return redirect('/user/dashboard');
+        }
         $stats = [
             'users' => \App\Models\User::count(),
             'products' => \App\Models\Product::count(),

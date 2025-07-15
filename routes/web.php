@@ -71,8 +71,8 @@ Route::middleware('auth')->group(function () {
         // Referrals Management
         Route::get('/referrals', [App\Http\Controllers\AuthController::class, 'referrals'])->name('referrals');
     });
-    
-    Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
+    Route::middleware('role:admin')->prefix('admin')->name('admin.')->group(function () {
+    // Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
         Route::resource('categories', 'App\Http\Controllers\Admin\CategoryController');
         Route::resource('products', 'App\Http\Controllers\Admin\ProductController');
         Route::post('products/filter', 'App\Http\Controllers\Admin\ProductController@filter')->name('products.filter');
