@@ -16,6 +16,9 @@ Route::get('/services', 'App\\Http\\Controllers\\WebController@services')->name(
 Route::get('/blog', 'App\Http\Controllers\WebController@blog')->name('blog.index');
 Route::get('/blog/{slug}', 'App\Http\Controllers\WebController@blogPost')->name('blog.post');
 
+// Public Reviews page
+Route::get('/reviews', [App\Http\Controllers\Web\ReviewController::class, 'index'])->name('web.reviews');
+
 // Cart routes
 Route::post('/cart/add', 'App\Http\Controllers\CartController@add')->name('cart.add');
 Route::post('/cart/update', 'App\Http\Controllers\CartController@update')->name('cart.update');

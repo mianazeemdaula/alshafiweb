@@ -58,7 +58,7 @@ class AuthController extends Controller
             'orders' => \App\Models\Order::count(),
             'revenue' => \App\Models\Order::sum('total'),
         ];
-        return view('auth.dashboard', compact('stats'));
+        return view('admin.dashboard', compact('stats'));
     }
 
     public function register(){
