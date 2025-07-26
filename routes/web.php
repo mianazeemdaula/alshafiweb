@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', 'App\Http\Controllers\WebController@index')->name('web.home');
 Route::get('/products', 'App\Http\Controllers\WebController@products')->name('web.products');
+Route::get('/product/{slug}', 'App\Http\Controllers\WebController@product')->name('web.product');
 Route::get('/contact-us', 'App\Http\Controllers\WebController@contactus')->name('web.contact');
 Route::get('/cart', 'App\Http\Controllers\WebController@cart')->name('web.cart');
 Route::get('/checkout', 'App\Http\Controllers\CheckoutController@index')->name('web.checkout');

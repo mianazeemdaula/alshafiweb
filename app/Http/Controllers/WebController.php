@@ -161,6 +161,24 @@ class WebController extends Controller
         return view('web.products', compact('products', 'categories'));
     }
 
+    public function product($slug)
+    {
+        $product = \App\Models\Product::with(['country', 'category', 'reviews'])
+            ->where('sku', $slug)
+            ->firstOrFail();
+        
+        // Check if product belongs to current country
+        $currentCountry = session('country');
+        if ($currentCountry) {
+            $country = \App\Models\Country::where('iso2', $currentCountry)->first();
+            if ($country && $product->country_id !== $country->id) {
+                abort(404);
+            }
+        }
+        
+        return view('web.product', compact('product'));
+    }
+
     public function contactus()
     {
         return view('web.contactus');
