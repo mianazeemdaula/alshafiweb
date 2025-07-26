@@ -168,13 +168,13 @@ class WebController extends Controller
             ->firstOrFail();
         
         // Check if product belongs to current country
-        $currentCountry = session('country');
-        if ($currentCountry) {
-            $country = \App\Models\Country::where('iso2', $currentCountry)->first();
-            if ($country && $product->country_id !== $country->id) {
-                abort(404);
-            }
-        }
+        // $currentCountry = session('country');
+        // if ($currentCountry) {
+        //     $country = \App\Models\Country::where('iso2', $currentCountry)->first();
+        //     if ($country && $product->country_id !== $country->id) {
+        //         abort(404);
+        //     }
+        // }
         
         return view('web.product', compact('product'));
     }
