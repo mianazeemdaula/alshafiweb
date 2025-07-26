@@ -21,7 +21,7 @@ class ProductController extends Controller
         if(request()->has('country') && request()->country != ''){
             $products = $products->where('country_id', request()->country);
         }
-        $products = $products->paginate();
+        $products = $products->orderBy('id','desc')->paginate();
         return view('admin.products.index', ['products' => $products]);
     }
 
@@ -163,7 +163,13 @@ class ProductController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $product = Product::findOrFail($id);
+        $product->delete();
+        // Delete associated media
+        foreach ($product->media as $media) {
+            MediaHelper::delete($media);
+        }
+        return redirect()->route('admin.products.index')->with('success', 'Product deleted successfully');
     }
 
     public function filter(Request $request)

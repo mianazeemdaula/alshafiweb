@@ -74,7 +74,22 @@ class CategoryController extends Controller
     public function destroy($id)
     {
         $category = Category::findOrFail($id);
+        
+        // Delete the image if it exists
+        if ($category->image && file_exists(public_path($category->image))) {
+            unlink(public_path($category->image));
+        }
+
+        // Delete the products
+        foreach ($category->products as $product) {
+            $product->delete();
+            // Delete associated media for each product
+            foreach ($product->media as $media) {
+                MediaHelper::delete($media);
+            }
+        }   
+
         $category->delete();
-        return redirect()->route('admin.categories.index');
+        return redirect()->route('admin.categories.index')->with('success', 'Category deleted successfully');
     }
 }
