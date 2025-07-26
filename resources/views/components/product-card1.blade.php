@@ -1,8 +1,13 @@
 <div
     class="relative overflow-hidden group transition-transform duration-300 hover:scale-105 hover:shadow-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg">
     <div class="relative bg-gray-200 dark:bg-gray-700 h-32 sm:h-48 md:h-56 lg:h-64 flex items-center justify-center">
-        <img src="https://cdn.ishop.cholobangla.com/uploads/product-6-1.webp" alt=""
-            class="object-cover h-full w-full">
+
+        @if ($product->media->isNotEmpty())
+            <img src="{{ asset($product->media->first()->file_path) }}" alt="" class="object-cover h-full w-full">
+        @else
+            <img src="https://cdn.ishop.cholobangla.com/uploads/product-6-1.webp" alt=""
+                class="object-cover h-full w-full">
+        @endif
     </div>
     @if ($product->featured)
         <div class="absolute top-0 left-0 w-12 h-12 sm:w-16 sm:h-16">
