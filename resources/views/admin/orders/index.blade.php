@@ -22,8 +22,6 @@
                                         <th scope="col" class="px-12 py-3.5 text-left text-sm font-normal text-gray-700">
                                             Status</th>
                                         <th scope="col" class="px-4 py-3.5 text-left text-sm font-normal text-gray-700">
-                                            Street</th>
-                                        <th scope="col" class="px-4 py-3.5 text-left text-sm font-normal text-gray-700">
                                             City/Zip</th>
                                         <th scope="col" class="px-4 py-3.5 text-left text-sm font-normal text-gray-700">
                                             Shipping Cost</th>
@@ -62,9 +60,7 @@
                                                     class="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800">{{ $item->status }}</span>
                                             </td>
                                             <td class="whitespace-nowrap px-4 py-4 text-sm text-gray-700">
-                                                {{ $item->street_address }}</td>
-                                            <td class="whitespace-nowrap px-4 py-4 text-sm text-gray-700">
-                                                {{ $item->city->name }} ({{ $item->zip_code }})</td>
+                                                {{ $item->shipping_address['city'] ?? '' }} ({{ $item->zip_code }})</td>
                                             <td class="whitespace-nowrap px-4 py-4 text-sm text-gray-700">
                                                 {{ $item->shipping_cost }}</td>
                                             <td class="whitespace-nowrap px-4 py-4 text-sm text-gray-700">
@@ -73,13 +69,13 @@
                                                 {{ $item->extra_note }}</td>
                                             <td
                                                 class="px-2 py-1 text-xs font-medium text-right sm:px-4 sm:py-1 flex space-x-2">
-                                                <a href="#" class="">
+                                                <a href="{{ route('admin.orders.show', $item->id) }}" class="">
                                                     <i class="fa fa-eye"></i>
                                                 </a>
-                                                <a href="{{ route('admin.categories.edit', $item->id) }}">
+                                                <a href="{{ route('admin.orders.edit', $item->id) }}">
                                                     <i class="fa fa-pencil"></i>
                                                 </a>
-                                                <form action="{{ route('admin.categories.destroy', $item->id) }}"
+                                                <form action="{{ route('admin.orders.destroy', $item->id) }}"
                                                     method="post">
                                                     @csrf
                                                     @method('delete')

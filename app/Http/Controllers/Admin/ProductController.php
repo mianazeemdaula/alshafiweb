@@ -167,7 +167,12 @@ class ProductController extends Controller
         $product->delete();
         // Delete associated media
         foreach ($product->media as $media) {
-            MediaHelper::delete($media);
+            // Delete the media file from storage
+            if (file_exists(public_path($media->file_path))) {
+                unlink(public_path($media->file_path));
+            }
+            // Delete the media record from the database
+            $media->delete();
         }
         return redirect()->route('admin.products.index')->with('success', 'Product deleted successfully');
     }

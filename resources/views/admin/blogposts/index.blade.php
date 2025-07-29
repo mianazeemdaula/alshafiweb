@@ -77,7 +77,7 @@
                                             <a href="#">read</a>
                                         </td>
                                         <td class="px-4 py-2 text-right text-xs font-medium flex space-x-2">
-                                            <a href="#" class="">
+                                            <a href="{{ url("/blog/{$item->slug}") }}" class="">
                                                 <i class="fa fa-eye"></i>
                                             </a>
                                             <a href="{{ route('admin.posts.edit', $item->id) }}">

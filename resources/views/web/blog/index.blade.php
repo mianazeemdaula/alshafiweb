@@ -74,7 +74,7 @@
                             <div
                                 class="h-48 bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center">
                                 @if ($post->image)
-                                    <img src="{{ asset('storage/' . $post->image) }}" alt="{{ $post->title }}"
+                                    <img src="{{ asset($post->image) }}" alt="{{ $post->title }}"
                                         class="w-full h-full object-cover">
                                 @else
                                     <div class="text-white text-center">

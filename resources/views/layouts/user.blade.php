@@ -81,6 +81,17 @@
                     </a>
                 </li>
             </ul>
+            <form method="POST" action="{{ route('logout') }}" id="logout-form">
+                @csrf
+                <button type="submit"
+                    class="w-full flex px-4 py-2 rounded items-center gap-2 transition-colors text-left"
+                    style="color: var(--text-primary);"
+                    onmouseover="this.style.backgroundColor='var(--accent-red)'; this.style.color='#fff';"
+                    onmouseout="this.style.backgroundColor=''; this.style.color='var(--text-primary)';">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    <span>Logout</span>
+                </button>
+            </form>
         </div>
 
         <!-- Overlay for mobile -->

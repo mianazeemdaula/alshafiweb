@@ -36,7 +36,7 @@
             @endif
             <!-- Theme Toggle Button -->
             <button class="theme-toggle" title="{{ __('Toggle Theme') }}" aria-label="{{ __('Toggle Theme') }}">
-                <i class="fa-solid fa-moon"></i>
+                <i class="fa-solid fa-moon text-sm"></i>
             </button>
         </div>
         <div class="border border-slate-100 dark:border-gray-700 h-4 hidden sm:block"></div>
@@ -97,12 +97,12 @@
                 <i class="fa fa-user-lock mx-1"></i>
                 <div class="hidden sm:block">{{ __('login.title') }}</div>
             </a>
-            <div class="border border-slate-100 dark:border-gray-700 h-4 hidden sm:block"></div>
+            {{-- <div class="border border-slate-100 dark:border-gray-700 h-4 hidden sm:block"></div>
             <a href="{{ url('/register') }}"
                 class="flex items-center text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
                 <i class="fa fa-user-plus mx-1"></i>
                 <div class="hidden sm:block">{{ __('register.title') }}</div>
-            </a>
+            </a> --}}
         @endauth
     </div>
 </div>
@@ -248,10 +248,10 @@
                                 class="block text-sm text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100 px-3 py-2 rounded transition-colors">
                                 <i class="fa fa-user-lock mr-2"></i>{{ __('login.title') }}
                             </a>
-                            <a href="{{ url('/register') }}"
+                            {{-- <a href="{{ url('/register') }}"
                                 class="block text-sm text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100 px-3 py-2 rounded transition-colors">
                                 <i class="fa fa-user-plus mr-2"></i>{{ __('register.title') }}
-                            </a>
+                            </a> --}}
                         @endauth
                     </div>
                 </div>

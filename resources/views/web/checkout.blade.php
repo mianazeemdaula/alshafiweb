@@ -401,8 +401,10 @@
                 });
             }
 
-            // Place order functionality
+            // Place order functionality (prevent double submission)
+            let isPlacingOrder = false;
             document.getElementById('place-order-btn').addEventListener('click', function() {
+                if (isPlacingOrder) return;
                 if (!isAuthenticated) {
                     showNotification('Please login or create an account to continue', 'error');
                     return;
@@ -422,6 +424,7 @@
 
                 this.disabled = true;
                 this.textContent = 'Placing Order...';
+                isPlacingOrder = true;
 
                 const orderData = {
                     shipping: Object.fromEntries(formData),
@@ -446,14 +449,16 @@
                             }, 1500);
                         } else {
                             showNotification(data.message || 'Order placement failed', 'error');
+                            this.disabled = false;
+                            this.textContent = 'Place Order';
+                            isPlacingOrder = false;
                         }
                     })
                     .catch(error => {
                         showNotification('Order placement error occurred', 'error');
-                    })
-                    .finally(() => {
                         this.disabled = false;
                         this.textContent = 'Place Order';
+                        isPlacingOrder = false;
                     });
             });
 

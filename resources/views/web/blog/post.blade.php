@@ -49,7 +49,7 @@
                     <!-- Featured Image -->
                     @if ($post->image)
                         <div class="h-64 md:h-96">
-                            <img src="{{ asset('storage/' . $post->image) }}" alt="{{ $post->title }}"
+                            <img src="{{ asset($post->image) }}" alt="{{ $post->title }}"
                                 class="w-full h-full object-cover">
                         </div>
                     @else

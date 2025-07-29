@@ -93,9 +93,9 @@ Route::middleware('auth')->group(function () {
         Route::post('posts/filter', 'App\Http\Controllers\Admin\BlogPostController@filter')->name('posts.filter');
         Route::resource('banners', 'App\Http\Controllers\Admin\BannerController');
         Route::post('banners/filter', 'App\Http\Controllers\Admin\BannerController@filter')->name('banners.filter');
-        Route::resource('media', 'App\Http\Controllers\Admin\BlogPostController');
+        Route::resource('media', 'App\Http\Controllers\Admin\MediaController');
     });
-    Route::post('logout', 'App\Http\Controllers\AuthController@logout');
+    Route::post('logout', 'App\Http\Controllers\AuthController@logout')->name('logout');
 });
 
 
