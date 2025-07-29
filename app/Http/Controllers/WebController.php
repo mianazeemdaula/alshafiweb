@@ -279,13 +279,13 @@ class WebController extends Controller
             ->firstOrFail();
             
         // Check if post belongs to current country
-        $currentCountry = session('country');
-        if ($currentCountry) {
-            $country = \App\Models\Country::where('iso2', $currentCountry)->first();
-            if ($country && $post->country_id !== $country->id) {
-                abort(404);
-            }
-        }
+        // $currentCountry = session('country');
+        // if ($currentCountry) {
+        //     $country = \App\Models\Country::where('iso2', $currentCountry)->first();
+        //     if ($country && $post->country_id !== $country->id) {
+        //         abort(404);
+        //     }
+        // }
         
         // Get related posts from same category and country
         $relatedPosts = \App\Models\BlogPost::with(['country', 'category'])
