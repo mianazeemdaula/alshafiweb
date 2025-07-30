@@ -36,24 +36,24 @@ class DatabaseSeeder extends Seeder
 
         User::factory()->create([
             'name' => 'Admin User',
-            'email' => 'admin@test.com',
+            'email' => 'admin@alshaafionline.com',
         ]);
         $user = User::find(1);
         $user->assignRole('admin');
 
         User::factory()->create([
             'name' => 'Support User',
-            'email' => 'support@test.com',
+            'email' => 'support@alshaafionline.com',
         ]);
         $user = User::find(2);
         $user->assignRole('support');
 
-        User::factory()->create([
-            'name' => 'Normal User',
-            'email' => 'user@test.com',
-        ]);
-        $user = User::find(3);
-        $user->assignRole('user');
+        // User::factory()->create([
+        //     'name' => 'Normal User',
+        //     'email' => 'user@test.com',
+        // ]);
+        // $user = User::find(3);
+        // $user->assignRole('user');
 
         // Call the CountrySeeder to add our restricted countries
         $this->call([
@@ -103,15 +103,15 @@ class DatabaseSeeder extends Seeder
         \App\Models\PaymentMethod::factory(5)->create();
 
         // Categories 
-        \App\Models\Category::factory(15)->create();
-        // Products
-        \App\Models\Product::factory(100)->create();
+        // \App\Models\Category::factory(15)->create();
+        // // Products
+        // \App\Models\Product::factory(100)->create();
 
-        $this->call([
-            BlogCategorySeeder::class,
-        ]);
+        // $this->call([
+        //     BlogCategorySeeder::class,
+        // ]);
 
-        \App\Models\BlogPost::factory(100)->create();
+        // \App\Models\BlogPost::factory(100)->create();
         
     }
 }
