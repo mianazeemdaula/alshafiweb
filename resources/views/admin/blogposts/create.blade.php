@@ -58,7 +58,7 @@
 @endsection
 
 @section('head')
-    <script src="https://cdn.tiny.cloud/1/kput55tw7sf7m8nadh5lth5ghsdshrjgwfbj9ju8hcdigf4a/tinymce/7/tinymce.min.js"
+    <script src="https://cdn.tiny.cloud/1/qxsiixa2mkq6u711kgpc20nafpny7wpufinm5gdvvytgryxh/tinymce/7/tinymce.min.js"
         referrerpolicy="origin"></script>
     <script>
         tinymce.init({
