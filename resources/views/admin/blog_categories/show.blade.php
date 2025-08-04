@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.web')
 @section('content')
     <div class="container mx-auto px-4 py-8 max-w-lg">
         <h1 class="text-2xl font-bold mb-6">Blog Category Details</h1>
