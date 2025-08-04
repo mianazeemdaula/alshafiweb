@@ -94,6 +94,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('banners', 'App\Http\Controllers\Admin\BannerController');
         Route::post('banners/filter', 'App\Http\Controllers\Admin\BannerController@filter')->name('banners.filter');
         Route::resource('media', 'App\Http\Controllers\Admin\MediaController');
+        Route::resource('blog-categories', 'App\Http\Controllers\Admin\BlogCategoryController');
     });
     Route::post('logout', 'App\Http\Controllers\AuthController@logout')->name('logout');
 });

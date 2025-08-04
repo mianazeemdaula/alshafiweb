@@ -61,6 +61,12 @@
                             class="fa-solid fa-handshake-angle mr-2"></i> Suggestions</a>
                 </li>
                 <li
+                    class="p-2 hover:bg-gray-700  hover:animate-pulse @if (request()->routeIs('admin.blog-categories.*')) bg-green-500 @endif">
+                    <a href="{{ route('admin.blog-categories.index') }}" class="block"><i
+                            class="fa-solid fa-folder mr-2"></i>
+                        Blog Categories</a>
+                </li>
+                <li
                     class="p-2 hover:bg-gray-700  hover:animate-pulse @if (request()->routeIs('admin.posts.*')) bg-green-500 @endif">
                     <a href="{{ route('admin.posts.index') }}" class="block"><i class="fa-solid fa-blog mr-2"></i>
                         Blog</a>
