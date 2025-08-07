@@ -3,7 +3,8 @@
     <div class="relative aspect-square overflow-hidden">
         <a href="{{ url("/product/$product->sku") }}" class="block group">
             @if ($product->media->isNotEmpty())
-                <img src="{{ asset($product->image) }}" alt="" class="object-cover w-full h-full">
+                <img src="{{ asset($product->media->first()->file_path) }}" alt=""
+                    class="object-cover w-full h-full">
             @else
                 <img src="https://cdn.ishop.cholobangla.com/uploads/product-6-1.webp" alt=""
                     class="object-cover w-full h-full">
