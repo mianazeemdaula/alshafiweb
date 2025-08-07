@@ -11,32 +11,31 @@ class SetLocaleAndCountry
 {
     public function handle(Request $request, Closure $next)
     {
-        // Get country from URL parameter, session, or default
-        $country = $request->get('country', Session::get('country', 'PK'));
-        $locale = $request->get('locale', Session::get('locale'));
+        // Get available countries and locales from config
+        $availableCountries = config('app.available_countries', []);
+        $availableLocales = config('app.available_locales', []);
         
-        // Get available countries and locales
-        $availableCountries = config('app.available_countries');
-        $availableLocales = config('app.available_locales');
+        // Handle locale - completely independent of country
+        // Priority: URL parameter > Session > Default to 'en'
+        $locale = $request->get('locale') ?? Session::get('locale') ?? 'en';
         
-        // Validate country
-        if (!array_key_exists($country, $availableCountries)) {
-            $country = 'PK';
-        }
-        
-        // Set locale based on country if not explicitly set
-        if (!$locale) {
-            $locale = $availableCountries[$country]['locale'] ?? 'ur';
-        }
-        
-        // Validate locale
+        // Validate locale exists in config
         if (!array_key_exists($locale, $availableLocales)) {
-            $locale = 'ur';
+            $locale = 'en';
         }
         
-        // Store in session
-        Session::put('country', $country);
+        // Handle country - completely independent of locale
+        // Priority: URL parameter > Session > Default to 'WW' (Rest of World)
+        $country = $request->get('country') ?? Session::get('country') ?? 'WW';
+        
+        // Validate country exists in config
+        if (!array_key_exists($country, $availableCountries)) {
+            $country = 'WW';
+        }
+        
+        // Store in session for persistence
         Session::put('locale', $locale);
+        Session::put('country', $country);
         
         // Set application locale
         App::setLocale($locale);
@@ -45,13 +44,15 @@ class SetLocaleAndCountry
         $countryInfo = \App\Models\Country::where('iso2', $country)->first();
         $currency = $countryInfo ? $countryInfo->currency_symbol : '$';
         
-        // Share with views
-        view()->share('currentCountry', $country);
-        view()->share('currentLocale', $locale);
-        view()->share('currentCurrency', $currency);
-        view()->share('countryInfo', $countryInfo);
-        view()->share('availableCountries', $availableCountries);
-        view()->share('availableLocales', $availableLocales);
+        // Share data with all views
+        view()->share([
+            'currentCountry' => $country,
+            'currentLocale' => $locale,
+            'currentCurrency' => $currency,
+            'countryInfo' => $countryInfo,
+            'availableCountries' => $availableCountries,
+            'availableLocales' => $availableLocales,
+        ]);
 
         return $next($request);
     }

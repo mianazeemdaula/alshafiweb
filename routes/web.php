@@ -111,11 +111,30 @@ Route::get('/send-mail', function () {
 });
 
 Route::get('/change-country/{country}', function($country) {
-    session(['country' => $country]);
+    $availableCountries = config('app.available_countries', []);
+    if (array_key_exists($country, $availableCountries)) {
+        session(['country' => $country]);
+        // Do NOT change locale when country changes
+    }
     return redirect()->back();
 })->name('change.country');
 
 Route::get('/change-locale/{locale}', function($locale) {
-    session(['locale' => $locale]);
+    $availableLocales = config('app.available_locales', []);
+    if (array_key_exists($locale, $availableLocales)) {
+        session(['locale' => $locale]);
+        // Do NOT change country when locale changes
+    }
     return redirect()->back();
 })->name('change.locale');
+
+// Debug API endpoint for locale info
+Route::get('/api/locale-debug', function() {
+    return response()->json([
+        'app_locale' => App::getLocale(),
+        'session_locale' => session('locale'),
+        'session_country' => session('country'),
+        'available_locales' => config('app.available_locales'),
+        'available_countries' => config('app.available_countries'),
+    ]);
+});
