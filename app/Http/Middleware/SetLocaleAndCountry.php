@@ -26,11 +26,11 @@ class SetLocaleAndCountry
         
         // Handle country - completely independent of locale
         // Priority: URL parameter > Session > Default to 'WW' (Rest of World)
-        $country = $request->get('country') ?? Session::get('country') ?? 'WW';
+        $country = $request->get('country') ?? Session::get('country') ?? 'PK';
         
         // Validate country exists in config
         if (!array_key_exists($country, $availableCountries)) {
-            $country = 'WW';
+            $country = 'PK';
         }
         
         // Store in session for persistence

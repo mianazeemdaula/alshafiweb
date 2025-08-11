@@ -156,4 +156,16 @@ return [
         'driver' => env('APP_MAINTENANCE_DRIVER', 'file'),
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | WhatsApp Configuration
+    |--------------------------------------------------------------------------
+    |
+    | WhatsApp number for customer support. Include country code without + sign.
+    | Example: 923001234567 for Pakistan number
+    |
+    */
+
+    'whatsapp_number' => env('WHATSAPP_NUMBER', '1234567890'),
 ];
