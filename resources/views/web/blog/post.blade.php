@@ -1,5 +1,9 @@
 @extends('layouts.guest')
 
+@section('title', $post->title ?? 'Blog Post')
+@section('meta_description', $post->meta_description)
+@section('meta_keywords', $post->meta_keywords)
+
 @section('content')
     <div class="bg-gray-100 py-8">
         <div class="container mx-auto px-4">

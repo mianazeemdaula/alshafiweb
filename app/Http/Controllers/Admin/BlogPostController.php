@@ -51,9 +51,9 @@ class BlogPostController extends Controller
         $post->country_id = $request->country_id;
         $post->user_id = auth()->user()->id;
         $post->status = 'published';
-        $post->meta_title = $request->title;
-        $post->meta_description = $request->title;
-        $post->meta_keywords = "blog, alshaafi, health";
+        $post->meta_title = $request->meta_title ?? $request->title;
+        $post->meta_description = $request->meta_description ?? $request->title;
+        $post->meta_keywords = $request->meta_keywords ?? "blog, alshaafi, health";
         if($request->hasFile('image')) {
             $post->image = MediaHelper::upload($request->file('image'));
         }
@@ -99,9 +99,9 @@ class BlogPostController extends Controller
         $post->blog_category_id = $request->category_id;
         $post->country_id = $request->country_id;
         $post->status = 'published';
-        $post->meta_title = $request->title;
-        $post->meta_description = $request->title;
-        $post->meta_keywords = "blog, alshaafi, health";
+        $post->meta_title = $request->meta_title ?? $request->title;
+        $post->meta_description = $request->meta_description ?? $request->title;
+        $post->meta_keywords = $request->meta_keywords ?? "blog, alshaafi, health";
         if($request->hasFile('image')) {
             if(File::exists(public_path('uploads/' . $post->image))) {
                 File::delete(public_path('uploads/' . $post->image));

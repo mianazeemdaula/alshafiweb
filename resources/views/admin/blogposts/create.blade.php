@@ -44,6 +44,21 @@
                     <textarea name="content" id="mytextarea" cols="30" rows="10"
                         class="w-full border border-gray-300 rounded-md p-2">{{ old('content') }}</textarea>
                 </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-4 pb-4">
+                    <div class="flex flex-col gap-2">
+                        <x-label>Meta Title</x-label>
+                        <x-input name="meta_title" value="{{ old('meta_title') }}" placeholder="Meta Title" />
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <x-label>Meta Description</x-label>
+                        <x-input name="meta_description" value="{{ old('meta_description') }}"
+                            placeholder="Meta Description" />
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <x-label>Meta Keywords</x-label>
+                        <x-input name="meta_keywords" value="{{ old('meta_keywords') }}" placeholder="Meta Keywords" />
+                    </div>
+                </div>
                 <div class="flex py-6 space-x-4">
                     <button type="submit"
                         class="font-poppins py-2 px-4 rounded-md bg-green-500 text-white hover:bg-green-600 cursor-pointer">Create

@@ -7,10 +7,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>
-        {{ config('app.name', 'eCommerce') }} - @yield('title')
+        @hasSection('title')
+            @yield('title')
+        @else
+            {{ config('app.name', 'eCommerce') }}
+        @endif
     </title>
-    <meta name="description" content="{{ config('global.description_' . App::getLocale(), 'eCommerce') }}">
-    <meta name="keywords" content="{{ config('global.keywords_' . App::getLocale(), 'eCommerce') }}">
+    @hasSection('meta_description')
+        <meta name="description" content="@yield('meta_description')">
+    @else
+        <meta name="description" content="{{ config('global.description_' . App::getLocale(), 'eCommerce') }}">
+    @endif
+
+    @hasSection('meta_keywords')
+        <meta name="keywords" content="@yield('meta_keywords')">
+    @else
+        <meta name="keywords" content="{{ config('global.keywords_' . App::getLocale(), 'eCommerce') }}">
+    @endif
     @livewireStyles
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
