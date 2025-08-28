@@ -47,13 +47,13 @@ class ProductController extends Controller
             'name' => 'required|max:255',
             'price' => 'required|numeric',
             'sku' => 'required|unique:products,sku',
-            'discount' => 'required|numeric',
+            'discount' => 'nullable|numeric',
             'description' => 'required',
-            'vat' => 'required|numeric',
+            'vat' => 'nullable|numeric',
             'stock' => 'required|numeric',
-            'referrer_discount' => 'required|numeric',
-            'referal_discount' => 'required|numeric',
-            'buyer_discount' => 'required|numeric',
+            'referrer_discount' => 'nullable|numeric',
+            'referal_discount' => 'nullable|numeric',
+            'buyer_discount' => 'nullable|numeric',
             'image.*' => 'image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
         ]);
 
@@ -65,12 +65,12 @@ class ProductController extends Controller
         $product->country_id = $request->country_id;
         $product->description = $request->description;
         $product->discount = $request->discount;
-        $product->vat = $request->vat;
+        $product->vat = $request->vat ?? 0;
         $product->stock = $request->stock;
-        $product->referrer_discount = $request->referrer_discount;
-        $product->referal_discount = $request->referal_discount;
-        $product->buyer_discount = $request->buyer_discount;
-        $product->earn_points = $request->earn_points;
+        $product->referrer_discount = $request->referrer_discount ?? 0;
+        $product->referal_discount = $request->referal_discount ?? 0;
+        $product->buyer_discount = $request->buyer_discount ?? 0;
+        $product->earn_points = $request->earn_points ?? 0;
         $product->featured = $request->featured;
         $product->is_active = $request->is_active;
         $product->image = "https://via.placeholder.com/640x480.png/000077?text=quas";
