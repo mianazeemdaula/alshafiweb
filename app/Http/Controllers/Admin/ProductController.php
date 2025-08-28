@@ -119,14 +119,14 @@ class ProductController extends Controller
             'price' => 'required|numeric',
             'category_id' => 'required|exists:categories,id',
             'country_id' => 'required|exists:countries,id',
-            'discount' => 'required|numeric',
+            'discount' => 'nullable|numeric',
             'description' => 'required',
-            'vat' => 'required|numeric',
+            'vat' => 'nullable|numeric',
             'stock' => 'required|numeric',
-            'referrer_discount' => 'required|numeric',
-            'referal_discount' => 'required|numeric',
-            'buyer_discount' => 'required|numeric',
-            'earn_points' => 'required|numeric',
+            'referrer_discount' => 'nullable|numeric',
+            'referal_discount' => 'nullable|numeric',
+            'buyer_discount' => 'nullable|numeric',
+            'earn_points' => 'nullable|numeric',
             'image.*' => 'image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
         ]);
 
@@ -135,14 +135,14 @@ class ProductController extends Controller
         $product->price = $request->price;
         $product->category_id = $request->category_id;
         $product->country_id = $request->country_id;
-        $product->discount = $request->discount;
+        $product->discount = $request->discount ?? 0;
         $product->description = $request->description;
-        $product->vat = $request->vat;
+        $product->vat = $request->vat ?? 0;
         $product->stock = $request->stock;
-        $product->referrer_discount = $request->referrer_discount;
-        $product->referal_discount = $request->referal_discount;
-        $product->buyer_discount = $request->buyer_discount;
-        $product->earn_points = $request->earn_points;
+        $product->referrer_discount = $request->referrer_discount ?? 0;
+        $product->referal_discount = $request->referal_discount ?? 0;
+        $product->buyer_discount = $request->buyer_discount ?? 0;
+        $product->earn_points = $request->earn_points ?? 0;
         $product->featured = $request->featured;
         $product->is_active = $request->is_active;
         $product->save();

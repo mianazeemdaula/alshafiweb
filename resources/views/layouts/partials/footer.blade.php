@@ -45,25 +45,25 @@
                 <h1 class="text-lg font-bold mb-4 text-gray-900 dark:text-gray-100">{{ __('Social Media') }}</h1>
                 <ul class="text-sm space-y-2">
                     <li>
-                        <a href="#"
+                        <a href="https://www.facebook.com/AlShaafiOnlineDotCom"
                             class="social-icon text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
                             <i class="fa-brands fa-facebook"></i> Facebook
                         </a>
                     </li>
                     <li>
-                        <a href="#"
+                        <a href="https://www.tiktok.com/@hakeemsarfraz786"
                             class="social-icon text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
-                            <i class="fa-brands fa-twitter"></i> Twitter
+                            <i class="fa-brands fa-tiktok"></i> TikTok
                         </a>
                     </li>
                     <li>
-                        <a href="#"
+                        <a href="https://www.instagram.com/alshaafionline/"
                             class="social-icon text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
                             <i class="fa-brands fa-instagram"></i> Instagram
                         </a>
                     </li>
                     <li>
-                        <a href="#"
+                        <a href="https://www.youtube.com/@HakeemSarfrazGlobal"
                             class="social-icon text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
                             <i class="fa-brands fa-youtube"></i> Youtube
                         </a>
