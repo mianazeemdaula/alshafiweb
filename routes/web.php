@@ -95,6 +95,11 @@ Route::middleware('auth')->group(function () {
         Route::post('banners/filter', 'App\Http\Controllers\Admin\BannerController@filter')->name('banners.filter');
         Route::resource('media', 'App\Http\Controllers\Admin\MediaController');
         Route::resource('blog-categories', 'App\Http\Controllers\Admin\BlogCategoryController');
+        
+        // Courier Services Management
+        Route::resource('courier-services', 'App\Http\Controllers\Admin\CourierServiceController');
+        Route::patch('courier-services/{courier}/toggle-status', 'App\Http\Controllers\Admin\CourierServiceController@toggleStatus')->name('courier-services.toggle-status');
+        Route::post('courier-services/{courier}/test-connection', 'App\Http\Controllers\Admin\CourierServiceController@testConnection')->name('courier-services.test-connection');
     });
     Route::post('logout', 'App\Http\Controllers\AuthController@logout')->name('logout');
 });

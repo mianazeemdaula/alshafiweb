@@ -77,11 +77,16 @@
                     <a href="{{ route('admin.posts.index') }}" class="block"><i class="fa-solid fa-blog mr-2"></i>
                         Blog</a>
                 </li>
-
                 <li
                     class="p-2 hover:bg-gray-700  hover:animate-pulse @if (request()->routeIs('admin.banners.*')) bg-green-500 @endif">
                     <a href="{{ route('admin.banners.index') }}" class="block"><i class="fa-solid fa-image mr-2"></i>
                         Banners</a>
+                </li>
+                <li
+                    class="p-2 hover:bg-gray-700  hover:animate-pulse @if (request()->routeIs('admin.couriers.*')) bg-green-500 @endif">
+                    <a href="{{ route('admin.courier-services.index') }}" class="block"><i
+                            class="fa-solid fa-truck mr-2"></i>
+                        Courier Services</a>
                 </li>
                 <li class="p-2 hover:bg-gray-700  hover:animate-pulse">
                     <form action="{{ url('logout') }}" method="post">
