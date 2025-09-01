@@ -17,6 +17,11 @@ class AppServiceProvider extends ServiceProvider
         });
         
         $this->app->alias(\App\Services\CartService::class, 'cart');
+        
+        // Register UnifiedCourierService
+        $this->app->singleton(\App\Services\UnifiedCourierService::class, function ($app) {
+            return new \App\Services\UnifiedCourierService();
+        });
     }
 
     /**

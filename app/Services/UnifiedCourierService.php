@@ -4,7 +4,7 @@ namespace App\Services;
 use Illuminate\Support\Facades\Http;
 use App\Models\CourierServiceConfig;
 
-class CourierService
+class UnifiedCourierService
 {
     const COURIERS = ['trax', 'tcs', 'leopards'];
 
