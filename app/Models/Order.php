@@ -68,6 +68,11 @@ class Order extends Model
         return $this->belongsTo(PaymentMethod::class);
     }
 
+    public function shipment()
+    {
+        return $this->hasOne(Shipment::class);
+    }
+
     /**
      * Get the total amount in decimal format
      */

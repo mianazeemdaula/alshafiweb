@@ -1,0 +1,367 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+use App\Models\Shipment;
+use App\Models\Order;
+use App\Models\CourierServiceConfig;
+use App\Services\UnifiedCourierService;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+
+class ShipmentController extends Controller
+{
+    protected $courierService;
+
+    public function __construct(UnifiedCourierService $courierService)
+    {
+        $this->courierService = $courierService;
+    }
+
+    /**
+     * Display a listing of shipments
+     */
+    public function index(Request $request)
+    {
+        $query = Shipment::with(['order', 'courierService']);
+
+        // Filter by status
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        // Filter by courier
+        if ($request->filled('courier')) {
+            $query->whereHas('courierService', function($q) use ($request) {
+                $q->where('courier', $request->courier);
+            });
+        }
+
+        // Search by tracking number or order ID
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('tracking_number', 'like', "%{$search}%")
+                  ->orWhere('courier_shipment_id', 'like', "%{$search}%")
+                  ->orWhereHas('order', function($orderQuery) use ($search) {
+                      $orderQuery->where('id', 'like', "%{$search}%")
+                               ->orWhere('order_number', 'like', "%{$search}%");
+                  });
+            });
+        }
+
+        $shipments = $query->latest()->paginate(20);
+        $courierServices = CourierServiceConfig::where('is_active', true)->get();
+
+        return view('admin.shipments.index', compact('shipments', 'courierServices'));
+    }
+
+    /**
+     * Show the form for creating a new shipment
+     */
+    public function create(Request $request)
+    {
+        $order = null;
+        if ($request->filled('order_id')) {
+            $order = Order::with(['orderDetails.product', 'user'])->find($request->order_id);
+            if (!$order) {
+                return redirect()->route('admin.orders.index')
+                    ->with('error', 'Order not found.');
+            }
+        }
+
+        $courierServices = CourierServiceConfig::where('is_active', true)->get();
+        $orders = Order::where('status', '!=', 'cancelled')
+                       ->whereDoesntHave('shipment')
+                       ->with('user')
+                       ->latest()
+                       ->take(50)
+                       ->get();
+
+        return view('admin.shipments.create', compact('order', 'courierServices', 'orders'));
+    }
+
+    /**
+     * Store a newly created shipment
+     */
+    public function store(Request $request)
+    {
+        $request->validate([
+            'order_id' => 'required|exists:orders,id',
+            'courier_service_config_id' => 'required|exists:courier_service_configs,id',
+            'weight' => 'required|numeric|min:0.1|max:999',
+            'declared_value' => 'nullable|numeric|min:0',
+            'cod_amount' => 'nullable|numeric|min:0',
+            'special_instructions' => 'nullable|string|max:500',
+            'pickup_name' => 'required|string|max:100',
+            'pickup_phone' => 'required|string|max:20',
+            'pickup_address' => 'required|string|max:255',
+            'pickup_city' => 'required|string|max:100',
+            'delivery_name' => 'required|string|max:100',
+            'delivery_phone' => 'required|string|max:20',
+            'delivery_address' => 'required|string|max:255',
+            'delivery_city' => 'required|string|max:100'
+        ]);
+
+        $order = Order::findOrFail($request->order_id);
+        $courierConfig = CourierServiceConfig::findOrFail($request->courier_service_config_id);
+
+        // Check if order already has a shipment
+        if ($order->shipment) {
+            return redirect()->back()
+                ->with('error', 'This order already has a shipment.');
+        }
+
+        try {
+            // Create shipment record
+            $shipment = Shipment::create([
+                'order_id' => $order->id,
+                'courier_service_config_id' => $courierConfig->id,
+                'status' => Shipment::STATUS_PENDING,
+                'pickup_address' => [
+                    'name' => $request->pickup_name,
+                    'phone' => $request->pickup_phone,
+                    'address' => $request->pickup_address,
+                    'city' => $request->pickup_city
+                ],
+                'delivery_address' => [
+                    'name' => $request->delivery_name,
+                    'phone' => $request->delivery_phone,
+                    'address' => $request->delivery_address,
+                    'city' => $request->delivery_city
+                ],
+                'weight' => $request->weight,
+                'declared_value' => $request->declared_value,
+                'cod_amount' => $request->cod_amount ?? $order->total,
+                'special_instructions' => $request->special_instructions
+            ]);
+
+            // Book shipment with courier
+            $shipmentData = [
+                'pickup_name' => $request->pickup_name,
+                'pickup_phone' => $request->pickup_phone,
+                'pickup_address' => $request->pickup_address,
+                'pickup_city' => $request->pickup_city,
+                'delivery_name' => $request->delivery_name,
+                'delivery_phone' => $request->delivery_phone,
+                'delivery_address' => $request->delivery_address,
+                'delivery_city' => $request->delivery_city,
+                'weight' => $request->weight,
+                'cod_amount' => $request->cod_amount ?? $order->total,
+                'declared_value' => $request->declared_value ?? $order->total,
+                'special_instructions' => $request->special_instructions,
+                'reference' => "ORDER-{$order->id}"
+            ];
+
+            $response = $this->courierService->bookShipment($courierConfig->courier, $shipmentData);
+
+            if ($response['success']) {
+                // Update shipment with courier response
+                $shipment->update([
+                    'status' => Shipment::STATUS_BOOKED,
+                    'tracking_number' => $response['tracking_number'] ?? null,
+                    'courier_shipment_id' => $response['shipment_id'] ?? null,
+                    'courier_response' => $response,
+                    'shipped_at' => now()
+                ]);
+
+                // Update order status
+                $order->update(['status' => 'shipped']);
+
+                return redirect()->route('admin.shipments.show', $shipment)
+                    ->with('success', 'Shipment created and booked successfully!');
+            } else {
+                // Keep shipment as pending if booking failed
+                $shipment->update([
+                    'courier_response' => $response
+                ]);
+
+                return redirect()->route('admin.shipments.show', $shipment)
+                    ->with('warning', 'Shipment created but booking failed: ' . $response['message']);
+            }
+
+        } catch (\Exception $e) {
+            Log::error('Shipment creation failed: ' . $e->getMessage());
+            
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Failed to create shipment: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Display the specified shipment
+     */
+    public function show(Shipment $shipment)
+    {
+        $shipment->load(['order.orderDetails.product', 'order.user', 'courierService']);
+        return view('admin.shipments.show', compact('shipment'));
+    }
+
+    /**
+     * Show the form for editing the specified shipment
+     */
+    public function edit(Shipment $shipment)
+    {
+        $shipment->load(['order', 'courierService']);
+        $courierServices = CourierServiceConfig::where('is_active', true)->get();
+        
+        return view('admin.shipments.edit', compact('shipment', 'courierServices'));
+    }
+
+    /**
+     * Update the specified shipment
+     */
+    public function update(Request $request, Shipment $shipment)
+    {
+        $request->validate([
+            'weight' => 'required|numeric|min:0.1|max:999',
+            'declared_value' => 'nullable|numeric|min:0',
+            'cod_amount' => 'nullable|numeric|min:0',
+            'special_instructions' => 'nullable|string|max:500',
+            'status' => 'required|in:' . implode(',', array_keys(Shipment::getStatuses()))
+        ]);
+
+        $originalStatus = $shipment->status;
+
+        $shipment->update([
+            'weight' => $request->weight,
+            'declared_value' => $request->declared_value,
+            'cod_amount' => $request->cod_amount,
+            'special_instructions' => $request->special_instructions,
+            'status' => $request->status
+        ]);
+
+        // Update timestamps based on status change
+        if ($originalStatus !== $request->status) {
+            switch ($request->status) {
+                case Shipment::STATUS_DELIVERED:
+                    $shipment->update(['delivered_at' => now()]);
+                    $shipment->order->update(['status' => 'delivered']);
+                    break;
+                case Shipment::STATUS_CANCELLED:
+                    $shipment->update(['cancelled_at' => now()]);
+                    break;
+            }
+        }
+
+        return redirect()->route('admin.shipments.show', $shipment)
+            ->with('success', 'Shipment updated successfully!');
+    }
+
+    /**
+     * Remove the specified shipment
+     */
+    public function destroy(Shipment $shipment)
+    {
+        if ($shipment->status === Shipment::STATUS_DELIVERED) {
+            return redirect()->back()
+                ->with('error', 'Cannot delete a delivered shipment.');
+        }
+
+        $order = $shipment->order;
+        $shipment->delete();
+
+        // Reset order status if it was shipped
+        if ($order->status === 'shipped') {
+            $order->update(['status' => 'processing']);
+        }
+
+        return redirect()->route('admin.shipments.index')
+            ->with('success', 'Shipment deleted successfully!');
+    }
+
+    /**
+     * Track shipment status
+     */
+    public function track(Shipment $shipment)
+    {
+        try {
+            if (!$shipment->tracking_number && !$shipment->courier_shipment_id) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No tracking information available'
+                ]);
+            }
+
+            $trackingId = $shipment->tracking_number ?? $shipment->courier_shipment_id;
+            $response = $this->courierService->trackShipment(
+                $shipment->courierService->courier, 
+                $trackingId
+            );
+
+            if ($response['success']) {
+                // Update shipment status if available in response
+                if (isset($response['status']) && $response['status'] !== $shipment->status) {
+                    $shipment->update(['status' => $response['status']]);
+                }
+            }
+
+            return response()->json($response);
+
+        } catch (\Exception $e) {
+            Log::error('Shipment tracking failed: ' . $e->getMessage());
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'Tracking failed: ' . $e->getMessage()
+            ]);
+        }
+    }
+
+    /**
+     * Cancel shipment
+     */
+    public function cancel(Request $request, Shipment $shipment)
+    {
+        $request->validate([
+            'cancellation_reason' => 'required|string|max:500'
+        ]);
+
+        try {
+            if ($shipment->status === Shipment::STATUS_DELIVERED) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Cannot cancel a delivered shipment'
+                ]);
+            }
+
+            if ($shipment->courier_shipment_id) {
+                $response = $this->courierService->cancelShipment(
+                    $shipment->courierService->courier,
+                    $shipment->courier_shipment_id
+                );
+
+                if (!$response['success']) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Failed to cancel with courier: ' . $response['message']
+                    ]);
+                }
+            }
+
+            $shipment->update([
+                'status' => Shipment::STATUS_CANCELLED,
+                'cancelled_at' => now(),
+                'cancellation_reason' => $request->cancellation_reason
+            ]);
+
+            // Update order status
+            $shipment->order->update(['status' => 'cancelled']);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Shipment cancelled successfully'
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Shipment cancellation failed: ' . $e->getMessage());
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'Cancellation failed: ' . $e->getMessage()
+            ]);
+        }
+    }
+}

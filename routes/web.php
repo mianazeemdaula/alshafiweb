@@ -100,6 +100,11 @@ Route::middleware('auth')->group(function () {
         Route::resource('courier-services', 'App\Http\Controllers\Admin\CourierServiceController');
         Route::patch('courier-services/{courier}/toggle-status', 'App\Http\Controllers\Admin\CourierServiceController@toggleStatus')->name('courier-services.toggle-status');
         Route::post('courier-services/{courier}/test-connection', 'App\Http\Controllers\Admin\CourierServiceController@testConnection')->name('courier-services.test-connection');
+        
+        // Shipments Management
+        Route::resource('shipments', 'App\Http\Controllers\Admin\ShipmentController');
+        Route::post('shipments/{shipment}/track', 'App\Http\Controllers\Admin\ShipmentController@track')->name('shipments.track');
+        Route::post('shipments/{shipment}/cancel', 'App\Http\Controllers\Admin\ShipmentController@cancel')->name('shipments.cancel');
     });
     Route::post('logout', 'App\Http\Controllers\AuthController@logout')->name('logout');
 });
