@@ -1,4 +1,4 @@
-@extends('layouts.user')
+@extends('layouts.web')
 
 @section('main')
 
