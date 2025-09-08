@@ -1,5 +1,75 @@
 /* Admin Panel Custom Styles */
 
+/* Order Creation Form Specific Styles */
+.order-form-container {
+    max-width: 1400px;
+}
+
+.form-section {
+    background-color: #f9fafb;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.form-section h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #374151;
+}
+
+.compact-input {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+}
+
+.product-row {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+    transition: all 0.2s;
+}
+
+.product-row:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.product-row.has-error {
+    border-color: #ef4444;
+    background-color: #fef2f2;
+}
+
+.line-total {
+    font-weight: 600;
+    color: #2563eb;
+    font-size: 1rem;
+}
+
+.order-summary {
+    background-color: #f9fafb;
+    border-radius: 0.5rem;
+    padding: 1rem;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.25rem 0;
+}
+
+.summary-total {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: #2563eb;
+    border-top: 1px solid #e5e7eb;
+    padding-top: 0.5rem;
+    margin-top: 0.5rem;
+}
+
 /* Responsive Table for Mobile */
 @media (max-width: 768px) {
     .orders-table-container {
@@ -8,6 +78,19 @@
     
     .orders-mobile-view {
         display: block;
+    }
+    
+    .form-section {
+        padding: 0.75rem;
+    }
+    
+    .product-row {
+        padding: 0.75rem;
+    }
+    
+    .compact-input {
+        padding: 0.5rem;
+        font-size: 0.875rem;
     }
 }
 

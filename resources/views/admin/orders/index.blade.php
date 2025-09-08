@@ -157,11 +157,11 @@
                                 </td>
                                 <td class="px-4 py-3">
                                     <div class="text-sm font-medium text-gray-900">
-                                        ${{ number_format($item->total, 2) }}
+                                        RS {{ number_format($item->total, 2) }}
                                     </div>
                                     @if ($item->shipping_cost > 0)
                                         <div class="text-xs text-gray-500">
-                                            +${{ number_format($item->shipping_cost, 2) }} shipping
+                                            +RS {{ number_format($item->shipping_cost, 2) }} shipping
                                         </div>
                                     @endif
                                 </td>
@@ -301,7 +301,7 @@
                             <div class="order-card-row">
                                 <span class="order-card-label">Total:</span>
                                 <span class="order-card-value font-medium">
-                                    ${{ number_format($item->total, 2) }}
+                                    RS {{ number_format($item->total, 2) }}
                                 </span>
                             </div>
 

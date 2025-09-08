@@ -101,7 +101,7 @@ class ShipmentController extends Controller
             'delivery_name' => 'required|string|max:100',
             'delivery_phone' => 'required|string|max:20',
             'delivery_address' => 'required|string|max:255',
-            'delivery_city' => 'required|string|max:100'
+            'delivery_city_id' => 'required|string|max:100'
         ]);
 
         $order = Order::findOrFail($request->order_id);
@@ -129,7 +129,7 @@ class ShipmentController extends Controller
                     'name' => $request->delivery_name,
                     'phone' => $request->delivery_phone,
                     'address' => $request->delivery_address,
-                    'city' => $request->delivery_city
+                    'city_id' => $request->delivery_city_id
                 ],
                 'weight' => $request->weight,
                 'declared_value' => $request->declared_value,
@@ -146,7 +146,7 @@ class ShipmentController extends Controller
                 'delivery_name' => $request->delivery_name,
                 'delivery_phone' => $request->delivery_phone,
                 'delivery_address' => $request->delivery_address,
-                'delivery_city' => $request->delivery_city,
+                'delivery_city_id' => $request->delivery_city_id,
                 'weight' => $request->weight,
                 'cod_amount' => $request->cod_amount ?? $order->total,
                 'declared_value' => $request->declared_value ?? $order->total,
@@ -361,6 +361,49 @@ class ShipmentController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Cancellation failed: ' . $e->getMessage()
+            ]);
+        }
+    }
+
+    /**
+     * Get cities for a specific courier service
+     */
+    public function getCities(Request $request)
+    {
+        $request->validate([
+            'courier_service_id' => 'required|exists:courier_service_configs,id'
+        ]);
+
+        try {
+            $courierService = CourierServiceConfig::find($request->courier_service_id);
+            
+            if (!$courierService) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Courier service not found'
+                ]);
+            }
+
+            $response = $this->courierService->getCities($courierService->courier);
+
+            if (isset($response['error'])) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $response['error']
+                ]);
+            }
+
+            return response()->json([
+                'success' => true,
+                'data' => $response
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Failed to get cities for courier: ' . $e->getMessage());
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to load cities: ' . $e->getMessage()
             ]);
         }
     }

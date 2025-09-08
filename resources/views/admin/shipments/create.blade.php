@@ -37,7 +37,7 @@
                                 <div>
                                     <h4 class="font-medium text-gray-900">Order #{{ $order->id }}</h4>
                                     <p class="text-sm text-gray-600">Customer: {{ $order->user->name ?? 'N/A' }}</p>
-                                    <p class="text-sm text-gray-600">Total: ${{ number_format($order->total_amount, 2) }}
+                                    <p class="text-sm text-gray-600">Total: RS {{ number_format($order->total_amount, 2) }}
                                     </p>
                                     <p class="text-sm text-gray-600">Status: {{ ucfirst($order->status) }}</p>
                                 </div>
@@ -50,7 +50,7 @@
                                 <p class="text-sm text-gray-600">Items:</p>
                                 <ul class="text-sm text-gray-500 ml-4">
                                     @foreach ($order->orderDetails as $detail)
-                                        <li>{{ $detail->product->name ?? 'Product' }} (Qty: {{ $detail->quantity }})</li>
+                                        <li>{{ $detail->product->name ?? 'Product' }} (Qty: {{ $detail->qty }})</li>
                                     @endforeach
                                 </ul>
                             </div>
@@ -69,7 +69,7 @@
                                     <option value="{{ $orderOption->id }}"
                                         {{ old('order_id') == $orderOption->id ? 'selected' : '' }}>
                                         Order #{{ $orderOption->id }} - {{ $orderOption->user->name ?? 'N/A' }} -
-                                        ${{ number_format($orderOption->total_amount, 2) }}
+                                        RS {{ number_format($orderOption->total_amount, 2) }}
                                     </option>
                                 @endforeach
                             </select>
@@ -109,14 +109,14 @@
                                 Weight (kg) <span class="text-red-500">*</span>
                             </label>
                             <input type="number" name="weight" id="weight" step="0.001" min="0.1" max="999"
-                                value="{{ old('weight', '1.000') }}"
+                                value="{{ old('weight', '0.5') }}"
                                 class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-blue-500 focus:border-blue-500"
-                                placeholder="1.000" required>
+                                placeholder="0.5" required>
                         </div>
 
                         <div>
                             <label for="declared_value" class="block text-sm font-medium text-gray-700 mb-2">
-                                Declared Value ($)
+                                Declared Value (RS)
                             </label>
                             <input type="number" name="declared_value" id="declared_value" step="0.01" min="0"
                                 value="{{ old('declared_value') }}"
@@ -126,7 +126,7 @@
 
                         <div>
                             <label for="cod_amount" class="block text-sm font-medium text-gray-700 mb-2">
-                                COD Amount ($)
+                                COD Amount (RS)
                             </label>
                             <input type="number" name="cod_amount" id="cod_amount" step="0.01" min="0"
                                 value="{{ old('cod_amount') }}"
@@ -141,7 +141,7 @@
                         </label>
                         <textarea name="special_instructions" id="special_instructions" rows="3"
                             class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-blue-500 focus:border-blue-500"
-                            placeholder="Any special handling instructions...">{{ old('special_instructions') }}</textarea>
+                            placeholder="Any special handling instructions...">{{ old('special_instructions', 'MUST MAKE CALL TO THE CUSTOMER AND SHIPPER BEFORE RETURNING AND DON\'T FAKE REASON') }}</textarea>
                     </div>
                 </div>
 
@@ -165,7 +165,7 @@
                                 Phone Number <span class="text-red-500">*</span>
                             </label>
                             <input type="text" name="pickup_phone" id="pickup_phone"
-                                value="{{ old('pickup_phone') }}"
+                                value="{{ old('pickup_phone', '03223236262') }}"
                                 class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-blue-500 focus:border-blue-500"
                                 placeholder="Phone number" required>
                         </div>
@@ -178,7 +178,7 @@
                             </label>
                             <textarea name="pickup_address" id="pickup_address" rows="3"
                                 class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-blue-500 focus:border-blue-500"
-                                placeholder="Complete pickup address" required>{{ old('pickup_address') }}</textarea>
+                                placeholder="Complete pickup address" required>{{ old('pickup_address', 'Al-Shaafi Dawakhana DPA') }}</textarea>
                         </div>
 
                         <div>
@@ -229,13 +229,17 @@
                         </div>
 
                         <div>
-                            <label for="delivery_city" class="block text-sm font-medium text-gray-700 mb-2">
-                                City <span class="text-red-500">*</span>
+                            <label for="delivery_city_id" class="block text-sm font-medium text-gray-700 mb-2">
+                                Delivery City <span class="text-red-500">*</span>
                             </label>
-                            <input type="text" name="delivery_city" id="delivery_city"
-                                value="{{ old('delivery_city', $order->city->name ?? '') }}"
+                            <select name="delivery_city_id" id="delivery_city_id"
                                 class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-blue-500 focus:border-blue-500"
-                                placeholder="City name" required>
+                                required disabled>
+                                <option value="">First select a courier service</option>
+                            </select>
+                            <div id="delivery_city_loading" class="hidden mt-2 text-blue-600 text-sm">
+                                <i class="fas fa-spinner fa-spin mr-2"></i>Loading cities...
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -276,6 +280,71 @@
                     '<div class="bg-white rounded-lg p-4 border"><p class="text-sm text-gray-600">Order details will be loaded here</p></div>';
             }, 500);
         }
+
+        // Load cities when courier service is selected
+        function loadCourierCities() {
+            const courierServiceId = document.getElementById('courier_service_config_id').value;
+            const citySelect = document.getElementById('delivery_city_id');
+            const loadingDiv = document.getElementById('delivery_city_loading');
+
+            if (!courierServiceId) {
+                citySelect.disabled = true;
+                citySelect.innerHTML = '<option value="">First select a courier service</option>';
+                return;
+            }
+
+            // Show loading
+            loadingDiv.classList.remove('hidden');
+            citySelect.disabled = true;
+            citySelect.innerHTML = '<option value="">Loading cities...</option>';
+
+            // Make AJAX request to get cities
+            fetch(`{{ route('admin.shipments.courier.cities') }}?courier_service_id=${courierServiceId}`)
+                .then(response => response.json())
+                .then(data => {
+                    loadingDiv.classList.add('hidden');
+
+                    if (data.success) {
+                        citySelect.innerHTML = '<option value="">Select delivery city</option>';
+
+                        // Handle different courier response formats
+                        let cities = [];
+                        if (data.data && Array.isArray(data.data)) {
+                            cities = data.data;
+                        } else if (data.data && data.data.cities && Array.isArray(data.data.cities)) {
+                            cities = data.data.cities;
+                        } else if (data.data && data.data.data && Array.isArray(data.data.data)) {
+                            cities = data.data.data;
+                        }
+
+                        cities.forEach(city => {
+                            const option = document.createElement('option');
+                            // Handle different city object structures
+                            if (typeof city === 'object') {
+                                option.value = city.id || city.city_id || city.code || city.name;
+                                option.textContent = city.name || city.city_name || city.title || city.id;
+                            } else {
+                                option.value = city;
+                                option.textContent = city;
+                            }
+                            citySelect.appendChild(option);
+                        });
+
+                        citySelect.disabled = false;
+                    } else {
+                        citySelect.innerHTML = '<option value="">Failed to load cities</option>';
+                        console.error('Failed to load cities:', data.message);
+                    }
+                })
+                .catch(error => {
+                    loadingDiv.classList.add('hidden');
+                    citySelect.innerHTML = '<option value="">Error loading cities</option>';
+                    console.error('Error:', error);
+                });
+        }
+
+        // Event listeners
+        document.getElementById('courier_service_config_id').addEventListener('change', loadCourierCities);
 
         // Auto-fill delivery address when order is selected (if implemented)
         document.getElementById('order_id')?.addEventListener('change', function() {

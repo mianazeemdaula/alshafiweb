@@ -105,6 +105,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('shipments', 'App\Http\Controllers\Admin\ShipmentController');
         Route::post('shipments/{shipment}/track', 'App\Http\Controllers\Admin\ShipmentController@track')->name('shipments.track');
         Route::post('shipments/{shipment}/cancel', 'App\Http\Controllers\Admin\ShipmentController@cancel')->name('shipments.cancel');
+        Route::get('shipments/courier/cities', 'App\Http\Controllers\Admin\ShipmentController@getCities')->name('shipments.courier.cities');
     });
     Route::post('logout', 'App\Http\Controllers\AuthController@logout')->name('logout');
 });

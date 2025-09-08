@@ -103,14 +103,14 @@
                         @if ($shipment->declared_value)
                             <div class="flex justify-between">
                                 <span class="font-medium text-gray-600">Declared Value:</span>
-                                <span class="text-gray-800">${{ number_format($shipment->declared_value, 2) }}</span>
+                                <span class="text-gray-800">RS {{ number_format($shipment->declared_value, 2) }}</span>
                             </div>
                         @endif
 
                         @if ($shipment->cod_amount)
                             <div class="flex justify-between">
                                 <span class="font-medium text-gray-600">COD Amount:</span>
-                                <span class="text-gray-800">${{ number_format($shipment->cod_amount, 2) }}</span>
+                                <span class="text-gray-800">RS {{ number_format($shipment->cod_amount, 2) }}</span>
                             </div>
                         @endif
 
@@ -168,7 +168,7 @@
 
                         <div class="flex justify-between">
                             <span class="font-medium text-gray-600">Order Total:</span>
-                            <span class="text-gray-800">${{ number_format($shipment->order->total_amount, 2) }}</span>
+                            <span class="text-gray-800">RS {{ number_format($shipment->order->total_amount, 2) }}</span>
                         </div>
 
                         <div class="flex justify-between">
@@ -192,7 +192,7 @@
                                             <div class="text-xs text-gray-600">Qty: {{ $detail->quantity }}</div>
                                         </div>
                                         <div class="text-sm font-medium">
-                                            ${{ number_format($detail->price / 100, 2) }}
+                                            RS {{ number_format($detail->price / 100, 2) }}
                                         </div>
                                     </div>
                                 </div>

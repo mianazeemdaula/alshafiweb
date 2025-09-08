@@ -129,7 +129,8 @@
 @endsection
 
 @section('head')
-    <script src="https://cdn.tiny.cloud/1/qxsiixa2mkq6u711kgpc20nafpny7wpufinm5gdvvytgryxh/tinymce/7/tinymce.min.js"
+    <script
+        src="https://cdn.tiny.cloud/1/{{ config('app.env') === 'production' ? 'qxsiixa2mkq6u711kgpc20nafpny7wpufinm5gdvvytgryxh' : env('TINYMCE_API_KEY') }}/tinymce/7/tinymce.min.js"
         referrerpolicy="origin"></script>
     <script>
         tinymce.init({
