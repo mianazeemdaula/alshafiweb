@@ -21,7 +21,7 @@
     <div class="flex bg-gray-100 min-h-screen">
         <!-- Sidebar -->
         <div id="sidebar"
-            class="lg:flex flex-col lg:relative fixed top-0 left-0 min-h-full bg-gray-800 text-white w-64 transform -translate-x-full lg:translate-x-0 transition-transform duration-300">
+            class="lg:flex flex-col lg:relative fixed top-0 left-0 min-h-full bg-gray-800 text-white w-64 lg:w-56 xl:w-64 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 z-50">
             <div class="flex justify-between">
                 <div class="p-4 font-bold text-lg">Admin Panel</div>
                 <button class="p-4 lg:hidden" id="close-sidebar">✕</button>
@@ -98,7 +98,7 @@
         </div>
 
         <!-- Main Content -->
-        <div class="flex-1 flex flex-col">
+        <div class="flex-1 flex flex-col lg:ml-0 min-w-0">
             <header class="bg-white shadow-md p-4 flex flex-row items-center justify-between print:hidden">
                 <button id="menu-button" class="text-xl font-bold lg:hidden">☰</button>
                 <h1 class="text-xl font-bold mb-2 sm:mb-0 hidden lg:block">Dashboard</h1>
@@ -113,7 +113,7 @@
                 </div>
             </header>
 
-            <main class="flex-1 p-4 bg-gray-100">
+            <main class="flex-1 p-2 sm:p-4 bg-gray-100 min-w-0 overflow-x-auto">
                 @if (session('success'))
                     <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-2"
                         role="alert">

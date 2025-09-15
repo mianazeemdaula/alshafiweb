@@ -1,35 +1,40 @@
 @extends('layouts.web')
 
 @section('content')
-    <div class="container mx-auto px-2 py-2">
-        <div class="bg-white rounded-lg shadow-md p-2">
+    <div class="container mx-auto px-1 sm:px-2 py-2 max-w-7xl">
+        <div class="bg-white rounded-lg shadow-md p-3 sm:p-4">
             <!-- Header -->
-            <div class="flex items-center justify-between mb-2">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-3">
                 <div class="flex items-center">
-                    <a href="{{ route('admin.shipments.index') }}" class="text-blue-600 hover:text-blue-800 mr-2">
+                    <a href="{{ route('admin.shipments.index') }}" class="text-blue-600 hover:text-blue-800 mr-3">
                         <i class="fas fa-arrow-left mr-1"></i>Back to Shipments
                     </a>
                     <h1 class="text-xl font-bold text-gray-800">Shipment #{{ $shipment->id }}</h1>
                 </div>
 
-                <div class="flex space-x-2">
+                <div class="flex flex-wrap gap-2 sm:space-x-2">
                     @if (!in_array($shipment->status, ['delivered', 'cancelled']))
                         <a href="{{ route('admin.shipments.edit', $shipment->id) }}"
-                            class="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded-lg transition duration-200">
+                            class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-lg transition duration-200 text-sm">
                             <i class="fas fa-edit mr-1"></i>Edit
                         </a>
                     @endif
 
                     @if ($shipment->tracking_number)
                         <button onclick="trackShipment({{ $shipment->id }})"
-                            class="bg-purple-500 hover:bg-purple-600 text-white px-2 py-1 rounded-lg transition duration-200">
+                            class="bg-purple-500 hover:bg-purple-600 text-white px-3 py-2 rounded-lg transition duration-200 text-sm">
                             <i class="fas fa-search-location mr-1"></i>Track
                         </button>
+
+                        <a href="{{ route('admin.shipments.download-slip', $shipment->id) }}" target="_blank"
+                            class="bg-green-500 hover:bg-green-600 text-white px-3 py-2 rounded-lg transition duration-200 text-sm">
+                            <i class="fas fa-download mr-1"></i>Download Slip
+                        </a>
                     @endif
 
                     @if (!in_array($shipment->status, ['delivered', 'cancelled']))
                         <button onclick="cancelShipment({{ $shipment->id }})"
-                            class="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded-lg transition duration-200">
+                            class="bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-lg transition duration-200 text-sm">
                             <i class="fas fa-ban mr-1"></i>Cancel
                         </button>
                     @endif
@@ -38,23 +43,23 @@
 
             <!-- Success Message -->
             @if (session('success'))
-                <div class="bg-green-100 border border-green-400 text-green-700 px-2 py-2 rounded mb-2">
+                <div class="bg-green-100 border border-green-400 text-green-700 px-3 py-3 rounded mb-4">
                     {{ session('success') }}
                 </div>
             @endif
 
             @if (session('warning'))
-                <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-2 py-2 rounded mb-2">
+                <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-3 py-3 rounded mb-4">
                     {{ session('warning') }}
                 </div>
             @endif
 
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-2">
+            <div class="grid grid-cols-1 xl:grid-cols-2 gap-4 sm:gap-6">
                 <!-- Shipment Information -->
-                <div class="bg-gray-50 rounded-lg p-2">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-2">Shipment Information</h3>
+                <div class="bg-gray-50 rounded-lg p-4">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Shipment Information</h3>
 
-                    <div class="space-y-2">
+                    <div class="space-y-3">
                         <div class="flex justify-between">
                             <span class="font-medium text-gray-600">Status:</span>
                             <span class="px-2 py-1 rounded-full text-xs font-medium {{ $shipment->status_badge }}">
@@ -304,23 +309,79 @@
                 .then(data => {
                     const resultDiv = document.getElementById('trackingResult');
                     if (data.success) {
-                        resultDiv.innerHTML = `
-                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded">
-                    <h4 class="font-medium mb-2">Tracking Results</h4>
-                    <pre class="text-sm whitespace-pre-wrap">${JSON.stringify(data.data, null, 2)}</pre>
-                </div>
-            `;
+                        let trackingHtml = `
+                            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+                                <h4 class="font-medium mb-2">✓ ${data.message || 'Tracking information retrieved successfully'}</h4>
+                            </div>
+                            
+                            <div class="space-y-4">
+                                <div class="bg-gray-50 p-3 rounded">
+                                    <div class="grid grid-cols-2 gap-2 text-sm">
+                                        <div><strong>Tracking Number:</strong> ${data.tracking_number || 'N/A'}</div>
+                                        <div><strong>Current Status:</strong> <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">${data.current_status || data.status || 'Unknown'}</span></div>
+                                    </div>
+                                </div>
+                        `;
+
+                        // Add consignee information if available
+                        if (data.consignee) {
+                            trackingHtml += `
+                                <div class="bg-gray-50 p-3 rounded">
+                                    <h5 class="font-medium mb-2">Consignee Information</h5>
+                                    <div class="text-sm space-y-1">
+                                        <div><strong>Name:</strong> ${data.consignee.name || 'N/A'}</div>
+                                        <div><strong>Phone:</strong> ${data.consignee.phone_number_1 || 'N/A'}</div>
+                                        <div><strong>Destination:</strong> ${data.consignee.destination || 'N/A'}</div>
+                                        ${data.consignee.address ? `<div><strong>Address:</strong> ${data.consignee.address}</div>` : ''}
+                                    </div>
+                                </div>
+                            `;
+                        }
+
+                        // Add tracking history if available
+                        if (data.tracking_history && data.tracking_history.length > 0) {
+                            trackingHtml += `
+                                <div class="bg-gray-50 p-3 rounded">
+                                    <h5 class="font-medium mb-2">Tracking History</h5>
+                                    <div class="space-y-2">
+                            `;
+
+                            data.tracking_history.forEach(event => {
+                                trackingHtml += `
+                                    <div class="border-l-2 border-blue-500 pl-3 py-1">
+                                        <div class="text-sm font-medium">${event.status}</div>
+                                        <div class="text-xs text-gray-600">${event.date_time}</div>
+                                        ${event.status_reason ? `<div class="text-xs text-gray-500">${event.status_reason}</div>` : ''}
+                                    </div>
+                                `;
+                            });
+
+                            trackingHtml += `
+                                    </div>
+                                </div>
+                            `;
+                        }
+
+                        trackingHtml += `</div>`;
+                        resultDiv.innerHTML = trackingHtml;
                     } else {
                         resultDiv.innerHTML = `
-                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
-                    <i class="fas fa-exclamation-circle mr-2"></i>${data.message}
-                </div>
-            `;
+                            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                                <i class="fas fa-exclamation-circle mr-2"></i>${data.message || 'Failed to track shipment'}
+                            </div>
+                        `;
                     }
                     document.getElementById('trackModal').classList.remove('hidden');
                 })
                 .catch(error => {
                     console.error('Error:', error);
+                    const resultDiv = document.getElementById('trackingResult');
+                    resultDiv.innerHTML = `
+                        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                            <i class="fas fa-exclamation-circle mr-2"></i>Network error occurred while tracking shipment
+                        </div>
+                    `;
+                    document.getElementById('trackModal').classList.remove('hidden');
                 });
         }
 

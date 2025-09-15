@@ -169,7 +169,7 @@ class ShipmentController extends Controller
                 'cod_amount' => $request->cod_amount ?? $order->total_amount,
                 'declared_value' => $request->declared_value ?? $order->total_amount,
                 'special_instructions' => $request->special_instructions,
-                'order_id' => $order->id,
+                'order_id' => $request->reference,
                 'description' => 'Order items from Alshaafi Store'
             ];
 
@@ -189,7 +189,7 @@ class ShipmentController extends Controller
                 // Update shipment with courier response
                 $shipment->update([
                     'status' => Shipment::STATUS_BOOKED,
-                    'tracking_number' => $response['tracking_number'] ?? null,
+                    'tracking_number' => $response['tracking_number'] ?? $response['raw_response']['tracking_number'] ?? null,
                     'courier_shipment_id' => $response['shipment_id'] ?? null,
                     'courier_response' => $response,
                     'shipped_at' => now()
@@ -314,13 +314,15 @@ class ShipmentController extends Controller
                 ]);
             }
 
-            $trackingId = $shipment->tracking_number ?? $shipment->courier_shipment_id;
+            $trackingNumber = $shipment->tracking_number ?? $shipment->courier_response['raw_response']['tracking_number'] ??  $shipment->courier_shipment_id;
             $response = $this->courierService->trackShipment(
                 $shipment->courierService->courier, 
-                $trackingId
+                $trackingNumber
             );
-
-            if ($response['success']) {
+            
+            Log::info('Tracking response: ' . json_encode($response));
+            
+            if (isset($response['success']) && $response['success']) {
                 // Update shipment status if available in response
                 if (isset($response['status']) && $response['status'] !== $shipment->status) {
                     $shipment->update(['status' => $response['status']]);
@@ -336,6 +338,109 @@ class ShipmentController extends Controller
                 'success' => false,
                 'message' => 'Tracking failed: ' . $e->getMessage()
             ]);
+        }
+    }
+
+    /**
+     * Download shipment slip/label from courier service
+     */
+    public function downloadSlip(Shipment $shipment)
+    {
+        try {
+            $trackingNumber = $shipment->tracking_number ?? $shipment->courier_response['raw_response']['tracking_number'] ?? null;
+            
+            if (!$trackingNumber) {
+                return back()->with('error', 'No tracking number available for slip download');
+            }
+
+            $courier = $shipment->courierService->courier;
+            
+            // Get slip download information from unified courier service
+            $result = $this->courierService->downloadSlip($courier, $trackingNumber, $shipment->courier_response);
+
+            if (isset($result['error'])) {
+                return back()->with('error', $result['error']);
+            }
+
+            // Handle different response types
+            switch ($result['type']) {
+                case 'redirect':
+                    return redirect($result['url']);
+
+                case 'content':
+                    return response($result['content'], 200, [
+                        'Content-Type' => $result['content_type'],
+                        'Content-Disposition' => 'attachment; filename="' . $result['filename'] . '"',
+                        'Content-Length' => strlen($result['content']),
+                        'Cache-Control' => 'no-cache, no-store, must-revalidate',
+                        'Pragma' => 'no-cache',
+                        'Expires' => '0'
+                    ]);
+
+                case 'stream_auth':
+                    return response()->streamDownload(function() use ($result) {
+                        $ch = curl_init();
+                        curl_setopt($ch, CURLOPT_URL, $result['url']);
+                        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                            'Authorization: ' . $result['auth_header'],
+                            'Accept: application/pdf'
+                        ]);
+                        curl_setopt($ch, CURLOPT_RETURNTRANSFER, false);
+                        curl_setopt($ch, CURLOPT_HEADER, false);
+                        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+                        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+                        curl_setopt($ch, CURLOPT_TIMEOUT, 60);
+                        curl_setopt($ch, CURLOPT_WRITEFUNCTION, function($ch, $data) {
+                            echo $data;
+                            return strlen($data);
+                        });
+                        
+                        $result = curl_exec($ch);
+                        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                        
+                        if ($result === false || $httpCode !== 200) {
+                            Log::error('cURL error for Trax slip download: ' . curl_error($ch) . ' HTTP Code: ' . $httpCode);
+                        }
+                        
+                        curl_close($ch);
+                    }, $result['filename'], [
+                        'Content-Type' => 'application/pdf'
+                    ]);
+
+                case 'stream':
+                    return response()->streamDownload(function() use ($result) {
+                        $ch = curl_init();
+                        curl_setopt($ch, CURLOPT_URL, $result['url']);
+                        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                            'Authorization: ' . $result['headers']['Authorization'],
+                            'Accept: ' . $result['headers']['Accept']
+                        ]);
+                        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+                        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+                        curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+                        $data = curl_exec($ch);
+                        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                        curl_close($ch);
+                        
+                        if ($httpCode === 200 && $data !== false) {
+                            echo $data;
+                        } else {
+                            // Log error for debugging
+                            Log::error('Failed to download slip from Trax. HTTP Code: ' . $httpCode);
+                            echo 'Error downloading slip';
+                        }
+                    }, $result['filename'], [
+                        'Content-Type' => 'application/pdf'
+                    ]);
+
+                default:
+                    return back()->with('error', 'Unknown download type');
+            }
+
+        } catch (\Exception $e) {
+            Log::error('Slip download failed: ' . $e->getMessage());
+            return back()->with('error', 'Failed to download slip: ' . $e->getMessage());
         }
     }
 

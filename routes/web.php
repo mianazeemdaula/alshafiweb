@@ -107,6 +107,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('shipments', 'App\Http\Controllers\Admin\ShipmentController');
         Route::post('shipments/{shipment}/track', 'App\Http\Controllers\Admin\ShipmentController@track')->name('shipments.track');
         Route::post('shipments/{shipment}/cancel', 'App\Http\Controllers\Admin\ShipmentController@cancel')->name('shipments.cancel');
+        Route::get('shipments/{shipment}/download-slip', 'App\Http\Controllers\Admin\ShipmentController@downloadSlip')->name('shipments.download-slip');
         
         // Order API for shipment creation
         Route::get('orders/{order}/api', 'App\Http\Controllers\Admin\OrderController@apiShow')->name('orders.api.show');

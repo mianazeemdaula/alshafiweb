@@ -3,6 +3,7 @@ namespace App\Services;
 
 use Illuminate\Support\Facades\Http;
 use App\Models\CourierServiceConfig;
+use Illuminate\Support\Facades\Log;
 
 class UnifiedCourierService
 {
@@ -75,6 +76,23 @@ class UnifiedCourierService
                 return $this->cancelTcsShipment($trackingNumber);
             case 'leopards':
                 return $this->cancelLeopardsShipment($trackingNumber);
+            default:
+                return ['error' => 'Unsupported courier'];
+        }
+    }
+
+    /**
+     * Get shipment slip download URL or stream
+     */
+    public function downloadSlip($courier, $trackingNumber, $shipmentData = null)
+    {
+        switch ($courier) {
+            case 'trax':
+                return $this->downloadTraxSlip($trackingNumber);
+            case 'tcs':
+                return $this->downloadTcsSlip($trackingNumber);
+            case 'leopards':
+                return $this->downloadLeopardsSlip($trackingNumber, $shipmentData);
             default:
                 return ['error' => 'Unsupported courier'];
         }
@@ -173,12 +191,13 @@ class UnifiedCourierService
         ])->post("$baseUrl/shipment/book", $payload);
 
         $responseData = $response->json();
+        Log::info('Trax Booking Response:', $responseData);
         
         // Normalize Trax response format to match expected format
         if (isset($responseData['status']) && $responseData['status'] === 0) {
             return [
                 'success' => true,
-                'tracking_number' => $responseData['tracking number'] ?? null,
+                'tracking_number' => $responseData['tracking_number'] ?? null,
                 'message' => $responseData['message'] ?? 'Shipment booked successfully',
                 'raw_response' => $responseData
             ];
@@ -200,9 +219,56 @@ class UnifiedCourierService
         
         $response = Http::withHeaders([
             'Authorization' => $config->api_key
-        ])->get("$baseUrl/shipment/track", ['tracking_number' => $trackingNumber]);
+        ])->get("$baseUrl/shipment/track", ['tracking_number' => $trackingNumber,'type' => 0]);
 
-        return $response->json();
+        $responseData = $response->json();
+        
+        // Normalize Trax tracking response
+        if (isset($responseData['status']) && $responseData['status'] === 0) {
+            $details = $responseData['details'] ?? [];
+            $trackingHistory = $details['tracking_history'] ?? [];
+            
+            // Get the latest status
+            $latestStatus = !empty($trackingHistory) ? $trackingHistory[0]['status'] : 'Unknown';
+            
+            return [
+                'success' => true,
+                'status' => $this->mapTraxStatus($latestStatus),
+                'tracking_number' => $details['tracking_number'] ?? $trackingNumber,
+                'current_status' => $latestStatus,
+                'shipper' => $details['shipper'] ?? null,
+                'consignee' => $details['consignee'] ?? null,
+                'pickup' => $details['pickup'] ?? null,
+                'order_info' => $details['order_information'] ?? null,
+                'tracking_history' => $trackingHistory,
+                'message' => $responseData['message'] ?? 'Tracking information retrieved successfully',
+                'raw_response' => $responseData
+            ];
+        } else {
+            return [
+                'success' => false,
+                'message' => $responseData['message'] ?? 'Failed to track shipment',
+                'raw_response' => $responseData
+            ];
+        }
+    }
+
+    /**
+     * Map Trax status to standard shipment status
+     */
+    private function mapTraxStatus($traxStatus)
+    {
+        $statusMap = [
+            'Shipment - Booked' => 'booked',
+            'In Transit' => 'in_transit',
+            'Out for Delivery' => 'out_for_delivery',
+            'Delivered' => 'delivered',
+            'Returned' => 'returned',
+            'Cancelled' => 'cancelled',
+            'On Hold' => 'on_hold'
+        ];
+
+        return $statusMap[$traxStatus] ?? 'unknown';
     }
 
     protected function cancelTraxShipment($trackingNumber)
@@ -353,7 +419,7 @@ class UnifiedCourierService
         ])->post("$baseUrl/booking/create", $payload);
 
         $responseData = $response->json();
-        
+        Log::info('TCS Booking Response:', $responseData);
         // Normalize TCS response format to match expected format
         if (isset($responseData['status']) && $responseData['status'] === true) {
             return [
@@ -449,6 +515,7 @@ class UnifiedCourierService
             return [
                 'success' => true,
                 'tracking_number' => $responseData['track_number'] ?? null,
+                'slip_link' => $responseData['slip_link'] ?? null,
                 'message' => 'Shipment booked successfully',
                 'raw_response' => $responseData
             ];
@@ -563,5 +630,86 @@ class UnifiedCourierService
             'order_id' => 'Your order reference',
             'description' => 'Item description'
         ];
+    }
+
+    /**
+     * Download Trax shipment slip (air waybill)
+     */
+    private function downloadTraxSlip($trackingNumber)
+    {
+        $config = $this->getConfig('trax');
+        if (!$config) {
+            return ['error' => 'Trax configuration not found'];
+        }
+
+        $baseUrl = $this->getBaseUrl('trax', $config);
+        
+        try {
+            // For Trax air waybill, use direct URL approach since binary content handling
+            // through Laravel's HTTP client may cause issues
+            $url = "{$baseUrl}/shipment/air_waybill?" . http_build_query([
+                'tracking_number' => $trackingNumber,
+                'type' => 1 // PDF format
+            ]);
+            
+            // First verify the endpoint is working by making a test request
+            $testResponse = Http::withHeaders([
+                'Authorization' => $config->api_key,
+                'Accept' => 'application/pdf'
+            ])->timeout(30)->get($url);
+            if ($testResponse->successful() && strlen($testResponse->body()) > 0) {
+                // Return URL with authentication for direct streaming
+                return [
+                    'type' => 'stream_auth',
+                    'url' => $url,
+                    'auth_header' => $config->api_key,
+                    'filename' => "trax-waybill-{$trackingNumber}.pdf"
+                ];
+            } else {
+                return ['error' => 'Failed to get valid PDF from Trax API'];
+            }
+        } catch (\Exception $e) {
+            Log::error('Trax slip download exception: ' . $e->getMessage());
+            return ['error' => 'Failed to download slip: ' . $e->getMessage()];
+        }
+    }
+
+    /**
+     * Download TCS shipment label
+     */
+    private function downloadTcsSlip($trackingNumber)
+    {
+        $config = $this->getConfig('tcs');
+        if (!$config) {
+            return ['error' => 'TCS configuration not found'];
+        }
+
+        $baseUrl = $config->is_sandbox ? $config->sandbox_endpoint : $config->api_endpoint;
+        $url = "{$baseUrl}/ecom/api/print/label?" . http_build_query([
+            'consignmentno' => $trackingNumber,
+            'shipperdetail' => 'true',
+            'accesstoken' => $config->token
+        ]);
+
+        return [
+            'type' => 'redirect',
+            'url' => $url
+        ];
+    }
+
+    /**
+     * Download Leopards shipment slip
+     */
+    private function downloadLeopardsSlip($trackingNumber, $shipmentData = null)
+    {
+        // For Leopards, slip_link should be available in the booking response
+        if ($shipmentData && isset($shipmentData['slip_link'])) {
+            return [
+                'type' => 'redirect',
+                'url' => $shipmentData['slip_link']
+            ];
+        }
+
+        return ['error' => 'Slip link not available from Leopards booking response'];
     }
 }
