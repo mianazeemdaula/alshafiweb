@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
@@ -12,8 +13,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('orders', function (Blueprint $table) {
-            // Drop foreign key constraint first
-            $table->dropForeign(['user_id']);
+            // Check if foreign key exists and drop it
+            $this->dropForeignKeyIfExists('orders', 'orders_user_id_foreign');
             
             // Modify user_id to be nullable
             $table->unsignedBigInteger('user_id')->nullable()->change();
@@ -34,8 +35,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('orders', function (Blueprint $table) {
-            // Drop foreign key
-            $table->dropForeign(['user_id']);
+            // Check if foreign key exists and drop it
+            $this->dropForeignKeyIfExists('orders', 'orders_user_id_foreign');
             
             // Remove manual customer fields
             $table->dropColumn(['customer_name', 'customer_email', 'customer_phone']);
@@ -46,5 +47,25 @@ return new class extends Migration
             // Add foreign key back with cascade delete
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
+    }
+
+    /**
+     * Check if foreign key exists and drop it safely
+     */
+    private function dropForeignKeyIfExists($table, $foreignKey)
+    {
+        $database = DB::getDatabaseName();
+        
+        $exists = DB::select("
+            SELECT CONSTRAINT_NAME 
+            FROM information_schema.KEY_COLUMN_USAGE 
+            WHERE TABLE_SCHEMA = ? 
+            AND TABLE_NAME = ? 
+            AND CONSTRAINT_NAME = ?
+        ", [$database, $table, $foreignKey]);
+        
+        if (!empty($exists)) {
+            DB::statement("ALTER TABLE `{$table}` DROP FOREIGN KEY `{$foreignKey}`");
+        }
     }
 };
