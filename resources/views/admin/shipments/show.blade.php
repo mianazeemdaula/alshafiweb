@@ -1,36 +1,36 @@
 @extends('layouts.web')
 
 @section('content')
-    <div class="container mx-auto px-4 py-6">
-        <div class="bg-white rounded-lg shadow-md p-6">
+    <div class="container mx-auto px-2 py-2">
+        <div class="bg-white rounded-lg shadow-md p-2">
             <!-- Header -->
-            <div class="flex items-center justify-between mb-6">
+            <div class="flex items-center justify-between mb-2">
                 <div class="flex items-center">
-                    <a href="{{ route('admin.shipments.index') }}" class="text-blue-600 hover:text-blue-800 mr-4">
-                        <i class="fas fa-arrow-left mr-2"></i>Back to Shipments
+                    <a href="{{ route('admin.shipments.index') }}" class="text-blue-600 hover:text-blue-800 mr-2">
+                        <i class="fas fa-arrow-left mr-1"></i>Back to Shipments
                     </a>
-                    <h1 class="text-2xl font-bold text-gray-800">Shipment #{{ $shipment->id }}</h1>
+                    <h1 class="text-xl font-bold text-gray-800">Shipment #{{ $shipment->id }}</h1>
                 </div>
 
-                <div class="flex space-x-3">
+                <div class="flex space-x-2">
                     @if (!in_array($shipment->status, ['delivered', 'cancelled']))
                         <a href="{{ route('admin.shipments.edit', $shipment->id) }}"
-                            class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition duration-200">
-                            <i class="fas fa-edit mr-2"></i>Edit
+                            class="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded-lg transition duration-200">
+                            <i class="fas fa-edit mr-1"></i>Edit
                         </a>
                     @endif
 
                     @if ($shipment->tracking_number)
                         <button onclick="trackShipment({{ $shipment->id }})"
-                            class="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg transition duration-200">
-                            <i class="fas fa-search-location mr-2"></i>Track
+                            class="bg-purple-500 hover:bg-purple-600 text-white px-2 py-1 rounded-lg transition duration-200">
+                            <i class="fas fa-search-location mr-1"></i>Track
                         </button>
                     @endif
 
                     @if (!in_array($shipment->status, ['delivered', 'cancelled']))
                         <button onclick="cancelShipment({{ $shipment->id }})"
-                            class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition duration-200">
-                            <i class="fas fa-ban mr-2"></i>Cancel
+                            class="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded-lg transition duration-200">
+                            <i class="fas fa-ban mr-1"></i>Cancel
                         </button>
                     @endif
                 </div>
@@ -38,23 +38,23 @@
 
             <!-- Success Message -->
             @if (session('success'))
-                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">
+                <div class="bg-green-100 border border-green-400 text-green-700 px-2 py-2 rounded mb-2">
                     {{ session('success') }}
                 </div>
             @endif
 
             @if (session('warning'))
-                <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded mb-6">
+                <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-2 py-2 rounded mb-2">
                     {{ session('warning') }}
                 </div>
             @endif
 
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-2">
                 <!-- Shipment Information -->
-                <div class="bg-gray-50 rounded-lg p-6">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Shipment Information</h3>
+                <div class="bg-gray-50 rounded-lg p-2">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">Shipment Information</h3>
 
-                    <div class="space-y-3">
+                    <div class="space-y-2">
                         <div class="flex justify-between">
                             <span class="font-medium text-gray-600">Status:</span>
                             <span class="px-2 py-1 rounded-full text-xs font-medium {{ $shipment->status_badge }}">

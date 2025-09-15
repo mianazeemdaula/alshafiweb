@@ -102,10 +102,14 @@ Route::middleware('auth')->group(function () {
         Route::post('courier-services/{courier}/test-connection', 'App\Http\Controllers\Admin\CourierServiceController@testConnection')->name('courier-services.test-connection');
         
         // Shipments Management
+        Route::get('shipments/courier-cities', 'App\Http\Controllers\Admin\ShipmentController@getCities')->name('shipments.courier.cities');
+        Route::get('shipments/pickup-addresses', 'App\Http\Controllers\Admin\ShipmentController@getPickupAddresses')->name('shipments.pickup-addresses');
         Route::resource('shipments', 'App\Http\Controllers\Admin\ShipmentController');
         Route::post('shipments/{shipment}/track', 'App\Http\Controllers\Admin\ShipmentController@track')->name('shipments.track');
         Route::post('shipments/{shipment}/cancel', 'App\Http\Controllers\Admin\ShipmentController@cancel')->name('shipments.cancel');
-        Route::get('shipments/courier/cities', 'App\Http\Controllers\Admin\ShipmentController@getCities')->name('shipments.courier.cities');
+        
+        // Order API for shipment creation
+        Route::get('orders/{order}/api', 'App\Http\Controllers\Admin\OrderController@apiShow')->name('orders.api.show');
     });
     Route::post('logout', 'App\Http\Controllers\AuthController@logout')->name('logout');
 });

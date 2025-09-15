@@ -1,31 +1,31 @@
 @extends('layouts.web')
 
 @section('content')
-    <div class="container mx-auto px-4 py-6">
-        <div class="bg-white rounded-lg shadow-md p-6">
+    <div class="container mx-auto px-2 py-2">
+        <div class="bg-white rounded-lg shadow-md p-2">
             <!-- Header -->
-            <div class="flex justify-between items-center mb-6">
-                <h1 class="text-2xl font-bold text-gray-800">Shipments Management</h1>
+            <div class="flex justify-between items-center mb-2">
+                <h1 class="text-xl font-bold text-gray-800">Shipments Management</h1>
                 <a href="{{ route('admin.shipments.create') }}"
-                    class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition duration-200">
-                    <i class="fas fa-plus mr-2"></i>Create Shipment
+                    class="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded-lg transition duration-200">
+                    <i class="fas fa-plus mr-1"></i>Create Shipment
                 </a>
             </div>
 
             <!-- Filters -->
-            <div class="bg-gray-50 rounded-lg p-4 mb-6">
-                <form method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div class="bg-gray-50 rounded-lg p-2 mb-2">
+                <form method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-2">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Search</label>
                         <input type="text" name="search" value="{{ request('search') }}"
                             placeholder="Tracking number, Order ID..."
-                            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+                            class="w-full border border-gray-300 rounded-lg px-2 py-1 focus:ring-blue-500 focus:border-blue-500">
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
                         <select name="status"
-                            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+                            class="w-full border border-gray-300 rounded-lg px-2 py-1 focus:ring-blue-500 focus:border-blue-500">
                             <option value="">All Statuses</option>
                             @foreach (\App\Models\Shipment::getStatuses() as $key => $label)
                                 <option value="{{ $key }}" {{ request('status') == $key ? 'selected' : '' }}>
@@ -38,7 +38,7 @@
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Courier</label>
                         <select name="courier"
-                            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+                            class="w-full border border-gray-300 rounded-lg px-2 py-1 focus:ring-blue-500 focus:border-blue-500">
                             <option value="">All Couriers</option>
                             @foreach ($courierServices as $service)
                                 <option value="{{ $service->courier }}"

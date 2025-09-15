@@ -16,7 +16,7 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $orders = Order::paginate(10);
+        $orders = Order::orderBy('id','desc')->paginate(10);
         return view('admin.orders.index', compact('orders'));
     }
 
@@ -39,9 +39,11 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'user_id' => 'required|exists:users,id',
-            'payment_method_id' => 'required|exists:payment_methods,id',
+        // Base validation rules
+        $rules = [
+            'customer_type' => 'required|in:existing,manual',
+            'payment_method_id' => 'required_if:customer_type,existing|exists:payment_methods,id',
+            'payment_method_id_manual' => 'required_if:customer_type,manual|exists:payment_methods,id',
             'city_id' => 'required|exists:cities,id',
             'country_id' => 'required|exists:countries,id',
             'street_address' => 'required|string|max:255',
@@ -53,7 +55,18 @@ class OrderController extends Controller
             'products.*.id' => 'required|exists:products,id',
             'products.*.quantity' => 'required|integer|min:1',
             'products.*.price' => 'required|numeric|min:0',
-        ]);
+        ];
+
+        // Add conditional validation based on customer type
+        if ($request->customer_type === 'existing') {
+            $rules['user_id'] = 'required|exists:users,id';
+        } else {
+            $rules['customer_name'] = 'required|string|max:255';
+            $rules['customer_email'] = 'nullable|email|max:255';
+            $rules['customer_phone'] = 'nullable|string|max:20';
+        }
+
+        $validated = $request->validate($rules);
 
         try {
             // Generate order number
@@ -69,11 +82,15 @@ class OrderController extends Controller
             $discount = $validated['discount'] ?? 0;
             $total = $subtotal + $shippingCost - $discount;
 
+            // Determine payment method ID based on customer type
+            $paymentMethodId = $validated['customer_type'] === 'existing' 
+                ? $validated['payment_method_id'] 
+                : $validated['payment_method_id_manual'];
+
             // Create order
-            $order = Order::create([
+            $orderData = [
                 'number' => $orderNumber,
-                'user_id' => $validated['user_id'],
-                'payment_method_id' => $validated['payment_method_id'],
+                'payment_method_id' => $paymentMethodId,
                 'city_id' => $validated['city_id'],
                 'country_id' => $validated['country_id'],
                 'street_address' => $validated['street_address'],
@@ -84,7 +101,19 @@ class OrderController extends Controller
                 'total' => (int)($total),
                 'status' => 'pending',
                 'payment_status' => 'pending',
-            ]);
+            ];
+
+            // Add customer information based on type
+            if ($validated['customer_type'] === 'existing') {
+                $orderData['user_id'] = $validated['user_id'];
+            } else {
+                $orderData['user_id'] = null;
+                $orderData['customer_name'] = $validated['customer_name'];
+                $orderData['customer_email'] = $validated['customer_email'] ?? null;
+                $orderData['customer_phone'] = $validated['customer_phone'] ?? null;
+            }
+
+            $order = Order::create($orderData);
 
             // Create order details
             foreach ($validated['products'] as $productData) {
@@ -171,5 +200,52 @@ class OrderController extends Controller
             return redirect()->route('admin.orders.index')->with('success', 'Order deleted successfully');
         }
         return redirect()->route('admin.orders.index')->with('error', 'Order not found');
+    }
+
+    /**
+     * Return order data as JSON for API calls
+     */
+    public function apiShow(Order $order)
+    {
+        $order->load(['orderDetails.product', 'user', 'city', 'country']);
+        
+        return response()->json([
+            'id' => $order->id,
+            'order_number' => $order->order_number,
+            'total_amount' => $order->total_amount,
+            'status' => $order->status,
+            'street_address' => $order->street_address,
+            'customer_name' => $order->customer_name,
+            'customer_email' => $order->customer_email,
+            'customer_phone' => $order->customer_phone,
+            'city_id' => $order->city_id,
+            'country_id' => $order->country_id,
+            'zip_code' => $order->zip_code,
+            'user' => $order->user ? [
+                'id' => $order->user->id,
+                'name' => $order->user->name,
+                'email' => $order->user->email,
+                'phone' => $order->user->phone,
+            ] : null,
+            'city' => $order->city ? [
+                'id' => $order->city->id,
+                'name' => $order->city->name,
+            ] : null,
+            'country' => $order->country ? [
+                'id' => $order->country->id,
+                'name' => $order->country->name,
+            ] : null,
+            'order_details' => $order->orderDetails->map(function ($detail) {
+                return [
+                    'id' => $detail->id,
+                    'qty' => $detail->qty,
+                    'price' => $detail->price,
+                    'product' => $detail->product ? [
+                        'id' => $detail->product->id,
+                        'name' => $detail->product->name,
+                    ] : null
+                ];
+            })
+        ]);
     }
 }

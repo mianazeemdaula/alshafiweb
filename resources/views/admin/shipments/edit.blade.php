@@ -1,19 +1,19 @@
 @extends('layouts.web')
 
 @section('content')
-    <div class="container mx-auto px-4 py-6">
-        <div class="bg-white rounded-lg shadow-md p-6">
+    <div class="container mx-auto px-2 py-2">
+        <div class="bg-white rounded-lg shadow-md p-2">
             <!-- Header -->
-            <div class="flex items-center mb-6">
-                <a href="{{ route('admin.shipments.show', $shipment->id) }}" class="text-blue-600 hover:text-blue-800 mr-4">
-                    <i class="fas fa-arrow-left mr-2"></i>Back to Shipment
+            <div class="flex items-center mb-2">
+                <a href="{{ route('admin.shipments.show', $shipment->id) }}" class="text-blue-600 hover:text-blue-800 mr-2">
+                    <i class="fas fa-arrow-left mr-1"></i>Back to Shipment
                 </a>
-                <h1 class="text-2xl font-bold text-gray-800">Edit Shipment #{{ $shipment->id }}</h1>
+                <h1 class="text-xl font-bold text-gray-800">Edit Shipment #{{ $shipment->id }}</h1>
             </div>
 
             <!-- Error Messages -->
             @if ($errors->any())
-                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
+                <div class="bg-red-100 border border-red-400 text-red-700 px-2 py-2 rounded mb-2">
                     <ul class="list-disc list-inside">
                         @foreach ($errors->all() as $error)
                             <li>{{ $error }}</li>
@@ -22,15 +22,15 @@
                 </div>
             @endif
 
-            <form action="{{ route('admin.shipments.update', $shipment->id) }}" method="POST" class="space-y-6">
+            <form action="{{ route('admin.shipments.update', $shipment->id) }}" method="POST" class="space-y-2">
                 @csrf
                 @method('PUT')
 
                 <!-- Current Information -->
-                <div class="bg-gray-50 rounded-lg p-4">
-                    <h3 class="text-lg font-medium text-gray-800 mb-4">Current Information</h3>
+                <div class="bg-gray-50 rounded-lg p-2">
+                    <h3 class="text-lg font-medium text-gray-800 mb-2">Current Information</h3>
 
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
                         <div>
                             <span class="text-sm font-medium text-gray-600">Order:</span>
                             <div class="text-gray-900">
@@ -287,7 +287,7 @@
             if (status === 'delivered' || status === 'cancelled') {
                 if (!confirm(
                         `Are you sure you want to change the status to "${status}"? This action will update the order status as well.`
-                        )) {
+                    )) {
                     this.value = '{{ $shipment->status }}'; // Reset to original value
                 }
             }

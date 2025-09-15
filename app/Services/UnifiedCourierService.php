@@ -17,12 +17,16 @@ class UnifiedCourierService
      */
     public function bookShipment($courier, $params)
     {
-        // Validate required unified parameters
-        $requiredParams = [
-            'pickup_name', 'pickup_phone', 'pickup_email', 'pickup_address', 'pickup_city_id',
+        $requiredParams = [];
+        if($courier === 'trax'){
+            // remove pickup details because of Trax API requirements
+            $requiredParams[] = 'pickup_address_id';
+        }
+
+        $requiredParams = array_merge($requiredParams, [
             'delivery_name', 'delivery_phone', 'delivery_address', 'delivery_city_id',
             'weight', 'pieces', 'cod_amount', 'order_id', 'description'
-        ];
+        ]);
         
         foreach ($requiredParams as $param) {
             if (empty($params[$param])) {
@@ -93,6 +97,38 @@ class UnifiedCourierService
         }
     }
 
+    /**
+     * Get pickup addresses for a courier
+     */
+    public function getPickupAddresses($courier)
+    {
+        switch ($courier) {
+            case 'trax':
+                return $this->getTraxPickupAddresses();
+            case 'tcs':
+            case 'leopards':
+                return ['error' => 'Pickup addresses not supported by this courier', 'addresses' => []];
+            default:
+                return ['error' => 'Unsupported courier'];
+        }
+    }
+
+    /**
+     * Add pickup address for a courier
+     */
+    public function addPickupAddress($courier, $params)
+    {
+        switch ($courier) {
+            case 'trax':
+                return $this->addTraxPickupAddress($params);
+            case 'tcs':
+            case 'leopards':
+                return ['error' => 'Adding pickup addresses not supported by this courier'];
+            default:
+                return ['error' => 'Unsupported courier'];
+        }
+    }
+
     // TRAX Implementation
     protected function bookTraxShipment($params)
     {
@@ -102,36 +138,57 @@ class UnifiedCourierService
         $baseUrl = $this->getBaseUrl('trax', $config);
         
         $payload = [
+            // Mandatory fields according to Trax documentation
             'service_type_id' => 1, // Regular service
             'pickup_address_id' => $params['pickup_address_id'] ?? null,
-            'information_display' => 1,
+            'information_display' => 1, // Show contact details on air waybill
             'consignee_city_id' => $params['delivery_city_id'],
             'consignee_name' => $params['delivery_name'],
             'consignee_address' => $params['delivery_address'],
             'consignee_phone_number_1' => $params['delivery_phone'],
             'consignee_email_address' => $params['delivery_email'] ?? '',
-            'order_id' => $params['order_id'],
+            'order_id' => $params['order_id'], // Optional but recommended
             'item_product_type_id' => 12, // General merchandise
             'item_description' => $params['description'],
             'item_quantity' => $params['pieces'],
-            'item_insurance' => 0,
+            'item_insurance' => 0, // No insurance
             'item_price' => $params['cod_amount'],
             'pickup_date' => date('Y-m-d'),
-            'special_instructions' => $params['instructions'] ?? '',
-            'estimated_weight' => $params['weight'],
-            'shipping_mode_id' => 1,
+            'estimated_weight' => (float)$params['weight'],
+            'shipping_mode_id' => 1, // Regular shipping
             'amount' => $params['cod_amount'],
             'payment_mode_id' => 1, // COD
-            'charges_mode_id' => 4,
-            'open_shipment' => 0
+            'charges_mode_id' => 4, // Standard charge mode
+            
+            // Optional fields
+            'special_instructions' => $params['instructions'] ?? '',
+            'open_shipment' => 0,
+            'pieces_quantity' => $params['pieces']
         ];
 
         $response = Http::withHeaders([
-            'Authorization' => $config->api_key,
-            'Content-Type' => 'application/json'
+            'Authorization' =>  $config->api_key,
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json'
         ])->post("$baseUrl/shipment/book", $payload);
 
-        return $response->json();
+        $responseData = $response->json();
+        
+        // Normalize Trax response format to match expected format
+        if (isset($responseData['status']) && $responseData['status'] === 0) {
+            return [
+                'success' => true,
+                'tracking_number' => $responseData['tracking number'] ?? null,
+                'message' => $responseData['message'] ?? 'Shipment booked successfully',
+                'raw_response' => $responseData
+            ];
+        } else {
+            return [
+                'success' => false,
+                'message' => $responseData['message'] ?? 'Unknown error occurred',
+                'raw_response' => $responseData
+            ];
+        }
     }
 
     protected function trackTraxShipment($trackingNumber)
@@ -176,6 +233,63 @@ class UnifiedCourierService
         return $response->json();
     }
 
+    protected function getTraxPickupAddresses()
+    {
+        $config = $this->getConfig('trax');
+        if (!$config) return ['error' => 'Trax config not found', 'addresses' => []];
+
+        $baseUrl = $this->getBaseUrl('trax', $config);
+        
+        $response = Http::withHeaders([
+            'Authorization' => $config->api_key
+        ])->get("$baseUrl/pickup_addresses");
+        
+        $result = $response->json();
+        
+        if ($response->successful() && isset($result['pickup_addresses'])) {
+            return [
+                'success' => true,
+                'addresses' => $result['pickup_addresses']
+            ];
+        }
+        
+        return ['error' => 'Failed to fetch pickup addresses', 'addresses' => []];
+    }
+
+    protected function addTraxPickupAddress($params)
+    {
+        $config = $this->getConfig('trax');
+        if (!$config) return ['error' => 'Trax config not found'];
+
+        $baseUrl = $this->getBaseUrl('trax', $config);
+        
+        $data = [
+            'person_of_contact' => $params['contact_name'],
+            'phone_number' => $params['phone_number'], 
+            'Email_address' => $params['email'],
+            'address' => $params['address'],
+            'city_id' => $params['city_id']
+        ];
+        
+        $response = Http::withHeaders([
+            'Authorization' => $config->api_key
+        ])->post("$baseUrl/pickup_address/add", $data);
+        
+        $result = $response->json();
+        
+        if ($response->successful() && isset($result['status']) && $result['status'] == 0) {
+            return [
+                'success' => true,
+                'message' => $result['message'] ?? 'Pickup address added successfully',
+                'address_id' => $result['pickup_address_id'] ?? null
+            ];
+        }
+        
+        return [
+            'error' => $result['message'] ?? 'Failed to add pickup address'
+        ];
+    }
+
     // TCS Implementation
     protected function bookTcsShipment($params)
     {
@@ -184,33 +298,77 @@ class UnifiedCourierService
 
         $baseUrl = $this->getBaseUrl('tcs', $config);
         
+        // TCS requires structured payload according to their documentation
         $payload = [
             'accesstoken' => $config->token,
-            'tcsaccount' => $config->client_id,
-            'shippername' => $params['pickup_name'],
-            'address1' => $params['pickup_address'],
-            'countrycode' => 'PK',
-            'countryname' => 'Pakistan',
-            'cityname' => $params['pickup_city_name'] ?? 'Karachi',
-            'mobile' => $params['pickup_phone'],
-            'firstname' => $params['delivery_name'],
-            'middlename' => '',
-            'address1' => $params['delivery_address'],
-            'cityname' => $params['delivery_city_name'] ?? 'Karachi',
-            'mobile' => $params['delivery_phone'],
-            'email' => $params['delivery_email'] ?? '',
-            'productdetails' => $params['description'],
-            'pieces' => $params['pieces'],
-            'weight' => $params['weight'],
-            'codamount' => $params['cod_amount'],
-            'customerreferenceno' => $params['order_id'],
-            'remarks' => $params['instructions'] ?? ''
+            'consignmentno' => '', // Optional
+            'shipperinfo' => [
+                'tcsaccount' => $config->client_id,
+                'shippername' => $params['pickup_name'],
+                'address1' => $params['pickup_address'],
+                'countrycode' => 'PK',
+                'countryname' => 'Pakistan',
+                'cityname' => $params['pickup_city_name'] ?? 'Karachi',
+                'mobile' => $params['pickup_phone']
+            ],
+            'consigneeinfo' => [
+                'firstname' => $params['delivery_name'],
+                'middlename' => '', // Mandatory but can be empty
+                'address1' => $params['delivery_address'],
+                'countrycode' => 'PK',
+                'countryname' => 'Pakistan',
+                'cityname' => $params['delivery_city_name'] ?? 'Karachi',
+                'mobile' => $params['delivery_phone'],
+                'email' => $params['delivery_email'] ?? ''
+            ],
+            'shipmentinfo' => [
+                'costcentercode' => 'DEFAULT', // Mandatory
+                'referenceno' => $params['order_id'],
+                'contentdesc' => $params['description'],
+                'servicecode' => 'O', // Overnight service code
+                'currency' => 'PKR',
+                'codamount' => (int)$params['cod_amount'],
+                'weightinkg' => (float)$params['weight'],
+                'pieces' => (int)$params['pieces'],
+                'fragile' => false,
+                'remarks' => $params['instructions'] ?? '',
+                'skus' => [
+                    [
+                        'description' => $params['description'],
+                        'quantity' => (int)$params['pieces'],
+                        'weight' => (float)$params['weight'],
+                        'uom' => 'KG',
+                        'unitprice' => (int)$params['cod_amount'],
+                        'declaredvalue' => null,
+                        'insuredvalue' => null
+                    ]
+                ]
+            ]
         ];
 
-        $response = Http::withToken($config->token)
-            ->post("$baseUrl/booking/create", $payload);
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer ' . $config->token,
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json'
+        ])->post("$baseUrl/booking/create", $payload);
 
-        return $response->json();
+        $responseData = $response->json();
+        
+        // Normalize TCS response format to match expected format
+        if (isset($responseData['status']) && $responseData['status'] === true) {
+            return [
+                'success' => true,
+                'tracking_number' => $responseData['result']['trackingno'] ?? null,
+                'message' => $responseData['message'] ?? 'Shipment booked successfully',
+                'raw_response' => $responseData
+            ];
+        } else {
+            return [
+                'success' => false,
+                'message' => $responseData['message'] ?? 'Unknown error occurred',
+                'raw_response' => $responseData
+            ];
+        }
     }
 
     protected function trackTcsShipment($trackingNumber)
@@ -260,30 +418,47 @@ class UnifiedCourierService
 
         $baseUrl = $this->getBaseUrl('leopards', $config);
         
+        // Leopards required payload according to documentation
         $payload = [
             'api_key' => $config->api_key,
             'api_password' => $config->api_password,
-            'booked_packet_weight' => $params['weight'],
-            'booked_packet_no_piece' => $params['pieces'],
-            'booked_packet_collect_amount' => $params['cod_amount'],
-            'booked_packet_order_id' => $params['order_id'],
+            'booked_packet_weight' => (int)$params['weight'], // Weight in grams
+            'booked_packet_no_piece' => (int)$params['pieces'],
+            'booked_packet_collect_amount' => (int)$params['cod_amount'],
+            'booked_packet_order_id' => $params['order_id'], // Optional
             'origin_city' => $params['pickup_city_id'],
             'destination_city' => $params['delivery_city_id'],
             'shipment_name_eng' => $params['pickup_name'],
-            'shipment_email' => $params['pickup_email'],
+            'shipment_email' => $params['pickup_email'] ?? '',
             'shipment_phone' => $params['pickup_phone'],
             'shipment_address' => $params['pickup_address'],
             'consignment_name_eng' => $params['delivery_name'],
-            'consignment_email' => $params['delivery_email'] ?? '',
+            'consignment_email' => $params['delivery_email'] ?? '', // Optional
             'consignment_phone' => $params['delivery_phone'],
             'consignment_address' => $params['delivery_address'],
-            'special_instructions' => $params['instructions'] ?? '',
-            'shipment_type' => 'overnight'
+            'special_instructions' => $params['instructions'] ?? '', // Optional
+            'shipment_type' => 'overnight' // Default shipment type
         ];
 
         $response = Http::post("$baseUrl/bookPacket/format/json", $payload);
 
-        return $response->json();
+        $responseData = $response->json();
+        
+        // Normalize Leopards response format to match expected format
+        if (isset($responseData['status']) && $responseData['status'] === 1) {
+            return [
+                'success' => true,
+                'tracking_number' => $responseData['track_number'] ?? null,
+                'message' => 'Shipment booked successfully',
+                'raw_response' => $responseData
+            ];
+        } else {
+            return [
+                'success' => false,
+                'message' => $responseData['error'] ?? 'Unknown error occurred',
+                'raw_response' => $responseData
+            ];
+        }
     }
 
     protected function trackLeopardsShipment($trackingNumber)

@@ -1,11 +1,11 @@
 @extends('layouts.web')
 
 @section('content')
-    <div class="container mx-auto px-4 py-4 order-form-container">
-        <div class="bg-white rounded-lg shadow-md p-4">
+    <div class="container mx-auto px-2 py-2 order-form-container">
+        <div class="bg-white rounded-lg shadow-md p-2">
             <!-- Header -->
-            <div class="flex justify-between items-center mb-4">
-                <h1 class="text-xl font-bold text-gray-800">Create New Order</h1>
+            <div class="flex justify-between items-center mb-2">
+                <h1 class="text-lg font-bold text-gray-800">Create New Order</h1>
                 <a href="{{ route('admin.orders.index') }}"
                     class="bg-gray-500 hover:bg-gray-600 text-white px-3 py-2 rounded-lg text-sm transition duration-200">
                     <i class="fas fa-arrow-left mr-1"></i>Back
@@ -14,9 +14,9 @@
 
             <!-- Error Display -->
             @if ($errors->any())
-                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+                <div class="bg-red-100 border border-red-400 text-red-700 px-3 py-2 rounded mb-2">
                     <strong class="font-bold">Error!</strong>
-                    <ul class="mt-2 list-disc list-inside text-sm">
+                    <ul class="mt-1 list-disc list-inside text-sm">
                         @foreach ($errors->all() as $error)
                             <li>{{ $error }}</li>
                         @endforeach
@@ -28,14 +28,34 @@
                 @csrf
 
                 <!-- Customer & Payment Information -->
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 mb-3">
                     <!-- Customer Information -->
                     <div class="form-section">
                         <h3><i class="fas fa-user mr-2"></i>Customer Information</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+
+                        <!-- Customer Type Selection -->
+                        <div class="mb-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Customer Type *</label>
+                            <div class="flex gap-3">
+                                <label class="flex items-center">
+                                    <input type="radio" name="customer_type" value="existing" id="customer_existing"
+                                        class="mr-2"
+                                        {{ old('customer_type', 'existing') == 'existing' ? 'checked' : '' }}>
+                                    <span class="text-sm">Existing Customer</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="radio" name="customer_type" value="manual" id="customer_manual"
+                                        class="mr-2" {{ old('customer_type') == 'manual' ? 'checked' : '' }}>
+                                    <span class="text-sm">Manual Entry</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Existing Customer Selection -->
+                        <div id="existing_customer_section" class="grid grid-cols-1 md:grid-cols-2 gap-3">
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Customer *</label>
-                                <select name="user_id" required
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Select Customer</label>
+                                <select name="user_id" id="user_id"
                                     class="compact-input w-full border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
                                     <option value="">Select Customer</option>
                                     @foreach ($users as $user)
@@ -59,6 +79,49 @@
                                         </option>
                                     @endforeach
                                 </select>
+                            </div>
+                        </div>
+
+                        <!-- Manual Customer Entry -->
+                        <div id="manual_customer_section" class="hidden">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Customer Name</label>
+                                    <input type="text" name="customer_name" id="customer_name"
+                                        value="{{ old('customer_name') }}"
+                                        class="compact-input w-full border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                                        placeholder="Enter customer name">
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Customer Email</label>
+                                    <input type="email" name="customer_email" id="customer_email"
+                                        value="{{ old('customer_email') }}"
+                                        class="compact-input w-full border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                                        placeholder="Enter customer email">
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Customer Phone</label>
+                                    <input type="text" name="customer_phone" id="customer_phone"
+                                        value="{{ old('customer_phone') }}"
+                                        class="compact-input w-full border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                                        placeholder="Enter customer phone">
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Payment Method *</label>
+                                    <select name="payment_method_id_manual" id="payment_method_id_manual"
+                                        class="compact-input w-full border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                                        <option value="">Select Payment Method</option>
+                                        @foreach ($paymentMethods as $method)
+                                            <option value="{{ $method->id }}"
+                                                {{ old('payment_method_id') == $method->id ? 'selected' : '' }}>
+                                                {{ $method->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -156,8 +219,8 @@
                             <div class="summary-row">
                                 <span>Discount:</span>
                                 <div>
-                                    <input type="number" name="discount" value="{{ old('discount', '0') }}" step="0.01"
-                                        min="0" placeholder="0.00" id="discountInput"
+                                    <input type="number" name="discount" value="{{ old('discount', '0') }}"
+                                        step="0.01" min="0" placeholder="0.00" id="discountInput"
                                         class="compact-input w-16 border border-gray-300 rounded px-2 py-1 text-right">
                                 </div>
                             </div>
@@ -290,6 +353,59 @@
                 // Add first product row
                 document.getElementById('addProduct').click();
 
+                // Customer type toggle functionality
+                function toggleCustomerType() {
+                    const existingSection = document.getElementById('existing_customer_section');
+                    const manualSection = document.getElementById('manual_customer_section');
+                    const userIdSelect = document.getElementById('user_id');
+                    const customerFields = ['customer_name', 'customer_email', 'customer_phone'];
+                    const paymentMethodSelect = document.querySelector('select[name="payment_method_id"]');
+                    const paymentMethodManualSelect = document.getElementById('payment_method_id_manual');
+
+                    if (document.getElementById('customer_existing').checked) {
+                        existingSection.classList.remove('hidden');
+                        manualSection.classList.add('hidden');
+                        userIdSelect.required = true;
+
+                        // Clear manual fields and remove required
+                        customerFields.forEach(fieldName => {
+                            const field = document.getElementById(fieldName);
+                            if (field) {
+                                field.value = '';
+                                field.required = false;
+                            }
+                        });
+
+                        paymentMethodSelect.required = true;
+                        paymentMethodSelect.disabled = false;
+                        paymentMethodManualSelect.required = false;
+                        paymentMethodManualSelect.disabled = true;
+                    } else {
+                        existingSection.classList.add('hidden');
+                        manualSection.classList.remove('hidden');
+                        manualSection.querySelector('.grid').classList.add('grid', 'grid-cols-1', 'md:grid-cols-2',
+                            'gap-3');
+
+                        userIdSelect.required = false;
+                        userIdSelect.value = '';
+
+                        // Make manual fields required
+                        document.getElementById('customer_name').required = true;
+
+                        paymentMethodSelect.required = false;
+                        paymentMethodSelect.disabled = true;
+                        paymentMethodManualSelect.required = true;
+                        paymentMethodManualSelect.disabled = false;
+                    }
+                }
+
+                // Initialize customer type on page load
+                toggleCustomerType();
+
+                // Add event listeners for customer type radio buttons
+                document.getElementById('customer_existing').addEventListener('change', toggleCustomerType);
+                document.getElementById('customer_manual').addEventListener('change', toggleCustomerType);
+
                 // Form validation
                 document.getElementById('orderForm').onsubmit = function(e) {
                     const products = document.querySelectorAll('.product-row');
@@ -297,6 +413,16 @@
                         e.preventDefault();
                         alert('Please add at least one product to the order.');
                         return false;
+                    }
+
+                    // Additional validation for manual customer entry
+                    if (document.getElementById('customer_manual').checked) {
+                        const customerName = document.getElementById('customer_name').value.trim();
+                        if (!customerName) {
+                            e.preventDefault();
+                            alert('Please enter customer name for manual entry.');
+                            return false;
+                        }
                     }
                 };
             });

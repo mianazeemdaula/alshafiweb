@@ -87,22 +87,31 @@ class ShipmentController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        // Base validation rules
+        $rules = [
             'order_id' => 'required|exists:orders,id',
             'courier_service_config_id' => 'required|exists:courier_service_configs,id',
             'weight' => 'required|numeric|min:0.1|max:999',
             'declared_value' => 'nullable|numeric|min:0',
             'cod_amount' => 'nullable|numeric|min:0',
             'special_instructions' => 'nullable|string|max:500',
-            'pickup_name' => 'required|string|max:100',
-            'pickup_phone' => 'required|string|max:20',
-            'pickup_address' => 'required|string|max:255',
-            'pickup_city' => 'required|string|max:100',
             'delivery_name' => 'required|string|max:100',
             'delivery_phone' => 'required|string|max:20',
             'delivery_address' => 'required|string|max:255',
             'delivery_city_id' => 'required|string|max:100'
-        ]);
+        ];
+
+        // Add pickup validation based on pickup type
+        if ($request->pickup_type === 'existing') {
+            $rules['pickup_address_id'] = 'required|string';
+        } else {
+            $rules['pickup_name'] = 'required|string|max:100';
+            $rules['pickup_phone'] = 'required|string|max:20';
+            $rules['pickup_address'] = 'required|string|max:255';
+            $rules['pickup_city'] = 'required|string|max:100';
+        }
+
+        $request->validate($rules);
 
         $order = Order::findOrFail($request->order_id);
         $courierConfig = CourierServiceConfig::findOrFail($request->courier_service_config_id);
@@ -114,17 +123,29 @@ class ShipmentController extends Controller
         }
 
         try {
+            // Prepare pickup address data
+            $pickupData = [];
+            if ($request->pickup_type === 'existing') {
+                $pickupData = [
+                    'type' => 'existing',
+                    'pickup_address_id' => $request->pickup_address_id
+                ];
+            } else {
+                $pickupData = [
+                    'type' => 'manual',
+                    'name' => $request->pickup_name,
+                    'phone' => $request->pickup_phone,
+                    'address' => $request->pickup_address,
+                    'city' => $request->pickup_city
+                ];
+            }
+
             // Create shipment record
             $shipment = Shipment::create([
                 'order_id' => $order->id,
                 'courier_service_config_id' => $courierConfig->id,
                 'status' => Shipment::STATUS_PENDING,
-                'pickup_address' => [
-                    'name' => $request->pickup_name,
-                    'phone' => $request->pickup_phone,
-                    'address' => $request->pickup_address,
-                    'city' => $request->pickup_city
-                ],
+                'pickup_address' => $pickupData,
                 'delivery_address' => [
                     'name' => $request->delivery_name,
                     'phone' => $request->delivery_phone,
@@ -133,29 +154,37 @@ class ShipmentController extends Controller
                 ],
                 'weight' => $request->weight,
                 'declared_value' => $request->declared_value,
-                'cod_amount' => $request->cod_amount ?? $order->total,
+                'cod_amount' => $request->cod_amount ?? $order->total_amount,
                 'special_instructions' => $request->special_instructions
             ]);
 
-            // Book shipment with courier
+            // Prepare shipment data for courier booking
             $shipmentData = [
-                'pickup_name' => $request->pickup_name,
-                'pickup_phone' => $request->pickup_phone,
-                'pickup_address' => $request->pickup_address,
-                'pickup_city' => $request->pickup_city,
                 'delivery_name' => $request->delivery_name,
                 'delivery_phone' => $request->delivery_phone,
                 'delivery_address' => $request->delivery_address,
                 'delivery_city_id' => $request->delivery_city_id,
-                'weight' => $request->weight,
-                'cod_amount' => $request->cod_amount ?? $order->total,
-                'declared_value' => $request->declared_value ?? $order->total,
+                'weight' => $request->weight * 1000, // Convert to grams
+                'pieces' => 1,
+                'cod_amount' => $request->cod_amount ?? $order->total_amount,
+                'declared_value' => $request->declared_value ?? $order->total_amount,
                 'special_instructions' => $request->special_instructions,
-                'reference' => "ORDER-{$order->id}"
+                'order_id' => $order->id,
+                'description' => 'Order items from Alshaafi Store'
             ];
 
+            // Add pickup data based on type
+            if ($request->pickup_type === 'existing') {
+                $shipmentData['pickup_address_id'] = $request->pickup_address_id;
+            } else {
+                $shipmentData['pickup_name'] = $request->delivery_name;
+                $shipmentData['pickup_phone'] = $request->delivery_phone;
+                $shipmentData['pickup_email'] = 'info@alshaafi.com'; // Default email
+                $shipmentData['pickup_address'] = $request->delivery_address;
+                $shipmentData['pickup_city_id'] = $request->pickup_city; // For now use city name
+            }
+            // return $shipmentData;
             $response = $this->courierService->bookShipment($courierConfig->courier, $shipmentData);
-
             if ($response['success']) {
                 // Update shipment with courier response
                 $shipment->update([
@@ -373,7 +402,7 @@ class ShipmentController extends Controller
         $request->validate([
             'courier_service_id' => 'required|exists:courier_service_configs,id'
         ]);
-
+    
         try {
             $courierService = CourierServiceConfig::find($request->courier_service_id);
             
@@ -384,26 +413,72 @@ class ShipmentController extends Controller
                 ]);
             }
 
+            // Try to get cities from courier API
             $response = $this->courierService->getCities($courierService->courier);
 
-            if (isset($response['error'])) {
+            // If courier API failed, fallback to local cities
+            if (isset($response['error']) || !is_array($response) || empty($response)) {
+                $localCities = \App\Models\City::select('id', 'name')->get()->toArray();
+                
                 return response()->json([
-                    'success' => false,
-                    'message' => $response['error']
+                    'success' => true,
+                    'data' => $localCities,
+                    'source' => 'local'
                 ]);
             }
 
             return response()->json([
                 'success' => true,
-                'data' => $response
+                'data' => $response,
+                'source' => 'api'
             ]);
 
         } catch (\Exception $e) {
-            Log::error('Failed to get cities for courier: ' . $e->getMessage());
+            \Log::error('Failed to get cities for courier: ' . $e->getMessage());
+            
+            // Fallback to local cities on exception
+            $localCities = \App\Models\City::select('id', 'name')->get()->toArray();
+            
+            return response()->json([
+                'success' => true,
+                'data' => $localCities,
+                'source' => 'local_fallback'
+            ]);
+        }
+    }
+
+    /**
+     * Get pickup addresses for a specific courier
+     */
+    public function getPickupAddresses(Request $request)
+    {
+        $request->validate([
+            'courier' => 'required|string|in:trax,tcs,leopards'
+        ]);
+
+        try {
+            $response = $this->courierService->getPickupAddresses($request->courier);
+
+            if (isset($response['error'])) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $response['error'],
+                    'addresses' => []
+                ]);
+            }
+
+            return response()->json([
+                'success' => true,
+                'addresses' => $response['addresses'] ?? []
+            ]);
+
+        } catch (\Exception $e) {
+            \Log::error('Failed to get pickup addresses for courier: ' . $e->getMessage());
             
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to load cities: ' . $e->getMessage()
+                'message' => 'Failed to load pickup addresses: ' . $e->getMessage(),
+                'addresses' => []
             ]);
         }
     }
