@@ -109,6 +109,9 @@ Route::middleware('auth')->group(function () {
         Route::post('shipments/{shipment}/cancel', 'App\Http\Controllers\Admin\ShipmentController@cancel')->name('shipments.cancel');
         Route::get('shipments/{shipment}/download-slip', 'App\Http\Controllers\Admin\ShipmentController@downloadSlip')->name('shipments.download-slip');
         
+        // Shipments Dashboard
+        Route::get('dashboard/shipments', 'App\Http\Controllers\Admin\ShipmentDashboardController@index')->name('dashboard.shipments');
+        
         // Order API for shipment creation
         Route::get('orders/{order}/api', 'App\Http\Controllers\Admin\OrderController@apiShow')->name('orders.api.show');
     });

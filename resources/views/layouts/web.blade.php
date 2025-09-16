@@ -88,6 +88,18 @@
                             class="fa-solid fa-truck mr-2"></i>
                         Courier Services</a>
                 </li>
+                <li
+                    class="p-2 hover:bg-gray-700  hover:animate-pulse @if (request()->routeIs('admin.shipments.*')) bg-green-500 @endif">
+                    <a href="{{ route('admin.shipments.index') }}" class="block"><i
+                            class="fa-solid fa-shipping-fast mr-2"></i>
+                        Shipments</a>
+                </li>
+                <li
+                    class="p-2 hover:bg-gray-700  hover:animate-pulse @if (request()->routeIs('admin.dashboard.shipments')) bg-green-500 @endif">
+                    <a href="{{ route('admin.dashboard.shipments') }}" class="block"><i
+                            class="fa-solid fa-chart-pie mr-2"></i>
+                        Shipment Dashboard</a>
+                </li>
                 <li class="p-2 hover:bg-gray-700  hover:animate-pulse">
                     <form action="{{ url('logout') }}" method="post">
                         @csrf
