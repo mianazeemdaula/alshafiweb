@@ -98,7 +98,6 @@ class CourierServiceController extends Controller
     public function update(Request $request, $id)
     {
         $courier = CourierServiceConfig::findOrFail($id);
-        
         $validator = Validator::make($request->all(), [
             'courier' => 'required|string|in:trax,tcs,leopards|unique:courier_service_configs,courier,' . $id,
             'api_key' => 'nullable|string',

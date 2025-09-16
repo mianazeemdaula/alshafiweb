@@ -17,7 +17,7 @@ class ProfileController extends Controller
         // Calculate user stats
         $stats = [
             'total_orders' => $user->orders()->count(),
-            'total_spent' => $user->orders()->where('status', 'completed')->sum('total') / 100, // Convert from cents
+            'total_spent' => $user->orders()->where('status', 'completed')->sum('total'), // Keep as rupees
             'total_reviews' => $user->productReviews()->count(),
             'days_member' => $user->created_at->diffInDays(now()),
         ];

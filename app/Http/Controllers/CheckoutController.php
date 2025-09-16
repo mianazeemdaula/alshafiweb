@@ -196,7 +196,7 @@ class CheckoutController extends Controller
                 'zip_code' => $request->shipping['postal_code'] ? (int)$request->shipping['postal_code'] : 0,
                 'shipping_cost' => 0, // Free shipping
                 'discount' => 0,
-                'total' => (int)(floatval(str_replace(['$', ','], '', $cartTotal)) * 100), // Convert to cents, removing any currency symbols
+                'total' => floatval(str_replace(['$', ','], '', $cartTotal)), // Keep as rupees
                 'extra_note' => $request->shipping['notes'] ?? null,
             ]);
 

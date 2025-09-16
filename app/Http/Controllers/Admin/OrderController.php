@@ -96,9 +96,9 @@ class OrderController extends Controller
                 'street_address' => $validated['street_address'],
                 'zip_code' => $validated['zip_code'],
                 'extra_note' => $validated['extra_note'],
-                'shipping_cost' => (int)($shippingCost),
-                'discount' => (int)($discount),
-                'total' => (int)($total),
+                'shipping_cost' => $shippingCost,
+                'discount' => $discount,
+                'total' => $total,
                 'status' => 'pending',
                 'payment_status' => 'pending',
             ];

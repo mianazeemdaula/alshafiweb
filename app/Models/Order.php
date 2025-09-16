@@ -81,6 +81,6 @@ class Order extends Model
      */
     public function getTotalAmountAttribute()
     {
-        return $this->total / 100;
+        return $this->total; // Return as rupees without conversion
     }
 }

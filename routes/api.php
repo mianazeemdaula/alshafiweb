@@ -26,3 +26,11 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/suggestions', 'App\Http\Controllers\Api\SuggestionController@store');
 });
+
+// Courier Webhook Routes (no authentication required)
+Route::prefix('webhooks')->group(function () {
+    Route::post('/trax', 'App\Http\Controllers\Api\CourierWebhookController@traxWebhook');
+    Route::post('/tcs', 'App\Http\Controllers\Api\CourierWebhookController@tcsWebhook');
+    Route::post('/leopards', 'App\Http\Controllers\Api\CourierWebhookController@leopardsWebhook');
+    Route::post('/test', 'App\Http\Controllers\Api\CourierWebhookController@testWebhook');
+});

@@ -197,7 +197,7 @@
                                     API Password <span class="text-red-500">*</span>
                                 </label>
                                 <input type="password" name="api_password" id="api_password"
-                                    value="{{ old('api_password', $extra['api_password'] ?? '') }}"
+                                    value="{{ old('api_password', $courier->api_password) }}"
                                     class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-blue-500 focus:border-blue-500"
                                     placeholder="Enter API Password" required>
                             </div>

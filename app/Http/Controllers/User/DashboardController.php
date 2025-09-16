@@ -19,7 +19,7 @@ class DashboardController extends Controller
             'total_orders' => $user->orders()->count(),
             'pending_orders' => $user->orders()->where('status', 'open')->count(),
             'completed_orders' => $user->orders()->where('status', 'completed')->count(),
-            'total_spent' => $user->orders()->where('status', 'completed')->sum('total') / 100, // Convert from cents
+            'total_spent' => $user->orders()->where('status', 'completed')->sum('total'), // Keep as rupees
             'total_reviews' => $user->productReviews()->count(),
             'referral_products' => $user->referrProducts()->count(),
         ];

@@ -121,6 +121,24 @@ class ShipmentController extends Controller
             return redirect()->back()
                 ->with('error', 'This order already has a shipment.');
         }
+        
+        // Create shipment record
+        $shipment = Shipment::create([
+            'order_id' => $order->id,
+            'courier_service_config_id' => $courierConfig->id,
+            'status' => Shipment::STATUS_PENDING,
+            'pickup_address' => $pickupData,
+            'delivery_address' => [
+                'name' => $request->delivery_name,
+                'phone' => $request->delivery_phone,
+                'address' => $request->delivery_address,
+                'city_id' => $request->delivery_city_id
+            ],
+            'weight' => $request->weight,
+            'declared_value' => $request->declared_value,
+            'cod_amount' => $request->cod_amount ?? $order->total_amount,
+            'special_instructions' => $request->special_instructions
+        ]);
 
         try {
             // Prepare pickup address data
@@ -140,31 +158,13 @@ class ShipmentController extends Controller
                 ];
             }
 
-            // Create shipment record
-            $shipment = Shipment::create([
-                'order_id' => $order->id,
-                'courier_service_config_id' => $courierConfig->id,
-                'status' => Shipment::STATUS_PENDING,
-                'pickup_address' => $pickupData,
-                'delivery_address' => [
-                    'name' => $request->delivery_name,
-                    'phone' => $request->delivery_phone,
-                    'address' => $request->delivery_address,
-                    'city_id' => $request->delivery_city_id
-                ],
-                'weight' => $request->weight,
-                'declared_value' => $request->declared_value,
-                'cod_amount' => $request->cod_amount ?? $order->total_amount,
-                'special_instructions' => $request->special_instructions
-            ]);
-
             // Prepare shipment data for courier booking
             $shipmentData = [
                 'delivery_name' => $request->delivery_name,
                 'delivery_phone' => $request->delivery_phone,
                 'delivery_address' => $request->delivery_address,
                 'delivery_city_id' => $request->delivery_city_id,
-                'weight' => $request->weight * 1000, // Convert to grams
+                'weight' => $request->weight, // Weight in kg (will be converted by service as needed)
                 'pieces' => 1,
                 'cod_amount' => $request->cod_amount ?? $order->total_amount,
                 'declared_value' => $request->declared_value ?? $order->total_amount,
@@ -185,6 +185,9 @@ class ShipmentController extends Controller
             }
             // return $shipmentData;
             $response = $this->courierService->bookShipment($courierConfig->courier, $shipmentData);
+            
+            
+            // Handle booking response
             if ($response['success']) {
                 // Update shipment with courier response
                 $shipment->update([
@@ -197,7 +200,6 @@ class ShipmentController extends Controller
 
                 // Update order status
                 $order->update(['status' => 'shipped']);
-
                 return redirect()->route('admin.shipments.show', $shipment)
                     ->with('success', 'Shipment created and booked successfully!');
             } else {

@@ -22,6 +22,8 @@ class UnifiedCourierService
         if($courier === 'trax'){
             // remove pickup details because of Trax API requirements
             $requiredParams[] = 'pickup_address_id';
+        }else{
+            $requiredParams = ['pickup_name', 'pickup_phone', 'pickup_address', 'pickup_city_id'];
         }
 
         $requiredParams = array_merge($requiredParams, [
@@ -172,14 +174,14 @@ class UnifiedCourierService
             'item_insurance' => 0, // No insurance
             'item_price' => $params['cod_amount'],
             'pickup_date' => date('Y-m-d'),
-            'estimated_weight' => (float)$params['weight'],
+            'estimated_weight' => (float)$params['weight'], // Weight in kg
             'shipping_mode_id' => 1, // Regular shipping
             'amount' => $params['cod_amount'],
             'payment_mode_id' => 1, // COD
             'charges_mode_id' => 4, // Standard charge mode
             
             // Optional fields
-            'special_instructions' => $params['instructions'] ?? '',
+            'special_instructions' => $params['special_instructions'] ?? '',
             'open_shipment' => 0,
             'pieces_quantity' => $params['pieces']
         ];
@@ -393,8 +395,8 @@ class UnifiedCourierService
                 'contentdesc' => $params['description'],
                 'servicecode' => 'O', // Overnight service code
                 'currency' => 'PKR',
-                'codamount' => (int)$params['cod_amount'],
-                'weightinkg' => (float)$params['weight'],
+                'codamount' => (float)$params['cod_amount'], // Keep as rupees
+                'weightinkg' => (float)$params['weight'], // Weight in kg
                 'pieces' => (int)$params['pieces'],
                 'fragile' => false,
                 'remarks' => $params['instructions'] ?? '',
@@ -402,9 +404,9 @@ class UnifiedCourierService
                     [
                         'description' => $params['description'],
                         'quantity' => (int)$params['pieces'],
-                        'weight' => (float)$params['weight'],
+                        'weight' => (float)$params['weight'], // Weight in kg
                         'uom' => 'KG',
-                        'unitprice' => (int)$params['cod_amount'],
+                        'unitprice' => (float)$params['cod_amount'], // Keep as rupees
                         'declaredvalue' => null,
                         'insuredvalue' => null
                     ]
@@ -488,9 +490,9 @@ class UnifiedCourierService
         $payload = [
             'api_key' => $config->api_key,
             'api_password' => $config->api_password,
-            'booked_packet_weight' => (int)$params['weight'], // Weight in grams
+            'booked_packet_weight' => (int)($params['weight'] * 1000), // Convert kg to grams for Leopards
             'booked_packet_no_piece' => (int)$params['pieces'],
-            'booked_packet_collect_amount' => (int)$params['cod_amount'],
+            'booked_packet_collect_amount' => (float)$params['cod_amount'], // Keep as rupees
             'booked_packet_order_id' => $params['order_id'], // Optional
             'origin_city' => $params['pickup_city_id'],
             'destination_city' => $params['delivery_city_id'],
@@ -502,13 +504,14 @@ class UnifiedCourierService
             'consignment_email' => $params['delivery_email'] ?? '', // Optional
             'consignment_phone' => $params['delivery_phone'],
             'consignment_address' => $params['delivery_address'],
-            'special_instructions' => $params['instructions'] ?? '', // Optional
+            'special_instructions' => $params['special_instructions'] ?? '', // Optional
             'shipment_type' => 'overnight' // Default shipment type
         ];
 
         $response = Http::post("$baseUrl/bookPacket/format/json", $payload);
 
         $responseData = $response->json();
+        Log::info('Leopards Booking Response:', $responseData);
         
         // Normalize Leopards response format to match expected format
         if (isset($responseData['status']) && $responseData['status'] === 1) {
@@ -542,8 +545,89 @@ class UnifiedCourierService
         ];
 
         $response = Http::post("$baseUrl/trackBookedPacket/format/json", $payload);
+        $responseData = $response->json();
+        Log::info('Leopards Tracking Response:', $responseData);
+        
+        // Normalize Leopards tracking response
+        if (isset($responseData['status']) && $responseData['status'] === 1) {
+            $packetList = $responseData['packet_list'] ?? [];
+            
+            if (!empty($packetList)) {
+                $packet = $packetList[0]; // Get first packet details
+                $currentStatus = $packet['booked_packet_status'] ?? 'Unknown';
+                $trackingDetails = $packet['Tracking Detail'] ?? [];
+                
+                return [
+                    'success' => true,
+                    'status' => $this->mapLeopardsStatus($currentStatus),
+                    'tracking_number' => $packet['track_number'] ?? $trackingNumber,
+                    'current_status' => $currentStatus,
+                    'shipper' => [
+                        'name' => $packet['shipment_name_eng'] ?? null,
+                        'email' => $packet['shipment_email'] ?? null,
+                        'phone' => $packet['shipment_phone'] ?? null,
+                        'address' => $packet['shipment_address'] ?? null
+                    ],
+                    'consignee' => [
+                        'name' => $packet['consignment_name_eng'] ?? null,
+                        'email' => $packet['consignment_email'] ?? null,
+                        'phone' => $packet['consignment_phone'] ?? null,
+                        'address' => $packet['consignment_address'] ?? null
+                    ],
+                    'pickup' => [
+                        'city' => $packet['origin_city_name'] ?? null,
+                        'country' => $packet['origin_country_name'] ?? null
+                    ],
+                    'delivery' => [
+                        'city' => $packet['destination_city_name'] ?? null
+                    ],
+                    'order_info' => [
+                        'booking_date' => $packet['booking_date'] ?? null,
+                        'order_id' => $packet['booked_packet_order_id'] ?? null,
+                        'weight' => $packet['booked_packet_weight'] ?? null,
+                        'pieces' => $packet['booked_packet_no_piece'] ?? null,
+                        'cod_amount' => $packet['booked_packet_collect_amount'] ?? null,
+                        'special_instructions' => $packet['special_instructions'] ?? null
+                    ],
+                    'tracking_history' => $trackingDetails,
+                    'message' => 'Tracking information retrieved successfully',
+                    'raw_response' => $responseData
+                ];
+            } else {
+                return [
+                    'success' => false,
+                    'message' => 'No tracking information found for this tracking number',
+                    'raw_response' => $responseData
+                ];
+            }
+        } else {
+            return [
+                'success' => false,
+                'message' => $responseData['error'] ?? 'Failed to track shipment',
+                'raw_response' => $responseData
+            ];
+        }
+    }
 
-        return $response->json();
+    /**
+     * Map Leopards status to standard shipment status
+     */
+    private function mapLeopardsStatus($leopardsStatus)
+    {
+        $statusMap = [
+            'Pickup Request not Send' => 'booked',
+            'Booked' => 'booked',
+            'Picked' => 'picked_up',
+            'In Transit' => 'in_transit',
+            'Out for Delivery' => 'out_for_delivery',
+            'Delivered' => 'delivered',
+            'Returned' => 'returned',
+            'Cancelled' => 'cancelled',
+            'On Hold' => 'on_hold',
+            'RTO' => 'returned'
+        ];
+
+        return $statusMap[$leopardsStatus] ?? 'unknown';
     }
 
     protected function cancelLeopardsShipment($trackingNumber)
@@ -575,10 +659,12 @@ class UnifiedCourierService
             'api_key' => $config->api_key,
             'api_password' => $config->api_password
         ];
-
         $response = Http::post("$baseUrl/getAllCities/format/json", $payload);
-
-        return $response->json();
+        $res =  $response->json();
+        if (isset($res['status']) && $res['status'] == 1) {
+            return $res['city_list'] ?? [];
+        }
+        return ['error' => 'Failed to fetch cities', 'cities' => []];
     }
 
     // Helper Methods
@@ -624,7 +710,7 @@ class UnifiedCourierService
             'delivery_phone' => 'Consignee phone',
             'delivery_address' => 'Delivery address',
             'delivery_city_id' => 'Delivery city ID',
-            'weight' => 'Weight in grams',
+            'weight' => 'Weight in kilograms',
             'pieces' => 'Number of pieces',
             'cod_amount' => 'Cash on delivery amount',
             'order_id' => 'Your order reference',

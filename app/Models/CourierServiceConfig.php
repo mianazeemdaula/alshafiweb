@@ -14,8 +14,11 @@ class CourierServiceConfig extends Model
     protected $fillable = [
         'courier',
         'api_key',
-        'username',
-        'password',
+        'api_password',
+        'client_id',
+        'client_secret',
+        'token',
+        'token_expiry',
         'extra',
         'is_active'
     ];

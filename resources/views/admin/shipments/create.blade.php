@@ -239,10 +239,11 @@
                                 <label for="pickup_city" class="block text-sm font-medium text-gray-700 mb-1">
                                     City <span class="text-red-500">*</span>
                                 </label>
-                                <input type="text" name="pickup_city" id="pickup_city"
-                                    value="{{ old('pickup_city') }}"
+                                <select name="pickup_city" id="pickup_city"
                                     class="w-full border border-gray-300 rounded-lg px-2 py-1 focus:ring-blue-500 focus:border-blue-500"
-                                    placeholder="City name">
+                                    required disabled>
+                                    <option value="">Select courier first to load cities</option>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -476,7 +477,7 @@
                 existingSection.classList.remove('hidden');
                 manualSection.classList.add('hidden');
                 // Remove required attributes from manual fields
-                manualSection.querySelectorAll('input[required], textarea[required]').forEach(el => {
+                manualSection.querySelectorAll('input[required], textarea[required], select[required]').forEach(el => {
                     el.removeAttribute('required');
                 });
                 // Add required to pickup address selection
@@ -485,8 +486,8 @@
                 existingSection.classList.add('hidden');
                 manualSection.classList.remove('hidden');
                 // Add required attributes to manual fields
-                manualSection.querySelectorAll('input, textarea').forEach(el => {
-                    if (el.name.startsWith('pickup_')) {
+                manualSection.querySelectorAll('input, textarea, select').forEach(el => {
+                    if (el.name && el.name.startsWith('pickup_')) {
                         el.setAttribute('required', '');
                     }
                 });
@@ -505,6 +506,7 @@
 
             if (!courier) {
                 pickupSelect.innerHTML = '<option value="">Select courier first</option>';
+                // Load cities when courier is selected
                 loadCourierCities();
                 return;
             }
@@ -537,8 +539,13 @@
                             option.setAttribute('data-details', JSON.stringify(address));
                             pickupSelect.appendChild(option);
                         });
+
+                        // Keep existing address option selected
+                        document.querySelector('input[name="pickup_type"][value="existing"]').checked = true;
+                        togglePickupType();
                     } else {
                         pickupSelect.innerHTML = '<option value="">No pickup addresses available</option>';
+                        // Switch to manual mode when no pickup addresses exist
                         document.querySelector('input[name="pickup_type"][value="manual"]').checked = true;
                         togglePickupType();
                     }
@@ -550,7 +557,7 @@
                     togglePickupType();
                 });
 
-            // Also load cities
+            // Load cities only once here to avoid duplication
             loadCourierCities();
         }
 
@@ -576,20 +583,25 @@
         function loadCourierCities() {
             console.log('Loading courier cities...');
             const courierServiceId = document.getElementById('courier_service_config_id').value;
-            const citySelect = document.getElementById('delivery_city_id');
+            const deliveryCitySelect = document.getElementById('delivery_city_id');
+            const pickupCitySelect = document.getElementById('pickup_city');
             const loadingDiv = document.getElementById('delivery_city_loading');
 
             console.log('Selected courier service ID:', courierServiceId);
 
             if (!courierServiceId) {
-                citySelect.disabled = true;
-                citySelect.innerHTML = '<option value="">First select a courier service</option>';
+                deliveryCitySelect.disabled = true;
+                deliveryCitySelect.innerHTML = '<option value="">First select a courier service</option>';
+                pickupCitySelect.disabled = true;
+                pickupCitySelect.innerHTML = '<option value="">First select a courier service</option>';
                 return Promise.resolve();
             }
 
             loadingDiv.classList.remove('hidden');
-            citySelect.disabled = true;
-            citySelect.innerHTML = '<option value="">Loading cities...</option>';
+            deliveryCitySelect.disabled = true;
+            deliveryCitySelect.innerHTML = '<option value="">Loading cities...</option>';
+            pickupCitySelect.disabled = true;
+            pickupCitySelect.innerHTML = '<option value="">Loading cities...</option>';
 
             // Simple fetch for cities - return the promise
             return fetch(`{{ route('admin.shipments.courier.cities') }}?courier_service_id=${courierServiceId}`, {
@@ -609,7 +621,8 @@
                     loadingDiv.classList.add('hidden');
 
                     if (data.success) {
-                        citySelect.innerHTML = '<option value="">Select delivery city</option>';
+                        deliveryCitySelect.innerHTML = '<option value="">Select delivery city</option>';
+                        pickupCitySelect.innerHTML = '<option value="">Select pickup city</option>';
 
                         let cities = [];
                         if (data.data && Array.isArray(data.data)) {
@@ -623,27 +636,42 @@
                         console.log('Processing cities:', cities.length);
 
                         cities.forEach(city => {
-                            const option = document.createElement('option');
+                            // Create options for delivery city dropdown
+                            const deliveryOption = document.createElement('option');
+                            const pickupOption = document.createElement('option');
+
                             if (typeof city === 'object') {
-                                option.value = city.id || city.city_id || city.code || city.name;
-                                option.textContent = city.name || city.city_name || city.title || city.id;
+                                const cityId = city.id || city.city_id || city.code || city.name;
+                                const cityName = city.name || city.city_name || city.title || city.id;
+
+                                deliveryOption.value = cityId;
+                                deliveryOption.textContent = cityName;
+                                pickupOption.value = cityId;
+                                pickupOption.textContent = cityName;
                             } else {
-                                option.value = city;
-                                option.textContent = city;
+                                deliveryOption.value = city;
+                                deliveryOption.textContent = city;
+                                pickupOption.value = city;
+                                pickupOption.textContent = city;
                             }
-                            citySelect.appendChild(option);
+
+                            deliveryCitySelect.appendChild(deliveryOption);
+                            pickupCitySelect.appendChild(pickupOption);
                         });
 
-                        citySelect.disabled = false;
-                        console.log('Cities loaded successfully');
+                        deliveryCitySelect.disabled = false;
+                        pickupCitySelect.disabled = false;
+                        console.log('Cities loaded successfully for both dropdowns');
                     } else {
-                        citySelect.innerHTML = '<option value="">Failed to load cities</option>';
+                        deliveryCitySelect.innerHTML = '<option value="">Failed to load cities</option>';
+                        pickupCitySelect.innerHTML = '<option value="">Failed to load cities</option>';
                         console.error('Failed to load cities:', data.message);
                     }
                 })
                 .catch(error => {
                     loadingDiv.classList.add('hidden');
-                    citySelect.innerHTML = '<option value="">Error loading cities</option>';
+                    deliveryCitySelect.innerHTML = '<option value="">Error loading cities</option>';
+                    pickupCitySelect.innerHTML = '<option value="">Error loading cities</option>';
                     console.error('Error:', error);
                 });
         } // Event listeners
