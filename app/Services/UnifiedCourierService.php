@@ -561,7 +561,7 @@ class UnifiedCourierService
                     'success' => true,
                     'status' => $this->mapLeopardsStatus($currentStatus),
                     'tracking_number' => $packet['track_number'] ?? $trackingNumber,
-                    'current_status' => $currentStatus,
+                    'current_status' => $this->mapLeopardsStatus($currentStatus),
                     'shipper' => [
                         'name' => $packet['shipment_name_eng'] ?? null,
                         'email' => $packet['shipment_email'] ?? null,
@@ -624,7 +624,8 @@ class UnifiedCourierService
             'Returned' => 'returned',
             'Cancelled' => 'cancelled',
             'On Hold' => 'on_hold',
-            'RTO' => 'returned'
+            'RTO' => 'returned',
+            'Pickup Request not Send' => 'booked'
         ];
 
         return $statusMap[$leopardsStatus] ?? 'unknown';
