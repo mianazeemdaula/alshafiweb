@@ -19,14 +19,12 @@ class CourierWebhookController extends Controller
         try {
             Log::info('Trax Webhook Received:', $request->all());
 
-            // Validate required fields based on Trax webhook documentation
+            // Validate required fields based on Trax webhook documentation and real payloads
+            // Trax sometimes sends `date_time`, `order_id`, `courier_name`, `otp` etc. so accept those as well.
             $validator = Validator::make($request->all(), [
                 'tracking_number' => 'required|string',
                 'status' => 'required|string',
-                'status_date' => 'nullable|string',
-                'status_time' => 'nullable|string',
-                'location' => 'nullable|string',
-                'remarks' => 'nullable|string'
+                'date_time' => 'nullable|string',
             ]);
 
             if ($validator->fails()) {
@@ -56,7 +54,6 @@ class CourierWebhookController extends Controller
 
             // Map Trax status to our system status
             $mappedStatus = $this->mapTraxStatus($status);
-            
             // Update shipment status
             $updateData = [
                 'status' => $mappedStatus
@@ -278,9 +275,13 @@ class CourierWebhookController extends Controller
             'Shipment - Booked' => 'booked',
             'Shipment - Dispatched' => 'in_transit',
             'In Transit' => 'in_transit',
+            'Shipment - Out for Delivery' => 'out_for_delivery',
+            'Shipment - Arrived at Destination' => 'out_for_delivery',
             'Out for Delivery' => 'out_for_delivery',
+            'Shipment - Delivered' => 'delivered',
             'Delivered' => 'delivered',
             'Returned' => 'returned',
+            'Return - Confirm' => 'returned',
             'Cancelled' => 'cancelled',
             'On Hold' => 'on_hold',
             'Exception' => 'exception'
