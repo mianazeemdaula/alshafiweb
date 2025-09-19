@@ -134,35 +134,35 @@
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label for="username" class="block text-sm font-medium text-gray-700 mb-2">
-                                    Username <span class="text-red-500">*</span>
+                                <label for="token" class="block text-sm font-medium text-gray-700 mb-2">
+                                    Token <span class="text-red-500">*</span>
                                 </label>
-                                <input type="text" name="username" id="username"
-                                    value="{{ old('username', $courier->username) }}"
+                                <input type="text" name="token" id="token"
+                                    value="{{ old('token', $courier->token) }}"
                                     class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-blue-500 focus:border-blue-500"
-                                    placeholder="Enter TCS Username" required>
+                                    placeholder="Enter TCS Token" required>
                             </div>
 
                             <div>
-                                <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
-                                    Password <span class="text-red-500">*</span>
+                                <label for="token_expiry" class="block text-sm font-medium text-gray-700 mb-2">
+                                    Token Expiry <span class="text-red-500">*</span>
                                 </label>
-                                <input type="password" name="password" id="password"
-                                    value="{{ old('password', $courier->password) }}"
+                                <input type="date" name="token_expiry" id="token_expiry"
+                                    value="{{ old('token_expiry', $courier->token_expiry) }}"
                                     class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-blue-500 focus:border-blue-500"
-                                    placeholder="Enter TCS Password" required>
+                                    placeholder="Enter TCS Token Expiry" required>
                             </div>
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label for="cost_center" class="block text-sm font-medium text-gray-700 mb-2">
-                                    Cost Center <span class="text-red-500">*</span>
+                                <label for="costcentercode" class="block text-sm font-medium text-gray-700 mb-2">
+                                    Cost Center Code <span class="text-red-500">*</span>
                                 </label>
-                                <input type="text" name="cost_center" id="cost_center"
-                                    value="{{ old('cost_center', $extra['cost_center'] ?? '') }}"
+                                <input type="text" name="costcentercode" id="costcentercode"
+                                    value="{{ old('costcentercode', $extra['costcentercode'] ?? '') }}"
                                     class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-blue-500 focus:border-blue-500"
-                                    placeholder="Enter Cost Center" required>
+                                    placeholder="Enter Cost Center Code" required>
                             </div>
 
                             <div>
@@ -173,6 +173,24 @@
                                     value="{{ old('location_id', $extra['location_id'] ?? '') }}"
                                     class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-blue-500 focus:border-blue-500"
                                     placeholder="Enter Location ID" required>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                            <div>
+                                <label for="cost_center_endpoint" class="block text-sm font-medium text-gray-700 mb-2">
+                                    Cost Center Endpoint (optional)
+                                </label>
+                                <input type="text" name="cost_center_endpoint" id="cost_center_endpoint"
+                                    value="{{ old('cost_center_endpoint', $extra['cost_center_endpoint'] ?? '') }}"
+                                    class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-blue-500 focus:border-blue-500"
+                                    placeholder="Optional API endpoint to generate cost center code">
+                            </div>
+                            <div class="flex items-end">
+                                <button type="button" id="generate-costcenter"
+                                    class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">
+                                    Generate Cost Center
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -257,4 +275,44 @@
             </form>
         </div>
     </div>
+@endsection
+@section('js')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const btn = document.getElementById('generate-costcenter');
+            if (!btn) return;
+
+            btn.addEventListener('click', async function() {
+                btn.disabled = true;
+                btn.textContent = 'Generating...';
+                try {
+                    const courierId = {{ $courier->id }};
+                    const token = document.querySelector('meta[name="csrf-token"]').getAttribute(
+                        'content');
+                    const res = await fetch(
+                        `{{ url('admin/courier-services') }}/${courierId}/generate-costcenter`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': token,
+                                'Accept': 'application/json'
+                            },
+                            body: JSON.stringify({})
+                        });
+                    const data = await res.json();
+                    if (data.success && data.costcentercode) {
+                        document.getElementById('costcentercode').value = data.costcentercode;
+                        alert('Cost center generated: ' + data.costcentercode);
+                    } else {
+                        alert('Failed to generate cost center: ' + (data.message || 'Unknown'));
+                    }
+                } catch (err) {
+                    alert('Error generating cost center: ' + err.message);
+                } finally {
+                    btn.disabled = false;
+                    btn.textContent = 'Generate Cost Center';
+                }
+            });
+        });
+    </script>
 @endsection

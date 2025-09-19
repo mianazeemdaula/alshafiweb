@@ -121,24 +121,6 @@ class ShipmentController extends Controller
             return redirect()->back()
                 ->with('error', 'This order already has a shipment.');
         }
-        
-        // Create shipment record
-        $shipment = Shipment::create([
-            'order_id' => $order->id,
-            'courier_service_config_id' => $courierConfig->id,
-            'status' => Shipment::STATUS_PENDING,
-            'pickup_address' => $pickupData,
-            'delivery_address' => [
-                'name' => $request->delivery_name,
-                'phone' => $request->delivery_phone,
-                'address' => $request->delivery_address,
-                'city_id' => $request->delivery_city_id
-            ],
-            'weight' => $request->weight,
-            'declared_value' => $request->declared_value,
-            'cod_amount' => $request->cod_amount ?? $order->total_amount,
-            'special_instructions' => $request->special_instructions
-        ]);
 
         try {
             // Prepare pickup address data
@@ -158,6 +140,26 @@ class ShipmentController extends Controller
                 ];
             }
 
+            
+        
+            // Create shipment record
+            $shipment = Shipment::create([
+                'order_id' => $order->id,
+                'courier_service_config_id' => $courierConfig->id,
+                'status' => Shipment::STATUS_PENDING,
+                'pickup_address' => $pickupData,
+                'delivery_address' => [
+                    'name' => $request->delivery_name,
+                    'phone' => $request->delivery_phone,
+                    'address' => $request->delivery_address,
+                    'city_id' => $request->delivery_city_id
+                ],
+                'weight' => $request->weight,
+                'declared_value' => $request->declared_value,
+                'cod_amount' => $request->cod_amount ?? $order->total_amount,
+                'special_instructions' => $request->special_instructions
+            ]);
+
             // Prepare shipment data for courier booking
             $shipmentData = [
                 'delivery_name' => $request->delivery_name,
@@ -168,9 +170,9 @@ class ShipmentController extends Controller
                 'pieces' => 1,
                 'cod_amount' => $request->cod_amount ?? $order->total_amount,
                 'declared_value' => $request->declared_value ?? $order->total_amount,
-                'special_instructions' => $request->special_instructions,
+                'special_instructions' => $request->specizal_instructions,
                 'order_id' => $request->reference,
-                'description' => 'Order items from Alshaafi Store'
+                'description' => $order->orderDetails->pluck('product.sku')->unique()->implode(', ')
             ];
 
             // Add pickup data based on type

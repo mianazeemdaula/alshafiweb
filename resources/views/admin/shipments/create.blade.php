@@ -641,8 +641,10 @@
                             const pickupOption = document.createElement('option');
 
                             if (typeof city === 'object') {
-                                const cityId = city.id || city.city_id || city.code || city.name;
-                                const cityName = city.name || city.city_name || city.title || city.id;
+                                const cityId = city.id || city.city_id || city.code || city.name || city
+                                    .citycode;
+                                const cityName = city.name || city.city_name || city.title || city.id || city
+                                    .cityname;
 
                                 deliveryOption.value = cityId;
                                 deliveryOption.textContent = cityName;

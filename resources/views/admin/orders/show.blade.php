@@ -24,7 +24,7 @@
                 <div class="text-sm text-gray-700 mb-1">Payment Status: <span
                         class="font-semibold">{{ ucfirst($order->payment_status) }}</span></div>
                 <div class="text-sm text-gray-700 mb-1">Total: <span class="font-bold">RS
-                        {{ number_format($order->total / 100, 2) }}</span></div>
+                        {{ number_format($order->total, 2) }}</span></div>
             </div>
 
             <!-- Customer Info -->
@@ -58,7 +58,7 @@
                     <div class="text-sm text-gray-700 mb-1">ZIP: {{ $order->zip_code }}</div>
                 @endif
                 <div class="text-sm text-gray-700 mb-1">Shipping Cost: RS
-                    {{ number_format($order->shipping_cost / 100, 2) }}</div>
+                    {{ number_format($order->shipping_cost, 2) }}</div>
                 @if ($order->extra_note)
                     <div class="text-sm text-gray-700 mt-2">
                         <strong>Notes:</strong> {{ $order->extra_note }}
@@ -99,10 +99,10 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td class="px-2 py-2 text-right">RS {{ number_format($item->price / 100, 2) }}</td>
+                                <td class="px-2 py-2 text-right">RS {{ number_format($item->price, 2) }}</td>
                                 <td class="px-2 py-2 text-right">{{ $item->qty }}</td>
                                 <td class="px-2 py-2 text-right">RS
-                                    {{ number_format(($item->price * $item->qty) / 100, 2) }}</td>
+                                    {{ number_format($item->price * $item->qty, 2) }}</td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -121,21 +121,21 @@
                 @endphp
                 <div class="flex justify-between text-sm mb-1">
                     <span>Subtotal:</span>
-                    <span>RS {{ number_format($subtotal / 100, 2) }}</span>
+                    <span>RS {{ number_format($subtotal, 2) }}</span>
                 </div>
                 <div class="flex justify-between text-sm mb-1">
                     <span>Shipping:</span>
-                    <span>RS {{ number_format($order->shipping_cost / 100, 2) }}</span>
+                    <span>RS {{ number_format($order->shipping_cost, 2) }}</span>
                 </div>
                 @if ($order->discount > 0)
                     <div class="flex justify-between text-sm mb-1 text-green-600">
                         <span>Discount:</span>
-                        <span>-RS {{ number_format($order->discount / 100, 2) }}</span>
+                        <span>-RS {{ number_format($order->discount, 2) }}</span>
                     </div>
                 @endif
                 <div class="flex justify-between text-base font-bold border-t pt-2 mt-2">
                     <span>Total:</span>
-                    <span>RS {{ number_format($order->total / 100, 2) }}</span>
+                    <span>RS {{ number_format($order->total, 2) }}</span>
                 </div>
             </div>
 

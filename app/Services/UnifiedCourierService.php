@@ -365,13 +365,35 @@ class UnifiedCourierService
         if (!$config) return ['error' => 'TCS config not found'];
 
         $baseUrl = $this->getBaseUrl('tcs', $config);
-        
+        $res = Http::withToken($config->token)->get("$baseUrl/authentication/token", [
+            'username' => 'alshafionline',
+            'password' => 'Basit@123',
+        ]);
+        if($res->failed()){
+            return ['error' => 'Failed to authenticate with TCS'];
+        }
         // TCS requires structured payload according to their documentation
+        // Ensure cost center code is available; generate if missing
+        $costCenterCode = $config->extra['costcentercode'] ?? null;
+        if (empty($costCenterCode)) {
+            try {
+                $costCenterCode = $this->generateTcsCostCenter($config, $res['accesstoken']);
+                if ($costCenterCode) {
+                    $extra = $config->extra ?? [];
+                    $extra['costcentercode'] = $costCenterCode;
+                    $config->extra = $extra;
+                    $config->save();
+                }
+            } catch (\Exception $e) {
+                Log::warning('Failed to generate TCS cost center: '.$e->getMessage());
+            }
+        }
+
         $payload = [
-            'accesstoken' => $config->token,
+            'accesstoken' => $res['accesstoken'],
             'consignmentno' => '', // Optional
             'shipperinfo' => [
-                'tcsaccount' => $config->client_id,
+                'tcsaccount' => 'MG03794',
                 'shippername' => $params['pickup_name'],
                 'address1' => $params['pickup_address'],
                 'countrycode' => 'PK',
@@ -389,8 +411,8 @@ class UnifiedCourierService
                 'mobile' => $params['delivery_phone'],
                 'email' => $params['delivery_email'] ?? ''
             ],
-            'shipmentinfo' => [
-                'costcentercode' => 'DEFAULT', // Mandatory
+                'shipmentinfo' => [
+                'costcentercode' => $costCenterCode ?? 'MG03794', // Mandatory - try generated or fallback to default
                 'referenceno' => $params['order_id'],
                 'contentdesc' => $params['description'],
                 'servicecode' => 'O', // Overnight service code
@@ -414,11 +436,9 @@ class UnifiedCourierService
             ]
         ];
 
-        $response = Http::withHeaders([
-            'Authorization' => 'Bearer ' . $config->token,
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json'
-        ])->post("$baseUrl/booking/create", $payload);
+        Log::info('TCS Booking Payload:', $payload);
+        $response = Http::withToken($config->token)
+        ->post("$baseUrl/booking/create", $payload);
 
         $responseData = $response->json();
         Log::info('TCS Booking Response:', $responseData);
@@ -426,7 +446,7 @@ class UnifiedCourierService
         if (isset($responseData['status']) && $responseData['status'] === true) {
             return [
                 'success' => true,
-                'tracking_number' => $responseData['result']['trackingno'] ?? null,
+                'tracking_number' => $responseData['consignmentNo'] ?? null,
                 'message' => $responseData['message'] ?? 'Shipment booked successfully',
                 'raw_response' => $responseData
             ];
@@ -471,11 +491,48 @@ class UnifiedCourierService
         if (!$config) return ['error' => 'TCS config not found'];
 
         $baseUrl = $this->getBaseUrl('tcs', $config);
-        
         $response = Http::withToken($config->token)
-            ->get("$baseUrl/setup/citylist");
+        ->get("$baseUrl/setup/citylistbycountry", ['countrycode' => "PK"]);
+        
+        return $response->json()['data'] ?? [];
+    }
 
-        return $response->json();
+    /**
+     * Attempt to generate a TCS cost center code using configured endpoint or default endpoint
+     * Returns cost center code string on success or null on failure
+     */
+    public function generateTcsCostCenter(CourierServiceConfig $config, $token = null)
+    {
+        try {
+            $token = $config->token;
+            $baseUrl = $this->getBaseUrl('tcs', $config);
+            $url = "$baseUrl/booking/createcostcentercode";
+            $response = Http::withToken($token)->timeout(20)->post($url, [
+                'costcentercitname' => 'alshafionline',
+                'costcentercode' => 'ALSHAFI123',
+                'costcentername' => 'Alshafi Online',
+                'pickupaddress' => 'Al-Shaafi Dawakhana DPA',
+                'returnaddress' => 'Al-Shaafi Dawakhana DPA',
+                'islabelprint' => true,
+                'costcentercityname' => 'DEPAL PUR',
+                'accountNumber' => 'MG03794',
+                'accesstoken' => $token
+            ]);
+            Log::info('TCS Cost Center Generation Response:', $response->json());
+            if ($response->successful()) {
+                $data = $response->json();
+                // Try common keys
+                $code = $data['data']['costcentercode'] ?? $data['costcentercode'] ?? $data['costCenterCode'] ?? null;
+                if ($code) {
+                    Log::info('Generated TCS cost center code: '.$code);
+                    return $code;
+                }
+            }
+        } catch (\Exception $e) {
+            Log::warning('TCS cost center generation failed: '.$e->getMessage());
+        }
+
+        return null;
     }
 
     // Leopards Implementation

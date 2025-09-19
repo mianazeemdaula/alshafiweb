@@ -100,6 +100,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('courier-services', 'App\Http\Controllers\Admin\CourierServiceController');
         Route::patch('courier-services/{courier}/toggle-status', 'App\Http\Controllers\Admin\CourierServiceController@toggleStatus')->name('courier-services.toggle-status');
         Route::post('courier-services/{courier}/test-connection', 'App\Http\Controllers\Admin\CourierServiceController@testConnection')->name('courier-services.test-connection');
+    Route::post('courier-services/{courier}/generate-costcenter', 'App\Http\Controllers\Admin\CourierServiceController@generateCostCenter')->name('courier-services.generate-costcenter');
         
         // Shipments Management
         Route::get('shipments/courier-cities', 'App\Http\Controllers\Admin\ShipmentController@getCities')->name('shipments.courier.cities');
