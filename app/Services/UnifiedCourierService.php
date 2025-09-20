@@ -126,11 +126,37 @@ class UnifiedCourierService
             case 'trax':
                 return $this->getTraxPickupAddresses();
             case 'tcs':
+                return $this->getTcsPickupAddresses();
             case 'leopards':
                 return ['error' => 'Pickup addresses not supported by this courier', 'addresses' => []];
             default:
                 return ['error' => 'Unsupported courier'];
         }
+    }
+
+    public function getTcsPickupAddresses()
+    {
+        $config = $this->getConfig('tcs');
+        if (!$config) return ['error' => 'TCS config not found', 'addresses' => []];
+
+        $baseUrl = $this->getBaseUrl('tcs', $config);
+        
+        $response = Http::withToken($config->token)
+        ->get("$baseUrl/inquiry/costcenterinquiry",[
+            'tcsaccount' => 'MG03794',
+            'accesstoken' => $config->token,
+        ]);
+        
+        $result = $response->json();
+        
+        if ($response->successful() && isset($result['message']) && $result['message'] === 'success') {
+            return [
+                'success' => true,
+                'addresses' => $result['detail'] ?? []
+            ];
+        }
+        
+        return ['error' => 'Failed to fetch pickup addresses', 'addresses' => []];
     }
 
     /**

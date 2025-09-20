@@ -17,6 +17,7 @@ class Order extends Model
         'customer_phone',
         'payment_method_id',
         'extra_note',
+        'type',
         'status',
         'delivery_date',
         'payment_date',
@@ -82,5 +83,31 @@ class Order extends Model
     public function getTotalAmountAttribute()
     {
         return $this->total; // Return as rupees without conversion
+    }
+
+    // Order type constants
+    const TYPE_CALL = 'call';
+    const TYPE_CLINIC = 'clinic';
+    const TYPE_WEBSITE = 'website';
+    const TYPE_REPEAT = 'repeat';
+    const TYPE_COMPLAIN = 'complain';
+    const TYPE_GIFT = 'gift';
+
+    public static function getTypes()
+    {
+        return [
+            self::TYPE_CALL => 'Call',
+            self::TYPE_CLINIC => 'Clinic',
+            self::TYPE_WEBSITE => 'Website',
+            self::TYPE_REPEAT => 'Repeat',
+            self::TYPE_COMPLAIN => 'Complain',
+            self::TYPE_GIFT => 'Gift'
+        ];
+    }
+
+    public function getTypeLabelAttribute()
+    {
+        $types = self::getTypes();
+        return $types[$this->type] ?? ucfirst($this->type ?? '');
     }
 }

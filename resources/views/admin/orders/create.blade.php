@@ -232,6 +232,18 @@
                     </div>
                 </div>
 
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Order Type</label>
+                    <select name="type"
+                        class="compact-input w-48 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                        <option value="">Select Type</option>
+                        @foreach ($types as $k => $v)
+                            <option value="{{ $k }}" {{ old('type') == $k ? 'selected' : '' }}>
+                                {{ $v }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
                 <!-- Submit Button -->
                 <div class="flex justify-center">
                     <button type="submit"

@@ -16,8 +16,35 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $orders = Order::orderBy('id','desc')->paginate(10);
-        return view('admin.orders.index', compact('orders'));
+        $query = Order::query();
+
+        if ($search = request('search')) {
+            $query->where(function ($q) use ($search) {
+                $q->where('id', $search)
+                    ->orWhere('number', 'like', "%{$search}%")
+                    ->orWhere('customer_name', 'like', "%{$search}%")
+                    ->orWhereHas('user', function ($qu) use ($search) {
+                        $qu->where('name', 'like', "%{$search}%")->orWhere('email', 'like', "%{$search}%");
+                    });
+            });
+        }
+
+        if ($status = request('status')) {
+            $query->where('status', $status);
+        }
+
+        if ($payment = request('payment_status')) {
+            $query->where('payment_status', $payment);
+        }
+
+        if ($type = request('type')) {
+            $query->where('type', $type);
+        }
+
+        $orders = $query->orderBy('id', 'desc')->paginate(10)->withQueryString();
+        $types = Order::getTypes();
+
+        return view('admin.orders.index', compact('orders', 'types'));
     }
 
     /**
@@ -30,8 +57,9 @@ class OrderController extends Controller
         $cities = \App\Models\City::with('state')->get();
         $countries = \App\Models\Country::all();
         $paymentMethods = \App\Models\PaymentMethod::where('status', true)->get();
-        
-        return view('admin.orders.create', compact('users', 'products', 'cities', 'countries', 'paymentMethods'));
+        $types = Order::getTypes();
+
+        return view('admin.orders.create', compact('users', 'products', 'cities', 'countries', 'paymentMethods', 'types'));
     }
 
     /**
@@ -66,7 +94,10 @@ class OrderController extends Controller
             $rules['customer_phone'] = 'nullable|string|max:20';
         }
 
-        $validated = $request->validate($rules);
+    $allowedTypes = implode(',', array_keys(Order::getTypes()));
+    $rules['type'] = 'nullable|in:' . $allowedTypes;
+
+    $validated = $request->validate($rules);
 
         try {
             // Generate order number
@@ -98,6 +129,7 @@ class OrderController extends Controller
                 'extra_note' => $validated['extra_note'],
                 'shipping_cost' => $shippingCost,
                 'discount' => $discount,
+                'type' => $validated['type'] ?? null,
                 'total' => $total,
                 'status' => 'pending',
                 'payment_status' => 'pending',
@@ -154,7 +186,8 @@ class OrderController extends Controller
     {
         $order = Order::find($id);
         $cities = City::all();
-        return view('admin.orders.edit', compact('order', 'cities'));
+        $types = Order::getTypes();
+        return view('admin.orders.edit', compact('order', 'cities', 'types'));
     }
 
     /**
@@ -162,12 +195,14 @@ class OrderController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $allowedTypes = implode(',', array_keys(Order::getTypes()));
         $request->validate([
             'status' => 'required',
             'payment_status' => 'required',
             'city_id' => 'required',
             'street_address' => 'required',
             'zip_code' => 'required',
+            'type' => 'nullable|in:' . $allowedTypes,
         ]);
         $order = Order::find($id);
         $order->status = $request->status;
@@ -175,6 +210,7 @@ class OrderController extends Controller
         $order->city_id = $request->city_id;
         $order->street_address = $request->street_address;
         $order->zip_code = $request->zip_code;
+        $order->type = $request->type;
         if($order->status !== $request->status) {
             // \Mail::to($order->user->email, $order->user->name)->send(new OrderStatus($order));
         }

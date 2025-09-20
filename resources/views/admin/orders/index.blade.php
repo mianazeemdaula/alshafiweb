@@ -53,6 +53,18 @@
                         </select>
                     </div>
 
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Type</label>
+                        <select name="type"
+                            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+                            <option value="">All Types</option>
+                            @foreach ($types as $k => $v)
+                                <option value="{{ $k }}" {{ request('type') == $k ? 'selected' : '' }}>
+                                    {{ $v }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
                     <div class="flex items-end space-x-2">
                         <button type="submit"
                             class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition duration-200">
