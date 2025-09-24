@@ -31,25 +31,32 @@
 
                     @if ($order)
                         <!-- Pre-selected order -->
+                        @php
+                            $data = null;
+                            if (!$order->customer_name) {
+                                $data = $order->shipping_address;
+                            }
+                        @endphp
                         <input type="hidden" name="order_id" value="{{ $order->id }}">
                         <div class="bg-white rounded-lg p-2 border">
                             <div class="flex justify-between items-start">
                                 <div>
                                     <h4 class="font-medium text-gray-900">Order #{{ $order->id }}</h4>
                                     <p class="text-sm text-gray-600">
-                                        Customer: {{ $order->user ? $order->user->name : $order->customer_name ?? 'N/A' }}
+                                        Customer:
+                                        {{ $data ? $data['first_name'] . ' ' . $data['last_name'] : $order->customer_name ?? 'N/A' }}
                                     </p>
                                     <p class="text-sm text-gray-600">Total: RS {{ number_format($order->total_amount, 2) }}
                                     </p>
                                     <p class="text-sm text-gray-600">Status: {{ ucfirst($order->status) }}</p>
                                     <p class="text-sm text-gray-600">
-                                        Phone: {{ $order->user ? $order->user->phone : $order->customer_phone ?? 'N/A' }}
+                                        Phone: {{ $data ? $data['phone'] : $order->customer_phone ?? 'N/A' }}
                                     </p>
                                     <p class="text-sm text-gray-600">
                                         Email: {{ $order->user ? $order->user->email : $order->customer_email ?? 'N/A' }}
                                     </p>
                                     <p class="text-sm text-gray-600">
-                                        Address: {{ $order->delivery_address ?? 'N/A' }}
+                                        Address: {{ $data ? $data['address'] : $order->street_address }}
                                     </p>
                                 </div>
                                 <a href="{{ route('admin.orders.show', $order->id) }}"
@@ -259,7 +266,7 @@
                                 Customer Name <span class="text-red-500">*</span>
                             </label>
                             <input type="text" name="delivery_name" id="delivery_name"
-                                value="{{ old('delivery_name') ?? $order->user ? $order->user->name : $order->customer_name ?? '' }}"
+                                value="{{ old('delivery_name') ?? ($data ? $data['first_name'] . ' ' . $data['last_name'] : $order->first_name ?? '') }}"
                                 class="w-full border border-gray-300 rounded-lg px-2 py-1 focus:ring-blue-500 focus:border-blue-500"
                                 placeholder="Customer name" required>
                         </div>
@@ -269,7 +276,7 @@
                                 Phone Number <span class="text-red-500">*</span>
                             </label>
                             <input type="text" name="delivery_phone" id="delivery_phone"
-                                value="{{ old('delivery_phone') ?? $order->user ? $order->user->phone : $order->customer_phone ?? '' }}"
+                                value="{{ $data ? $data['phone'] : $order->customer_phone ?? '' }}"
                                 class="w-full border border-gray-300 rounded-lg px-2 py-1 focus:ring-blue-500 focus:border-blue-500"
                                 placeholder="Customer phone" required>
                         </div>
@@ -502,8 +509,6 @@
             const courier = courierSelect.options[courierSelect.selectedIndex]?.getAttribute('data-courier');
             const pickupSelect = document.getElementById('pickup_address_id');
 
-            console.log('Selected courier:', courier);
-
             if (!courier) {
                 pickupSelect.innerHTML = '<option value="">Select courier first</option>';
                 // Load cities when courier is selected
@@ -527,7 +532,6 @@
                     return response.json();
                 })
                 .then(data => {
-                    console.log('Pickup addresses data:', data);
                     if (data.success && data.addresses && data.addresses.length > 0) {
                         currentPickupAddresses = data.addresses;
                         pickupSelect.innerHTML = '<option value="">Select pickup address</option>';

@@ -22,7 +22,7 @@ class UnifiedCourierService
         if($courier === 'trax'){
             // remove pickup details because of Trax API requirements
             $requiredParams[] = 'pickup_address_id';
-        }else{
+        }else if($courier == 'leopards'){
             $requiredParams = ['pickup_name', 'pickup_phone', 'pickup_address', 'pickup_city_id'];
         }
 
@@ -126,7 +126,18 @@ class UnifiedCourierService
             case 'trax':
                 return $this->getTraxPickupAddresses();
             case 'tcs':
-                return $this->getTcsPickupAddresses();
+                return  [
+                'success' => true,
+                'addresses' => [
+                    [
+                        'id' => 'www.alShaafiOnline.com',
+                        'address' => 'AL-Shaafi Dawakhana DPA',
+                        'city' => [ 'name' =>'DEPAL PUR'],
+                        'person_of_contact' => '03223236262',
+                        'phone_number' => '03223236262'
+                    ]
+                ]
+            ];
             case 'leopards':
                 return ['error' => 'Pickup addresses not supported by this courier', 'addresses' => []];
             default:
@@ -140,15 +151,29 @@ class UnifiedCourierService
         if (!$config) return ['error' => 'TCS config not found', 'addresses' => []];
 
         $baseUrl = $this->getBaseUrl('tcs', $config);
+        $sessionToken = $config->api_key;
+        if(!$sessionToken){
+            $res = Http::withToken($config->token)->get("$baseUrl/authentication/token", [
+                'username' => env('TCS_API_USERNAME'),
+                'password' => env('TCS_API_PASSWORD'),
+            ]);
+            $resData = $res->json();
+            Log::info('TCS Auth Response:', $resData);
+            $sessionToken = $resData['accesstoken'] ?? null;
+            $config->api_key = $sessionToken;
+            $config->save();
+        }
         
-        $response = Http::withToken($config->token)
-        ->get("$baseUrl/inquiry/costcenterinquiry",[
+        $response = Http::withHeaders([
+            'Authorization' => "Bearer $config->token",
+            'Accept' => 'application/json',
+        ])->get("$baseUrl/inquiry/costcenterinquiry", [
             'tcsaccount' => 'MG03794',
-            'accesstoken' => $config->token,
+            'accesstoken' => $sessionToken,
         ]);
         
         $result = $response->json();
-        
+        Log::info('TCS Pickup Addresses Response:', $result);
         if ($response->successful() && isset($result['message']) && $result['message'] === 'success') {
             return [
                 'success' => true,
@@ -391,41 +416,29 @@ class UnifiedCourierService
         if (!$config) return ['error' => 'TCS config not found'];
 
         $baseUrl = $this->getBaseUrl('tcs', $config);
-        $res = Http::withToken($config->token)->get("$baseUrl/authentication/token", [
-            'username' => 'alshafionline',
-            'password' => 'Basit@123',
-        ]);
-        if($res->failed()){
-            return ['error' => 'Failed to authenticate with TCS'];
-        }
-        // TCS requires structured payload according to their documentation
-        // Ensure cost center code is available; generate if missing
-        $costCenterCode = $config->extra['costcentercode'] ?? null;
-        if (empty($costCenterCode)) {
-            try {
-                $costCenterCode = $this->generateTcsCostCenter($config, $res['accesstoken']);
-                if ($costCenterCode) {
-                    $extra = $config->extra ?? [];
-                    $extra['costcentercode'] = $costCenterCode;
-                    $config->extra = $extra;
-                    $config->save();
-                }
-            } catch (\Exception $e) {
-                Log::warning('Failed to generate TCS cost center: '.$e->getMessage());
+        if(!$config->api_key){
+            $res = Http::withToken($config->token)->get("$baseUrl/authentication/token", [
+                'username' => env('TCS_API_USERNAME'),
+                'password' => env('TCS_API_PASSWORD'),
+            ]);
+            if($res->failed()){
+                Log::error('TCS Authentication Failed:', $res->json());
             }
+            $config->api_key = $res['accesstoken']; // Clear cached token to force re-authentication
+            $config->save();
         }
-
+        
         $payload = [
-            'accesstoken' => $res['accesstoken'],
+            'accesstoken' => $config->api_key,
             'consignmentno' => '', // Optional
             'shipperinfo' => [
                 'tcsaccount' => 'MG03794',
-                'shippername' => $params['pickup_name'],
-                'address1' => $params['pickup_address'],
+                'shippername' => "AlShaafi Dawakhana",
+                'address1' => "AL-Shaafi Dawakhana DPA",
                 'countrycode' => 'PK',
                 'countryname' => 'Pakistan',
-                'cityname' => $params['pickup_city_name'] ?? 'Karachi',
-                'mobile' => $params['pickup_phone']
+                'cityname' => 'DEPAL PUR',
+                'mobile' => "03223236262",
             ],
             'consigneeinfo' => [
                 'firstname' => $params['delivery_name'],
@@ -434,11 +447,19 @@ class UnifiedCourierService
                 'countrycode' => 'PK',
                 'countryname' => 'Pakistan',
                 'cityname' => $params['delivery_city_name'] ?? 'Karachi',
-                'mobile' => $params['delivery_phone'],
+                'mobile' => (function($phone){
+                    $m = preg_replace('/\D/','', $phone ?? '');
+                    if (strlen($m) === 10) $m = '0'.$m; // allow 10-digit numbers without leading zero
+                    if (strlen($m) > 11) $m = substr($m, -11); // keep last 11 digits if extra chars
+                    // Ensure pattern like 03xxxxxxxxx
+                    if (preg_match('/^0[3]\d{9}$/', $m)) return $m;
+                    // Fallback to original input if normalization fails
+                    return $phone;
+                })($params['delivery_phone']),
                 'email' => $params['delivery_email'] ?? ''
             ],
                 'shipmentinfo' => [
-                'costcentercode' => $costCenterCode ?? 'MG03794', // Mandatory - try generated or fallback to default
+                // 'costcentercode' => "www.alShaafiOnline.com", // Mandatory - try generated or fallback to default
                 'referenceno' => $params['order_id'],
                 'contentdesc' => $params['description'],
                 'servicecode' => 'O', // Overnight service code
@@ -447,7 +468,7 @@ class UnifiedCourierService
                 'weightinkg' => (float)$params['weight'], // Weight in kg
                 'pieces' => (int)$params['pieces'],
                 'fragile' => false,
-                'remarks' => $params['instructions'] ?? '',
+                'remarks' => $params['special_instructions'] ?? '',
                 'skus' => [
                     [
                         'description' => $params['description'],
@@ -469,7 +490,7 @@ class UnifiedCourierService
         $responseData = $response->json();
         Log::info('TCS Booking Response:', $responseData);
         // Normalize TCS response format to match expected format
-        if (isset($responseData['status']) && $responseData['status'] === true) {
+        if (isset($responseData['message']) && $responseData['message'] === "SUCCESS") {
             return [
                 'success' => true,
                 'tracking_number' => $responseData['consignmentNo'] ?? null,
@@ -493,9 +514,9 @@ class UnifiedCourierService
         $baseUrl = $this->getBaseUrl('tcs', $config);
         
         $response = Http::withToken($config->token)
-            ->get("$baseUrl/tracking", ['consignmentno' => $trackingNumber]);
-
-        return $response->json();
+            ->get("https://ociconnect.tcscourier.com/tracking/api/Tracking/GetDynamicTrackDetail", ['consignee' => "$trackingNumber"]);
+        $data =  $response->json();
+        return $data;
     }
 
     protected function cancelTcsShipment($trackingNumber)
@@ -854,11 +875,11 @@ class UnifiedCourierService
             return ['error' => 'TCS configuration not found'];
         }
 
-        $baseUrl = $config->is_sandbox ? $config->sandbox_endpoint : $config->api_endpoint;
-        $url = "{$baseUrl}/ecom/api/print/label?" . http_build_query([
+        $baseUrl = $this->getBaseUrl('tcs', $config);
+        $url = "{$baseUrl}/print/label?" . http_build_query([
             'consignmentno' => $trackingNumber,
             'shipperdetail' => 'true',
-            'accesstoken' => $config->token
+            'accesstoken' => $config->api_key
         ]);
 
         return [

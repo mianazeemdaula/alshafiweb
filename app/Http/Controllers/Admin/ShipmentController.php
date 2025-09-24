@@ -78,7 +78,7 @@ class ShipmentController extends Controller
                        ->latest()
                        ->take(50)
                        ->get();
-
+            
         return view('admin.shipments.create', compact('order', 'courierServices', 'orders'));
     }
 
@@ -140,8 +140,6 @@ class ShipmentController extends Controller
                 ];
             }
 
-            
-        
             // Create shipment record
             $shipment = Shipment::create([
                 'order_id' => $order->id,
@@ -188,7 +186,7 @@ class ShipmentController extends Controller
             // return $shipmentData;
             $response = $this->courierService->bookShipment($courierConfig->courier, $shipmentData);
             
-            
+            Log::info('Shipment booking response: ' . json_encode($response));
             // Handle booking response
             if ($response['success']) {
                 // Update shipment with courier response
