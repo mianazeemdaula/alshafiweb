@@ -608,7 +608,7 @@ class UnifiedCourierService
             'consignment_email' => $params['delivery_email'] ?? '', // Optional
             'consignment_phone' => $params['delivery_phone'],
             'consignment_address' => $params['delivery_address'],
-            'special_instructions' => $params['special_instructions'] ?? '', // Optional
+            'special_instructions' => $params['special_instructions'] ?? $params['instructions'], // Optional
             'shipment_type' => 'overnight' // Default shipment type
         ];
 

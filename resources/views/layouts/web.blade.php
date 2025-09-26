@@ -31,6 +31,7 @@
                     <a href="{{ route('dashboard') }}" class="block"><i class="fa-solid fa-home mr-2"></i>
                         Dashboard</a>
                 </li>
+                @if(auth()->user()->hasRole('admin'))
                 <li
                     class="p-2 hover:bg-gray-700 hover:animate-pulse @if (request()->routeIs('admin.categories.*')) bg-green-500 @endif">
                     <a href="{{ route('admin.categories.index') }}" class="block"><i
@@ -51,11 +52,17 @@
                     <a href="{{ route('admin.levels.index') }}" class="block"><i
                             class="fa-solid fa-chart-line mr-2"></i> Levels</a>
                 </li>
+                @endif
+
+                @if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('support'))
                 <li
                     class="p-2 hover:bg-gray-700 hover:animate-pulse @if (request()->routeIs('admin.orders.*')) bg-green-500 @endif">
                     <a href="{{ route('admin.orders.index') }}" class="block"><i
                             class="fa-solid fa-cart-shopping mr-2"></i> Orders</a>
                 </li>
+                @endif
+
+                @if(auth()->user()->hasRole('admin'))
                 <li
                     class="p-2 hover:bg-gray-700 hover:animate-pulse @if (request()->routeIs('admin.news.*')) bg-green-500 @endif">
                     <a href="{{ route('admin.news.index') }}" class="block"><i class="fa-solid fa-newspaper mr-2"></i>
@@ -88,6 +95,9 @@
                             class="fa-solid fa-truck mr-2"></i>
                         Courier Services</a>
                 </li>
+                @endif
+
+                @if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('support'))
                 <li
                     class="p-2 hover:bg-gray-700  hover:animate-pulse @if (request()->routeIs('admin.shipments.*')) bg-green-500 @endif">
                     <a href="{{ route('admin.shipments.index') }}" class="block"><i
@@ -100,6 +110,7 @@
                             class="fa-solid fa-chart-pie mr-2"></i>
                         Shipment Dashboard</a>
                 </li>
+                @endif
                 <li class="p-2 hover:bg-gray-700  hover:animate-pulse">
                     <form action="{{ url('logout') }}" method="post">
                         @csrf
