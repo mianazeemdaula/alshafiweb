@@ -232,7 +232,7 @@ class UnifiedCourierService
             'charges_mode_id' => 4, // Standard charge mode
             
             // Optional fields
-            'special_instructions' => $params['special_instructions'] ?? '',
+            'special_instructions' => $params['special_instructions'] ?? $params['instructions'], // Optional
             'open_shipment' => 0,
             'pieces_quantity' => $params['pieces']
         ];
