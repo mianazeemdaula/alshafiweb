@@ -33,7 +33,7 @@ class UnifiedCourierService
         
         foreach ($requiredParams as $param) {
             if (empty($params[$param])) {
-                return ['error' => "Missing required parameter: $param"];
+                return ['status' => 'error', 'message' => "Missing required parameter: $param"];
             }
         }
 
@@ -219,7 +219,7 @@ class UnifiedCourierService
             'consignee_phone_number_1' => $params['delivery_phone'],
             'consignee_email_address' => $params['delivery_email'] ?? '',
             'order_id' => $params['order_id'], // Optional but recommended
-            'item_product_type_id' => 12, // General merchandise
+            'item_product_type_id' => 15, // General merchandise
             'item_description' => $params['description'],
             'item_quantity' => $params['pieces'],
             'item_insurance' => 0, // No insurance
@@ -446,7 +446,7 @@ class UnifiedCourierService
                 'address1' => $params['delivery_address'],
                 'countrycode' => 'PK',
                 'countryname' => 'Pakistan',
-                'cityname' => $params['delivery_city_name'] ?? 'Karachi',
+                'citycode' => $params['delivery_city_id'] ?? 'Karachi',
                 'mobile' => (function($phone){
                     $m = preg_replace('/\D/','', $phone ?? '');
                     if (strlen($m) === 10) $m = '0'.$m; // allow 10-digit numbers without leading zero
@@ -598,7 +598,7 @@ class UnifiedCourierService
             'booked_packet_no_piece' => (int)$params['pieces'],
             'booked_packet_collect_amount' => (float)$params['cod_amount'], // Keep as rupees
             'booked_packet_order_id' => $params['order_id'], // Optional
-            'origin_city' => $params['pickup_city_id'],
+            'origin_city' => "1126",
             'destination_city' => $params['delivery_city_id'],
             'shipment_name_eng' => $params['pickup_name'],
             'shipment_email' => $params['pickup_email'] ?? '',
@@ -612,6 +612,7 @@ class UnifiedCourierService
             'shipment_type' => 'overnight' // Default shipment type
         ];
 
+        Log::info('Leopards Booking payload:', $payload);
         $response = Http::post("$baseUrl/bookPacket/format/json", $payload);
 
         $responseData = $response->json();

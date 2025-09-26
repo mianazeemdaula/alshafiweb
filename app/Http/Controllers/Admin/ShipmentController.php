@@ -140,24 +140,6 @@ class ShipmentController extends Controller
                 ];
             }
 
-            // Create shipment record
-            $shipment = Shipment::create([
-                'order_id' => $order->id,
-                'courier_service_config_id' => $courierConfig->id,
-                'status' => Shipment::STATUS_PENDING,
-                'pickup_address' => $pickupData,
-                'delivery_address' => [
-                    'name' => $request->delivery_name,
-                    'phone' => $request->delivery_phone,
-                    'address' => $request->delivery_address,
-                    'city_id' => $request->delivery_city_id
-                ],
-                'weight' => $request->weight,
-                'declared_value' => $request->declared_value,
-                'cod_amount' => $request->cod_amount ?? $order->total_amount,
-                'special_instructions' => $request->special_instructions
-            ]);
-
             // Prepare shipment data for courier booking
             $shipmentData = [
                 'delivery_name' => $request->delivery_name,
@@ -168,7 +150,7 @@ class ShipmentController extends Controller
                 'pieces' => 1,
                 'cod_amount' => $request->cod_amount ?? $order->total_amount,
                 'declared_value' => $request->declared_value ?? $order->total_amount,
-                'special_instructions' => $request->specizal_instructions,
+                'special_instructions' => $request->special_instructions,
                 'order_id' => $request->reference,
                 'description' => $order->orderDetails->pluck('product.sku')->unique()->implode(', ')
             ];
@@ -177,18 +159,35 @@ class ShipmentController extends Controller
             if ($request->pickup_type === 'existing') {
                 $shipmentData['pickup_address_id'] = $request->pickup_address_id;
             } else {
-                $shipmentData['pickup_name'] = $request->delivery_name;
-                $shipmentData['pickup_phone'] = $request->delivery_phone;
+                $shipmentData['pickup_name'] = $request->pickup_name;
+                $shipmentData['pickup_phone'] = $request->pickup_phone;
                 $shipmentData['pickup_email'] = 'info@alshaafi.com'; // Default email
-                $shipmentData['pickup_address'] = $request->delivery_address;
+                $shipmentData['pickup_address'] = $request->pickup_address;
                 $shipmentData['pickup_city_id'] = $request->pickup_city; // For now use city name
             }
-            // return $shipmentData;
             $response = $this->courierService->bookShipment($courierConfig->courier, $shipmentData);
             
             Log::info('Shipment booking response: ' . json_encode($response));
             // Handle booking response
             if ($response['success']) {
+
+                // Create shipment record
+                $shipment = Shipment::create([
+                    'order_id' => $order->id,
+                    'courier_service_config_id' => $courierConfig->id,
+                    'status' => Shipment::STATUS_PENDING,
+                    'pickup_address' => $pickupData,
+                    'delivery_address' => [
+                        'name' => $request->delivery_name,
+                        'phone' => $request->delivery_phone,
+                        'address' => $request->delivery_address,
+                        'city_id' => $request->delivery_city_id
+                    ],
+                    'weight' => $request->weight,
+                    'declared_value' => $request->declared_value,
+                    'cod_amount' => $request->cod_amount ?? $order->total_amount,
+                    'special_instructions' => $request->special_instructions
+                ]);
                 // Update shipment with courier response
                 $shipment->update([
                     'status' => Shipment::STATUS_BOOKED,
@@ -203,13 +202,7 @@ class ShipmentController extends Controller
                 return redirect()->route('admin.shipments.show', $shipment)
                     ->with('success', 'Shipment created and booked successfully!');
             } else {
-                // Keep shipment as pending if booking failed
-                $shipment->update([
-                    'courier_response' => $response
-                ]);
-
-                return redirect()->route('admin.shipments.show', $shipment)
-                    ->with('warning', 'Shipment created but booking failed: ' . $response['message']);
+                return redirect()->back()->with('warning', 'Shipment created but booking failed: ' . $response['message']);
             }
 
         } catch (\Exception $e) {

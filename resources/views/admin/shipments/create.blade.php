@@ -139,7 +139,7 @@
                                 Declared Value (RS)
                             </label>
                             <input type="number" name="declared_value" id="declared_value" step="0.01" min="0"
-                                value="{{ old('declared_value') }}"
+                                value="{{ old('declared_value') ?? $order->total }}"
                                 class="w-full border border-gray-300 rounded-lg px-2 py-1 focus:ring-blue-500 focus:border-blue-500"
                                 placeholder="Auto-filled from order">
                         </div>
@@ -149,7 +149,7 @@
                                 COD Amount (RS)
                             </label>
                             <input type="number" name="cod_amount" id="cod_amount" step="0.01" min="0"
-                                value="{{ old('cod_amount') }}"
+                                value="{{ old('cod_amount') ?? $order->total }}"
                                 class="w-full border border-gray-300 rounded-lg px-2 py-1 focus:ring-blue-500 focus:border-blue-500"
                                 placeholder="Auto-filled from order">
                         </div>
@@ -246,11 +246,10 @@
                                 <label for="pickup_city" class="block text-sm font-medium text-gray-700 mb-1">
                                     City <span class="text-red-500">*</span>
                                 </label>
-                                <select name="pickup_city" id="pickup_city"
+                                <input type="text" name="pickup_city" id="pickup_city" value="Depalpur"
                                     class="w-full border border-gray-300 rounded-lg px-2 py-1 focus:ring-blue-500 focus:border-blue-500"
-                                    required disabled>
-                                    <option value="">Select courier first to load cities</option>
-                                </select>
+                                    placeholder="City">
+
                             </div>
                         </div>
                     </div>
