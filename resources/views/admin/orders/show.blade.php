@@ -34,13 +34,15 @@
                     <!-- Existing User -->
                     <div class="text-sm text-gray-700 mb-1">Name: {{ $order->user->name ?? 'N/A' }}</div>
                     <div class="text-sm text-gray-700 mb-1">Email: {{ $order->user->email ?? 'N/A' }}</div>
-                    <div class="text-sm text-gray-700 mb-1">Phone: {{ $order->user->phone ?? 'N/A' }}</div>
+                    <div class="text-sm text-gray-700 mb-1">Phone:
+                        {{ $order->customer_phone ?? ($order->shipping_address['phone'] ?? 'N/A') }}</div>
                     <div class="text-xs text-blue-600 mt-2">Registered Customer</div>
                 @else
                     <!-- Manual Customer -->
                     <div class="text-sm text-gray-700 mb-1">Name: {{ $order->customer_name ?? 'N/A' }}</div>
                     <div class="text-sm text-gray-700 mb-1">Email: {{ $order->customer_email ?? 'N/A' }}</div>
-                    <div class="text-sm text-gray-700 mb-1">Phone: {{ $order->customer_phone ?? 'N/A' }}</div>
+                    <div class="text-sm text-gray-700 mb-1">Phone:
+                        {{ $order->customer_phone ?? ($order->shipping_address['phone'] ?? 'N/A') }}</div>
                     <div class="text-xs text-green-600 mt-2">Manual Entry</div>
                 @endif
             </div>

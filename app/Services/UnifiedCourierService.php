@@ -288,7 +288,7 @@ class UnifiedCourierService
                 'success' => true,
                 'status' => $this->mapTraxStatus($latestStatus),
                 'tracking_number' => $details['tracking_number'] ?? $trackingNumber,
-                'current_status' => $latestStatus,
+                'current_status' => $this->mapTraxStatus($latestStatus),
                 'shipper' => $details['shipper'] ?? null,
                 'consignee' => $details['consignee'] ?? null,
                 'pickup' => $details['pickup'] ?? null,
