@@ -283,6 +283,7 @@ class CourierWebhookController extends Controller
             'Returned' => 'returned',
             'Return - Confirm' => 'returned',
             'Cancelled' => 'cancelled',
+            'Shipment - Cancelled' => 'cancelled',
             'On Hold' => 'on_hold',
             'Exception' => 'exception'
         ];

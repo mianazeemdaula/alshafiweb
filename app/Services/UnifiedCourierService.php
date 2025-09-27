@@ -280,6 +280,7 @@ class UnifiedCourierService
         if (isset($responseData['status']) && $responseData['status'] === 0) {
             $details = $responseData['details'] ?? [];
             $trackingHistory = $details['tracking_history'] ?? [];
+            Log::info('Trax Tracking History:', $trackingHistory);
             
             // Get the latest status
             $latestStatus = !empty($trackingHistory) ? $trackingHistory[0]['status'] : 'Unknown';
@@ -317,6 +318,7 @@ class UnifiedCourierService
             'Out for Delivery' => 'out_for_delivery',
             'Delivered' => 'delivered',
             'Returned' => 'returned',
+            'Shipment - Cancelled' => 'cancelled',
             'Cancelled' => 'cancelled',
             'On Hold' => 'on_hold'
         ];
