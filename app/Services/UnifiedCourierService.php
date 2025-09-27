@@ -318,6 +318,7 @@ class UnifiedCourierService
             'Out for Delivery' => 'out_for_delivery',
             'Delivered' => 'delivered',
             'Returned' => 'returned',
+            'Shipment - Arrived at Destination' => 'delivered',
             'Shipment - Cancelled' => 'cancelled',
             'Cancelled' => 'cancelled',
             'On Hold' => 'on_hold'
