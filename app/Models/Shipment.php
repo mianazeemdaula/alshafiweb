@@ -63,6 +63,8 @@ class Shipment extends Model
     const STATUS_DELIVERED = 'delivered';
     const STATUS_CANCELLED = 'cancelled';
     const STATUS_RETURNED = 'returned';
+    const STATUS_ON_HOLD = 'on_hold';
+    const STATUS_UNKNOWN = 'unknown';
 
     public static function getStatuses()
     {
@@ -74,7 +76,9 @@ class Shipment extends Model
             self::STATUS_OUT_FOR_DELIVERY => 'Out for Delivery',
             self::STATUS_DELIVERED => 'Delivered',
             self::STATUS_CANCELLED => 'Cancelled',
-            self::STATUS_RETURNED => 'Returned'
+            self::STATUS_RETURNED => 'Returned',
+            self::STATUS_ON_HOLD => 'On Hold',
+            self::STATUS_UNKNOWN => 'Unknown'
         ];
     }
 
@@ -88,7 +92,9 @@ class Shipment extends Model
             self::STATUS_OUT_FOR_DELIVERY => 'bg-orange-100 text-orange-800',
             self::STATUS_DELIVERED => 'bg-green-100 text-green-800',
             self::STATUS_CANCELLED => 'bg-red-100 text-red-800',
-            self::STATUS_RETURNED => 'bg-gray-100 text-gray-800'
+            self::STATUS_RETURNED => 'bg-gray-100 text-gray-800',
+            self::STATUS_ON_HOLD => 'bg-gray-100 text-gray-800',
+            self::STATUS_UNKNOWN => 'bg-gray-100 text-gray-800'
         ];
 
         return $badges[$this->status] ?? 'bg-gray-100 text-gray-800';

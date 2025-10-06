@@ -121,11 +121,7 @@
 
                         <div class="flex justify-between">
                             <span class="font-medium text-gray-600">Created:</span>
-                            @php
-                                $tz = optional(auth()->user())->timezone ?? config('app.timezone');
-                            @endphp
-                            <span
-                                class="text-gray-800">{{ $shipment->created_at->setTimezone($tz)->format('M d, Y H:i') }}</span>
+                            <span class="text-gray-800">{{ $shipment->created_at->format('M d, Y H:i') }}</span>
                         </div>
 
                         @if ($shipment->shipped_at)

@@ -314,17 +314,61 @@ class UnifiedCourierService
     {
         $statusMap = [
             'Shipment - Booked' => 'booked',
-            'In Transit' => 'in_transit',
-            'Out for Delivery' => 'out_for_delivery',
-            'Delivered' => 'delivered',
-            'Returned' => 'returned',
             'Shipment - Arrived at Destination' => 'delivered',
             'Shipment - Cancelled' => 'cancelled',
-            'Cancelled' => 'cancelled',
-            'On Hold' => 'on_hold'
+            'Shipment - Arrived at Origin' => 'in_transit',
+            'Shipment - In Transit' => 'in_transit',
+            'Shipment - Booked' => 'booked',
+            'Shipment - Arrived at Destination' => 'delivered',
+            'Shipment - Out for Delivery' => 'out_for_delivery',
+            'Shipment - Rider Exchanged' => 'out_for_delivery',
+            'Shipment - Delivery Unsuccessful' => 'out_for_delivery',
+            'Shipment - On Hold' => 'on_hold',
+            'Shipment - Non-Service Area' => 'on_hold',
+            'Shipment - Misrouted' => 'on_hold',
+            'Shipment - Delivered' => 'delivered',
+            'Shipment - Cancelled' => 'cancelled',
+            'Shipment - Lost' => 'cancelled',
+            'Return - Confirm' => 'returned',
+            'Return - Delivered to Shipper' => 'returned',
+            'Shipment - Received at Junction' => 'in_transit',
+            'Shipment - Onward Forwarded' => 'in_transit',
+            'Shipment - Arrival Service Center' => 'in_transit',
+            'Shipment - Dispatched From Warehouse' => 'in_transit'
         ];
 
         return $statusMap[$traxStatus] ?? 'unknown';
+    }
+
+    /**
+     * Map TCS status to standard shipment status
+     */
+    private function mapTcsStatus($tcsStatus)
+    {
+        $statusMap = [
+            'Shipment - Booked' => 'booked',
+            'Shipment - Arrived at Destination' => 'delivered',
+            'Shipment - Cancelled' => 'cancelled',
+            'Shipment - Arrived at Origin' => 'in_transit',
+            'Shipment - In Transit' => 'in_transit',
+            'Shipment - Booked' => 'booked',
+            'Shipment - Arrived at Destination' => 'delivered',
+            'Shipment - Out for Delivery' => 'out_for_delivery',
+            'Shipment - Rider Exchanged' => 'out_for_delivery',
+            'Shipment - Delivery Unsuccessful' => 'out_for_delivery',
+            'Shipment - On Hold' => 'on_hold',
+            'Shipment - Non-Service Area' => 'on_hold',
+            'Shipment - Misrouted' => 'on_hold',
+            'Shipment - Delivered' => 'delivered',
+            'Shipment - Cancelled' => 'cancelled',
+            'Shipment - Lost' => 'cancelled',
+            'Return - Confirm' => 'returned',
+            'Return - Delivered to Shipper' => 'returned',
+            'Shipment - Received at Junction' => 'in_transit',
+            'Shipment - Onward Forwarded' => 'in_transit'
+        ];
+
+        return $statusMap[$tcsStatus] ?? 'unknown';
     }
 
     protected function cancelTraxShipment($trackingNumber)

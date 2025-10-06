@@ -51,9 +51,9 @@ class CourierWebhookController extends Controller
                     'message' => 'Shipment not found'
                 ], 404);
             }
-
+            $unifiedCourierService = new \App\Services\UnifiedCourierService();
             // Map Trax status to our system status
-            $mappedStatus = $this->mapTraxStatus($status);
+            $mappedStatus = $unifiedCourierService->mapTraxStatus($status);
             // Update shipment status
             $updateData = [
                 'status' => $mappedStatus
@@ -138,7 +138,8 @@ class CourierWebhookController extends Controller
             }
 
             // Map TCS status to our system status
-            $mappedStatus = $this->mapTcsStatus($status);
+            $unifiedCourierService = new \App\Services\UnifiedCourierService();
+            $mappedStatus = $unifiedCourierService->mapTcsStatus($status);
             
             // Update shipment status
             $updateData = [
@@ -223,9 +224,11 @@ class CourierWebhookController extends Controller
                 ], 404);
             }
 
+            // Initialize UnifiedCourierService
+            $unifiedCourierService = new \App\Services\UnifiedCourierService();
             // Map Leopards status to our system status
-            $mappedStatus = $this->mapLeopardsStatus($status);
-            
+            $mappedStatus = $unifiedCourierService->mapLeopardsStatus($status);
+
             // Update shipment status
             $updateData = [
                 'status' => $mappedStatus
@@ -264,71 +267,6 @@ class CourierWebhookController extends Controller
                 'message' => 'Internal server error'
             ], 500);
         }
-    }
-
-    /**
-     * Map Trax status to system status
-     */
-    private function mapTraxStatus($traxStatus)
-    {
-        $statusMap = [
-            'Shipment - Booked' => 'booked',
-            'Shipment - Dispatched' => 'in_transit',
-            'In Transit' => 'in_transit',
-            'Shipment - Out for Delivery' => 'out_for_delivery',
-            'Shipment - Arrived at Destination' => 'out_for_delivery',
-            'Out for Delivery' => 'out_for_delivery',
-            'Shipment - Delivered' => 'delivered',
-            'Delivered' => 'delivered',
-            'Returned' => 'returned',
-            'Return - Confirm' => 'returned',
-            'Cancelled' => 'cancelled',
-            'Shipment - Cancelled' => 'cancelled',
-            'On Hold' => 'on_hold',
-            'Exception' => 'exception'
-        ];
-
-        return $statusMap[$traxStatus] ?? 'unknown';
-    }
-
-    /**
-     * Map TCS status to system status
-     */
-    private function mapTcsStatus($tcsStatus)
-    {
-        $statusMap = [
-            'Booked' => 'booked',
-            'Picked Up' => 'picked_up',
-            'In Transit' => 'in_transit',
-            'Out for Delivery' => 'out_for_delivery',
-            'Delivered' => 'delivered',
-            'Returned' => 'returned',
-            'Cancelled' => 'cancelled',
-            'On Hold' => 'on_hold',
-            'Exception' => 'exception'
-        ];
-
-        return $statusMap[$tcsStatus] ?? 'unknown';
-    }
-
-    /**
-     * Map Leopards status to system status
-     */
-    private function mapLeopardsStatus($leopardsStatus)
-    {
-        $statusMap = [
-            'Booked' => 'booked',
-            'Picked' => 'picked_up',
-            'In Transit' => 'in_transit',
-            'Out for Delivery' => 'out_for_delivery',
-            'Delivered' => 'delivered',
-            'Returned' => 'returned',
-            'Cancelled' => 'cancelled',
-            'On Hold' => 'on_hold',
-            'Exception' => 'exception'
-        ];
-
-        return $leopardsStatus ? $statusMap[$leopardsStatus] ?? 'unknown' : 'unknown';
     }
 
     /**
