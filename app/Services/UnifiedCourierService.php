@@ -346,26 +346,14 @@ class UnifiedCourierService
     private function mapTcsStatus($tcsStatus)
     {
         $statusMap = [
-            'Shipment - Booked' => 'booked',
-            'Shipment - Arrived at Destination' => 'delivered',
-            'Shipment - Cancelled' => 'cancelled',
-            'Shipment - Arrived at Origin' => 'in_transit',
-            'Shipment - In Transit' => 'in_transit',
-            'Shipment - Booked' => 'booked',
-            'Shipment - Arrived at Destination' => 'delivered',
-            'Shipment - Out for Delivery' => 'out_for_delivery',
-            'Shipment - Rider Exchanged' => 'out_for_delivery',
-            'Shipment - Delivery Unsuccessful' => 'out_for_delivery',
-            'Shipment - On Hold' => 'on_hold',
-            'Shipment - Non-Service Area' => 'on_hold',
-            'Shipment - Misrouted' => 'on_hold',
-            'Shipment - Delivered' => 'delivered',
-            'Shipment - Cancelled' => 'cancelled',
-            'Shipment - Lost' => 'cancelled',
-            'Return - Confirm' => 'returned',
-            'Return - Delivered to Shipper' => 'returned',
-            'Shipment - Received at Junction' => 'in_transit',
-            'Shipment - Onward Forwarded' => 'in_transit'
+            'Delivered' => 'delivered',
+            'In-Process' => 'in_transit',
+            'Returned' => 'returned',
+            'Undelivered' => 'out_for_delivery',
+            'On Hold' => 'on_hold',
+            'Cancelled' => 'cancelled',
+            'Pickup' => 'booked',
+            'In Transit' => 'in_transit',
         ];
 
         return $statusMap[$tcsStatus] ?? 'unknown';

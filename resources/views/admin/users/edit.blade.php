@@ -31,8 +31,23 @@
 
                     <div class="flex flex-col gap-2 ">
                         <x-label>Extra Discount</x-label>
-                        <x-input name="extra_discount" value="{{ $user->extra_discount }}" />
+                        <x-input name="extra_discount" value="{{ $user->extra_discount }}" type="number" step="0.1" />
+                    </div>
 
+                    <div class="flex flex-col gap-2">
+                        <x-label>Role <span class="text-red-500">*</span></x-label>
+                        <select name="role"
+                            class="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500">
+                            <option value="">Select Role</option>
+                            @foreach ($roles as $role)
+                                <option value="{{ $role->name }}" {{ $user->hasRole($role->name) ? 'selected' : '' }}>
+                                    {{ ucfirst($role->name) }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('role')
+                            <span class="text-red-500 text-xs">{{ $message }}</span>
+                        @enderror
                     </div>
                 </div>
                 <div class="flex py-6 space-x-4">
