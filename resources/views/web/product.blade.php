@@ -4,7 +4,7 @@
     <div class="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 py-4">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <nav class="flex items-center text-white text-sm">
-                <a href="{{ route('/') }}" class="hover:text-gray-200 transition-colors">
+                <a href="{{ url('/') }}" class="hover:text-gray-200 transition-colors">
                     <i class="fa-solid fa-home mr-2"></i>Home
                 </a>
                 <span class="mx-2">/</span>
