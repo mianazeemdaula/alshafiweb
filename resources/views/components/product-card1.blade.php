@@ -155,7 +155,6 @@
                     <span class="text-xs font-bold hidden sm:inline">Unavailable</span>
                 @else
                     <i class="fa-solid fa-cart-plus text-sm"></i>
-                    <span class="text-xs font-bold hidden sm:inline">Add to Cart</span>
                 @endif
             </button>
         </div>
