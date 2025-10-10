@@ -285,6 +285,15 @@
         .dark .scrollbar-thin::-webkit-scrollbar-thumb {
             background: #4b5563;
         }
+
+        /* Quantity input scale animation */
+        .quantity-input {
+            transition: transform 0.2s ease;
+        }
+
+        .quantity-input.scale-110 {
+            transform: scale(1.1);
+        }
     </style>
 
     <script>
@@ -307,6 +316,147 @@
                     this.classList.add('border-blue-500', 'dark:border-blue-400');
                 });
             });
+
+            // Quantity button functionality
+            document.querySelectorAll('.quantity-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const action = this.dataset.action;
+                    const productCard = this.dataset.productCard;
+                    const input = document.querySelector(
+                        `.quantity-input[data-product-card="${productCard}"]`);
+
+                    if (!input) return;
+
+                    let currentValue = parseInt(input.value) || 1;
+                    const min = parseInt(input.min) || 1;
+                    const max = parseInt(input.max) || 10;
+
+                    if (action === 'plus' && currentValue < max) {
+                        input.value = currentValue + 1;
+                    } else if (action === 'minus' && currentValue > min) {
+                        input.value = currentValue - 1;
+                    }
+
+                    // Add visual feedback
+                    input.classList.add('scale-110');
+                    setTimeout(() => input.classList.remove('scale-110'), 200);
+                });
+            });
+
+            // Add to cart functionality
+            document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    if (this.disabled) return;
+
+                    const productId = this.dataset.productId;
+                    const productName = this.dataset.productName;
+                    const productPrice = this.dataset.productPrice;
+                    const quantityInput = document.querySelector(
+                        `.quantity-input[data-product-card="${productId}"]`);
+                    const quantity = quantityInput ? parseInt(quantityInput.value) || 1 : 1;
+
+                    // Save original button content
+                    const originalContent = this.innerHTML;
+                    this.disabled = true;
+                    this.innerHTML =
+                        '<i class="fa-solid fa-spinner fa-spin text-xl"></i><span>Adding...</span>';
+
+                    // Add to cart via fetch API
+                    fetch('/cart/add', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': document.querySelector(
+                                        'meta[name="csrf-token"]')
+                                    .content,
+                                'Accept': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                product_id: productId,
+                                quantity: quantity,
+                                name: productName,
+                                price: productPrice
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                showNotification(
+                                    `${productName} has been added to your cart! (Qty: ${quantity})`,
+                                    'success');
+                                updateCartCount(data.cartCount || quantity);
+
+                                // Reset quantity to 1 after successful add
+                                if (quantityInput) {
+                                    quantityInput.value = 1;
+                                }
+                            } else {
+                                showNotification(data.message ||
+                                    'Failed to add product to cart',
+                                    'error');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            showNotification('Error adding product to cart', 'error');
+                        })
+                        .finally(() => {
+                            button.disabled = false;
+                            button.innerHTML = originalContent;
+                        });
+                });
+            });
+
+            // Enhanced notification function
+            function showNotification(message, type = 'info') {
+                const existingNotifications = document.querySelectorAll('.cart-notification');
+                existingNotifications.forEach(n => n.remove());
+
+                const notification = document.createElement('div');
+                let bgClass = '';
+                let iconClass = '';
+
+                if (type === 'success') {
+                    bgClass = 'bg-gradient-to-r from-green-500 to-emerald-500';
+                    iconClass = 'fa-check-circle';
+                } else if (type === 'error') {
+                    bgClass = 'bg-gradient-to-r from-red-500 to-pink-500';
+                    iconClass = 'fa-exclamation-circle';
+                } else {
+                    bgClass = 'bg-gradient-to-r from-blue-500 to-purple-500';
+                    iconClass = 'fa-info-circle';
+                }
+
+                notification.className =
+                    `cart-notification fixed top-4 right-4 z-50 px-6 py-4 rounded-xl shadow-2xl text-white font-medium transition-all duration-300 transform ${bgClass}`;
+                notification.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <i class="fa ${iconClass} text-2xl"></i>
+                        <span>${message}</span>
+                    </div>
+                `;
+
+                document.body.appendChild(notification);
+
+                setTimeout(() => {
+                    notification.style.transform = 'translateX(0)';
+                }, 10);
+
+                setTimeout(() => {
+                    notification.style.opacity = '0';
+                    notification.style.transform = 'translateX(100%)';
+                    setTimeout(() => notification.remove(), 300);
+                }, 3000);
+            }
+
+            // Update cart count in header
+            function updateCartCount(count) {
+                const cartCountElements = document.querySelectorAll('.cart-count');
+                cartCountElements.forEach(element => {
+                    element.textContent = count;
+                    element.style.display = count > 0 ? 'flex' : 'none';
+                });
+            }
         });
     </script>
 @endsection
