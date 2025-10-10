@@ -48,9 +48,26 @@ class AuthController extends Controller
             return redirect('/login');
         }
         $user = auth()->user();
+        
+        // Redirect regular users to user dashboard
         if($user->hasRole('user')) {
             return redirect('/user/dashboard');
         }
+        
+        // Order Taker Dashboard - Only Order Statistics (No Financial Data)
+        if($user->hasRole('order_taker')) {
+            $stats = [
+                'total_orders' => \App\Models\Order::count(),
+                'pending_orders' => \App\Models\Order::where('status', 'pending')->count(),
+                'processing_orders' => \App\Models\Order::where('status', 'processing')->count(),
+                'shipped_orders' => \App\Models\Order::where('status', 'shipped')->count(),
+                'delivered_orders' => \App\Models\Order::where('status', 'delivered')->count(),
+                'cancelled_orders' => \App\Models\Order::where('status', 'cancelled')->count(),
+            ];
+            return view('admin.order-taker-dashboard', compact('stats'));
+        }
+        
+        // Admin Dashboard - Full Statistics Including Financial Data
         $stats = [
             'users' => \App\Models\User::count(),
             'products' => \App\Models\Product::count(),
