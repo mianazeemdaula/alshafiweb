@@ -70,13 +70,13 @@
 
         <!-- Sidebar Filters with Modern Card Design -->
         <div id="filter-sidebar"
-            class="w-full lg:w-80 bg-white dark:bg-gray-800 lg:border-r border-gray-200 dark:border-gray-700 hidden lg:block lg:sticky lg:top-0 lg:h-screen lg:overflow-y-auto">
-            <div class="p-6 space-y-6">
+            class="w-full lg:w-64 bg-white dark:bg-gray-800 lg:border-r border-gray-200 dark:border-gray-700 hidden lg:block lg:sticky lg:top-0 lg:h-screen lg:overflow-y-auto">
+            <div class="p-3 space-y-4">
 
                 <!-- Filter Header -->
-                <div class="flex items-center justify-between pb-4 border-b border-gray-200 dark:border-gray-700">
+                <div class="flex items-center justify-between pb-3 border-b border-gray-200 dark:border-gray-700">
                     <h2
-                        class="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
+                        class="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
                         <i class="fa fa-filter text-blue-600"></i> {{ __('Filters') }}
                     </h2>
                     @if (request('min') || request('max') || request('rating') || request('category'))
@@ -89,11 +89,11 @@
 
                 {{-- Price Range Filter --}}
                 <div
-                    class="bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-700 dark:to-gray-800 rounded-xl p-4 shadow-sm">
-                    <h3 class="font-bold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
+                    class="bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-700 dark:to-gray-800 rounded-xl p-3 shadow-sm">
+                    <h3 class="font-semibold text-sm text-gray-900 dark:text-white mb-2 flex items-center gap-2">
                         <div
-                            class="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-                            <i class="fa fa-dollar-sign text-white text-sm"></i>
+                            class="w-7 h-7 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+                            <i class="fa fa-dollar-sign text-white text-xs"></i>
                         </div>
                         {{ __('Price Range') }}
                     </h3>
@@ -130,11 +130,11 @@
 
                 {{-- Rating Filter --}}
                 <div
-                    class="bg-gradient-to-br from-yellow-50 to-orange-50 dark:from-gray-700 dark:to-gray-800 rounded-xl p-4 shadow-sm">
-                    <h3 class="font-bold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
+                    class="bg-gradient-to-br from-yellow-50 to-orange-50 dark:from-gray-700 dark:to-gray-800 rounded-xl p-3 shadow-sm">
+                    <h3 class="font-semibold text-sm text-gray-900 dark:text-white mb-2 flex items-center gap-2">
                         <div
-                            class="w-8 h-8 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-lg flex items-center justify-center">
-                            <i class="fa fa-star text-white text-sm"></i>
+                            class="w-7 h-7 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-lg flex items-center justify-center">
+                            <i class="fa fa-star text-white text-xs"></i>
                         </div>
                         {{ __('Customer Rating') }}
                     </h3>
@@ -166,11 +166,11 @@
 
                 {{-- Categories Filter --}}
                 <div
-                    class="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-gray-700 dark:to-gray-800 rounded-xl p-4 shadow-sm">
-                    <h3 class="font-bold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
+                    class="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-gray-700 dark:to-gray-800 rounded-xl p-3 shadow-sm">
+                    <h3 class="font-semibold text-sm text-gray-900 dark:text-white mb-2 flex items-center gap-2">
                         <div
-                            class="w-8 h-8 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg flex items-center justify-center">
-                            <i class="fa fa-th-large text-white text-sm"></i>
+                            class="w-7 h-7 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg flex items-center justify-center">
+                            <i class="fa fa-th-large text-white text-xs"></i>
                         </div>
                         {{ __('Categories') }}
                     </h3>
@@ -288,202 +288,203 @@
                 @endif
             </div>
         </div>
-    @endsection
+    </div>
+@endsection
 
-    @section('jsscript')
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                // Setup CSRF token for AJAX requests
-                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+@section('jsscript')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Setup CSRF token for AJAX requests
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-                // Restrict negative price input for min/max fields
-                document.querySelectorAll('input[type="number"]').forEach(function(input) {
-                    input.addEventListener('input', function() {
-                        if (parseInt(this.value) < 0) this.value = 0;
-                    });
+            // Restrict negative price input for min/max fields
+            document.querySelectorAll('input[type="number"]').forEach(function(input) {
+                input.addEventListener('input', function() {
+                    if (parseInt(this.value) < 0) this.value = 0;
                 });
+            });
 
-                // Handle quantity buttons
-                document.addEventListener('click', function(e) {
-                    // Check if clicked element is the button or a child of the button
-                    let button = null;
-                    if (e.target.classList.contains('quantity-btn')) {
-                        button = e.target;
-                    } else if (e.target.closest('.quantity-btn')) {
-                        button = e.target.closest('.quantity-btn');
+            // Handle quantity buttons
+            document.addEventListener('click', function(e) {
+                // Check if clicked element is the button or a child of the button
+                let button = null;
+                if (e.target.classList.contains('quantity-btn')) {
+                    button = e.target;
+                } else if (e.target.closest('.quantity-btn')) {
+                    button = e.target.closest('.quantity-btn');
+                }
+
+                if (button) {
+                    const action = button.getAttribute('data-action');
+                    const productCard = button.getAttribute('data-product-card');
+                    const quantityInput = document.querySelector(
+                        `input.quantity-input[data-product-card="${productCard}"]`);
+                    let currentValue = parseInt(quantityInput.value);
+
+                    if (action === 'plus' && currentValue < 10) {
+                        quantityInput.value = currentValue + 1;
+                    } else if (action === 'minus' && currentValue > 1) {
+                        quantityInput.value = currentValue - 1;
                     }
+                }
+            });
 
-                    if (button) {
-                        const action = button.getAttribute('data-action');
-                        const productCard = button.getAttribute('data-product-card');
-                        const quantityInput = document.querySelector(
-                            `input.quantity-input[data-product-card="${productCard}"]`);
-                        let currentValue = parseInt(quantityInput.value);
+            // Handle add to cart buttons
+            document.addEventListener('click', function(e) {
+                // Check if clicked element is the button or a child of the button
+                let button = null;
+                if (e.target.classList.contains('add-to-cart-btn')) {
+                    button = e.target;
+                } else if (e.target.closest('.add-to-cart-btn')) {
+                    button = e.target.closest('.add-to-cart-btn');
+                }
 
-                        if (action === 'plus' && currentValue < 10) {
-                            quantityInput.value = currentValue + 1;
-                        } else if (action === 'minus' && currentValue > 1) {
-                            quantityInput.value = currentValue - 1;
-                        }
-                    }
-                });
+                if (button && !button.disabled) {
+                    const productId = button.getAttribute('data-product-id');
+                    const productName = button.getAttribute('data-product-name');
+                    const productCard = button.getAttribute('data-product-id');
+                    const quantityInput = document.querySelector(
+                        `input.quantity-input[data-product-card="${productCard}"]`);
+                    const quantity = parseInt(quantityInput.value);
 
-                // Handle add to cart buttons
-                document.addEventListener('click', function(e) {
-                    // Check if clicked element is the button or a child of the button
-                    let button = null;
-                    if (e.target.classList.contains('add-to-cart-btn')) {
-                        button = e.target;
-                    } else if (e.target.closest('.add-to-cart-btn')) {
-                        button = e.target.closest('.add-to-cart-btn');
-                    }
+                    // Disable button during request and show loading state
+                    button.disabled = true;
+                    button.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-sm"></i>';
 
-                    if (button && !button.disabled) {
-                        const productId = button.getAttribute('data-product-id');
-                        const productName = button.getAttribute('data-product-name');
-                        const productCard = button.getAttribute('data-product-id');
-                        const quantityInput = document.querySelector(
-                            `input.quantity-input[data-product-card="${productCard}"]`);
-                        const quantity = parseInt(quantityInput.value);
-
-                        // Disable button during request and show loading state
-                        button.disabled = true;
-                        button.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-sm"></i>';
-
-                        // Make AJAX request to add to cart
-                        fetch('/cart/add', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                    'X-CSRF-TOKEN': csrfToken,
-                                    'Accept': 'application/json'
-                                },
-                                body: JSON.stringify({
-                                    product_id: productId,
-                                    quantity: quantity
-                                })
+                    // Make AJAX request to add to cart
+                    fetch('/cart/add', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': csrfToken,
+                                'Accept': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                product_id: productId,
+                                quantity: quantity
                             })
-                            .then(response => response.json())
-                            .then(data => {
-                                if (data.success) {
-                                    // Show success message with gradient
-                                    showNotification('✓ ' + productName + ' added to cart!', 'success');
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                // Show success message with gradient
+                                showNotification('✓ ' + productName + ' added to cart!', 'success');
 
-                                    // Update cart count in header if exists
-                                    updateCartCount(data.cart_count);
+                                // Update cart count in header if exists
+                                updateCartCount(data.cart_count);
 
-                                    // Reset quantity to 1
-                                    quantityInput.value = 1;
-                                } else {
-                                    showNotification('Error: ' + data.message, 'error');
-                                }
-                            })
-                            .catch(error => {
-                                console.error('Error:', error);
-                                showNotification('Error adding product to cart', 'error');
-                            })
-                            .finally(() => {
-                                // Re-enable button and restore icon
-                                button.disabled = false;
-                                button.innerHTML = '<i class="fa-solid fa-cart-plus text-sm"></i>';
-                            });
-                    }
-                });
+                                // Reset quantity to 1
+                                quantityInput.value = 1;
+                            } else {
+                                showNotification('Error: ' + data.message, 'error');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            showNotification('Error adding product to cart', 'error');
+                        })
+                        .finally(() => {
+                            // Re-enable button and restore icon
+                            button.disabled = false;
+                            button.innerHTML = '<i class="fa-solid fa-cart-plus text-sm"></i>';
+                        });
+                }
+            });
 
-                // Enhanced notification function with gradient and animation
-                function showNotification(message, type = 'info') {
-                    // Remove existing notifications
-                    const existingNotifications = document.querySelectorAll('.cart-notification');
-                    existingNotifications.forEach(n => n.remove());
+            // Enhanced notification function with gradient and animation
+            function showNotification(message, type = 'info') {
+                // Remove existing notifications
+                const existingNotifications = document.querySelectorAll('.cart-notification');
+                existingNotifications.forEach(n => n.remove());
 
-                    const notification = document.createElement('div');
-                    let bgClass = '';
-                    let iconClass = '';
+                const notification = document.createElement('div');
+                let bgClass = '';
+                let iconClass = '';
 
-                    if (type === 'success') {
-                        bgClass = 'bg-gradient-to-r from-green-500 to-emerald-500';
-                        iconClass = 'fa-check-circle';
-                    } else if (type === 'error') {
-                        bgClass = 'bg-gradient-to-r from-red-500 to-pink-500';
-                        iconClass = 'fa-exclamation-circle';
-                    } else {
-                        bgClass = 'bg-gradient-to-r from-blue-500 to-purple-500';
-                        iconClass = 'fa-info-circle';
-                    }
+                if (type === 'success') {
+                    bgClass = 'bg-gradient-to-r from-green-500 to-emerald-500';
+                    iconClass = 'fa-check-circle';
+                } else if (type === 'error') {
+                    bgClass = 'bg-gradient-to-r from-red-500 to-pink-500';
+                    iconClass = 'fa-exclamation-circle';
+                } else {
+                    bgClass = 'bg-gradient-to-r from-blue-500 to-purple-500';
+                    iconClass = 'fa-info-circle';
+                }
 
-                    notification.className =
-                        `cart-notification fixed top-4 right-4 z-50 px-6 py-4 rounded-xl shadow-2xl text-white font-medium transition-all duration-300 transform ${bgClass}`;
-                    notification.innerHTML = `
+                notification.className =
+                    `cart-notification fixed top-4 right-4 z-50 px-6 py-4 rounded-xl shadow-2xl text-white font-medium transition-all duration-300 transform ${bgClass}`;
+                notification.innerHTML = `
                     <div class="flex items-center gap-3">
                         <i class="fa ${iconClass} text-2xl"></i>
                         <span>${message}</span>
                     </div>
                 `;
 
-                    document.body.appendChild(notification);
+                document.body.appendChild(notification);
 
-                    // Animate in
-                    setTimeout(() => {
-                        notification.style.transform = 'translateX(0)';
-                    }, 10);
+                // Animate in
+                setTimeout(() => {
+                    notification.style.transform = 'translateX(0)';
+                }, 10);
 
-                    // Auto remove after 3 seconds with animation
-                    setTimeout(() => {
-                        notification.style.opacity = '0';
-                        notification.style.transform = 'translateX(100%)';
-                        setTimeout(() => notification.remove(), 300);
-                    }, 3000);
-                }
+                // Auto remove after 3 seconds with animation
+                setTimeout(() => {
+                    notification.style.opacity = '0';
+                    notification.style.transform = 'translateX(100%)';
+                    setTimeout(() => notification.remove(), 300);
+                }, 3000);
+            }
 
-                // Function to update cart count in header
-                function updateCartCount(count) {
-                    const cartCountElements = document.querySelectorAll('.cart-count');
-                    cartCountElements.forEach(element => {
-                        element.textContent = count;
-                        element.style.display = count > 0 ? 'flex' : 'none';
-                    });
-                }
-
-                // Enhanced mobile filter toggle with smooth animation
-                const mobileFilterToggle = document.getElementById('mobile-filter-toggle');
-                const filterSidebar = document.getElementById('filter-sidebar');
-                const filterToggleIcon = document.querySelector('.filter-toggle-icon');
-
-                if (mobileFilterToggle && filterSidebar) {
-                    mobileFilterToggle.addEventListener('click', function() {
-                        filterSidebar.classList.toggle('hidden');
-
-                        // Animate icon rotation
-                        if (filterSidebar.classList.contains('hidden')) {
-                            filterToggleIcon.style.transform = 'rotate(0deg)';
-                        } else {
-                            filterToggleIcon.style.transform = 'rotate(180deg)';
-                        }
-                    });
-                }
-
-                // Add scroll animations to product cards
-                const observerOptions = {
-                    threshold: 0.1,
-                    rootMargin: '0px 0px -50px 0px'
-                };
-
-                const observer = new IntersectionObserver(function(entries) {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            entry.target.style.opacity = '1';
-                            entry.target.style.transform = 'translateY(0)';
-                        }
-                    });
-                }, observerOptions);
-
-                // Observe all product cards with staggered animation
-                document.querySelectorAll('.grid > div').forEach((card, index) => {
-                    card.style.opacity = '0';
-                    card.style.transform = 'translateY(20px)';
-                    card.style.transition = `all 0.5s ease ${index * 0.05}s`;
-                    observer.observe(card);
+            // Function to update cart count in header
+            function updateCartCount(count) {
+                const cartCountElements = document.querySelectorAll('.cart-count');
+                cartCountElements.forEach(element => {
+                    element.textContent = count;
+                    element.style.display = count > 0 ? 'flex' : 'none';
                 });
+            }
+
+            // Enhanced mobile filter toggle with smooth animation
+            const mobileFilterToggle = document.getElementById('mobile-filter-toggle');
+            const filterSidebar = document.getElementById('filter-sidebar');
+            const filterToggleIcon = document.querySelector('.filter-toggle-icon');
+
+            if (mobileFilterToggle && filterSidebar) {
+                mobileFilterToggle.addEventListener('click', function() {
+                    filterSidebar.classList.toggle('hidden');
+
+                    // Animate icon rotation
+                    if (filterSidebar.classList.contains('hidden')) {
+                        filterToggleIcon.style.transform = 'rotate(0deg)';
+                    } else {
+                        filterToggleIcon.style.transform = 'rotate(180deg)';
+                    }
+                });
+            }
+
+            // Add scroll animations to product cards
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // Observe all product cards with staggered animation
+            document.querySelectorAll('.grid > div').forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = `all 0.5s ease ${index * 0.05}s`;
+                observer.observe(card);
             });
-        </script>
-    @endsection
+        });
+    </script>
+@endsection
