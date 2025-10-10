@@ -4,11 +4,11 @@
     <div class="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 py-4">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <nav class="flex items-center text-white text-sm">
-                <a href="{{ route('home') }}" class="hover:text-gray-200 transition-colors">
+                <a href="{{ route('/') }}" class="hover:text-gray-200 transition-colors">
                     <i class="fa-solid fa-home mr-2"></i>Home
                 </a>
                 <span class="mx-2">/</span>
-                <a href="{{ route('products') }}" class="hover:text-gray-200 transition-colors">Products</a>
+                <a href="{{ route('/products') }}" class="hover:text-gray-200 transition-colors">Products</a>
                 <span class="mx-2">/</span>
                 <span class="text-gray-200">{{ $product->name }}</span>
             </nav>
