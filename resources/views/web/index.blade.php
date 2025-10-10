@@ -2,12 +2,19 @@
 
 @section('content')
     <!-- Hero Section with Modern Animation -->
-    <div class="relative overflow-hidden bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-purple-900 dark:to-blue-900">
+    <div
+        class="relative overflow-hidden bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-purple-900 dark:to-blue-900">
         <!-- Animated Background Shapes -->
         <div class="absolute inset-0 overflow-hidden">
-            <div class="absolute -top-40 -right-40 w-80 h-80 bg-purple-300 dark:bg-purple-600 rounded-full mix-blend-multiply dark:mix-blend-soft-light filter blur-xl opacity-70 animate-blob"></div>
-            <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-300 dark:bg-blue-600 rounded-full mix-blend-multiply dark:mix-blend-soft-light filter blur-xl opacity-70 animate-blob animation-delay-2000"></div>
-            <div class="absolute top-40 left-40 w-80 h-80 bg-pink-300 dark:bg-pink-600 rounded-full mix-blend-multiply dark:mix-blend-soft-light filter blur-xl opacity-70 animate-blob animation-delay-4000"></div>
+            <div
+                class="absolute -top-40 -right-40 w-80 h-80 bg-purple-300 dark:bg-purple-600 rounded-full mix-blend-multiply dark:mix-blend-soft-light filter blur-xl opacity-70 animate-blob">
+            </div>
+            <div
+                class="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-300 dark:bg-blue-600 rounded-full mix-blend-multiply dark:mix-blend-soft-light filter blur-xl opacity-70 animate-blob animation-delay-2000">
+            </div>
+            <div
+                class="absolute top-40 left-40 w-80 h-80 bg-pink-300 dark:bg-pink-600 rounded-full mix-blend-multiply dark:mix-blend-soft-light filter blur-xl opacity-70 animate-blob animation-delay-4000">
+            </div>
         </div>
 
         <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20">
@@ -15,26 +22,32 @@
                 <!-- Left Content -->
                 <div class="text-center lg:text-left fade-in-up">
                     <div class="inline-block mb-4 sm:mb-6">
-                        <span class="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-full text-xs sm:text-sm font-semibold shadow-lg animate-pulse">
+                        <span
+                            class="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-full text-xs sm:text-sm font-semibold shadow-lg animate-pulse">
                             ✨ {{ __('Trusted by 10,000+ Customers') }}
                         </span>
                     </div>
-                    <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 dark:text-white mb-4 sm:mb-6 leading-tight">
+                    <h1
+                        class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 dark:text-white mb-4 sm:mb-6 leading-tight">
                         {{ __('Welcome to') }}
-                        <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 animate-gradient">
+                        <span
+                            class="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 animate-gradient">
                             {{ __('Al Shaafi') }}
                         </span>
                     </h1>
-                    <p class="text-base sm:text-lg md:text-xl text-gray-600 dark:text-gray-300 mb-6 sm:mb-8 max-w-2xl mx-auto lg:mx-0">
+                    <p
+                        class="text-base sm:text-lg md:text-xl text-gray-600 dark:text-gray-300 mb-6 sm:mb-8 max-w-2xl mx-auto lg:mx-0">
                         {{ __('Your trusted health and wellness partner. Discover premium quality products with fast delivery and exceptional service.') }}
                     </p>
                     <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                         <a href="{{ route('web.products') }}"
                             class="group relative inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-bold text-white bg-gradient-to-r from-blue-600 to-purple-600 rounded-full overflow-hidden shadow-2xl transform hover:scale-105 transition-all duration-300">
-                            <span class="absolute w-0 h-0 transition-all duration-500 ease-out bg-white rounded-full group-hover:w-56 group-hover:h-56 opacity-10"></span>
+                            <span
+                                class="absolute w-0 h-0 transition-all duration-500 ease-out bg-white rounded-full group-hover:w-56 group-hover:h-56 opacity-10"></span>
                             <span class="relative flex items-center gap-2">
                                 {{ __('Shop Now') }}
-                                <i class="fa-solid fa-arrow-right group-hover:translate-x-2 transition-transform duration-300"></i>
+                                <i
+                                    class="fa-solid fa-arrow-right group-hover:translate-x-2 transition-transform duration-300"></i>
                             </span>
                         </a>
                         <a href="#products"
@@ -46,16 +59,24 @@
                     <!-- Stats -->
                     <div class="grid grid-cols-3 gap-4 mt-8 sm:mt-12">
                         <div class="text-center counter-item" data-target="10000">
-                            <div class="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-600 dark:text-blue-400 counter">0</div>
-                            <div class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-1">{{ __('Customers') }}</div>
+                            <div
+                                class="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-600 dark:text-blue-400 counter">
+                                0</div>
+                            <div class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-1">{{ __('Customers') }}
+                            </div>
                         </div>
                         <div class="text-center counter-item" data-target="500">
-                            <div class="text-2xl sm:text-3xl md:text-4xl font-bold text-purple-600 dark:text-purple-400 counter">0</div>
+                            <div
+                                class="text-2xl sm:text-3xl md:text-4xl font-bold text-purple-600 dark:text-purple-400 counter">
+                                0</div>
                             <div class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-1">{{ __('Products') }}</div>
                         </div>
                         <div class="text-center counter-item" data-target="99">
-                            <div class="text-2xl sm:text-3xl md:text-4xl font-bold text-pink-600 dark:text-pink-400 counter">0</div>
-                            <div class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-1">{{ __('Satisfaction') }}%</div>
+                            <div
+                                class="text-2xl sm:text-3xl md:text-4xl font-bold text-pink-600 dark:text-pink-400 counter">
+                                0</div>
+                            <div class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-1">{{ __('Satisfaction') }}%
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -63,36 +84,51 @@
                 <!-- Right Content - Hero Image/Illustration -->
                 <div class="relative fade-in-up animation-delay-200">
                     <div class="relative z-10">
-                        <div class="bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 rounded-3xl shadow-2xl p-1 transform hover:rotate-1 transition-transform duration-500">
+                        <div
+                            class="bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 rounded-3xl shadow-2xl p-1 transform hover:rotate-1 transition-transform duration-500">
                             <div class="bg-white dark:bg-gray-800 rounded-3xl p-6 sm:p-8">
                                 <!-- Feature Cards Grid -->
                                 <div class="grid grid-cols-2 gap-4">
-                                    <div class="group bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900 dark:to-blue-800 p-4 sm:p-6 rounded-2xl hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-                                        <div class="w-12 h-12 sm:w-16 sm:h-16 bg-blue-500 rounded-2xl flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 transition-transform">
+                                    <div
+                                        class="group bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900 dark:to-blue-800 p-4 sm:p-6 rounded-2xl hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                                        <div
+                                            class="w-12 h-12 sm:w-16 sm:h-16 bg-blue-500 rounded-2xl flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 transition-transform">
                                             <i class="fa-solid fa-shield-heart text-white text-xl sm:text-2xl"></i>
                                         </div>
-                                        <h3 class="font-bold text-sm sm:text-base text-gray-800 dark:text-white mb-1">{{ __('Quality') }}</h3>
-                                        <p class="text-xs text-gray-600 dark:text-gray-300">{{ __('Certified Products') }}</p>
+                                        <h3 class="font-bold text-sm sm:text-base text-gray-800 dark:text-white mb-1">
+                                            {{ __('Quality') }}</h3>
+                                        <p class="text-xs text-gray-600 dark:text-gray-300">{{ __('Certified Products') }}
+                                        </p>
                                     </div>
-                                    <div class="group bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900 dark:to-purple-800 p-4 sm:p-6 rounded-2xl hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 animation-delay-100">
-                                        <div class="w-12 h-12 sm:w-16 sm:h-16 bg-purple-500 rounded-2xl flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 transition-transform">
+                                    <div
+                                        class="group bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900 dark:to-purple-800 p-4 sm:p-6 rounded-2xl hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 animation-delay-100">
+                                        <div
+                                            class="w-12 h-12 sm:w-16 sm:h-16 bg-purple-500 rounded-2xl flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 transition-transform">
                                             <i class="fa-solid fa-rocket text-white text-xl sm:text-2xl"></i>
                                         </div>
-                                        <h3 class="font-bold text-sm sm:text-base text-gray-800 dark:text-white mb-1">{{ __('Fast') }}</h3>
-                                        <p class="text-xs text-gray-600 dark:text-gray-300">{{ __('Same Day Delivery') }}</p>
+                                        <h3 class="font-bold text-sm sm:text-base text-gray-800 dark:text-white mb-1">
+                                            {{ __('Fast') }}</h3>
+                                        <p class="text-xs text-gray-600 dark:text-gray-300">{{ __('Same Day Delivery') }}
+                                        </p>
                                     </div>
-                                    <div class="group bg-gradient-to-br from-pink-50 to-pink-100 dark:from-pink-900 dark:to-pink-800 p-4 sm:p-6 rounded-2xl hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 animation-delay-200">
-                                        <div class="w-12 h-12 sm:w-16 sm:h-16 bg-pink-500 rounded-2xl flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 transition-transform">
+                                    <div
+                                        class="group bg-gradient-to-br from-pink-50 to-pink-100 dark:from-pink-900 dark:to-pink-800 p-4 sm:p-6 rounded-2xl hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 animation-delay-200">
+                                        <div
+                                            class="w-12 h-12 sm:w-16 sm:h-16 bg-pink-500 rounded-2xl flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 transition-transform">
                                             <i class="fa-solid fa-percent text-white text-xl sm:text-2xl"></i>
                                         </div>
-                                        <h3 class="font-bold text-sm sm:text-base text-gray-800 dark:text-white mb-1">{{ __('Offers') }}</h3>
+                                        <h3 class="font-bold text-sm sm:text-base text-gray-800 dark:text-white mb-1">
+                                            {{ __('Offers') }}</h3>
                                         <p class="text-xs text-gray-600 dark:text-gray-300">{{ __('Up to 50% Off') }}</p>
                                     </div>
-                                    <div class="group bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900 dark:to-green-800 p-4 sm:p-6 rounded-2xl hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 animation-delay-300">
-                                        <div class="w-12 h-12 sm:w-16 sm:h-16 bg-green-500 rounded-2xl flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 transition-transform">
+                                    <div
+                                        class="group bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900 dark:to-green-800 p-4 sm:p-6 rounded-2xl hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 animation-delay-300">
+                                        <div
+                                            class="w-12 h-12 sm:w-16 sm:h-16 bg-green-500 rounded-2xl flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 transition-transform">
                                             <i class="fa-solid fa-headset text-white text-xl sm:text-2xl"></i>
                                         </div>
-                                        <h3 class="font-bold text-sm sm:text-base text-gray-800 dark:text-white mb-1">{{ __('Support') }}</h3>
+                                        <h3 class="font-bold text-sm sm:text-base text-gray-800 dark:text-white mb-1">
+                                            {{ __('Support') }}</h3>
                                         <p class="text-xs text-gray-600 dark:text-gray-300">{{ __('24/7 Available') }}</p>
                                     </div>
                                 </div>
@@ -100,8 +136,12 @@
                         </div>
                     </div>
                     <!-- Floating Elements -->
-                    <div class="absolute -top-4 -right-4 w-20 h-20 bg-yellow-400 rounded-full animate-bounce opacity-80 hidden sm:block"></div>
-                    <div class="absolute -bottom-4 -left-4 w-16 h-16 bg-blue-400 rounded-full animate-pulse opacity-80 hidden sm:block"></div>
+                    <div
+                        class="absolute -top-4 -right-4 w-20 h-20 bg-yellow-400 rounded-full animate-bounce opacity-80 hidden sm:block">
+                    </div>
+                    <div
+                        class="absolute -bottom-4 -left-4 w-16 h-16 bg-blue-400 rounded-full animate-pulse opacity-80 hidden sm:block">
+                    </div>
                 </div>
             </div>
         </div>
@@ -141,7 +181,8 @@
                 </div>
             @else
                 <div class="text-center py-12 sm:py-16 fade-in-up">
-                    <div class="inline-block p-6 bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-900 dark:to-purple-900 rounded-3xl mb-6">
+                    <div
+                        class="inline-block p-6 bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-900 dark:to-purple-900 rounded-3xl mb-6">
                         <i class="fa-solid fa-box-open text-6xl sm:text-7xl text-blue-600 dark:text-blue-400"></i>
                     </div>
                     <h3 class="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-white mb-3">
@@ -176,88 +217,91 @@
                 <div class="mt-6 h-1 w-24 bg-gradient-to-r from-blue-600 to-purple-600 mx-auto rounded-full"></div>
             </div>
 
-        @if (isset($blogPosts) && $blogPosts->count() > 0)
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8">
-                @foreach ($blogPosts as $index => $post)
-                    <article
-                        class="group bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 fade-in-up"
-                        style="animation-delay: {{ $index * 100 }}ms;">
-                        <!-- Post Image -->
-                        <div class="relative h-48 sm:h-56 overflow-hidden">
-                            @if ($post->image)
-                                <img src="{{ asset($post->image) }}" alt="{{ $post->title }}"
-                                    class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                            @else
-                                <div class="w-full h-full bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 flex items-center justify-center">
-                                    <div class="text-white text-center">
-                                        <i class="fa-solid fa-newspaper text-4xl sm:text-5xl mb-3 opacity-80"></i>
-                                        <p class="text-sm font-medium">{{ $post->category->name }}</p>
+            @if (isset($blogPosts) && $blogPosts->count() > 0)
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8">
+                    @foreach ($blogPosts as $index => $post)
+                        <article
+                            class="group bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 fade-in-up"
+                            style="animation-delay: {{ $index * 100 }}ms;">
+                            <!-- Post Image -->
+                            <div class="relative h-48 sm:h-56 overflow-hidden">
+                                @if ($post->image)
+                                    <img src="{{ asset($post->image) }}" alt="{{ $post->title }}"
+                                        class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                                @else
+                                    <div
+                                        class="w-full h-full bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 flex items-center justify-center">
+                                        <div class="text-white text-center">
+                                            <i class="fa-solid fa-newspaper text-4xl sm:text-5xl mb-3 opacity-80"></i>
+                                            <p class="text-sm font-medium">{{ $post->category->name }}</p>
+                                        </div>
                                     </div>
+                                @endif
+                                <div class="absolute top-4 left-4">
+                                    <span
+                                        class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-white dark:bg-gray-800 text-gray-800 dark:text-white shadow-lg backdrop-blur-sm">
+                                        {{ $post->category->name }}
+                                    </span>
                                 </div>
-                            @endif
-                            <div class="absolute top-4 left-4">
-                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-white dark:bg-gray-800 text-gray-800 dark:text-white shadow-lg backdrop-blur-sm">
-                                    {{ $post->category->name }}
-                                </span>
-                            </div>
-                        </div>
-
-                        <!-- Post Content -->
-                        <div class="p-5 sm:p-6">
-                            <!-- Date -->
-                            <div class="flex items-center text-xs text-gray-500 dark:text-gray-400 mb-3">
-                                <i class="fa-solid fa-calendar-days mr-2"></i>
-                                {{ $post->created_at->format('M d, Y') }}
                             </div>
 
-                            <!-- Title -->
-                            <h3 class="text-base sm:text-lg font-bold text-gray-900 dark:text-white mb-3 line-clamp-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
-                                <a href="{{ route('blog.post', $post->slug) }}">
-                                    {{ $post->title }}
+                            <!-- Post Content -->
+                            <div class="p-5 sm:p-6">
+                                <!-- Date -->
+                                <div class="flex items-center text-xs text-gray-500 dark:text-gray-400 mb-3">
+                                    <i class="fa-solid fa-calendar-days mr-2"></i>
+                                    {{ $post->created_at->format('M d, Y') }}
+                                </div>
+
+                                <!-- Title -->
+                                <h3
+                                    class="text-base sm:text-lg font-bold text-gray-900 dark:text-white mb-3 line-clamp-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
+                                    <a href="{{ route('blog.post', $post->slug) }}">
+                                        {{ $post->title }}
+                                    </a>
+                                </h3>
+
+                                <!-- Excerpt -->
+                                <p class="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-3">
+                                    {{ Str::limit(strip_tags($post->content), 100) }}
+                                </p>
+
+                                <!-- Read More -->
+                                <a href="{{ route('blog.post', $post->slug) }}"
+                                    class="inline-flex items-center gap-2 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-sm font-bold transition-all duration-300 group-hover:gap-3">
+                                    {{ __('Read More') }}
+                                    <i class="fa-solid fa-arrow-right"></i>
                                 </a>
-                            </h3>
-
-                            <!-- Excerpt -->
-                            <p class="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-3">
-                                {{ Str::limit(strip_tags($post->content), 100) }}
-                            </p>
-
-                            <!-- Read More -->
-                            <a href="{{ route('blog.post', $post->slug) }}"
-                                class="inline-flex items-center gap-2 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-sm font-bold transition-all duration-300 group-hover:gap-3">
-                                {{ __('Read More') }}
-                                <i class="fa-solid fa-arrow-right"></i>
-                            </a>
-                        </div>
-                    </article>
-                @endforeach
-            </div>
-
-            <div class="text-center mt-10 sm:mt-12">
-                <a href="{{ route('blog.index') }}"
-                    class="group inline-flex items-center gap-3 px-8 py-4 text-lg font-bold text-white bg-gradient-to-r from-blue-600 to-purple-600 rounded-full shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300">
-                    {{ __('View All Articles') }}
-                    <i class="fa-solid fa-arrow-right group-hover:translate-x-2 transition-transform duration-300"></i>
-                </a>
-            </div>
-        @else
-            <div class="text-center py-12 sm:py-16 fade-in-up">
-                <div class="inline-block p-8 bg-white dark:bg-gray-800 rounded-3xl shadow-xl mb-6">
-                    <i class="fa-solid fa-newspaper text-6xl sm:text-7xl text-gray-400"></i>
+                            </div>
+                        </article>
+                    @endforeach
                 </div>
-                <h3 class="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-white mb-3">
-                    {{ __('No Articles Yet') }}
-                </h3>
-                <p class="text-gray-600 dark:text-gray-400 mb-8 text-lg">
-                    {{ __('No articles available for your region') }}
-                </p>
-                <a href="{{ route('blog.index') }}"
-                    class="inline-flex items-center gap-2 px-8 py-4 text-lg font-bold text-white bg-gradient-to-r from-blue-600 to-purple-600 rounded-full shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300">
-                    {{ __('View All Articles') }}
-                    <i class="fa-solid fa-arrow-right"></i>
-                </a>
-            </div>
-        @endif
+
+                <div class="text-center mt-10 sm:mt-12">
+                    <a href="{{ route('blog.index') }}"
+                        class="group inline-flex items-center gap-3 px-8 py-4 text-lg font-bold text-white bg-gradient-to-r from-blue-600 to-purple-600 rounded-full shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300">
+                        {{ __('View All Articles') }}
+                        <i class="fa-solid fa-arrow-right group-hover:translate-x-2 transition-transform duration-300"></i>
+                    </a>
+                </div>
+            @else
+                <div class="text-center py-12 sm:py-16 fade-in-up">
+                    <div class="inline-block p-8 bg-white dark:bg-gray-800 rounded-3xl shadow-xl mb-6">
+                        <i class="fa-solid fa-newspaper text-6xl sm:text-7xl text-gray-400"></i>
+                    </div>
+                    <h3 class="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-white mb-3">
+                        {{ __('No Articles Yet') }}
+                    </h3>
+                    <p class="text-gray-600 dark:text-gray-400 mb-8 text-lg">
+                        {{ __('No articles available for your region') }}
+                    </p>
+                    <a href="{{ route('blog.index') }}"
+                        class="inline-flex items-center gap-2 px-8 py-4 text-lg font-bold text-white bg-gradient-to-r from-blue-600 to-purple-600 rounded-full shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300">
+                        {{ __('View All Articles') }}
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+            @endif
         </div>
     </div>
 
@@ -278,50 +322,74 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
                 <!-- Feature 1 -->
-                <div class="group relative bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900 dark:to-orange-800 rounded-2xl p-6 sm:p-8 transform hover:-translate-y-2 hover:shadow-2xl transition-all duration-500 fade-in-up">
-                    <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-orange-400 rounded-full opacity-20 group-hover:scale-150 transition-transform duration-500"></div>
+                <div
+                    class="group relative bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900 dark:to-orange-800 rounded-2xl p-6 sm:p-8 transform hover:-translate-y-2 hover:shadow-2xl transition-all duration-500 fade-in-up">
+                    <div
+                        class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-orange-400 rounded-full opacity-20 group-hover:scale-150 transition-transform duration-500">
+                    </div>
                     <div class="relative">
-                        <div class="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-orange-500 to-red-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 shadow-xl">
+                        <div
+                            class="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-orange-500 to-red-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 shadow-xl">
                             <i class="fa-solid fa-bullhorn text-white text-2xl sm:text-3xl"></i>
                         </div>
-                        <h3 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-3">{{ __('Special Offers') }}</h3>
-                        <p class="text-gray-600 dark:text-gray-300">{{ __('Exclusive deals and discounts up to 50% off on selected products') }}</p>
+                        <h3 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-3">
+                            {{ __('Special Offers') }}</h3>
+                        <p class="text-gray-600 dark:text-gray-300">
+                            {{ __('Exclusive deals and discounts up to 50% off on selected products') }}</p>
                     </div>
                 </div>
 
                 <!-- Feature 2 -->
-                <div class="group relative bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900 dark:to-blue-800 rounded-2xl p-6 sm:p-8 transform hover:-translate-y-2 hover:shadow-2xl transition-all duration-500 fade-in-up animation-delay-100">
-                    <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-blue-400 rounded-full opacity-20 group-hover:scale-150 transition-transform duration-500"></div>
+                <div
+                    class="group relative bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900 dark:to-blue-800 rounded-2xl p-6 sm:p-8 transform hover:-translate-y-2 hover:shadow-2xl transition-all duration-500 fade-in-up animation-delay-100">
+                    <div
+                        class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-blue-400 rounded-full opacity-20 group-hover:scale-150 transition-transform duration-500">
+                    </div>
                     <div class="relative">
-                        <div class="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 shadow-xl">
+                        <div
+                            class="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 shadow-xl">
                             <i class="fa-solid fa-shipping-fast text-white text-2xl sm:text-3xl"></i>
                         </div>
-                        <h3 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-3">{{ __('Fast Delivery') }}</h3>
-                        <p class="text-gray-600 dark:text-gray-300">{{ __('Same-day delivery available for urgent orders in major cities') }}</p>
+                        <h3 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-3">
+                            {{ __('Fast Delivery') }}</h3>
+                        <p class="text-gray-600 dark:text-gray-300">
+                            {{ __('Same-day delivery available for urgent orders in major cities') }}</p>
                     </div>
                 </div>
 
                 <!-- Feature 3 -->
-                <div class="group relative bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900 dark:to-green-800 rounded-2xl p-6 sm:p-8 transform hover:-translate-y-2 hover:shadow-2xl transition-all duration-500 fade-in-up animation-delay-200">
-                    <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-green-400 rounded-full opacity-20 group-hover:scale-150 transition-transform duration-500"></div>
+                <div
+                    class="group relative bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900 dark:to-green-800 rounded-2xl p-6 sm:p-8 transform hover:-translate-y-2 hover:shadow-2xl transition-all duration-500 fade-in-up animation-delay-200">
+                    <div
+                        class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-green-400 rounded-full opacity-20 group-hover:scale-150 transition-transform duration-500">
+                    </div>
                     <div class="relative">
-                        <div class="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 shadow-xl">
+                        <div
+                            class="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 shadow-xl">
                             <i class="fa-solid fa-heart text-white text-2xl sm:text-3xl"></i>
                         </div>
-                        <h3 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-3">{{ __('Trusted Quality') }}</h3>
-                        <p class="text-gray-600 dark:text-gray-300">{{ __('100% authentic products certified by health authorities') }}</p>
+                        <h3 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-3">
+                            {{ __('Trusted Quality') }}</h3>
+                        <p class="text-gray-600 dark:text-gray-300">
+                            {{ __('100% authentic products certified by health authorities') }}</p>
                     </div>
                 </div>
 
                 <!-- Feature 4 -->
-                <div class="group relative bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900 dark:to-purple-800 rounded-2xl p-6 sm:p-8 transform hover:-translate-y-2 hover:shadow-2xl transition-all duration-500 fade-in-up animation-delay-300">
-                    <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-purple-400 rounded-full opacity-20 group-hover:scale-150 transition-transform duration-500"></div>
+                <div
+                    class="group relative bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900 dark:to-purple-800 rounded-2xl p-6 sm:p-8 transform hover:-translate-y-2 hover:shadow-2xl transition-all duration-500 fade-in-up animation-delay-300">
+                    <div
+                        class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-purple-400 rounded-full opacity-20 group-hover:scale-150 transition-transform duration-500">
+                    </div>
                     <div class="relative">
-                        <div class="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 shadow-xl">
+                        <div
+                            class="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 shadow-xl">
                             <i class="fa-solid fa-headset text-white text-2xl sm:text-3xl"></i>
                         </div>
-                        <h3 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-3">{{ __('24/7 Support') }}</h3>
-                        <p class="text-gray-600 dark:text-gray-300">{{ __('Our dedicated team is always ready to assist you anytime') }}</p>
+                        <h3 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-3">
+                            {{ __('24/7 Support') }}</h3>
+                        <p class="text-gray-600 dark:text-gray-300">
+                            {{ __('Our dedicated team is always ready to assist you anytime') }}</p>
                     </div>
                 </div>
             </div>
@@ -351,10 +419,13 @@
                         <!-- User Avatar and Info -->
                         <div class="flex items-center mb-6">
                             <div class="relative">
-                                <div class="w-14 h-14 bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-lg group-hover:scale-110 transition-transform duration-300">
+                                <div
+                                    class="w-14 h-14 bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-lg group-hover:scale-110 transition-transform duration-300">
                                     {{ substr('User Name ' . $item, 0, 2) }}
                                 </div>
-                                <div class="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 border-2 border-white dark:border-gray-800 rounded-full"></div>
+                                <div
+                                    class="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 border-2 border-white dark:border-gray-800 rounded-full">
+                                </div>
                             </div>
                             <div class="ml-4 flex-1">
                                 <div class="font-bold text-gray-900 dark:text-white">User Name {{ $item }}</div>
@@ -374,7 +445,8 @@
                                     <i class="fa-regular fa-star text-gray-300 dark:text-gray-600 text-lg"></i>
                                 @endif
                             @endfor
-                            <span class="ml-2 text-sm font-bold text-gray-900 dark:text-white">{{ 6 - $item }}.0</span>
+                            <span
+                                class="ml-2 text-sm font-bold text-gray-900 dark:text-white">{{ 6 - $item }}.0</span>
                         </div>
 
                         <!-- Review Text -->
@@ -409,7 +481,8 @@
 
             <!-- View All Reviews Button -->
             <div class="text-center mt-12">
-                <button class="group inline-flex items-center gap-3 px-8 py-4 text-lg font-bold text-white bg-gradient-to-r from-blue-600 to-purple-600 rounded-full shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300">
+                <button
+                    class="group inline-flex items-center gap-3 px-8 py-4 text-lg font-bold text-white bg-gradient-to-r from-blue-600 to-purple-600 rounded-full shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300">
                     {{ __('View All Reviews') }}
                     <i class="fa-solid fa-arrow-right group-hover:translate-x-2 transition-transform duration-300"></i>
                 </button>
@@ -421,8 +494,12 @@
     <div class="py-12 sm:py-16 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 relative overflow-hidden">
         <!-- Animated Background -->
         <div class="absolute inset-0">
-            <div class="absolute top-0 left-0 w-96 h-96 bg-white rounded-full opacity-10 -translate-x-1/2 -translate-y-1/2 animate-pulse"></div>
-            <div class="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full opacity-10 translate-x-1/2 translate-y-1/2 animate-pulse animation-delay-2000"></div>
+            <div
+                class="absolute top-0 left-0 w-96 h-96 bg-white rounded-full opacity-10 -translate-x-1/2 -translate-y-1/2 animate-pulse">
+            </div>
+            <div
+                class="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full opacity-10 translate-x-1/2 translate-y-1/2 animate-pulse animation-delay-2000">
+            </div>
         </div>
 
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -436,11 +513,10 @@
                 <p class="text-lg sm:text-xl text-white/90 mb-8 max-w-2xl mx-auto">
                     {{ __('Subscribe to our newsletter and get exclusive offers, health tips, and product updates') }}
                 </p>
-                
+
                 <form class="max-w-md mx-auto">
                     <div class="flex flex-col sm:flex-row gap-3">
-                        <input type="email"
-                            placeholder="{{ __('Enter your email') }}"
+                        <input type="email" placeholder="{{ __('Enter your email') }}"
                             class="flex-1 px-6 py-4 rounded-full text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-4 focus:ring-white/50 text-base sm:text-lg shadow-lg">
                         <button type="submit"
                             class="px-8 py-4 bg-gray-900 hover:bg-gray-800 text-white font-bold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
@@ -455,15 +531,11 @@
         </div>
     </div>
 
-    <!-- Floating Action Button -->
-    <div class="fixed bottom-6 right-6 z-50 flex flex-col gap-3">
+    <!-- Scroll to Top Button -->
+    <div class="fixed bottom-6 right-6 z-40">
         <a href="#"
             class="w-14 h-14 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full shadow-2xl flex items-center justify-center text-white hover:scale-110 transition-transform duration-300 animate-bounce">
             <i class="fa-solid fa-arrow-up text-xl"></i>
-        </a>
-        <a href="https://wa.me/1234567890"
-            class="w-14 h-14 bg-green-500 rounded-full shadow-2xl flex items-center justify-center text-white hover:scale-110 transition-transform duration-300">
-            <i class="fa-brands fa-whatsapp text-2xl"></i>
         </a>
     </div>
 @endsection
@@ -473,16 +545,35 @@
     <style>
         /* Custom Animations */
         @keyframes blob {
-            0% { transform: translate(0px, 0px) scale(1); }
-            33% { transform: translate(30px, -50px) scale(1.1); }
-            66% { transform: translate(-20px, 20px) scale(0.9); }
-            100% { transform: translate(0px, 0px) scale(1); }
+            0% {
+                transform: translate(0px, 0px) scale(1);
+            }
+
+            33% {
+                transform: translate(30px, -50px) scale(1.1);
+            }
+
+            66% {
+                transform: translate(-20px, 20px) scale(0.9);
+            }
+
+            100% {
+                transform: translate(0px, 0px) scale(1);
+            }
         }
 
         @keyframes gradient {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
         }
 
         @keyframes fadeInUp {
@@ -490,6 +581,7 @@
                 opacity: 0;
                 transform: translateY(30px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -613,7 +705,9 @@
                         counterObserver.unobserve(entry.target);
                     }
                 });
-            }, { threshold: 0.5 });
+            }, {
+                threshold: 0.5
+            });
 
             document.querySelectorAll('.counter-item').forEach(item => {
                 counterObserver.observe(item);
@@ -621,7 +715,7 @@
 
             // Smooth scroll for anchor links
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
+                anchor.addEventListener('click', function(e) {
                     e.preventDefault();
                     const target = document.querySelector(this.getAttribute('href'));
                     if (target) {
@@ -752,7 +846,7 @@
             function showNotification(message, type = 'info') {
                 const existingNotifications = document.querySelectorAll('.cart-notification');
                 existingNotifications.forEach(n => n.remove());
-                
+
                 const notification = document.createElement('div');
                 notification.className = `cart-notification fixed top-4 right-4 z-50 px-6 py-4 rounded-2xl shadow-2xl text-white font-medium transition-all duration-300 transform ${
                     type === 'success' ? 'bg-gradient-to-r from-green-500 to-emerald-500' : 
@@ -762,11 +856,11 @@
                 notification.style.transform = 'translateX(400px)';
                 notification.textContent = message;
                 document.body.appendChild(notification);
-                
+
                 setTimeout(() => {
                     notification.style.transform = 'translateX(0)';
                 }, 10);
-                
+
                 setTimeout(() => {
                     notification.style.opacity = '0';
                     notification.style.transform = 'translateX(400px)';

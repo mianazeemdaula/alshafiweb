@@ -164,8 +164,8 @@
     </script>
 
     <!-- WhatsApp Floating Button -->
-    <div id="whatsapp-button" class="fixed bottom-6 right-6 z-50">
-        <a href="https://wa.me/{{ config('app.whatsapp_number', '1234567890') }}?text={{ urlencode(__('Hello! I need help with your products.')) }}"
+    <div id="whatsapp-button" class="fixed bottom-24 right-6 z-50">
+        <a href="https://wa.me/923253257878?text={{ urlencode(__('Hello! I need help with your products.')) }}"
             target="_blank"
             class="whatsapp-btn bg-green-500 hover:bg-green-600 text-white rounded-full p-4 shadow-lg transition-all duration-300 flex items-center justify-center group">
             <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

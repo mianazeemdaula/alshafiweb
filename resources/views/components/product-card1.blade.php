@@ -1,97 +1,163 @@
 <div
-    class="relative overflow-hidden transition-transform duration-300 hover:scale-105 hover:shadow-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg">
-    <div class="relative aspect-square overflow-hidden">
-        <a href="{{ url("/product/$product->sku") }}" class="block group">
+    class="group relative overflow-hidden transition-all duration-500 hover:scale-105 bg-white dark:bg-gray-800 rounded-2xl shadow-md hover:shadow-2xl border border-gray-100 dark:border-gray-700">
+
+    <!-- Product Image with Overlay -->
+    <div class="relative aspect-square overflow-hidden bg-gray-100 dark:bg-gray-700">
+        <a href="{{ url("/product/$product->sku") }}" class="block">
             @if ($product->media->isNotEmpty())
-                <img src="{{ asset($product->media->first()->file_path) }}" alt=""
-                    class="object-cover w-full h-full">
+                <img src="{{ asset($product->media->first()->file_path) }}" alt="{{ $product->name }}"
+                    class="object-cover w-full h-full transition-transform duration-700 group-hover:scale-110">
             @else
-                <img src="https://cdn.ishop.cholobangla.com/uploads/product-6-1.webp" alt=""
-                    class="object-cover w-full h-full">
+                <img src="https://cdn.ishop.cholobangla.com/uploads/product-6-1.webp" alt="{{ $product->name }}"
+                    class="object-cover w-full h-full transition-transform duration-700 group-hover:scale-110">
             @endif
-    </div>
-    @if ($product->featured)
-        <div class="absolute top-0 left-0 w-12 h-12 sm:w-16 sm:h-16">
+
+            <!-- Gradient Overlay on Hover -->
             <div
-                class="absolute w-16 sm:w-24 py-1 text-xs font-normal text-center text-gray-800 dark:text-gray-200 transform -rotate-45 bg-primary -left-5 sm:-left-7 top-1 sm:top-2">
-                Discount
+                class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-black/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
             </div>
-        </div>
-    @endif
 
-    </a>
-    <div class="p-3">
-        <div class="text-sm font-medium text-gray-900 dark:text-gray-100 line-clamp-2 mb-2">
-            {{ $product->name }}</div>
-        <div class="flex items-center mb-2">
-            @php
-                $rating = $product->average_rating ?? 0;
-                $fullStars = floor($rating);
-                $hasHalfStar = $rating - $fullStars >= 0.5;
-            @endphp
-            @for ($i = 1; $i <= 5; $i++)
-                @if ($i <= $fullStars)
-                    <i class="fa-solid fa-star text-yellow-400 text-xs mr-0.5"></i>
-                @elseif ($i == $fullStars + 1 && $hasHalfStar)
-                    <i class="fa-solid fa-star-half-stroke text-yellow-400 text-xs mr-0.5"></i>
-                @else
-                    <i class="fa-regular fa-star text-gray-300 dark:text-gray-500 text-xs mr-0.5"></i>
-                @endif
-            @endfor
-            <span class="ml-1 text-xs text-gray-500 dark:text-gray-400">({{ number_format($rating, 1) }})</span>
-        </div>
-        <div class="flex items-center mb-3 flex-wrap">
-            @if (isset($product->discount) && $product->discount > 0)
-                @php
-                    $originalPrice = $product->price + $product->discount;
-                @endphp
-                <span class="text-gray-400 dark:text-gray-500 text-xs line-through mr-2">{{ $product->currency }}
-                    {{ number_format($originalPrice, 2) }}</span>
-                <span class="text-red-500 dark:text-red-400 text-sm font-semibold mr-2">{{ $product->currency }}
-                    {{ number_format($product->price, 2) }}</span>
+            <!-- Quick View Badge (appears on hover) -->
+            <div
+                class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-4 group-hover:translate-y-0">
                 <span
-                    class="bg-red-100 dark:bg-red-900 text-red-600 dark:text-red-200 text-xs px-2 py-0.5 rounded-full font-bold">-{{ round(($product->discount / $originalPrice) * 100) }}%</span>
+                    class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm text-gray-900 dark:text-white px-4 py-2 rounded-xl text-sm font-medium shadow-lg">
+                    <i class="fa fa-eye mr-2"></i>Quick View
+                </span>
+            </div>
+        </a>
+
+        <!-- Featured Badge -->
+        @if ($product->featured)
+            <div class="absolute top-3 left-3">
+                <div
+                    class="bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-3 py-1.5 rounded-lg text-xs font-bold shadow-lg flex items-center gap-1">
+                    <i class="fa fa-star"></i>
+                    <span>Featured</span>
+                </div>
+            </div>
+        @endif
+
+        <!-- Discount Badge -->
+        @if (isset($product->discount) && $product->discount > 0)
+            @php
+                $originalPrice = $product->price + $product->discount;
+                $discountPercent = round(($product->discount / $originalPrice) * 100);
+            @endphp
+            <div class="absolute top-3 right-3">
+                <div
+                    class="bg-gradient-to-r from-red-500 to-pink-500 text-white px-3 py-1.5 rounded-lg text-xs font-bold shadow-lg">
+                    -{{ $discountPercent }}% OFF
+                </div>
+            </div>
+        @endif
+
+        <!-- Stock Status Badge -->
+        @if ($product->stock <= 0)
+            <div class="absolute bottom-3 left-3 right-3">
+                <div
+                    class="bg-gray-900/80 dark:bg-gray-800/80 backdrop-blur-sm text-white px-3 py-2 rounded-lg text-xs font-bold text-center">
+                    <i class="fa fa-ban mr-1"></i>OUT OF STOCK
+                </div>
+            </div>
+        @elseif($product->stock <= 5)
+            <div class="absolute bottom-3 left-3">
+                <div
+                    class="bg-orange-500/90 backdrop-blur-sm text-white px-2 py-1 rounded-lg text-xs font-bold animate-pulse">
+                    <i class="fa fa-fire mr-1"></i>Only {{ $product->stock }} left!
+                </div>
+            </div>
+        @endif
+    </div>
+
+    <!-- Product Info -->
+    <div class="p-4 space-y-3">
+
+        <!-- Product Name -->
+        <a href="{{ url("/product/$product->sku") }}" class="block">
+            <h3
+                class="text-sm font-semibold text-gray-900 dark:text-gray-100 line-clamp-2 leading-tight group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300 min-h-[2.5rem]">
+                {{ $product->name }}
+            </h3>
+        </a>
+
+        <!-- Rating -->
+        <div class="flex items-center gap-2">
+            <div class="flex items-center">
+                @php
+                    $rating = $product->average_rating ?? 0;
+                    $fullStars = floor($rating);
+                    $hasHalfStar = $rating - $fullStars >= 0.5;
+                @endphp
+                @for ($i = 1; $i <= 5; $i++)
+                    @if ($i <= $fullStars)
+                        <i class="fa-solid fa-star text-yellow-400 text-xs"></i>
+                    @elseif ($i == $fullStars + 1 && $hasHalfStar)
+                        <i class="fa-solid fa-star-half-stroke text-yellow-400 text-xs"></i>
+                    @else
+                        <i class="fa-regular fa-star text-gray-300 dark:text-gray-600 text-xs"></i>
+                    @endif
+                @endfor
+            </div>
+            <span class="text-xs font-medium text-gray-600 dark:text-gray-400">({{ number_format($rating, 1) }})</span>
+        </div>
+
+        <!-- Price Section -->
+        <div class="flex items-center gap-2 flex-wrap">
+            @if (isset($product->discount) && $product->discount > 0)
+                <div class="flex items-baseline gap-2">
+                    <span
+                        class="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
+                        {{ $product->currency }} {{ number_format($product->price, 2) }}
+                    </span>
+                    <span class="text-xs text-gray-400 dark:text-gray-500 line-through">
+                        {{ $product->currency }} {{ number_format($originalPrice, 2) }}
+                    </span>
+                </div>
             @else
-                <span class="text-gray-800 dark:text-gray-200 text-sm font-semibold">{{ $product->currency }}
-                    {{ number_format($product->price, 2) }}</span>
+                <span class="text-xl font-bold text-gray-900 dark:text-white">
+                    {{ $product->currency }} {{ number_format($product->price, 2) }}
+                </span>
             @endif
         </div>
 
-        <div class="flex items-center justify-between gap-2">
-            <div class="flex items-center space-x-2">
+        <!-- Quantity & Add to Cart -->
+        <div class="flex items-center justify-between gap-2 pt-2 border-t border-gray-100 dark:border-gray-700">
+
+            <!-- Quantity Selector -->
+            <div class="flex items-center bg-gray-100 dark:bg-gray-700 rounded-xl p-1">
                 <button type="button"
-                    class="quantity-btn bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 text-gray-700 dark:text-gray-200 w-7 h-7 rounded-full flex items-center justify-center text-sm font-bold transition-colors"
+                    class="quantity-btn bg-white dark:bg-gray-600 hover:bg-gradient-to-r hover:from-blue-500 hover:to-purple-500 hover:text-white text-gray-700 dark:text-gray-200 w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-300 shadow-sm"
                     data-action="minus" data-product-card="{{ $product->id }}">
                     <i class="fa-solid fa-minus text-xs"></i>
                 </button>
                 <input type="number"
-                    class="quantity-input w-10 text-center border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded px-1 py-1 text-xs"
-                    value="1" min="1" max="10" data-product-card="{{ $product->id }}">
+                    class="quantity-input w-10 text-center bg-transparent text-gray-900 dark:text-gray-100 font-semibold text-sm focus:outline-none"
+                    value="1" min="1" max="10" data-product-card="{{ $product->id }}" readonly>
                 <button type="button"
-                    class="quantity-btn bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 text-gray-700 dark:text-gray-200 w-7 h-7 rounded-full flex items-center justify-center text-sm font-bold transition-colors"
+                    class="quantity-btn bg-white dark:bg-gray-600 hover:bg-gradient-to-r hover:from-blue-500 hover:to-purple-500 hover:text-white text-gray-700 dark:text-gray-200 w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-300 shadow-sm"
                     data-action="plus" data-product-card="{{ $product->id }}">
                     <i class="fa-solid fa-plus text-xs"></i>
                 </button>
             </div>
 
+            <!-- Add to Cart Button -->
             <button type="button"
-                class="add-to-cart-btn {{ $product->stock <= 0 ? 'bg-gray-400 dark:bg-gray-600 cursor-not-allowed' : 'bg-blue-600 dark:bg-blue-500 hover:bg-blue-700 dark:hover:bg-blue-600' }} text-white w-9 h-9 rounded-full flex items-center justify-center transition-colors duration-200"
+                class="add-to-cart-btn flex-1 {{ $product->stock <= 0
+                    ? 'bg-gray-400 dark:bg-gray-600 cursor-not-allowed'
+                    : 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-lg hover:shadow-xl' }} 
+                    text-white px-4 py-2.5 rounded-xl font-medium transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2"
                 data-product-id="{{ $product->id }}" data-product-name="{{ $product->name }}"
                 data-product-price="{{ $product->price }}" {{ $product->stock <= 0 ? 'disabled' : '' }}
                 title="{{ $product->stock <= 0 ? 'Out of Stock' : 'Add to Cart' }}">
                 @if ($product->stock <= 0)
                     <i class="fa-solid fa-ban text-sm"></i>
+                    <span class="text-xs font-bold hidden sm:inline">Unavailable</span>
                 @else
                     <i class="fa-solid fa-cart-plus text-sm"></i>
+                    <span class="text-xs font-bold hidden sm:inline">Add to Cart</span>
                 @endif
             </button>
         </div>
-
-        @if ($product->stock <= 0)
-            <div class="text-red-500 dark:text-red-400 text-xs mt-2">Out of Stock</div>
-        @elseif($product->stock <= 5)
-            <div class="text-orange-500 dark:text-orange-400 text-xs mt-2">Only {{ $product->stock }} left in stock
-            </div>
-        @endif
     </div>
 </div>
