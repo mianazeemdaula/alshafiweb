@@ -112,14 +112,26 @@
                                         <input type="hidden" name="{{ $key }}" value="{{ $value }}">
                                     @endforeach
 
-                                    <div class="flex items-center gap-2">
-                                        <input type="number" name="min"
-                                            class="flex-1 rounded-lg px-3 py-2 text-sm bg-white dark:bg-gray-700 dark:text-white border-2 border-gray-200 dark:border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-900 transition-all"
-                                            min="0" placeholder="{{ __('min') }}" value="{{ request('min') }}">
-                                        <span class="text-gray-500 dark:text-gray-400 font-bold">—</span>
-                                        <input type="number" name="max"
-                                            class="flex-1 rounded-lg px-3 py-2 text-sm bg-white dark:bg-gray-700 dark:text-white border-2 border-gray-200 dark:border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-900 transition-all"
-                                            min="0" placeholder="{{ __('max') }}" value="{{ request('max') }}">
+                                    <!-- Price Input Fields - Responsive Stack on Mobile -->
+                                    <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+                                        <div class="flex-1">
+                                            <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">
+                                                {{ __('Min Price') }}
+                                            </label>
+                                            <input type="number" name="min"
+                                                class="w-full rounded-lg px-3 py-2.5 text-sm bg-white dark:bg-gray-700 dark:text-white border-2 border-gray-200 dark:border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-900 transition-all"
+                                                min="0" placeholder="0" value="{{ request('min') }}">
+                                        </div>
+                                        <span
+                                            class="hidden sm:block text-gray-500 dark:text-gray-400 font-bold self-end pb-2.5">—</span>
+                                        <div class="flex-1">
+                                            <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">
+                                                {{ __('Max Price') }}
+                                            </label>
+                                            <input type="number" name="max"
+                                                class="w-full rounded-lg px-3 py-2.5 text-sm bg-white dark:bg-gray-700 dark:text-white border-2 border-gray-200 dark:border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-900 transition-all"
+                                                min="0" placeholder="∞" value="{{ request('max') }}">
+                                        </div>
                                     </div>
 
                                     <button type="submit"
