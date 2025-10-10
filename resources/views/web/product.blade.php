@@ -8,7 +8,7 @@
                     <i class="fa-solid fa-home mr-2"></i>Home
                 </a>
                 <span class="mx-2">/</span>
-                <a href="{{ route('web.product') }}" class="hover:text-gray-200 transition-colors">Products</a>
+                <a href="{{ route('web.products') }}" class="hover:text-gray-200 transition-colors">Products</a>
                 <span class="mx-2">/</span>
                 <span class="text-gray-200">{{ $product->name }}</span>
             </nav>
