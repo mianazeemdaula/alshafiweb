@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Log;
 
 class UnifiedCourierService
 {
-    const COURIERS = ['trax', 'tcs', 'leopards'];
+    const COURIERS = ['trax', 'tcs', 'leopards', 'manual'];
 
     /**
      * Book a shipment with unified parameters
@@ -44,6 +44,13 @@ class UnifiedCourierService
                 return $this->bookTcsShipment($params);
             case 'leopards':
                 return $this->bookLeopardsShipment($params);
+            case 'manual':
+                return [
+                    'success' => true,
+                    'tracking_number' => 'MANUAL-'.$params['manual_id'] ?? uniqid(),
+                    'message' => 'Manual shipment recorded successfully',
+                    'raw_response' => null
+                ];
             default:
                 return ['error' => 'Unsupported courier'];
         }
@@ -61,6 +68,20 @@ class UnifiedCourierService
                 return $this->trackTcsShipment($trackingNumber);
             case 'leopards':
                 return $this->trackLeopardsShipment($trackingNumber);
+            case 'manual':
+                return [
+                    'success' => true,
+                    'status' => 'manual',
+                    'tracking_number' => $trackingNumber,
+                    'current_status' => 'This is a manual shipment. No tracking available.',
+                    'shipper' => null,
+                    'consignee' => null,
+                    'pickup' => null,
+                    'order_info' => null,
+                    'tracking_history' => [],
+                    'message' => 'Manual shipment. No tracking available.',
+                    'raw_response' => null
+                ];
             default:
                 return ['error' => 'Unsupported courier'];
         }
@@ -112,6 +133,13 @@ class UnifiedCourierService
                 return $this->getTcsCities();
             case 'leopards':
                 return $this->getLeopardsCities();
+            case 'manual':
+                return [
+                    'success' => true,
+                    'cities' => [
+                        ['id' => 1, 'name' => 'Manual City'],
+                    ]
+                ];
             default:
                 return ['error' => 'Unsupported courier'];
         }
@@ -140,6 +168,19 @@ class UnifiedCourierService
             ];
             case 'leopards':
                 return ['error' => 'Pickup addresses not supported by this courier', 'addresses' => []];
+            case 'manual':
+                return [
+                    'success' => true,
+                    'addresses' => [
+                        [
+                            'id' => 1,
+                            'address' => 'Manual Pickup Address',
+                            'city' => [ 'name' =>'DepalPur'],
+                            'person_of_contact' => 'Manual Contact',
+                            'phone_number' => '0000000000'
+                        ]
+                    ]
+                ];
             default:
                 return ['error' => 'Unsupported courier'];
         }

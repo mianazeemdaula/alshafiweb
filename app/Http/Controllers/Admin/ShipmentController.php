@@ -152,7 +152,8 @@ class ShipmentController extends Controller
                 'declared_value' => $request->declared_value ?? $order->total_amount,
                 'special_instructions' => $request->special_instructions,
                 'order_id' => $request->reference,
-                'description' => $order->orderDetails->pluck('product.sku')->unique()->implode(', ')
+                'description' => $order->orderDetails->pluck('product.sku')->unique()->implode(', '),
+                'manual_id' => $order->id // For manual shipments
             ];
 
             // Add pickup data based on type
