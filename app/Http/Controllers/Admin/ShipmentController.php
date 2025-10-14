@@ -150,8 +150,8 @@ class ShipmentController extends Controller
                 'pieces' => 1,
                 'cod_amount' => $request->cod_amount ?? $order->total_amount,
                 'declared_value' => $request->declared_value ?? $order->total_amount,
-                'special_instructions' => $request->special_instructions,
-                'order_id' => $request->reference,
+                'special_instructions' => $request->special_instructions ?? '',
+                'order_id' => $request->reference ?? 'ORD-' . $order->id,
                 'description' => $order->orderDetails->pluck('product.sku')->unique()->implode(', '),
                 'manual_id' => $order->id // For manual shipments
             ];
@@ -169,8 +169,9 @@ class ShipmentController extends Controller
             $response = $this->courierService->bookShipment($courierConfig->courier, $shipmentData);
             
             Log::info('Shipment booking response: ' . json_encode($response));
-            // Handle booking response
-            if ($response['success']) {
+            
+            // Handle booking response - check for success or error status
+            if (isset($response['success']) && $response['success']) {
 
                 // Create shipment record
                 $shipment = Shipment::create([
@@ -203,7 +204,14 @@ class ShipmentController extends Controller
                 return redirect()->route('admin.shipments.show', $shipment)
                     ->with('success', 'Shipment created and booked successfully!');
             } else {
-                return redirect()->back()->with('warning', 'Shipment created but booking failed: ' . $response['message']);
+                // Handle error response
+                $errorMessage = $response['message'] ?? $response['error'] ?? 'Unknown error occurred';
+                
+                Log::error('Shipment booking failed: ' . $errorMessage, ['response' => $response]);
+                
+                return redirect()->back()
+                    ->withInput()
+                    ->with('error', 'Failed to create shipment: ' . $errorMessage);
             }
 
         } catch (\Exception $e) {

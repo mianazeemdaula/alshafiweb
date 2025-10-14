@@ -33,7 +33,11 @@ class UnifiedCourierService
         
         foreach ($requiredParams as $param) {
             if (empty($params[$param])) {
-                return ['status' => 'error', 'message' => "Missing required parameter: $param"];
+                return [
+                    'success' => false,
+                    'status' => 'error',
+                    'message' => "Missing required parameter: $param"
+                ];
             }
         }
 
@@ -52,7 +56,11 @@ class UnifiedCourierService
                     'raw_response' => null
                 ];
             default:
-                return ['error' => 'Unsupported courier'];
+                return [
+                    'success' => false,
+                    'error' => 'Unsupported courier',
+                    'message' => 'The selected courier is not supported'
+                ];
         }
     }
 
