@@ -43,10 +43,15 @@ class ShipmentController extends Controller
             $search = $request->search;
             $query->where(function($q) use ($search) {
                 $q->where('tracking_number', 'like', "%{$search}%")
-                  ->orWhere('courier_shipment_id', 'like', "%{$search}%")
                   ->orWhereHas('order', function($orderQuery) use ($search) {
                       $orderQuery->where('id', 'like', "%{$search}%")
-                               ->orWhere('order_number', 'like', "%{$search}%");
+                        ->orWhere('number', 'like', "%{$search}%")
+                        ->orWhere('customer_name', 'like', "%{$search}%")
+                        ->orWhere('customer_phone', 'like', "%{$search}%")
+                        ->orWhereJson('first_name', 'like', "%{$search}%")
+                        ->orWhereJson('last_name', 'like', "%{$search}%")
+                        ->orWhereJson('phone', 'like', "%{$search}%")
+                        ->orWhere('customer_email', 'like', "%{$search}%");
                   });
             });
         }
