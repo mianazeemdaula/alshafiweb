@@ -23,6 +23,11 @@ class OrderController extends Controller
                 $q->where('id', $search)
                     ->orWhere('number', 'like', "%{$search}%")
                     ->orWhere('customer_name', 'like', "%{$search}%")
+                    ->orWhere('customer_phone', 'like', "%{$search}%")
+                    ->orWhere('customer_email', 'like', "%{$search}%")
+                    ->orWhereJsonContains('shipping_address->first_name', 'like', "%{$search}%")
+                    ->orWhereJsonContains('shipping_address->last_name', 'like', "%{$search}%")
+                    ->orWhereJsonContains('shipping_address->phone', 'like', "%{$search}%")
                     ->orWhereHas('user', function ($qu) use ($search) {
                         $qu->where('name', 'like', "%{$search}%")->orWhere('email', 'like', "%{$search}%");
                     });
