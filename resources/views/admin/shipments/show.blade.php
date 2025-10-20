@@ -255,14 +255,15 @@
     </div>
 
     <!-- Track Modal -->
-    <div id="trackModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden z-50">
+    <div id="trackModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden z-50 overflow-y-auto">
         <div class="flex items-center justify-center min-h-screen p-4">
-            <div class="bg-white rounded-lg shadow-xl max-w-3xl w-full max-h-[90vh] flex flex-col">
-                <div class="px-6 py-4 border-b border-gray-200">
+            <div class="bg-white rounded-lg shadow-xl max-w-3xl w-full my-8 flex flex-col"
+                style="max-height: calc(100vh - 4rem);">
+                <div class="px-6 py-4 border-b border-gray-200 flex-shrink-0">
                     <h3 class="text-lg font-medium text-gray-900">Tracking Information</h3>
                 </div>
                 <div id="trackingResult" class="flex-1 overflow-y-auto px-6 py-4"></div>
-                <div class="px-6 py-4 border-t border-gray-200 flex justify-end">
+                <div class="px-6 py-4 border-t border-gray-200 flex-shrink-0 flex justify-end">
                     <button onclick="closeTrackModal()"
                         class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition duration-200">
                         Close
