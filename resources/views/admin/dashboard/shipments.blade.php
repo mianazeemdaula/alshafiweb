@@ -107,33 +107,36 @@
                     </div>
                 </div>
 
-                <!-- Revenue -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-sm font-medium text-gray-600">Total Revenue</p>
-                            <div class="flex items-baseline space-x-2">
-                                <p class="text-2xl font-bold text-gray-900" id="totalRevenue">RS
-                                    {{ number_format($kpis['revenue']['total'], 2) }}</p>
-                                @if ($kpis['revenue']['growth'] >= 0)
-                                    <span class="text-sm font-medium text-green-600">
-                                        <i class="fas fa-arrow-up mr-1"></i>{{ $kpis['revenue']['growth'] }}%
-                                    </span>
-                                @else
-                                    <span class="text-sm font-medium text-red-600">
-                                        <i class="fas fa-arrow-down mr-1"></i>{{ abs($kpis['revenue']['growth']) }}%
-                                    </span>
-                                @endif
+                @role('admin')
+
+                    <!-- Revenue -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-600">Total Revenue</p>
+                                <div class="flex items-baseline space-x-2">
+                                    <p class="text-2xl font-bold text-gray-900" id="totalRevenue">RS
+                                        {{ number_format($kpis['revenue']['total'], 2) }}</p>
+                                    @if ($kpis['revenue']['growth'] >= 0)
+                                        <span class="text-sm font-medium text-green-600">
+                                            <i class="fas fa-arrow-up mr-1"></i>{{ $kpis['revenue']['growth'] }}%
+                                        </span>
+                                    @else
+                                        <span class="text-sm font-medium text-red-600">
+                                            <i class="fas fa-arrow-down mr-1"></i>{{ abs($kpis['revenue']['growth']) }}%
+                                        </span>
+                                    @endif
+                                </div>
+                                <div class="flex space-x-4 mt-2 text-xs text-gray-500">
+                                    <span>Today: RS {{ number_format($kpis['revenue']['today'], 0) }}</span>
+                                </div>
                             </div>
-                            <div class="flex space-x-4 mt-2 text-xs text-gray-500">
-                                <span>Today: RS {{ number_format($kpis['revenue']['today'], 0) }}</span>
+                            <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-dollar-sign text-purple-600 text-xl"></i>
                             </div>
-                        </div>
-                        <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
-                            <i class="fas fa-dollar-sign text-purple-600 text-xl"></i>
                         </div>
                     </div>
-                </div>
+                @endrole
             </div>
 
             <!-- Performance Metrics -->
@@ -214,45 +217,46 @@
             <!-- Revenue Analytics & City Performance -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <!-- Revenue Analytics -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-6">Revenue Analytics</h3>
-                    <div class="space-y-4">
-                        <div class="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
-                            <div>
-                                <p class="text-sm text-gray-600">Monthly Revenue</p>
-                                <p class="text-xl font-bold text-gray-900">RS
-                                    {{ number_format($revenueAnalytics['monthly_revenue'], 2) }}</p>
+                @role('admin')
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-6">Revenue Analytics</h3>
+                        <div class="space-y-4">
+                            <div class="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
+                                <div>
+                                    <p class="text-sm text-gray-600">Monthly Revenue</p>
+                                    <p class="text-xl font-bold text-gray-900">RS
+                                        {{ number_format($revenueAnalytics['monthly_revenue'], 2) }}</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-sm text-gray-600">Growth</p>
+                                    <p
+                                        class="text-lg font-semibold {{ $revenueAnalytics['monthly_growth'] >= 0 ? 'text-green-600' : 'text-red-600' }}">
+                                        {{ $revenueAnalytics['monthly_growth'] }}%
+                                    </p>
+                                </div>
                             </div>
-                            <div class="text-right">
-                                <p class="text-sm text-gray-600">Growth</p>
-                                <p
-                                    class="text-lg font-semibold {{ $revenueAnalytics['monthly_growth'] >= 0 ? 'text-green-600' : 'text-red-600' }}">
-                                    {{ $revenueAnalytics['monthly_growth'] }}%
-                                </p>
-                            </div>
-                        </div>
 
-                        <div class="grid grid-cols-2 gap-4">
-                            <div class="text-center p-4 bg-blue-50 rounded-lg">
-                                <p class="text-sm text-gray-600">Avg Order Value</p>
-                                <p class="text-lg font-bold text-blue-600">RS
-                                    {{ number_format($revenueAnalytics['avg_order_value'], 2) }}</p>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="text-center p-4 bg-blue-50 rounded-lg">
+                                    <p class="text-sm text-gray-600">Avg Order Value</p>
+                                    <p class="text-lg font-bold text-blue-600">RS
+                                        {{ number_format($revenueAnalytics['avg_order_value'], 2) }}</p>
+                                </div>
+                                <div class="text-center p-4 bg-green-50 rounded-lg">
+                                    <p class="text-sm text-gray-600">COD Collected</p>
+                                    <p class="text-lg font-bold text-green-600">RS
+                                        {{ number_format($revenueAnalytics['total_cod_collected'], 2) }}</p>
+                                </div>
                             </div>
-                            <div class="text-center p-4 bg-green-50 rounded-lg">
-                                <p class="text-sm text-gray-600">COD Collected</p>
-                                <p class="text-lg font-bold text-green-600">RS
-                                    {{ number_format($revenueAnalytics['total_cod_collected'], 2) }}</p>
-                            </div>
-                        </div>
 
-                        <div class="text-center p-4 bg-yellow-50 rounded-lg">
-                            <p class="text-sm text-gray-600">Pending Collection</p>
-                            <p class="text-lg font-bold text-yellow-600">RS
-                                {{ number_format($revenueAnalytics['pending_collection'], 2) }}</p>
+                            <div class="text-center p-4 bg-yellow-50 rounded-lg">
+                                <p class="text-sm text-gray-600">Pending Collection</p>
+                                <p class="text-lg font-bold text-yellow-600">RS
+                                    {{ number_format($revenueAnalytics['pending_collection'], 2) }}</p>
+                            </div>
                         </div>
                     </div>
-                </div>
-
+                @endrole
                 <!-- Top Cities -->
                 <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                     <h3 class="text-lg font-semibold text-gray-900 mb-6">Top Performing Cities</h3>
