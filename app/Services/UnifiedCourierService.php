@@ -631,11 +631,12 @@ class UnifiedCourierService
         $response = Http::withToken($config->token)
             ->get("https://ociconnect.tcscourier.com/tracking/api/Tracking/GetDynamicTrackDetail", ['consignee' => "$trackingNumber"]);
         $data = $response->json();
+        Log::info('TCS Tracking Response:', $data);
         
         // Normalize TCS tracking response to match Leopards format
         if (isset($data['message']) && $data['message'] === 'SUCCESS') {
             $shipmentInfo = $data['shipmentinfo'][0] ?? [];
-            $checkpoints = $data['checkpoints'] ?? [];
+            $checkpoints = $data['tracking_history'] ?? [];
             $deliveryInfo = $data['deliveryinfo'] ?? [];
             
             // Get current status from most recent checkpoint or delivery info
