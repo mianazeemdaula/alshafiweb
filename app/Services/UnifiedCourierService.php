@@ -681,7 +681,7 @@ class UnifiedCourierService
                 'success' => true,
                 'status' => $mappedStatus,
                 'tracking_number' => $shipmentInfo['consignmentno'] ?? $trackingNumber,
-                'current_status' => $currentStatusText,
+                'current_status' => $mappedStatus,
                 'shipper' => [
                     'name' => $shipmentInfo['shipper'] ?? null,
                     'email' => null,
