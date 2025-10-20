@@ -100,7 +100,8 @@
                                             class="font-medium text-blue-600 hover:text-blue-800">
                                             Order #{{ $shipment->order_id }}
                                         </a>
-                                        <div class="text-sm text-gray-600">{{ $shipment->order->user->name ?? 'N/A' }}
+                                        <div class="text-sm text-gray-600">
+                                            {{ $shipment->order->user->name ?? ($shipment->order->customer_name ?? ($shipment->order->shipping_address['first_name'] ?? 'N/A')) }}
                                         </div>
                                     </div>
                                 </td>
@@ -118,6 +119,11 @@
                                         <span
                                             class="bg-orange-100 text-orange-800 px-2 py-1 rounded-full text-xs font-medium">
                                             <i class="fas fa-box mr-1"></i>Leopards
+                                        </span>
+                                    @elseif($shipment->courierService->courier == 'manual')
+                                        <span
+                                            class="bg-orange-100 text-orange-800 px-2 py-1 rounded-full text-xs font-medium">
+                                            <i class="fas fa-box mr-1"></i>Manual
                                         </span>
                                     @endif
                                 </td>
