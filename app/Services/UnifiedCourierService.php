@@ -394,18 +394,49 @@ class UnifiedCourierService
      */
     private function mapTcsStatus($tcsStatus)
     {
+        $status = strtolower($tcsStatus);
+        
+        // Direct matches
         $statusMap = [
-            'Delivered' => 'delivered',
-            'In-Process' => 'in_transit',
-            'Returned' => 'returned',
-            'Undelivered' => 'out_for_delivery',
-            'On Hold' => 'on_hold',
-            'Cancelled' => 'cancelled',
-            'Pickup' => 'booked',
-            'In Transit' => 'in_transit',
+            'delivered' => 'delivered',
+            'shipment delivered' => 'delivered',
+            'in-process' => 'in_transit',
+            'returned' => 'returned',
+            'undelivered' => 'out_for_delivery',
+            'on hold' => 'on_hold',
+            'cancelled' => 'cancelled',
+            'pickup' => 'booked',
+            'in transit' => 'in_transit',
+            'shipment picked up' => 'picked_up',
         ];
-
-        return $statusMap[$tcsStatus] ?? 'unknown';
+        
+        // Check direct match first
+        if (isset($statusMap[$status])) {
+            return $statusMap[$status];
+        }
+        
+        // Pattern matching for complex statuses
+        if (stripos($status, 'delivered') !== false) {
+            return 'delivered';
+        } elseif (stripos($status, 'out for delivery') !== false) {
+            return 'out_for_delivery';
+        } elseif (stripos($status, 'picked') !== false || stripos($status, 'picked up') !== false) {
+            return 'picked_up';
+        } elseif (stripos($status, 'arrived at') !== false || stripos($status, 'departed from') !== false) {
+            return 'in_transit';
+        } elseif (stripos($status, 'in transit') !== false) {
+            return 'in_transit';
+        } elseif (stripos($status, 'booked') !== false) {
+            return 'booked';
+        } elseif (stripos($status, 'return') !== false) {
+            return 'returned';
+        } elseif (stripos($status, 'cancel') !== false) {
+            return 'cancelled';
+        } elseif (stripos($status, 'hold') !== false || stripos($status, 'not available') !== false) {
+            return 'on_hold';
+        } else {
+            return 'unknown';
+        }
     }
 
     protected function cancelTraxShipment($trackingNumber)
@@ -599,8 +630,99 @@ class UnifiedCourierService
         
         $response = Http::withToken($config->token)
             ->get("https://ociconnect.tcscourier.com/tracking/api/Tracking/GetDynamicTrackDetail", ['consignee' => "$trackingNumber"]);
-        $data =  $response->json();
-        return $data;
+        $data = $response->json();
+        
+        // Normalize TCS tracking response to match Leopards format
+        if (isset($data['message']) && $data['message'] === 'SUCCESS') {
+            $shipmentInfo = $data['shipmentinfo'][0] ?? [];
+            $checkpoints = $data['checkpoints'] ?? [];
+            $deliveryInfo = $data['deliveryinfo'] ?? [];
+            
+            // Get current status from most recent checkpoint or delivery info
+            $currentStatusText = 'Unknown';
+            $deliveredOn = null;
+            $deliveredBy = null;
+            
+            if (!empty($deliveryInfo)) {
+                $latestDelivery = $deliveryInfo[0];
+                $currentStatusText = $latestDelivery['status'] ?? 'Unknown';
+                
+                // Check if delivered
+                if (strtolower($latestDelivery['status'] ?? '') === 'delivered') {
+                    $deliveredOn = $latestDelivery['datetime'] ?? null;
+                    $deliveredBy = $latestDelivery['recievedby'] ?? null;
+                }
+            } elseif (!empty($checkpoints)) {
+                $latestCheckpoint = $checkpoints[0];
+                $currentStatusText = $latestCheckpoint['status'] ?? 'Unknown';
+                
+                // Check if delivered
+                if (stripos($latestCheckpoint['status'] ?? '', 'delivered') !== false) {
+                    $deliveredOn = $latestCheckpoint['datetime'] ?? null;
+                    $deliveredBy = $latestCheckpoint['recievedby'] ?? null;
+                }
+            }
+            
+            // Map TCS status to standard status
+            $mappedStatus = $this->mapTcsStatus($currentStatusText);
+            
+            // Format tracking history from checkpoints
+            $trackingHistory = [];
+            foreach ($checkpoints as $checkpoint) {
+                $trackingHistory[] = [
+                    'status' => $checkpoint['status'] ?? '',
+                    'datetime' => $checkpoint['datetime'] ?? '',
+                    'location' => $checkpoint['recievedby'] ?? '',
+                    'remarks' => $checkpoint['status'] ?? ''
+                ];
+            }
+            
+            return [
+                'success' => true,
+                'status' => $mappedStatus,
+                'tracking_number' => $shipmentInfo['consignmentno'] ?? $trackingNumber,
+                'current_status' => $currentStatusText,
+                'shipper' => [
+                    'name' => $shipmentInfo['shipper'] ?? null,
+                    'email' => null,
+                    'phone' => null,
+                    'address' => null
+                ],
+                'consignee' => [
+                    'name' => $shipmentInfo['consignee'] ?? null,
+                    'email' => null,
+                    'phone' => null,
+                    'address' => null
+                ],
+                'pickup' => [
+                    'city' => $shipmentInfo['origin'] ?? null,
+                    'country' => $shipmentInfo['origincountry'] ?? null
+                ],
+                'delivery' => [
+                    'city' => $shipmentInfo['destination'] ?? null,
+                    'delivered_on' => $deliveredOn,
+                    'delivered_by' => $deliveredBy
+                ],
+                'order_info' => [
+                    'booking_date' => $shipmentInfo['bookingdate'] ?? null,
+                    'order_id' => $shipmentInfo['referenceno'] ?? null,
+                    'weight' => null,
+                    'pieces' => null,
+                    'cod_amount' => null,
+                    'special_instructions' => null
+                ],
+                'tracking_history' => $trackingHistory,
+                'summary' => $data['shipmentsummary'] ?? null,
+                'message' => 'Tracking information retrieved successfully',
+                'raw_response' => $data
+            ];
+        } else {
+            return [
+                'success' => false,
+                'message' => $data['message'] ?? 'Failed to track shipment',
+                'raw_response' => $data
+            ];
+        }
     }
 
     protected function cancelTcsShipment($trackingNumber)
