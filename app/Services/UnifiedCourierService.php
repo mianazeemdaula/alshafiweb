@@ -409,11 +409,13 @@ class UnifiedCourierService
             'in transit' => 'in_transit',
             'shipment picked up' => 'picked_up',
         ];
-        
+        Log::info('Mapping TCS Status:', ['status' => $status]);
         // Check direct match first
         if (isset($statusMap[$status])) {
             return $statusMap[$status];
         }
+
+        Log::info('Mapping TCS Status fallback:', ['status' => $status]);
         
         // Pattern matching for complex statuses
         if (stripos($status, 'delivered') !== false) {
@@ -647,7 +649,6 @@ class UnifiedCourierService
             if (!empty($deliveryInfo)) {
                 $latestDelivery = $deliveryInfo[0];
                 $currentStatusText = $latestDelivery['status'] ?? 'Unknown';
-                Log::info('Latest Delivery Info:', $latestDelivery);
                 // Check if delivered
                 if (strtolower($latestDelivery['status'] ?? '') === 'delivered') {
                     $deliveredOn = $latestDelivery['datetime'] ?? null;
