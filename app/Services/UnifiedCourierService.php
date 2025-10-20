@@ -636,7 +636,7 @@ class UnifiedCourierService
         // Normalize TCS tracking response to match Leopards format
         if (isset($data['message']) && $data['message'] === 'SUCCESS') {
             $shipmentInfo = $data['shipmentinfo'][0] ?? [];
-            $checkpoints = $data['tracking_history'] ?? [];
+            $checkpoints = $data['checkpoints'] ?? [];
             $deliveryInfo = $data['deliveryinfo'] ?? [];
             
             // Get current status from most recent checkpoint or delivery info
@@ -647,7 +647,7 @@ class UnifiedCourierService
             if (!empty($deliveryInfo)) {
                 $latestDelivery = $deliveryInfo[0];
                 $currentStatusText = $latestDelivery['status'] ?? 'Unknown';
-                
+                Log::info('Latest Delivery Info:', $latestDelivery);
                 // Check if delivered
                 if (strtolower($latestDelivery['status'] ?? '') === 'delivered') {
                     $deliveredOn = $latestDelivery['datetime'] ?? null;
@@ -665,6 +665,7 @@ class UnifiedCourierService
             }
             
             // Map TCS status to standard status
+            Log::info('Current TCS Status Text:', $currentStatusText);
             $mappedStatus = $this->mapTcsStatus($currentStatusText);
             
             // Format tracking history from checkpoints
