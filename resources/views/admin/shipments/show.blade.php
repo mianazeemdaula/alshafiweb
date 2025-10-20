@@ -255,14 +255,16 @@
     </div>
 
     <!-- Track Modal -->
-    <div id="trackModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden">
-        <div class="flex items-center justify-center min-h-screen">
-            <div class="bg-white rounded-lg p-6 max-w-lg w-full mx-4">
-                <h3 class="text-lg font-medium text-gray-900 mb-4">Tracking Information</h3>
-                <div id="trackingResult"></div>
-                <div class="mt-4 flex justify-end">
+    <div id="trackModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-lg shadow-xl max-w-3xl w-full max-h-[90vh] flex flex-col">
+                <div class="px-6 py-4 border-b border-gray-200">
+                    <h3 class="text-lg font-medium text-gray-900">Tracking Information</h3>
+                </div>
+                <div id="trackingResult" class="flex-1 overflow-y-auto px-6 py-4"></div>
+                <div class="px-6 py-4 border-t border-gray-200 flex justify-end">
                     <button onclick="closeTrackModal()"
-                        class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg">
+                        class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition duration-200">
                         Close
                     </button>
                 </div>
@@ -342,16 +344,27 @@
                         if (data.tracking_history && data.tracking_history.length > 0) {
                             trackingHtml += `
                                 <div class="bg-gray-50 p-3 rounded">
-                                    <h5 class="font-medium mb-2">Tracking History</h5>
-                                    <div class="space-y-2">
+                                    <h5 class="font-medium mb-3">Tracking History</h5>
+                                    <div class="space-y-3 max-h-96 overflow-y-auto pr-2">
                             `;
 
-                            data.tracking_history.forEach(event => {
+                            data.tracking_history.forEach((event, index) => {
+                                const datetime = event.datetime || event.date_time || 'N/A';
+                                const status = event.status || event.activity || 'Unknown';
+                                const location = event.location || event.recievedby || '';
+                                const remarks = event.remarks || event.status_reason || '';
+
                                 trackingHtml += `
-                                    <div class="border-l-2 border-blue-500 pl-3 py-1">
-                                        <div class="text-sm font-medium">${event.status}</div>
-                                        <div class="text-xs text-gray-600">${event.date_time}</div>
-                                        ${event.status_reason ? `<div class="text-xs text-gray-500">${event.status_reason}</div>` : ''}
+                                    <div class="relative pl-6 pb-3 ${index < data.tracking_history.length - 1 ? 'border-l-2 border-blue-300' : ''}">
+                                        <div class="absolute left-0 top-0 -ml-2 w-4 h-4 rounded-full bg-blue-500 border-2 border-white"></div>
+                                        <div class="bg-white p-3 rounded-lg shadow-sm">
+                                            <div class="text-sm font-semibold text-gray-900">${status}</div>
+                                            <div class="text-xs text-gray-600 mt-1">
+                                                <i class="far fa-clock mr-1"></i>${datetime}
+                                            </div>
+                                            ${location ? `<div class="text-xs text-gray-500 mt-1"><i class="fas fa-map-marker-alt mr-1"></i>${location}</div>` : ''}
+                                            ${remarks && remarks !== status ? `<div class="text-xs text-gray-500 mt-1">${remarks}</div>` : ''}
+                                        </div>
                                     </div>
                                 `;
                             });

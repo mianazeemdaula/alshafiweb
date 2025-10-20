@@ -197,14 +197,16 @@
     </div>
 
     <!-- Track Modal -->
-    <div id="trackModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden">
-        <div class="flex items-center justify-center min-h-screen">
-            <div class="bg-white rounded-lg p-6 max-w-lg w-full mx-4">
-                <h3 class="text-lg font-medium text-gray-900 mb-4">Tracking Information</h3>
-                <div id="trackingResult"></div>
-                <div class="mt-4 flex justify-end">
+    <div id="trackModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-lg shadow-xl max-w-3xl w-full max-h-[90vh] flex flex-col">
+                <div class="px-6 py-4 border-b border-gray-200">
+                    <h3 class="text-lg font-medium text-gray-900">Tracking Information</h3>
+                </div>
+                <div id="trackingResult" class="flex-1 overflow-y-auto px-6 py-4"></div>
+                <div class="px-6 py-4 border-t border-gray-200 flex justify-end">
                     <button onclick="closeTrackModal()"
-                        class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg">
+                        class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition duration-200">
                         Close
                     </button>
                 </div>
@@ -253,23 +255,149 @@
                 .then(data => {
                     const resultDiv = document.getElementById('trackingResult');
                     if (data.success) {
-                        resultDiv.innerHTML = `
-                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded">
-                    <h4 class="font-medium mb-2">Tracking Results</h4>
-                    <pre class="text-sm whitespace-pre-wrap">${JSON.stringify(data.data, null, 2)}</pre>
-                </div>
-            `;
+                        let trackingHtml = `
+                            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+                                <h4 class="font-medium mb-2">✓ ${data.message || 'Tracking information retrieved successfully'}</h4>
+                            </div>
+                            
+                            <div class="space-y-4">
+                                <div class="bg-gray-50 p-3 rounded">
+                                    <div class="grid grid-cols-2 gap-2 text-sm">
+                                        <div><strong>Tracking Number:</strong> ${data.tracking_number || 'N/A'}</div>
+                                        <div><strong>Current Status:</strong> <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">${data.current_status || data.status || 'Unknown'}</span></div>
+                                    </div>
+                                </div>
+                        `;
+
+                        // Add shipper information if available
+                        if (data.shipper) {
+                            trackingHtml += `
+                                <div class="bg-gray-50 p-3 rounded">
+                                    <h5 class="font-medium mb-2">Shipper Information</h5>
+                                    <div class="text-sm space-y-1">
+                                        ${data.shipper.name ? `<div><strong>Name:</strong> ${data.shipper.name}</div>` : ''}
+                                        ${data.shipper.phone ? `<div><strong>Phone:</strong> ${data.shipper.phone}</div>` : ''}
+                                    </div>
+                                </div>
+                            `;
+                        }
+
+                        // Add consignee information if available
+                        if (data.consignee) {
+                            trackingHtml += `
+                                <div class="bg-gray-50 p-3 rounded">
+                                    <h5 class="font-medium mb-2">Consignee Information</h5>
+                                    <div class="text-sm space-y-1">
+                                        <div><strong>Name:</strong> ${data.consignee.name || 'N/A'}</div>
+                                        ${data.consignee.phone || data.consignee.phone_number_1 ? `<div><strong>Phone:</strong> ${data.consignee.phone || data.consignee.phone_number_1}</div>` : ''}
+                                        ${data.delivery && data.delivery.city ? `<div><strong>Destination:</strong> ${data.delivery.city}</div>` : ''}
+                                        ${data.consignee.address ? `<div><strong>Address:</strong> ${data.consignee.address}</div>` : ''}
+                                    </div>
+                                </div>
+                            `;
+                        }
+
+                        // Add pickup and delivery info
+                        if (data.pickup || data.delivery) {
+                            trackingHtml += `
+                                <div class="grid grid-cols-2 gap-3">
+                            `;
+
+                            if (data.pickup) {
+                                trackingHtml += `
+                                    <div class="bg-gray-50 p-3 rounded">
+                                        <h5 class="font-medium mb-2">Pickup</h5>
+                                        <div class="text-sm space-y-1">
+                                            ${data.pickup.city ? `<div><strong>City:</strong> ${data.pickup.city}</div>` : ''}
+                                            ${data.pickup.country ? `<div><strong>Country:</strong> ${data.pickup.country}</div>` : ''}
+                                        </div>
+                                    </div>
+                                `;
+                            }
+
+                            if (data.delivery) {
+                                trackingHtml += `
+                                    <div class="bg-gray-50 p-3 rounded">
+                                        <h5 class="font-medium mb-2">Delivery</h5>
+                                        <div class="text-sm space-y-1">
+                                            ${data.delivery.city ? `<div><strong>City:</strong> ${data.delivery.city}</div>` : ''}
+                                            ${data.delivery.delivered_on ? `<div><strong>Delivered On:</strong> ${data.delivery.delivered_on}</div>` : ''}
+                                            ${data.delivery.delivered_by ? `<div><strong>Delivered By:</strong> ${data.delivery.delivered_by}</div>` : ''}
+                                        </div>
+                                    </div>
+                                `;
+                            }
+
+                            trackingHtml += `
+                                </div>
+                            `;
+                        }
+
+                        // Add tracking history if available
+                        if (data.tracking_history && data.tracking_history.length > 0) {
+                            trackingHtml += `
+                                <div class="bg-gray-50 p-3 rounded">
+                                    <h5 class="font-medium mb-3">Tracking History</h5>
+                                    <div class="space-y-3 max-h-96 overflow-y-auto pr-2">
+                            `;
+
+                            data.tracking_history.forEach((event, index) => {
+                                const datetime = event.datetime || event.date_time || 'N/A';
+                                const status = event.status || event.activity || 'Unknown';
+                                const location = event.location || event.recievedby || '';
+                                const remarks = event.remarks || event.status_reason || '';
+
+                                trackingHtml += `
+                                    <div class="relative pl-6 pb-3 ${index < data.tracking_history.length - 1 ? 'border-l-2 border-blue-300' : ''}">
+                                        <div class="absolute left-0 top-0 -ml-2 w-4 h-4 rounded-full bg-blue-500 border-2 border-white"></div>
+                                        <div class="bg-white p-3 rounded-lg shadow-sm">
+                                            <div class="text-sm font-semibold text-gray-900">${status}</div>
+                                            <div class="text-xs text-gray-600 mt-1">
+                                                <i class="far fa-clock mr-1"></i>${datetime}
+                                            </div>
+                                            ${location ? `<div class="text-xs text-gray-500 mt-1"><i class="fas fa-map-marker-alt mr-1"></i>${location}</div>` : ''}
+                                            ${remarks && remarks !== status ? `<div class="text-xs text-gray-500 mt-1">${remarks}</div>` : ''}
+                                        </div>
+                                    </div>
+                                `;
+                            });
+
+                            trackingHtml += `
+                                    </div>
+                                </div>
+                            `;
+                        }
+
+                        // Add summary if available
+                        if (data.summary) {
+                            trackingHtml += `
+                                <div class="bg-blue-50 border border-blue-200 p-3 rounded">
+                                    <h5 class="font-medium mb-2 text-blue-900">Summary</h5>
+                                    <div class="text-sm text-blue-800 whitespace-pre-line">${data.summary}</div>
+                                </div>
+                            `;
+                        }
+
+                        trackingHtml += `</div>`;
+                        resultDiv.innerHTML = trackingHtml;
                     } else {
                         resultDiv.innerHTML = `
-                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
-                    <i class="fas fa-exclamation-circle mr-2"></i>${data.message}
-                </div>
-            `;
+                            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                                <i class="fas fa-exclamation-circle mr-2"></i>${data.message || 'Failed to track shipment'}
+                            </div>
+                        `;
                     }
                     document.getElementById('trackModal').classList.remove('hidden');
                 })
                 .catch(error => {
                     console.error('Error:', error);
+                    const resultDiv = document.getElementById('trackingResult');
+                    resultDiv.innerHTML = `
+                        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                            <i class="fas fa-exclamation-circle mr-2"></i>Network error occurred while tracking shipment
+                        </div>
+                    `;
+                    document.getElementById('trackModal').classList.remove('hidden');
                 });
         }
 

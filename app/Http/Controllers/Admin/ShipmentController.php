@@ -328,7 +328,7 @@ class ShipmentController extends Controller
             
             if (isset($response['success']) && $response['success']) {
                 // Update shipment status if available in response
-                if (isset($response['status']) && $response['status'] !== $shipment->status) {
+                if (isset($response['status'])) {
                     $shipment->update(['status' => $response['status']]);
                 }
             }
