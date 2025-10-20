@@ -665,7 +665,7 @@ class UnifiedCourierService
             }
             
             // Map TCS status to standard status
-            Log::info('Current TCS Status Text:', $currentStatusText);
+            Log::info('Current TCS Status Text:', ['status' => $currentStatusText]);
             $mappedStatus = $this->mapTcsStatus($currentStatusText);
             
             // Format tracking history from checkpoints
