@@ -869,7 +869,55 @@ class UnifiedCourierService
             if (!empty($packetList)) {
                 $packet = $packetList[0]; // Get first packet details
                 $currentStatus = $packet['booked_packet_status'] ?? 'Unknown';
-                $trackingDetails = $packet['Tracking Detail'] ?? [];
+                $rawTracking = $packet['Tracking Detail'] ?? $packet['tracking_detail'] ?? $packet['tracking_details'] ?? [];
+                $trackingDetails = [];
+
+                foreach ($rawTracking as $t) {
+                    $statusText = $t['Status'] ?? $t['status'] ?? '';
+                    
+                    // Build datetime (prefer Activity_datetime, else combine date + time)
+                    $datetime = $t['Activity_datetime'] ?? null;
+                    if (!$datetime) {
+                        $date = $t['Activity_Date'] ?? $t['activity_date'] ?? null;
+                        $time = $t['Activity_Time'] ?? $t['activity_time'] ?? null;
+                        if ($date && $time) {
+                            $datetime = trim("$date $time");
+                        } elseif ($date) {
+                            $datetime = $date;
+                        } elseif (isset($t['datetime'])) {
+                            $datetime = $t['datetime'];
+                        } else {
+                            $datetime = null;
+                        }
+                    }
+
+                    // Normalize datetime to Y-m-d H:i:s when possible
+                    $normalizedDatetime = null;
+                    if ($datetime) {
+                        $ts = strtotime($datetime);
+                        $normalizedDatetime = $ts !== false ? date('Y-m-d H:i:s', $ts) : $datetime;
+                    }
+
+                    // Try to extract location from status text ("in CITY", "to CITY", "at CITY")
+                    $location = null;
+                    if (preg_match('/\b(?:in|to|at)\s+([A-Za-z0-9\s\-]+)/i', $statusText, $m)) {
+                        $location = trim($m[1]);
+                    } else {
+                        // Fallback: last token if it looks like a place (contains letters)
+                        $parts = preg_split('/\s+/', trim($statusText));
+                        $last = end($parts);
+                        if ($last && preg_match('/[A-Za-z]/', $last)) {
+                            $location = $last;
+                        }
+                    }
+                    $statusText = preg_replace('/\s+in\s+[A-Za-z0-9\s\-]+$/i', '', $statusText);
+                    $trackingDetails[] = [
+                        'status' => $this->mapLeopardsStatus($statusText),
+                        'datetime' => $normalizedDatetime,
+                        'location' => $location,
+                        'remarks' => $statusText
+                    ];
+                }
                 
                 return [
                     'success' => true,
