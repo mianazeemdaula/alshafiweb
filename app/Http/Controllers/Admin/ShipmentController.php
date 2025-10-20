@@ -48,9 +48,9 @@ class ShipmentController extends Controller
                         ->orWhere('number', 'like', "%{$search}%")
                         ->orWhere('customer_name', 'like', "%{$search}%")
                         ->orWhere('customer_phone', 'like', "%{$search}%")
-                        ->orWhereJson('first_name', 'like', "%{$search}%")
-                        ->orWhereJson('last_name', 'like', "%{$search}%")
-                        ->orWhereJson('phone', 'like', "%{$search}%")
+                        ->orWhereJsonContains('shipping_address->first_name', 'like', "%{$search}%")
+                        ->orWhereJsonContains('shipping_address->last_name', 'like', "%{$search}%")
+                        ->orWhereJsonContains('shipping_address->phone', 'like', "%{$search}%")
                         ->orWhere('customer_email', 'like', "%{$search}%");
                   });
             });
