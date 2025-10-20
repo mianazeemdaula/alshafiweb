@@ -912,7 +912,7 @@ class UnifiedCourierService
                     }
                     $statusText = preg_replace('/\s+in\s+[A-Za-z0-9\s\-]+$/i', '', $statusText);
                     $trackingDetails[] = [
-                        'status' => $this->mapLeopardsStatus($statusText),
+                        'status' => $statusText,
                         'datetime' => $normalizedDatetime,
                         'location' => $location,
                         'remarks' => $statusText
