@@ -45,6 +45,9 @@
                         {{ $order->customer_phone ?? ($order->shipping_address['phone'] ?? 'N/A') }}</div>
                     <div class="text-xs text-green-600 mt-2">Manual Entry</div>
                 @endif
+                <div>
+                    <strong>Reference:</strong> {{ $order->reference_number ?? 'N/A' }}
+                </div>
             </div>
 
             <!-- Shipping Info -->
