@@ -50,13 +50,13 @@
                     <div class="flex items-center mb-2">
                         <i class="fa fa-phone mx-1 text-gray-500 dark:text-gray-400"></i>
                         <div class="text-gray-700 dark:text-gray-300">
-                            {{ __('contactus.helpline') ?? 'Helpline 4534345656' }}</div>
+                            {{ __('contactus.helpline') ?? 'Helpline +92-322-3232727' }}</div>
                     </div>
                     <div class="border border-slate-100 dark:border-gray-700 h-4 mb-2"></div>
                     <div class="flex items-center mb-2">
                         <i class="fa fa-envelope mx-1 text-gray-500 dark:text-gray-400"></i>
                         <div>
-                            <a href="mailto:info@alshafi.com"
+                            <a href="mailto:info@alshaafionline.com"
                                 class="hover:text-blue-600 dark:hover:text-blue-400 text-gray-700 dark:text-gray-300">info@alshafi.com</a>
                         </div>
                     </div>
@@ -64,8 +64,19 @@
                     <div class="flex items-center">
                         <i class="fa fa-map-marker-alt mx-1 text-gray-500 dark:text-gray-400"></i>
                         <div class="text-gray-700 dark:text-gray-300">
-                            {{ __('contactus.address') ?? 'Address: 123, Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.' }}
+                            {{ __('contactus.address') ?? 'Address: Alshaafi Dawakhna, MI City, Okara Road, Depalpur' }}
                         </div>
+                    </div>
+                </div>
+                <div
+                    class="mt-4 p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700">
+                    <div class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-3">
+                        {{ __('contactus.location') ?? 'Location' }}
+                    </div>
+                    <div class="w-full h-64 rounded overflow-hidden">
+                        <iframe src="https://maps.app.goo.gl/ZcXfob6ugZLpMsdP8?g_st=ic&output=embed" width="100%"
+                            height="100%" frameborder="0" style="border:0;" allowfullscreen loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade" title="Alshaafi location"></iframe>
                     </div>
                 </div>
             </div>
