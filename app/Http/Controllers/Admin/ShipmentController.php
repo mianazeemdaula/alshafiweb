@@ -205,7 +205,7 @@ class ShipmentController extends Controller
                 ]);
 
                 // Update order status
-                $order->update(['status' => 'shipped']);
+                $order->update(['status' => 'shipped','reference_number' => $request->reference ?? 'ORD-' . $order->id]);
                 return redirect()->route('admin.shipments.show', $shipment)
                     ->with('success', 'Shipment created and booked successfully!');
             } else {

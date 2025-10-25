@@ -103,9 +103,13 @@
                                         <div class="text-sm text-gray-600">
                                             {{ $shipment->order->user->name ?? ($shipment->order->customer_name ?? ($shipment->order->shipping_address['first_name'] ?? 'N/A')) }}
                                         </div>
+                                        <div class="text-sm text-gray-600">
+                                            {{ $shipment->order->reference_number ?? '' }}
+                                        </div>
                                     </div>
                                 </td>
-                                <td class="px-4 py-3">
+                                <td class="px-4
+                                            py-3">
                                     @if ($shipment->courierService->courier == 'trax')
                                         <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-medium">
                                             <i class="fas fa-shipping-fast mr-1"></i>TRAX

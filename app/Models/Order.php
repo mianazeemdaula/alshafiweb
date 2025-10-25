@@ -30,6 +30,7 @@ class Order extends Model
         'shipping_cost',
         'discount',
         'total',
+        'reference_number',
     ];
 
     protected $casts = [

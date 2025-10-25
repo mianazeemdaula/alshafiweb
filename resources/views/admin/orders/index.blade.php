@@ -118,6 +118,9 @@
                                             <div class="text-xs text-gray-500">
                                                 {{ $item->user->mobile ?? ($item->user->email ?? '') }}
                                             </div>
+                                            <div class="text-xs text-gray-500">
+                                                {{ $item->reference_number ?? '' }}
+                                            </div>
                                         </div>
                                     </div>
                                 </td>
