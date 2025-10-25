@@ -17,6 +17,10 @@ Route::get('/services', 'App\\Http\\Controllers\\WebController@services')->name(
 Route::get('/blog', 'App\Http\Controllers\WebController@blog')->name('blog.index');
 Route::get('/blog/{slug}', 'App\Http\Controllers\WebController@blogPost')->name('blog.post');
 
+// Legal pages
+Route::get('/terms-and-conditions', 'App\Http\Controllers\WebController@termsAndConditions')->name('terms.conditions');
+Route::get('/privacy-policy', 'App\Http\Controllers\WebController@privacyPolicy')->name('privacy.policy');
+
 // Public Reviews page
 Route::get('/reviews', [App\Http\Controllers\Web\ReviewController::class, 'index'])->name('web.reviews');
 

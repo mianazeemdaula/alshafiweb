@@ -298,4 +298,14 @@ class WebController extends Controller
         
         return view('web.blog.post', compact('post', 'relatedPosts'));
     }
+
+    public function termsAndConditions()
+    {
+        return view('web.legal.terms-and-conditions');
+    }
+
+    public function privacyPolicy()
+    {
+        return view('web.legal.privacy-policy');
+    }
 }
