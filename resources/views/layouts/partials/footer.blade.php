@@ -71,7 +71,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#"
+                            <a href="{{ url('/privacy-policy') }}"
                                 class="text-sm text-gray-300 hover:text-white transition-colors flex items-center group">
                                 <i
                                     class="fa fa-chevron-right text-xs mr-2 text-blue-500 group-hover:translate-x-1 transition-transform"></i>
@@ -79,7 +79,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#"
+                            <a href="{{ url('/terms-and-conditions') }}"
                                 class="text-sm text-gray-300 hover:text-white transition-colors flex items-center group">
                                 <i
                                     class="fa fa-chevron-right text-xs mr-2 text-blue-500 group-hover:translate-x-1 transition-transform"></i>
