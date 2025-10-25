@@ -8,7 +8,7 @@
                 <h1 class="text-4xl font-bold text-white mb-4">
                     <i class="fas fa-shield-alt mr-3"></i>Privacy Policy
                 </h1>
-                <p class="text-white/90 text-lg">Last Updated: {{ date('F d, Y') }}</p>
+                <p class="text-white/90 text-lg">Effective Date: October 25, 2025</p>
             </div>
         </div>
     </div>
@@ -18,20 +18,53 @@
         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 lg:p-12">
 
             <!-- Introduction -->
-            <div class="mb-12">
-                <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Your Privacy Matters</h2>
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Alshaafi Online — Privacy Policy</h2>
                 <p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
-                    Al-Shaafi Dawakhana ("us", "we", or "our") operates the Al-Shaafi Dawakhana website and services.
-                    This page informs you of our policies regarding the collection, use, and disclosure of personal data
-                    when you use our Service and the choices you have associated with that data.
+                    Alshaafi Online Private Limited (Pakistan) | Alshaafi Online Ltd (England) | U.S.-Registered Partner
+                    Entity (LLC)
+                </p>
+                <p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+                    Effective Date: October 25, 2025
                 </p>
                 <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
-                    We use your data to provide and improve the Service. By using the Service, you agree to the collection
-                    and use of information in accordance with this policy.
+                    Welcome to Alshaafi Online, an internationally recognized herbal and nutraceutical healthcare group
+                    specializing in natural medicine, research, and holistic wellness. This Privacy Policy explains how we
+                    collect, use, share, and protect your personal, medical, and transactional data when you visit our
+                    website <a href="https://www.alshaafionline.com"
+                        class="text-blue-600 dark:text-blue-400">www.alshaafionline.com</a>, consult with our certified
+                    herbalists (online or in person), or purchase our products. By using our website or services, you agree
+                    to the terms outlined in this policy.
                 </p>
             </div>
 
-            <!-- Section 1: Information We Collect -->
+            <!-- Section: Legal Entities & Scope -->
+            <section class="mb-8">
+                <div class="flex items-center mb-4">
+                    <div
+                        class="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-white font-bold mr-4">
+                        1</div>
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Legal Entities & Scope</h3>
+                </div>
+                <div class="ml-14 text-gray-700 dark:text-gray-300 space-y-3">
+                    <p>Alshaafi Online operates through a network of legally registered entities to ensure global compliance
+                        and product authenticity:</p>
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li><strong>Alshaafi Online Private Limited (Pakistan)</strong> — Primary manufacturing and export
+                            hub. Registered with SECP, FBR, DRAP, PCSIR, ISO, Halal, GMP, and Punjab Healthcare Commission
+                            (PHC).</li>
+                        <li><strong>Alshaafi Online Ltd (England)</strong> — Registered in the United Kingdom to manage
+                            operations within the UK and EU, compliant with UK-GDPR and EU-GDPR.</li>
+                        <li><strong>U.S.-Registered Partner Entity (LLC)</strong> — Official partner entity in the United
+                            States for distribution and compliance under FDA/FTC/HIPAA-equivalent privacy principles.</li>
+                    </ul>
+                    <p class="mt-3">This Privacy Policy applies to visitors of our website, patients consulting with
+                        Alshaafi herbalists (online or in person), customers purchasing herbal or nutraceutical products,
+                        and authorized distributors or healthcare professionals affiliated with Alshaafi.</p>
+                </div>
+            </section>
+
+            <!-- Section 2: Information We Collect -->
             <section class="mb-10">
                 <div class="flex items-center mb-4">
                     <div
@@ -42,15 +75,16 @@
                 </div>
                 <div class="ml-14 text-gray-700 dark:text-gray-300 space-y-4">
                     <div>
-                        <h4 class="font-semibold text-gray-900 dark:text-white mb-2">Personal Information</h4>
-                        <p>When you use our Service, we may ask you to provide certain personally identifiable information:
-                        </p>
+                        <h4 class="font-semibold text-gray-900 dark:text-white mb-2">Personal & Medical Information</h4>
+                        <p>When you use our Service, we may ask you to provide certain personally identifiable and medical
+                            information:</p>
                         <ul class="list-disc pl-6 space-y-1 mt-2">
                             <li>Name and contact information (email, phone number)</li>
                             <li>Billing and shipping address</li>
                             <li>Payment information (processed securely)</li>
                             <li>Account credentials (username, password)</li>
                             <li>Order history and preferences</li>
+                            <li>Medical history and consultation notes where required for treatment</li>
                         </ul>
                     </div>
 
@@ -74,7 +108,23 @@
                 </div>
             </section>
 
-            <!-- Section 2: Third-Party Authentication -->
+            <!-- Section: Purpose & Legal Basis -->
+            <section class="mb-8">
+                <div class="flex items-center mb-4">
+                    <div
+                        class="w-10 h-10 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold mr-4">
+                        3</div>
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Purpose of Processing & Legal Basis</h3>
+                </div>
+                <div class="ml-14 text-gray-700 dark:text-gray-300 space-y-3">
+                    <p>Your information is collected and processed to provide accurate consultation, manufacture and deliver
+                        prescribed products, ensure compliance, prevent fraud, and conduct research.</p>
+                    <p>We process data based on consent, contractual necessity, legal obligations, and legitimate interests.
+                    </p>
+                </div>
+            </section>
+
+            <!-- Section 4: Third-Party Authentication -->
             <section class="mb-10">
                 <div class="flex items-center mb-4">
                     <div
@@ -138,7 +188,7 @@
                 </div>
             </section>
 
-            <!-- Section 3: How We Use Your Information -->
+            <!-- Section: How We Use Your Information -->
             <section class="mb-10">
                 <div class="flex items-center mb-4">
                     <div
@@ -161,6 +211,39 @@
                         <li>To verify your identity through third-party authentication services</li>
                         <li>To personalize your shopping experience</li>
                     </ul>
+                </div>
+            </section>
+
+            <!-- Section: Data Sharing & Disclosure -->
+            <section class="mb-10">
+                <div class="flex items-center mb-4">
+                    <div
+                        class="w-10 h-10 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold mr-4">
+                        4</div>
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Data Sharing and Disclosure</h3>
+                </div>
+                <div class="ml-14 text-gray-700 dark:text-gray-300 space-y-4">
+                    <p>We do not sell or rent personal data. Limited sharing occurs only with payment processors, logistics
+                        partners, regulatory bodies, healthcare professionals, and IT vendors under strict confidentiality.
+                    </p>
+                    <div>
+                        <h4 class="font-semibold text-gray-900 dark:text-white mb-2">Service Providers</h4>
+                        <ul class="list-disc pl-6 space-y-1 mt-2">
+                            <li>Process payments (payment gateways)</li>
+                            <li>Deliver products (courier services: TCS, Trax, Leopards)</li>
+                            <li>Provide customer support</li>
+                            <li>Analyze service usage</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-gray-900 dark:text-white mb-2">Legal Requirements</h4>
+                        <p>We may disclose your information if required by law or in response to valid requests by public
+                            authorities.</p>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-gray-900 dark:text-white mb-2">Business Transfers</h4>
+                        <p>In the event of a merger, acquisition, or asset sale, your personal data may be transferred.</p>
+                    </div>
                 </div>
             </section>
 
@@ -339,7 +422,23 @@
                 </div>
             </section>
 
-            <!-- Section 11: Changes to Privacy Policy -->
+            <!-- Section: Regulatory Compliance & Updates -->
+            <section class="mb-10">
+                <div class="flex items-center mb-4">
+                    <div
+                        class="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-white font-bold mr-4">
+                        11</div>
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Regulatory Compliance & Policy Updates
+                    </h3>
+                </div>
+                <div class="ml-14 text-gray-700 dark:text-gray-300 space-y-3">
+                    <p>Alshaafi Online operates under SECP, FBR, DRAP, PCSIR, ISO, Halal, GMP, PHC, and IPO certifications,
+                        as well as UK-GDPR, EU-GDPR, and US HIPAA-equivalent frameworks where applicable.</p>
+                    <p>We may update our Privacy Policy periodically to reflect new regulations or operational changes. The
+                        latest version will always be available at <a href="https://www.alshaafionline.com"
+                            class="text-blue-600 dark:text-blue-400">www.alshaafionline.com</a>.</p>
+                </div>
+            </section>
             <section class="mb-10">
                 <div class="flex items-center mb-4">
                     <div
@@ -377,28 +476,23 @@
                 </div>
             </section>
 
-            <!-- Contact Information -->
+            <!-- Contact & DPO -->
             <section
                 class="mt-12 p-6 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-gray-700 dark:to-gray-600 rounded-xl">
-                <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-                    <i class="fas fa-envelope mr-2"></i>Contact Us About Your Privacy
-                </h3>
-                <p class="text-gray-700 dark:text-gray-300 mb-4">
-                    If you have any questions about this Privacy Policy, or wish to exercise your data protection rights,
-                    please contact us:
-                </p>
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4"><i
+                        class="fas fa-envelope mr-2"></i>Contact Us</h3>
+                <p class="text-gray-700 dark:text-gray-300 mb-4">If you have any questions about this Privacy Policy, or
+                    wish to exercise your data protection rights, please contact our Data Protection Officer (DPO):</p>
                 <div class="space-y-2 text-gray-700 dark:text-gray-300">
-                    <p><i class="fas fa-building mr-2 text-blue-600"></i><strong>Al-Shaafi Dawakhana</strong></p>
-                    <p><i class="fas fa-phone mr-2 text-green-600"></i>Phone: +92 325 3257878</p>
-                    <p><i class="fas fa-envelope mr-2 text-purple-600"></i>Email: info@alshaafi.com</p>
-                    <p><i class="fas fa-map-marker-alt mr-2 text-red-600"></i>Address: Depal Pur, Pakistan</p>
+                    <p><strong>Data Protection Officer (DPO)</strong></p>
+                    <p>Email: <a href="mailto:privacy@alshaafionline.com"
+                            class="text-blue-600 dark:text-blue-400">privacy@alshaafionline.com</a></p>
+                    <p>Website: <a href="https://www.alshaafionline.com"
+                            class="text-blue-600 dark:text-blue-400">www.alshaafionline.com</a></p>
                 </div>
-
                 <div class="mt-6 p-4 bg-white dark:bg-gray-800 rounded-lg">
-                    <p class="text-sm text-gray-600 dark:text-gray-400">
-                        <i class="fas fa-clock mr-2"></i>
-                        We aim to respond to all privacy-related inquiries within 30 days.
-                    </p>
+                    <p class="text-sm text-gray-600 dark:text-gray-400"><i class="fas fa-clock mr-2"></i>We aim to respond
+                        to all privacy-related inquiries within 30 days.</p>
                 </div>
             </section>
         </div>
