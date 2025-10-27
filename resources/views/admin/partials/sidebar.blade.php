@@ -18,6 +18,14 @@
             <a href="{{ route('admin.users.index') }}" class="block"><i class="fa-solid fa-users mr-2"></i>
                 Users</a>
         </li>
+        <li class="p-2 hover:bg-gray-700 hover:animate-pulse @if (request()->routeIs('admin.teams.*')) bg-green-500 @endif">
+            <a href="{{ route('admin.teams.index') }}" class="block"><i class="fa-solid fa-users-cog mr-2"></i>
+                Team Management</a>
+        </li>
+        <li class="p-2 hover:bg-gray-700 hover:animate-pulse @if (request()->routeIs('admin.bonuses.*')) bg-green-500 @endif">
+            <a href="{{ route('admin.bonuses.index') }}" class="block"><i class="fa-solid fa-dollar-sign mr-2"></i>
+                Bonuses</a>
+        </li>
         <li class="p-2 hover:bg-gray-700 hover:animate-pulse @if (request()->routeIs('admin.levels.*')) bg-green-500 @endif">
             <a href="{{ route('admin.levels.index') }}" class="block"><i class="fa-solid fa-chart-line mr-2"></i>
                 Levels</a>
@@ -25,7 +33,9 @@
     @endif
 
     {{-- Admin & Order Taker Menu Items --}}
-    @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('order_taker'))
+    @if (auth()->user()->hasRole('admin') ||
+            auth()->user()->hasRole('order_taker') ||
+            auth()->user()->hasRole('team_leader'))
         <li class="p-2 hover:bg-gray-700 hover:animate-pulse @if (request()->routeIs('admin.orders.*')) bg-green-500 @endif">
             <a href="{{ route('admin.orders.index') }}" class="block"><i class="fa-solid fa-cart-shopping mr-2"></i>
                 Orders</a>
@@ -61,7 +71,9 @@
     @endif
 
     {{-- Admin & Order Taker Menu Items --}}
-    @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('order_taker'))
+    @if (auth()->user()->hasRole('admin') ||
+            auth()->user()->hasRole('order_taker') ||
+            auth()->user()->hasRole('team_leader'))
         <li class="p-2 hover:bg-gray-700  hover:animate-pulse @if (request()->routeIs('admin.shipments.*')) bg-green-500 @endif">
             <a href="{{ route('admin.shipments.index') }}" class="block"><i
                     class="fa-solid fa-shipping-fast mr-2"></i>

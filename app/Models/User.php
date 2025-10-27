@@ -27,6 +27,7 @@ class User extends Authenticatable
         'level_id',
         'referrer',
         'extra_discount',
+        'team_leader_id',
     ];
 
     /**
@@ -73,6 +74,63 @@ class User extends Authenticatable
     {
         return $this->belongsTo(UserLevel::class, 'level_id');
     }
+
+    /**
+     * Team leader relationship - the team leader this user reports to
+     */
+    public function teamLeader()
+    {
+        return $this->belongsTo(User::class, 'team_leader_id');
+    }
+
+    /**
+     * Team members relationship - order takers assigned to this team leader
+     */
+    public function teamMembers()
+    {
+        return $this->hasMany(User::class, 'team_leader_id');
+    }
+
+    /**
+     * Manual orders created by this order taker
+     */
+    public function manualOrders()
+    {
+        return $this->hasMany(Order::class, 'order_taker_id');
+    }
+
+    /**
+     * Bonuses earned by this order taker
+     */
+    public function bonuses()
+    {
+        return $this->hasMany(Bonus::class, 'order_taker_id');
+    }
+
+    /**
+     * Check if user is a team leader
+     */
+    public function isTeamLeader()
+    {
+        return $this->hasRole('team_leader');
+    }
+
+    /**
+     * Check if user is an order taker
+     */
+    public function isOrderTaker()
+    {
+        return $this->hasRole('order_taker');
+    }
+
+    /**
+     * Check if user is an admin
+     */
+    public function isAdmin()
+    {
+        return $this->hasRole('admin');
+    }
+    
     protected static function booted()
     {
         static::creating(function ($user) {

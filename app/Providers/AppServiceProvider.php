@@ -32,6 +32,9 @@ class AppServiceProvider extends ServiceProvider
     {
         Schema::defaultStringLength(191);
         
+        // Register Order observer for bonus calculation
+        \App\Models\Order::observe(\App\Observers\OrderObserver::class);
+        
         // Register webhook middleware alias (currently not needed based on courier docs)
         // Route::aliasMiddleware('webhook.verify', \App\Http\Middleware\VerifyWebhookSignature::class);
     }

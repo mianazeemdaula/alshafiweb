@@ -106,10 +106,25 @@ Route::middleware('auth')->group(function () {
         Route::patch('courier-services/{courier}/toggle-status', 'App\Http\Controllers\Admin\CourierServiceController@toggleStatus')->name('courier-services.toggle-status');
         Route::post('courier-services/{courier}/test-connection', 'App\Http\Controllers\Admin\CourierServiceController@testConnection')->name('courier-services.test-connection');
         Route::post('courier-services/{courier}/generate-costcenter', 'App\Http\Controllers\Admin\CourierServiceController@generateCostCenter')->name('courier-services.generate-costcenter');
+        
+        // Team Management Routes
+        Route::prefix('teams')->name('teams.')->group(function () {
+            Route::get('/', 'App\Http\Controllers\Admin\TeamController@index')->name('index');
+            Route::get('/assign', 'App\Http\Controllers\Admin\TeamController@assign')->name('assign');
+            Route::post('/assign', 'App\Http\Controllers\Admin\TeamController@storeAssignment')->name('store-assignment');
+            Route::delete('/remove/{orderTaker}', 'App\Http\Controllers\Admin\TeamController@removeAssignment')->name('remove-assignment');
+            Route::get('/{teamLeader}', 'App\Http\Controllers\Admin\TeamController@show')->name('show');
+        });
+        
+        // Bonus Management Routes
+        Route::prefix('bonuses')->name('bonuses.')->group(function () {
+            Route::get('/', 'App\Http\Controllers\Admin\TeamController@bonuses')->name('index');
+            Route::patch('/{bonus}/status', 'App\Http\Controllers\Admin\TeamController@updateBonusStatus')->name('update-status');
+        });
     });
     
-    // Routes accessible by admin and order_taker
-    Route::middleware('role:admin|order_taker')->prefix('admin')->name('admin.')->group(function () {
+    // Routes accessible by admin, order_taker, and team_leader
+    Route::middleware('role:admin|order_taker|team_leader')->prefix('admin')->name('admin.')->group(function () {
         Route::resource('orders', 'App\Http\Controllers\Admin\OrderController');
         
         // Shipments Management

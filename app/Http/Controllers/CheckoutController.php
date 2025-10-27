@@ -198,6 +198,8 @@ class CheckoutController extends Controller
                 'discount' => 0,
                 'total' => floatval(str_replace(['$', ','], '', $cartTotal)), // Keep as rupees
                 'extra_note' => $request->shipping['notes'] ?? null,
+                'order_source' => 'website', // Orders from website checkout
+                'order_taker_id' => null, // No order taker for website orders
             ]);
 
             // Create order details and update stock

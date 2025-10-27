@@ -18,6 +18,8 @@ class Order extends Model
         'payment_method_id',
         'extra_note',
         'type',
+        'order_source',
+        'order_taker_id',
         'status',
         'delivery_date',
         'payment_date',
@@ -76,6 +78,80 @@ class Order extends Model
     public function shipment()
     {
         return $this->hasOne(Shipment::class);
+    }
+
+    /**
+     * Get the order taker who created this manual order
+     */
+    public function orderTaker()
+    {
+        return $this->belongsTo(User::class, 'order_taker_id');
+    }
+
+    /**
+     * Get the bonus associated with this order
+     */
+    public function bonus()
+    {
+        return $this->hasOne(Bonus::class);
+    }
+
+    /**
+     * Scope to get only website orders
+     */
+    public function scopeWebsiteOrders($query)
+    {
+        return $query->where('order_source', 'website');
+    }
+
+    /**
+     * Scope to get only manual orders
+     */
+    public function scopeManualOrders($query)
+    {
+        return $query->where('order_source', 'manual');
+    }
+
+    /**
+     * Scope to get orders visible to a specific user based on their role
+     */
+    public function scopeVisibleTo($query, User $user)
+    {
+        if ($user->isAdmin()) {
+            // Admin sees all orders
+            return $query;
+        } elseif ($user->isTeamLeader()) {
+            // Team leader sees all manual orders from their team members and website orders
+            return $query->where(function ($q) use ($user) {
+                $q->where('order_source', 'website')
+                  ->orWhereHas('orderTaker', function ($subQ) use ($user) {
+                      $subQ->where('team_leader_id', $user->id);
+                  });
+            });
+        } elseif ($user->isOrderTaker()) {
+            // Order taker sees only their own manual orders
+            return $query->where('order_source', 'manual')
+                         ->where('order_taker_id', $user->id);
+        }
+
+        // Default: no orders visible
+        return $query->where('id', null);
+    }
+
+    /**
+     * Check if this is a manual order
+     */
+    public function isManualOrder()
+    {
+        return $this->order_source === 'manual';
+    }
+
+    /**
+     * Check if this is a website order
+     */
+    public function isWebsiteOrder()
+    {
+        return $this->order_source === 'website';
     }
 
     /**

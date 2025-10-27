@@ -54,17 +54,64 @@ class AuthController extends Controller
             return redirect('/user/dashboard');
         }
         
+        // Team Leader Dashboard
+        if($user->hasRole('team_leader')) {
+            // Get team members
+            $teamMembers = $user->teamMembers()->with(['manualOrders', 'bonuses'])->get();
+            
+            // Get all orders visible to team leader (website orders + team manual orders)
+            $visibleOrders = \App\Models\Order::visibleTo($user);
+            
+            $stats = [
+                'team_members' => $teamMembers->count(),
+                'total_orders' => $visibleOrders->count(),
+                'website_orders' => (clone $visibleOrders)->where('order_source', 'website')->count(),
+                'manual_orders' => (clone $visibleOrders)->where('order_source', 'manual')->count(),
+                'pending_orders' => (clone $visibleOrders)->where('status', 'pending')->count(),
+                'processing_orders' => (clone $visibleOrders)->where('status', 'processing')->count(),
+                'shipped_orders' => (clone $visibleOrders)->where('status', 'shipped')->count(),
+                'delivered_orders' => (clone $visibleOrders)->where('status', 'delivered')->count(),
+                'cancelled_orders' => (clone $visibleOrders)->where('status', 'cancelled')->count(),
+            ];
+            
+            // Team performance
+            $teamStats = [
+                'total_team_orders' => $teamMembers->sum(function($member) {
+                    return $member->manualOrders->count();
+                }),
+                'total_team_bonuses' => $teamMembers->sum(function($member) {
+                    return $member->bonuses->sum('bonus_amount');
+                }),
+            ];
+            
+            return view('admin.team-leader-dashboard', compact('stats', 'teamStats', 'teamMembers'));
+        }
+        
         // Order Taker Dashboard - Only Order Statistics (No Financial Data)
         if($user->hasRole('order_taker')) {
+            // Get only manual orders for this order taker
+            $manualOrders = \App\Models\Order::where('order_taker_id', $user->id)
+                ->where('order_source', 'manual');
+            
             $stats = [
-                'total_orders' => \App\Models\Order::count(),
-                'pending_orders' => \App\Models\Order::where('status', 'pending')->count(),
-                'processing_orders' => \App\Models\Order::where('status', 'processing')->count(),
-                'shipped_orders' => \App\Models\Order::where('status', 'shipped')->count(),
-                'delivered_orders' => \App\Models\Order::where('status', 'delivered')->count(),
-                'cancelled_orders' => \App\Models\Order::where('status', 'cancelled')->count(),
+                'total_orders' => $manualOrders->count(),
+                'pending_orders' => (clone $manualOrders)->where('status', 'pending')->count(),
+                'processing_orders' => (clone $manualOrders)->where('status', 'processing')->count(),
+                'shipped_orders' => (clone $manualOrders)->where('status', 'shipped')->count(),
+                'delivered_orders' => (clone $manualOrders)->where('status', 'delivered')->count(),
+                'cancelled_orders' => (clone $manualOrders)->where('status', 'cancelled')->count(),
             ];
-            return view('admin.order-taker-dashboard', compact('stats'));
+            
+            // Get bonus information
+            $bonuses = $user->bonuses;
+            $bonusStats = [
+                'total_bonuses' => $bonuses->sum('bonus_amount'),
+                'pending_bonuses' => $bonuses->where('status', 'pending')->sum('bonus_amount'),
+                'paid_bonuses' => $bonuses->where('status', 'paid')->sum('bonus_amount'),
+                'bonus_count' => $bonuses->count(),
+            ];
+            
+            return view('admin.order-taker-dashboard', compact('stats', 'bonusStats'));
         }
         
         // Admin Dashboard - Full Statistics Including Financial Data

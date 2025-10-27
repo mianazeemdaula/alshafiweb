@@ -26,7 +26,7 @@
         <div class="mb-6">
             <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
                 <i class="fa fa-chart-bar text-blue-600"></i>
-                Order Statistics Overview
+                My Manual Orders Statistics
             </h2>
 
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
@@ -38,7 +38,7 @@
                             <i class="fa fa-shopping-cart text-2xl text-white"></i>
                         </div>
                     </div>
-                    <h3 class="text-white/90 text-sm font-medium mb-1">Total Orders</h3>
+                    <h3 class="text-white/90 text-sm font-medium mb-1">My Orders</h3>
                     <p class="text-3xl font-bold text-white">{{ $stats['total_orders'] }}</p>
                 </div>
 
@@ -100,6 +100,71 @@
                     </div>
                     <h3 class="text-white/90 text-sm font-medium mb-1">Cancelled</h3>
                     <p class="text-3xl font-bold text-white">{{ $stats['cancelled_orders'] }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bonus Summary Section -->
+        <div class="mb-6">
+            <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                <i class="fa fa-dollar-sign text-green-600"></i>
+                My Bonus Summary
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <!-- Total Bonuses -->
+                <div
+                    class="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl p-5 shadow-lg hover:shadow-xl transition-all">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center">
+                            <i class="fa fa-coins text-2xl text-white"></i>
+                        </div>
+                    </div>
+                    <h3 class="text-white/90 text-sm font-medium mb-1">Total Bonuses</h3>
+                    <p class="text-3xl font-bold text-white">PKR {{ number_format($bonusStats['total_bonuses'] / 100, 2) }}
+                    </p>
+                    <p class="text-white/70 text-xs mt-1">{{ $bonusStats['bonus_count'] }} bonuses earned</p>
+                </div>
+
+                <!-- Pending Bonuses -->
+                <div
+                    class="bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-xl p-5 shadow-lg hover:shadow-xl transition-all">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center">
+                            <i class="fa fa-clock text-2xl text-white"></i>
+                        </div>
+                    </div>
+                    <h3 class="text-white/90 text-sm font-medium mb-1">Pending</h3>
+                    <p class="text-3xl font-bold text-white">PKR
+                        {{ number_format($bonusStats['pending_bonuses'] / 100, 2) }}</p>
+                    <p class="text-white/70 text-xs mt-1">Awaiting payment</p>
+                </div>
+
+                <!-- Paid Bonuses -->
+                <div
+                    class="bg-gradient-to-br from-green-500 to-green-600 rounded-xl p-5 shadow-lg hover:shadow-xl transition-all">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center">
+                            <i class="fa fa-check-circle text-2xl text-white"></i>
+                        </div>
+                    </div>
+                    <h3 class="text-white/90 text-sm font-medium mb-1">Paid</h3>
+                    <p class="text-3xl font-bold text-white">PKR {{ number_format($bonusStats['paid_bonuses'] / 100, 2) }}
+                    </p>
+                    <p class="text-white/70 text-xs mt-1">Successfully received</p>
+                </div>
+
+                <!-- Bonus Rate -->
+                <div
+                    class="bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-xl p-5 shadow-lg hover:shadow-xl transition-all">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center">
+                            <i class="fa fa-percentage text-2xl text-white"></i>
+                        </div>
+                    </div>
+                    <h3 class="text-white/90 text-sm font-medium mb-1">Bonus Rate</h3>
+                    <p class="text-3xl font-bold text-white">5%</p>
+                    <p class="text-white/70 text-xs mt-1">On delivered orders</p>
                 </div>
             </div>
         </div>

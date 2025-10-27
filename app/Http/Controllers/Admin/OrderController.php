@@ -16,7 +16,10 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $query = Order::query();
+        $user = auth()->user();
+        
+        // Start with orders visible to current user based on role
+        $query = Order::visibleTo($user);
 
         if ($search = request('search')) {
             $query->where(function ($q) use ($search) {
@@ -44,6 +47,10 @@ class OrderController extends Controller
 
         if ($type = request('type')) {
             $query->where('type', $type);
+        }
+
+        if ($source = request('order_source')) {
+            $query->where('order_source', $source);
         }
 
         $orders = $query->orderBy('id', 'desc')->paginate(10)->withQueryString();
@@ -138,6 +145,8 @@ class OrderController extends Controller
                 'total' => $total,
                 'status' => 'pending',
                 'payment_status' => 'pending',
+                'order_source' => 'manual', // Orders created in admin panel are manual
+                'order_taker_id' => auth()->id(), // Current logged-in user is the order taker
             ];
 
             // Add customer information based on type
