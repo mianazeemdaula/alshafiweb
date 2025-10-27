@@ -114,6 +114,38 @@ class AuthController extends Controller
             return view('admin.order-taker-dashboard', compact('stats', 'bonusStats'));
         }
         
+        // Team Leader Dashboard
+        if($user->hasRole('team_leader')) {
+            // Get team members
+            $teamMembers = $user->teamMembers()->with(['manualOrders', 'bonuses'])->get();
+            
+            // Get visible orders (website + team manual orders)
+            $visibleOrders = \App\Models\Order::visibleTo($user);
+            
+            $stats = [
+                'team_members' => $teamMembers->count(),
+                'total_orders' => $visibleOrders->count(),
+                'website_orders' => (clone $visibleOrders)->where('order_source', 'website')->count(),
+                'manual_orders' => (clone $visibleOrders)->where('order_source', 'manual')->count(),
+                'pending_orders' => (clone $visibleOrders)->where('status', 'pending')->count(),
+                'processing_orders' => (clone $visibleOrders)->where('status', 'processing')->count(),
+                'shipped_orders' => (clone $visibleOrders)->where('status', 'shipped')->count(),
+                'delivered_orders' => (clone $visibleOrders)->where('status', 'delivered')->count(),
+                'cancelled_orders' => (clone $visibleOrders)->where('status', 'cancelled')->count(),
+            ];
+            
+            $teamStats = [
+                'total_team_orders' => $teamMembers->sum(function($member) {
+                    return $member->manualOrders->count();
+                }),
+                'total_team_bonuses' => $teamMembers->sum(function($member) {
+                    return $member->bonuses->sum('bonus_amount');
+                }),
+            ];
+            
+            return view('admin.team-leader-dashboard', compact('stats', 'teamStats', 'teamMembers'));
+        }
+        
         // Admin Dashboard - Full Statistics Including Financial Data
         $stats = [
             'users' => \App\Models\User::count(),

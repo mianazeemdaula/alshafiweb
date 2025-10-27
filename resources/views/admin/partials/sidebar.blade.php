@@ -18,14 +18,32 @@
             <a href="{{ route('admin.users.index') }}" class="block"><i class="fa-solid fa-users mr-2"></i>
                 Users</a>
         </li>
-        <li class="p-2 hover:bg-gray-700 hover:animate-pulse @if (request()->routeIs('admin.teams.*')) bg-green-500 @endif">
-            <a href="{{ route('admin.teams.index') }}" class="block"><i class="fa-solid fa-users-cog mr-2"></i>
-                Team Management</a>
+
+        {{-- Team Management Section --}}
+        <li class="p-2 hover:bg-gray-700 @if (request()->routeIs('admin.teams.*') || request()->routeIs('admin.bonuses.*')) bg-green-500 @endif">
+            <button onclick="toggleTeamMenu()" class="w-full text-left flex items-center justify-between">
+                <span><i class="fa-solid fa-users-cog mr-2"></i> Team Management</span>
+                <i class="fa-solid fa-chevron-down transition-transform" id="team-menu-icon"></i>
+            </button>
+            <ul class="ml-4 mt-2 space-y-1 @if (!request()->routeIs('admin.teams.*') && !request()->routeIs('admin.bonuses.*')) hidden @endif" id="team-submenu">
+                <li class="p-2 hover:bg-gray-600 rounded @if (request()->routeIs('admin.teams.index')) bg-gray-600 @endif">
+                    <a href="{{ route('admin.teams.index') }}" class="block text-sm">
+                        <i class="fa-solid fa-sitemap mr-2"></i>Team Structure
+                    </a>
+                </li>
+                <li class="p-2 hover:bg-gray-600 rounded @if (request()->routeIs('admin.teams.assign')) bg-gray-600 @endif">
+                    <a href="{{ route('admin.teams.assign') }}" class="block text-sm">
+                        <i class="fa-solid fa-user-plus mr-2"></i>Assign Members
+                    </a>
+                </li>
+                <li class="p-2 hover:bg-gray-600 rounded @if (request()->routeIs('admin.bonuses.*')) bg-gray-600 @endif">
+                    <a href="{{ route('admin.bonuses.index') }}" class="block text-sm">
+                        <i class="fa-solid fa-dollar-sign mr-2"></i>Bonuses
+                    </a>
+                </li>
+            </ul>
         </li>
-        <li class="p-2 hover:bg-gray-700 hover:animate-pulse @if (request()->routeIs('admin.bonuses.*')) bg-green-500 @endif">
-            <a href="{{ route('admin.bonuses.index') }}" class="block"><i class="fa-solid fa-dollar-sign mr-2"></i>
-                Bonuses</a>
-        </li>
+
         <li class="p-2 hover:bg-gray-700 hover:animate-pulse @if (request()->routeIs('admin.levels.*')) bg-green-500 @endif">
             <a href="{{ route('admin.levels.index') }}" class="block"><i class="fa-solid fa-chart-line mr-2"></i>
                 Levels</a>

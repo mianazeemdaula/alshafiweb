@@ -178,6 +178,19 @@
             sidebar.classList.add('-translate-x-full');
             sidebar.classList.remove('translate-x-0');
         });
+
+        // Toggle Team Management submenu
+        function toggleTeamMenu() {
+            const submenu = document.getElementById('team-submenu');
+            const icon = document.getElementById('team-menu-icon');
+            if (submenu.classList.contains('hidden')) {
+                submenu.classList.remove('hidden');
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                submenu.classList.add('hidden');
+                icon.style.transform = 'rotate(0deg)';
+            }
+        }
     </script>
     @yield('js')
     @stack('scripts')
