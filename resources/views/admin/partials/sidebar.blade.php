@@ -5,7 +5,7 @@
     </li>
 
     {{-- Admin Only Menu Items --}}
-    @if (auth()->user()->hasRole('admin'))
+    @role('admin')
         <li class="p-2 hover:bg-gray-700 hover:animate-pulse @if (request()->routeIs('admin.categories.*')) bg-green-500 @endif">
             <a href="{{ route('admin.categories.index') }}" class="block"><i class="fa-solid fa-share-alt mr-2"></i>
                 Categories</a>
@@ -48,7 +48,7 @@
             <a href="{{ route('admin.levels.index') }}" class="block"><i class="fa-solid fa-chart-line mr-2"></i>
                 Levels</a>
         </li>
-    @endif
+    @endrole
 
     {{-- Admin & Order Taker Menu Items --}}
     @if (auth()->user()->hasRole('admin') ||
