@@ -121,12 +121,9 @@ class Order extends Model
             // Admin sees all orders
             return $query;
         } elseif ($user->isTeamLeader()) {
-            // Team leader sees all manual orders from their team members and website orders
-            return $query->where(function ($q) use ($user) {
-                $q->where('order_source', 'website')
-                  ->orWhereHas('orderTaker', function ($subQ) use ($user) {
-                      $subQ->where('team_leader_id', $user->id);
-                  });
+            // Team leader: show only manual orders created by their team members
+            return $query->whereHas('orderTaker', function ($subQ) use ($user) {
+                $subQ->where('team_leader_id', $user->id);
             });
         } elseif ($user->isOrderTaker()) {
             // Order taker sees only their own manual orders

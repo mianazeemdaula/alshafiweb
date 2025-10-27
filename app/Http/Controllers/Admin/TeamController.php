@@ -29,6 +29,25 @@ class TeamController extends Controller
     }
 
     /**
+     * Show the current authenticated team leader's team
+     */
+    public function myTeam()
+    {
+        $user = auth()->user();
+        if (!$user->hasRole('team_leader')) {
+            abort(403);
+        }
+
+        $teamLeader = User::with(['teamMembers' => function($query) {
+            $query->with(['manualOrders' => function($q) {
+                $q->latest()->limit(10);
+            }, 'bonuses']);
+        }])->findOrFail($user->id);
+
+        return view('admin.teams.show', compact('teamLeader'));
+    }
+
+    /**
      * Show form to assign order takers to team leader
      */
     public function assign()

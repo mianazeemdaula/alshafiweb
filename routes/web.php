@@ -140,6 +140,9 @@ Route::middleware('auth')->group(function () {
         
         // Order API for shipment creation
         Route::get('orders/{order}/api', 'App\Http\Controllers\Admin\OrderController@apiShow')->name('orders.api.show');
+        
+        // Team leader self view
+        Route::get('teams/my', 'App\Http\Controllers\Admin\TeamController@myTeam')->name('teams.my');
     });
     
     Route::post('logout', 'App\Http\Controllers\AuthController@logout')->name('logout');
