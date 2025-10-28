@@ -31,8 +31,8 @@ class CheckoutController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            // Enforce mobile format 1234-1234567 for registration
-            'mobile' => ['required', 'regex:/^[0-9]{4}-[0-9]{7}$/', 'unique:users'],
+            // Enforce mobile format starting with 03 and 11 digits total (e.g., 03123456789)
+            'mobile' => ['required', 'regex:/^03[0-9]{9}$/', 'unique:users'],
             'password' => 'required|string|min:8|confirmed',
         ]);
 
@@ -106,15 +106,16 @@ class CheckoutController extends Controller
 
         $validator = Validator::make($request->all(), [
             'shipping.first_name' => 'required|string|max:255',
-            // Enforce phone format 1234-1234567
-            'shipping.phone' => ['required', 'regex:/^[0-9]{4}-[0-9]{7}$/'],
+            // Enforce phone format starting with 03 and 11 digits total (e.g., 03123456789)
+            'shipping.phone' => ['required', 'regex:/^03[0-9]{9}$/'],
             'shipping.address' => 'required|string|max:500',
             'shipping.city' => 'required|string|max:100',
             'shipping.postal_code' => 'nullable|string|max:20',
             'shipping.notes' => 'nullable|string|max:1000',
             'payment_method' => 'required|in:cod',
         ], [
-            'shipping.phone.regex' => 'Phone number must be in the format 1234-1234567',
+            'shipping.phone.regex' => 'Phone number must start with 03 and contain 11 digits, e.g. 03123456789',
+            'mobile.regex' => 'Mobile number must start with 03 and contain 11 digits, e.g. 03123456789',
         ]);
 
         if ($validator->fails()) {

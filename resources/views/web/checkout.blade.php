@@ -74,11 +74,11 @@
                                     <div>
                                         <label
                                             class="block text-sm font-medium text-gray-700 mb-1">{{ __('Phone') }}</label>
-                                        <input type="tel" name="phone" pattern="[0-9]{4}-[0-9]{7}" maxlength="12"
-                                            placeholder="1234-1234567"
+                                        <input type="tel" name="phone" pattern="03[0-9]{9}" maxlength="11"
+                                            placeholder="03123456789"
                                             class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                             required>
-                                        <p class="text-xs text-gray-500 mt-1">Format: 1234-1234567</p>
+                                        <p class="text-xs text-gray-500 mt-1">Format: 03xxxxxxxxx (e.g. 03123456789)</p>
                                     </div>
 
                                     <div>
