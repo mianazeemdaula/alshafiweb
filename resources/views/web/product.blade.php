@@ -390,6 +390,10 @@
                                 if (quantityInput) {
                                     quantityInput.value = 1;
                                 }
+                                // Redirect user to checkout after a short delay so notification is visible
+                                setTimeout(function() {
+                                    window.location.href = '/checkout';
+                                }, 600);
                             } else {
                                 showNotification(data.message ||
                                     'Failed to add product to cart',

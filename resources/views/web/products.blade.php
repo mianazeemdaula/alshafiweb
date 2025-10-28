@@ -441,6 +441,10 @@
                                 showNotification('✓ ' + productName + ' added to cart!', 'success');
                                 updateCartCount(data.cart_count);
                                 if (quantityInput) quantityInput.value = 1;
+                                // Redirect user to checkout after a short delay so notification is visible
+                                setTimeout(function() {
+                                    window.location.href = '/checkout';
+                                }, 600);
                             } else {
                                 showNotification('Error: ' + (data.message || 'Unable to add to cart'),
                                     'error');

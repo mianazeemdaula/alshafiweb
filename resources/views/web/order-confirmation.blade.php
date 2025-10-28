@@ -96,8 +96,8 @@
                     <div class="mt-6 pt-6 border-t">
                         <div class="flex justify-between items-center">
                             <span class="text-lg font-medium text-gray-900">Total Amount:</span>
-                            <span
-                                class="text-2xl font-bold text-gray-900">${{ number_format($order->total_amount, 2) }}</span>
+                            <span class="text-2xl font-bold text-gray-900">Rs.
+                                {{ number_format($order->total_amount, 2) }}</span>
                         </div>
                     </div>
                 </div>
