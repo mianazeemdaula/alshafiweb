@@ -5,7 +5,10 @@
         <!-- Header Section -->
         <div class="flex flex-col space-y-4 md:flex-row md:items-center md:justify-between md:space-y-0">
             <div>
-                <h2 class="text-lg font-semibold">Users</h2>
+                <div class="flex">
+                    <h2 class="text-lg font-semibold">Users</h2>
+                    <a href="{{ route('admin.teams.index') }}" class="text-xs text-primary hover:text-gray-900 ml-2">Teams</a>
+                </div>
                 <div class="flex items center">
                     @foreach (\Spatie\Permission\Models\Role::get() as $item)
                         <div class="px-1 @if (!$loop->last) border-r @endif">

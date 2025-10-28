@@ -110,8 +110,9 @@
     <div class="p-4 border-b border-gray-200 dark:border-gray-700">
         <div class="flex flex-col lg:flex-row items-center gap-4">
             <div class="w-full lg:w-2/12 flex justify-center lg:justify-start">
-                <img src="{{ asset('images/logo/logo.svg') }}" alt="logo"
-                    class="h-10 dark:filter dark:brightness-0 dark:invert transition-transform hover:scale-105">
+                {{-- <img src="{{ asset('images/logo/logo.svg') }}" alt="logo"
+                    class="h-10 dark:filter dark:brightness-0 dark:invert transition-transform hover:scale-105"> --}}
+                <span class="text-lg font-semibold">Alshaafi</span>
             </div>
             <div class="w-full lg:flex-1">
                 <form action="/products" method="get" class="flex items-center gap-2">
