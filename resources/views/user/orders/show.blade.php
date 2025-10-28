@@ -95,9 +95,6 @@
                                             {{ $order->shipping_address['last_name'] ?? '' }}<br>
                                             {{ $order->shipping_address['address'] ?? '' }}<br>
                                             {{ $order->shipping_address['city'] ?? '' }}
-                                            @if (!empty($order->shipping_address['postal_code']))
-                                                {{ $order->shipping_address['postal_code'] }}
-                                            @endif
                                             @if (!empty($order->shipping_address['phone']))
                                                 <br>Phone: {{ $order->shipping_address['phone'] }}
                                             @endif

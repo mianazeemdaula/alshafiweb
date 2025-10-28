@@ -49,8 +49,7 @@
                                         {{ $order->shipping_address['last_name'] ?? '' }}</p>
                                     <p>{{ $order->shipping_address['phone'] ?? '' }}</p>
                                     <p>{{ $order->shipping_address['address'] ?? $order->street_address }}</p>
-                                    <p>{{ $order->shipping_address['city'] ?? '' }}{{ $order->shipping_address['postal_code'] ?? '' ? ', ' . $order->shipping_address['postal_code'] : '' }}
-                                    </p>
+                                    <p>{{ $order->shipping_address['city'] ?? '' }}</p>
                                 </div>
                             @else
                                 <div class="text-sm">
@@ -72,7 +71,7 @@
                                     <div
                                         class="flex-shrink-0 w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center">
                                         @if ($detail->product->media->first())
-                                            <img src="{{ $detail->product->media->first()->path }}"
+                                            <img src="{{ asset($detail->product->media->first()->file_path) }}"
                                                 alt="{{ $detail->product->name }}"
                                                 class="w-full h-full object-cover rounded-lg">
                                         @else
@@ -82,11 +81,11 @@
                                     <div class="flex-1">
                                         <h4 class="text-sm font-medium text-gray-900">{{ $detail->product->name }}</h4>
                                         <p class="text-sm text-gray-500">Quantity: {{ $detail->qty }}</p>
-                                        <p class="text-sm text-gray-500">Price: ${{ number_format($detail->price, 2) }}
+                                        <p class="text-sm text-gray-500">Price: RS. {{ number_format($detail->price, 2) }}
                                             each</p>
                                     </div>
                                     <div class="text-sm font-medium text-gray-900">
-                                        ${{ number_format($detail->price * $detail->qty, 2) }}
+                                        RS. {{ number_format($detail->price * $detail->qty, 2) }}
                                     </div>
                                 </div>
                             @endforeach

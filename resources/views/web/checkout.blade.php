@@ -28,97 +28,11 @@
                         <!-- Left Column - Forms -->
                         <div class="lg:col-span-2 space-y-6">
 
-                            <!-- Authentication Section -->
-                            @guest
-                                <div class="bg-white rounded-lg shadow-md p-6">
-                                    <h3 class="text-lg font-semibold mb-4">{{ __('Account Information') }}</h3>
-                                    <div class="space-y-4">
-                                        <div class="flex space-x-4">
-                                            <button type="button" id="existing-customer-btn"
-                                                class="flex-1 bg-blue-600 text-white px-4 py-2 rounded font-medium">
-                                                {{ __('Existing Customer') }}
-                                            </button>
-                                            <button type="button" id="new-customer-btn"
-                                                class="flex-1 bg-gray-200 text-gray-700 px-4 py-2 rounded font-medium">
-                                                {{ __('New Customer') }}
-                                            </button>
-                                        </div>
-
-                                        <!-- Login Form -->
-                                        <div id="login-form" class="space-y-4">
-                                            <div>
-                                                <label
-                                                    class="block text-sm font-medium text-gray-700 mb-1">{{ __('Email') }}</label>
-                                                <input type="email" id="login-email"
-                                                    class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                                    required>
-                                            </div>
-                                            <div>
-                                                <label
-                                                    class="block text-sm font-medium text-gray-700 mb-1">{{ __('Password') }}</label>
-                                                <input type="password" id="login-password"
-                                                    class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                                    required>
-                                            </div>
-                                            <button type="button" id="login-btn"
-                                                class="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded font-medium">
-                                                {{ __('login.title') }}
-                                            </button>
-                                        </div>
-
-                                        <!-- Register Form -->
-                                        <div id="register-form" class="space-y-4 hidden">
-                                            <div class="grid grid-cols-2 gap-4">
-                                                <div>
-                                                    <label
-                                                        class="block text-sm font-medium text-gray-700 mb-1">{{ __('First Name') }}</label>
-                                                    <input type="text" id="register-first-name"
-                                                        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                                        required>
-                                                </div>
-                                                <div>
-                                                    <label
-                                                        class="block text-sm font-medium text-gray-700 mb-1">{{ __('Last Name') }}</label>
-                                                    <input type="text" id="register-last-name"
-                                                        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                                        required>
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <label
-                                                    class="block text-sm font-medium text-gray-700 mb-1">{{ __('Email') }}</label>
-                                                <input type="email" id="register-email"
-                                                    class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                                    required>
-                                            </div>
-                                            <div>
-                                                <label
-                                                    class="block text-sm font-medium text-gray-700 mb-1">{{ __('Mobile Number') }}</label>
-                                                <input type="tel" id="register-mobile"
-                                                    class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                                    required>
-                                            </div>
-                                            <div>
-                                                <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
-                                                <input type="password" id="register-password"
-                                                    class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                                    required>
-                                            </div>
-                                            <div>
-                                                <label
-                                                    class="block text-sm font-medium text-gray-700 mb-1">{{ __('Confirm Password') }}</label>
-                                                <input type="password" id="register-password-confirm"
-                                                    class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                                    required>
-                                            </div>
-                                            <button type="button" id="register-btn"
-                                                class="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded font-medium">
-                                                {{ __('Create Account') }}
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endguest
+                            <!-- Authentication Section removed per request: existing / new customer UI commented out -->
+                            {{--
+                                Authentication section (Existing Customer / New Customer) intentionally removed.
+                                If you need it back, re-enable the block here.
+                            --}}
 
                             <!-- Shipping Information -->
                             <div class="bg-white rounded-lg shadow-md p-6">
@@ -129,8 +43,7 @@
                                             <div>
                                                 <label
                                                     class="block text-sm font-medium text-gray-700 mb-1">{{ __('First Name') }}</label>
-                                                <input type="text" name="first_name"
-                                                    value="{{ auth()->user()->name ?? '' }}"
+                                                <input type="text" name="first_name" value="{{ auth()->user()->name ?? '' }}"
                                                     class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                                     required>
                                             </div>
@@ -161,9 +74,11 @@
                                     <div>
                                         <label
                                             class="block text-sm font-medium text-gray-700 mb-1">{{ __('Phone') }}</label>
-                                        <input type="tel" name="phone"
+                                        <input type="tel" name="phone" pattern="[0-9]{4}-[0-9]{7}" maxlength="12"
+                                            placeholder="1234-1234567"
                                             class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                             required>
+                                        <p class="text-xs text-gray-500 mt-1">Format: 1234-1234567</p>
                                     </div>
 
                                     <div>
@@ -174,7 +89,7 @@
                                             required></textarea>
                                     </div>
 
-                                    <div class="grid grid-cols-2 gap-4">
+                                    <div class="grid grid-cols-1 gap-4">
                                         <div>
                                             <label
                                                 class="block text-sm font-medium text-gray-700 mb-1">{{ __('City') }}</label>
@@ -182,17 +97,10 @@
                                                 class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                                 required>
                                         </div>
-                                        <div>
-                                            <label
-                                                class="block text-sm font-medium text-gray-700 mb-1">{{ __('Postal Code') }}</label>
-                                            <input type="text" name="postal_code"
-                                                class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                        </div>
                                     </div>
 
                                     <div>
-                                        <label
-                                            class="block text-sm font-medium text-gray-700 mb-1">{{ __('Order Notes') }}
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('Order Notes') }}
                                             ({{ __('Optional') }})</label>
                                         <textarea name="notes" rows="3"
                                             class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -216,7 +124,7 @@
                                 <div class="border-t pt-4 space-y-2">
                                     <div class="flex justify-between text-sm">
                                         <span>Subtotal:</span>
-                                        <span id="subtotal">$0.00</span>
+                                        <span id="subtotal">RS. 0.00</span>
                                     </div>
                                     <div class="flex justify-between text-sm">
                                         <span>Shipping:</span>
@@ -224,7 +132,7 @@
                                     </div>
                                     <div class="flex justify-between text-lg font-bold border-t pt-2">
                                         <span>Total:</span>
-                                        <span id="total">$0.00</span>
+                                        <span id="total">RS. 0.00</span>
                                     </div>
                                 </div>
 
@@ -405,10 +313,6 @@
             let isPlacingOrder = false;
             document.getElementById('place-order-btn').addEventListener('click', function() {
                 if (isPlacingOrder) return;
-                if (!isAuthenticated) {
-                    showNotification('Please login or create an account to continue', 'error');
-                    return;
-                }
 
                 const shippingForm = document.getElementById('shipping-form');
                 const formData = new FormData(shippingForm);
@@ -508,8 +412,8 @@
                     });
 
                     // Update totals
-                    document.getElementById('subtotal').textContent = '$' + data.total;
-                    document.getElementById('total').textContent = '$' + data.total;
+                    document.getElementById('subtotal').textContent = 'Rs. ' + data.total;
+                    document.getElementById('total').textContent = 'Rs. ' + data.total;
                 }
             }
 
@@ -526,7 +430,7 @@
                 <p class="text-xs text-gray-600">Qty: ${item.quantity}</p>
             </div>
             <div class="text-sm font-medium">
-                $${(item.price * item.quantity).toFixed(2)}
+                Rs. ${(item.price * item.quantity).toFixed(2)}
             </div>
         `;
                 return div;
@@ -568,7 +472,6 @@
                             phone: formData.get('phone'),
                             address: formData.get('address'),
                             city: formData.get('city'),
-                            postal_code: formData.get('postal_code'),
                             notes: formData.get('notes')
                         },
                         payment_method: paymentMethod.value
