@@ -106,10 +106,10 @@
                                         </div>
                                         <div class="ml-3">
                                             <div class="text-sm font-medium text-gray-900">
-                                                {{ $item->user->name ?? 'Guest' }}
+                                                {{ $item->user->name ?? ($item->customer_name ?? 'Guest') }}
                                             </div>
                                             <div class="text-xs text-gray-500">
-                                                {{ $item->user->mobile ?? ($item->user->email ?? '') }}
+                                                {{ $item->user->mobile ?? ($item->customer_phone ?? '') }}
                                             </div>
                                             <div class="text-xs text-gray-500">
                                                 {{ $item->reference_number ?? '' }}
