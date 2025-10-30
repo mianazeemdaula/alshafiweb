@@ -62,7 +62,7 @@
                     </li>
                 @endif
 
-                @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('order_taker'))
+                @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('team_leader'))
                     <li
                         class="p-2 hover:bg-gray-700 hover:animate-pulse @if (request()->routeIs('admin.orders.*')) bg-green-500 @endif">
                         <a href="{{ route('admin.orders.index') }}" class="block"><i
@@ -107,7 +107,7 @@
                     </li>
                 @endif
 
-                @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('order_taker'))
+                @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('team_leader'))
                     <li
                         class="p-2 hover:bg-gray-700  hover:animate-pulse @if (request()->routeIs('admin.shipments.*')) bg-green-500 @endif">
                         <a href="{{ route('admin.shipments.index') }}" class="block"><i

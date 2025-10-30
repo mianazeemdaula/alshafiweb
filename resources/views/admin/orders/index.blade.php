@@ -6,85 +6,66 @@
             <!-- Header -->
             <div class="flex justify-between items-center mb-6">
                 <h1 class="text-2xl font-bold text-gray-800">Orders Management</h1>
-                <div class="flex space-x-3">
-                    <a href="{{ route('admin.orders.create') }}"
-                        class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition duration-200">
-                        <i class="fas fa-plus mr-2"></i>New Order
-                    </a>
-                </div>
+                @hasanyrole('admin|team_leader')
+                    <div class="flex space-x-3">
+                        <a href="{{ route('admin.orders.create') }}"
+                            class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition duration-200">
+                            <i class="fas fa-plus mr-2"></i>New Order
+                        </a>
+                    </div>
+                @endhasanyrole
             </div>
 
-            <!-- Filters -->
-            <div class="bg-gray-50 rounded-lg p-4 mb-6">
-                <form method="GET" class="grid grid-cols-1 md:grid-cols-5 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Search</label>
-                        <input type="text" name="search" value="{{ request('search') }}"
-                            placeholder="Order ID, Customer name..."
-                            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
-                    </div>
+            <!-- Filters (minimal single-line) -->
+            <div class="bg-gray-50 rounded-lg p-3 mb-6">
+                <form method="GET" class="flex flex-wrap items-center gap-1">
+                    <input type="text" name="search" value="{{ request('search') }}"
+                        placeholder="Search order or customer"
+                        class="border border-gray-300 rounded-md px-3 py-2 w-48 md:w-64" />
 
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Order Source</label>
-                        <select name="order_source"
-                            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
-                            <option value="">All Sources</option>
-                            <option value="website" {{ request('order_source') == 'website' ? 'selected' : '' }}>Website
-                            </option>
-                            <option value="manual" {{ request('order_source') == 'manual' ? 'selected' : '' }}>Manual
-                            </option>
-                        </select>
-                    </div>
+                    <select name="order_source" class="border border-gray-300 rounded-md px-2 py-2 w-36">
+                        <option value="">All sources</option>
+                        <option value="website" {{ request('order_source') == 'website' ? 'selected' : '' }}>Website
+                        </option>
+                        <option value="manual" {{ request('order_source') == 'manual' ? 'selected' : '' }}>Manual</option>
+                    </select>
 
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
-                        <select name="status"
-                            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
-                            <option value="">All Statuses</option>
-                            <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
-                            <option value="processing" {{ request('status') == 'processing' ? 'selected' : '' }}>Processing
-                            </option>
-                            <option value="shipped" {{ request('status') == 'shipped' ? 'selected' : '' }}>Shipped</option>
-                            <option value="delivered" {{ request('status') == 'delivered' ? 'selected' : '' }}>Delivered
-                            </option>
-                            <option value="cancelled" {{ request('status') == 'cancelled' ? 'selected' : '' }}>Cancelled
-                            </option>
-                        </select>
-                    </div>
+                    <select name="status" class="border border-gray-300 rounded-md px-2 py-2 w-36">
+                        <option value="">All status</option>
+                        <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
+                        <option value="processing" {{ request('status') == 'processing' ? 'selected' : '' }}>Processing
+                        </option>
+                        <option value="shipped" {{ request('status') == 'shipped' ? 'selected' : '' }}>Shipped</option>
+                        <option value="delivered" {{ request('status') == 'delivered' ? 'selected' : '' }}>Delivered
+                        </option>
+                        <option value="cancelled" {{ request('status') == 'cancelled' ? 'selected' : '' }}>Cancelled
+                        </option>
+                    </select>
 
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Payment Status</label>
-                        <select name="payment_status"
-                            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
-                            <option value="">All Payment Status</option>
-                            <option value="paid" {{ request('payment_status') == 'paid' ? 'selected' : '' }}>Paid</option>
-                            <option value="pending" {{ request('payment_status') == 'pending' ? 'selected' : '' }}>Pending
-                            </option>
-                            <option value="failed" {{ request('payment_status') == 'failed' ? 'selected' : '' }}>Failed
-                            </option>
-                        </select>
-                    </div>
+                    <select name="payment_status" class="border border-gray-300 rounded-md px-2 py-2 w-36">
+                        <option value="">All payment</option>
+                        <option value="paid" {{ request('payment_status') == 'paid' ? 'selected' : '' }}>Paid</option>
+                        <option value="pending" {{ request('payment_status') == 'pending' ? 'selected' : '' }}>Pending
+                        </option>
+                        <option value="failed" {{ request('payment_status') == 'failed' ? 'selected' : '' }}>Failed
+                        </option>
+                    </select>
 
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Type</label>
-                        <select name="type"
-                            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
-                            <option value="">All Types</option>
-                            @foreach ($types as $k => $v)
-                                <option value="{{ $k }}" {{ request('type') == $k ? 'selected' : '' }}>
-                                    {{ $v }}</option>
-                            @endforeach
-                        </select>
-                    </div>
+                    <select name="type" class="border border-gray-300 rounded-md px-2 py-2 w-40">
+                        <option value="">All types</option>
+                        @foreach ($types as $k => $v)
+                            <option value="{{ $k }}" {{ request('type') == $k ? 'selected' : '' }}>
+                                {{ $v }}</option>
+                        @endforeach
+                    </select>
 
-                    <div class="flex items-end space-x-2 md:col-span-5">
-                        <button type="submit"
-                            class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition duration-200">
-                            <i class="fas fa-search mr-1"></i>Filter
+                    <div class="ml-auto flex items-center space-x-2">
+                        <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-md">
+                            <i class="fas fa-search"></i>
                         </button>
                         <a href="{{ route('admin.orders.index') }}"
-                            class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition duration-200">
-                            <i class="fas fa-times mr-1"></i>Clear
+                            class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-3 py-2 rounded-md">
+                            <i class="fas fa-times"></i>
                         </a>
                     </div>
                 </form>

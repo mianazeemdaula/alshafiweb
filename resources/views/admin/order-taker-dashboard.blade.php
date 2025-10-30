@@ -155,7 +155,7 @@
                 </div>
 
                 <!-- Bonus Rate -->
-                <div
+                {{-- <div
                     class="bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-xl p-5 shadow-lg hover:shadow-xl transition-all">
                     <div class="flex items-center justify-between mb-2">
                         <div class="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center">
@@ -165,7 +165,7 @@
                     <h3 class="text-white/90 text-sm font-medium mb-1">Bonus Rate</h3>
                     <p class="text-3xl font-bold text-white">5%</p>
                     <p class="text-white/70 text-xs mt-1">On delivered orders</p>
-                </div>
+                </div> --}}
             </div>
         </div>
 

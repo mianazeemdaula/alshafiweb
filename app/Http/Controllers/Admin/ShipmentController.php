@@ -56,6 +56,15 @@ class ShipmentController extends Controller
             });
         }
 
+        if(auth()->user()->hasRole('team_leader')) {
+            $query->whereHas('order', function($q) {
+                $q->where('order_taker_id', auth()->user()->id);
+                $q->orWhereHas('orderTaker', function($userQuery) {
+                    $userQuery->where('team_leader_id', auth()->user()->id);
+                });
+            });
+        }
+
         $shipments = $query->latest()->paginate(20);
         $courierServices = CourierServiceConfig::where('is_active', true)->get();
 
@@ -173,8 +182,6 @@ class ShipmentController extends Controller
             }
             $response = $this->courierService->bookShipment($courierConfig->courier, $shipmentData);
             
-            Log::info('Shipment booking response: ' . json_encode($response));
-            
             // Handle booking response - check for success or error status
             if (isset($response['success']) && $response['success']) {
 
@@ -204,6 +211,19 @@ class ShipmentController extends Controller
                     'shipped_at' => now()
                 ]);
 
+                // Give the bonus to the Team Leader on successful shipment creation or Rs. 5
+                $user = auth()->user();
+                if ($user->hasRole('team_leader')) {
+                    $bonus = $user->bonuses()->create([
+                        'order_taker_id' => $user->id,
+                        'order_id' => $order->id,
+                        'order_amount' => $order->total,
+                        'bonus_amount' => 5, // Fixed Rs. 5 bonus
+                        'status' => 'pending',
+                        'notes' => 'Auto-generated Rs. 5 bonus for shipment creation of order #' . $order->number,
+                    ]);
+                }
+                
                 // Update order status
                 $order->update(['status' => 'shipped','reference_number' => $request->reference ?? 'ORD-' . $order->id]);
                 return redirect()->route('admin.shipments.show', $shipment)
