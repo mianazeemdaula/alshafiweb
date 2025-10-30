@@ -211,13 +211,13 @@
                                     <span
                                         class="font-bold text-gray-900 dark:text-white">{{ $member->manualOrders->count() }}</span>
                                 </div>
-                                <div class="flex justify-between items-center">
+                                {{-- <div class="flex justify-between items-center">
                                     <span class="text-sm text-gray-600 dark:text-gray-400">
                                         <i class="fa fa-dollar-sign text-green-600 mr-1"></i>Bonuses
                                     </span>
                                     <span class="font-bold text-green-600">PKR
                                         {{ number_format($member->bonuses->sum('bonus_amount') / 100, 2) }}</span>
-                                </div>
+                                </div> --}}
                                 <div class="flex justify-between items-center">
                                     <span class="text-sm text-gray-600 dark:text-gray-400">
                                         <i class="fa fa-check-circle text-emerald-600 mr-1"></i>Delivered
