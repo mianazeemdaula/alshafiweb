@@ -63,6 +63,21 @@
                             </option>
                         </x-select>
                     </div>
+
+                    @if (auth()->user()->hasRole('team_leader') && $teamMembers->isNotEmpty())
+                        <div class="flex flex-col gap-2">
+                            <x-label>Assign Order To</x-label>
+                            <x-select name="order_taker_id">
+                                <option value="">Myself</option>
+                                @foreach ($teamMembers as $member)
+                                    <option value="{{ $member->id }}"
+                                        {{ $order->order_taker_id == $member->id ? 'selected' : '' }}>
+                                        {{ $member->name }}
+                                    </option>
+                                @endforeach
+                            </x-select>
+                        </div>
+                    @endif
                 </div>
                 <div class="flex py-6 space-x-4">
                     <button type="submit"

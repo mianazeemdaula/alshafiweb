@@ -208,7 +208,14 @@ class OrderController extends Controller
         $order = Order::find($id);
         $cities = City::all();
         $types = Order::getTypes();
-        return view('admin.orders.edit', compact('order', 'cities', 'types'));
+        
+        // Get team members if user is a team leader
+        $teamMembers = collect();
+        if (auth()->user()->hasRole('team_leader')) {
+            $teamMembers = auth()->user()->teamMembers;
+        }
+        
+        return view('admin.orders.edit', compact('order', 'cities', 'types', 'teamMembers'));
     }
 
     /**
@@ -224,6 +231,7 @@ class OrderController extends Controller
             'street_address' => 'required',
             'zip_code' => 'required',
             'type' => 'nullable|in:' . $allowedTypes,
+            'order_taker_id' => 'nullable|exists:users,id',
         ]);
         $order = Order::find($id);
         $order->status = $request->status;
@@ -232,6 +240,12 @@ class OrderController extends Controller
         $order->street_address = $request->street_address;
         $order->zip_code = $request->zip_code;
         $order->type = $request->type;
+        
+        // Update order_taker_id if provided
+        if ($request->has('order_taker_id')) {
+            $order->order_taker_id = $request->order_taker_id ?: auth()->id();
+        }
+        
         if($order->status !== $request->status) {
             // \Mail::to($order->user->email, $order->user->name)->send(new OrderStatus($order));
         }
