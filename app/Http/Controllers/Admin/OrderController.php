@@ -70,8 +70,14 @@ class OrderController extends Controller
         $countries = \App\Models\Country::all();
         $paymentMethods = \App\Models\PaymentMethod::where('status', true)->get();
         $types = Order::getTypes();
+        
+        // Get team members if user is a team leader
+        $teamMembers = collect();
+        if (auth()->user()->hasRole('team_leader')) {
+            $teamMembers = auth()->user()->teamMembers;
+        }
 
-        return view('admin.orders.create', compact('users', 'products', 'cities', 'countries', 'paymentMethods', 'types'));
+        return view('admin.orders.create', compact('users', 'products', 'cities', 'countries', 'paymentMethods', 'types', 'teamMembers'));
     }
 
     /**
@@ -95,6 +101,7 @@ class OrderController extends Controller
             'products.*.id' => 'required|exists:products,id',
             'products.*.quantity' => 'required|integer|min:1',
             'products.*.price' => 'required|numeric|min:0',
+            'order_taker_id' => 'nullable|exists:users,id', // For team leaders to assign to team members
         ];
 
         // Add conditional validation based on customer type
@@ -146,7 +153,7 @@ class OrderController extends Controller
                 'status' => 'pending',
                 'payment_status' => 'pending',
                 'order_source' => 'manual', // Orders created in admin panel are manual
-                'order_taker_id' => auth()->id(), // Current logged-in user is the order taker
+                'order_taker_id' => $validated['order_taker_id'] ?? auth()->id(), // Use assigned or current user
             ];
 
             // Add customer information based on type

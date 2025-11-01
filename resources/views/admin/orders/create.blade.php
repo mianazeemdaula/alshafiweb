@@ -116,12 +116,28 @@
                                         <option value="">Select Payment Method</option>
                                         @foreach ($paymentMethods as $method)
                                             <option value="{{ $method->id }}"
-                                                {{ old('payment_method_id') == $method->id ? 'selected' : '' }}>
+                                                {{ old('payment_method_id', 6) == $method->id ? 'selected' : '' }}>
                                                 {{ $method->name }}
                                             </option>
                                         @endforeach
                                     </select>
                                 </div>
+
+                                @if (auth()->user()->hasRole('team_leader') && $teamMembers->isNotEmpty())
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Assign Order To</label>
+                                        <select name="order_taker_id"
+                                            class="compact-input w-full border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                                            <option value="">Myself</option>
+                                            @foreach ($teamMembers as $member)
+                                                <option value="{{ $member->id }}"
+                                                    {{ old('order_taker_id') == $member->id ? 'selected' : '' }}>
+                                                    {{ $member->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -137,7 +153,7 @@
                                     <option value="">Select Country</option>
                                     @foreach ($countries as $country)
                                         <option value="{{ $country->id }}"
-                                            {{ old('country_id') == $country->id ? 'selected' : '' }}>
+                                            {{ old('country_id', 1) == $country->id ? 'selected' : '' }}>
                                             {{ $country->name }}
                                         </option>
                                     @endforeach
@@ -151,7 +167,7 @@
                                     <option value="">Select City</option>
                                     @foreach ($cities as $city)
                                         <option value="{{ $city->id }}"
-                                            {{ old('city_id') == $city->id ? 'selected' : '' }}>
+                                            {{ old('city_id', 1) == $city->id ? 'selected' : '' }}>
                                             {{ $city->name }}{{ $city->state ? ', ' . $city->state->name : '' }}
                                         </option>
                                     @endforeach
@@ -167,7 +183,7 @@
 
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">ZIP Code</label>
-                                <input type="text" name="zip_code" value="{{ old('zip_code') }}"
+                                <input type="text" name="zip_code" value="{{ old('zip_code', '56180') }}"
                                     placeholder="Postal/ZIP code"
                                     class="compact-input w-full border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
                             </div>
