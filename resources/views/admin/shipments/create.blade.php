@@ -157,7 +157,8 @@
                             <label for="reference" class="block text-sm font-medium text-gray-700 mb-1">
                                 Reference Number
                             </label>
-                            <input type="text" name="reference" id="reference" value="{{ old('reference') }}"
+                            <input type="text" name="reference" id="reference"
+                                value="{{ old('reference') ?? ($order->orderTaker->ref_code ?? '') }}"
                                 class="w-full border border-gray-300 rounded-lg px-2 py-1 focus:ring-blue-500 focus:border-blue-500"
                                 placeholder="Order reference or internal reference">
                         </div>
