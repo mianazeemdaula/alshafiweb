@@ -131,7 +131,7 @@
                                             <option value="">Myself</option>
                                             @foreach ($teamMembers as $member)
                                                 <option value="{{ $member->id }}"
-                                                    {{ old('order_taker_id') == $member->id ? 'selected' : '' }}>
+                                                    {{ (old('order_taker_id') ?? ($defaultOrderTakerId ?? '')) == $member->id ? 'selected' : '' }}>
                                                     {{ $member->name }} {{ $member->ref_code }}
                                                 </option>
                                             @endforeach

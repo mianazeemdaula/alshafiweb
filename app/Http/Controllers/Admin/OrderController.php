@@ -73,11 +73,12 @@ class OrderController extends Controller
         
         // Get team members if user is a team leader
         $teamMembers = collect();
+        $defaultOrderTakerId = session('default_order_taker_id');
         if (auth()->user()->hasRole('team_leader')) {
             $teamMembers = auth()->user()->teamMembers;
         }
 
-        return view('admin.orders.create', compact('users', 'products', 'cities', 'countries', 'paymentMethods', 'types', 'teamMembers'));
+        return view('admin.orders.create', compact('users', 'products', 'cities', 'countries', 'paymentMethods', 'types', 'teamMembers', 'defaultOrderTakerId'));
     }
 
     /**
@@ -155,6 +156,11 @@ class OrderController extends Controller
                 'order_source' => 'manual', // Orders created in admin panel are manual
                 'order_taker_id' => $validated['order_taker_id'] ?? auth()->id(), // Use assigned or current user
             ];
+
+            // Store the selected order_taker_id in session for future use
+            if (isset($validated['order_taker_id'])) {
+                session(['default_order_taker_id' => $validated['order_taker_id']]);
+            }
 
             // Add customer information based on type
             if ($validated['customer_type'] === 'existing') {
