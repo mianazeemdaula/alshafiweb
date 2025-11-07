@@ -297,6 +297,27 @@ class ShipmentController extends Controller
                 case Shipment::STATUS_DELIVERED:
                     $shipment->update(['delivered_at' => now()]);
                     $shipment->order->update(['status' => 'delivered']);
+                    
+                    // Give bonus to the order taker when shipment is delivered
+                    $order = $shipment->order;
+                    if ($order->order_taker_id && $order->isManualOrder()) {
+                        // Check if bonus already exists for this order
+                        $existingBonus = \App\Models\Bonus::where('order_id', $order->id)->first();
+                        
+                        if (!$existingBonus) {
+                            $orderTaker = $order->orderTaker;
+                            $bonusAmount = \App\Models\Bonus::calculateBonusAmount($order->total);
+                            
+                            $orderTaker->bonuses()->create([
+                                'order_taker_id' => $orderTaker->id,
+                                'order_id' => $order->id,
+                                'order_amount' => $order->total,
+                                'bonus_amount' => $bonusAmount,
+                                'status' => 'pending',
+                                'notes' => 'Auto-generated 5% bonus for delivered order #' . $order->number,
+                            ]);
+                        }
+                    }
                     break;
                 case Shipment::STATUS_CANCELLED:
                     $shipment->update(['cancelled_at' => now()]);
