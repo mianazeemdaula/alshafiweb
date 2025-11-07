@@ -266,7 +266,7 @@ class UnifiedCourierService
             'consignee_name' => $params['delivery_name'],
             'consignee_address' => $params['delivery_address'],
             'consignee_phone_number_1' => $params['delivery_phone'],
-            'consignee_email_address' => $params['delivery_email'] ?? '',
+            'consignee_email_address' => null,
             'order_id' => $params['order_id'], // Optional but recommended
             'item_product_type_id' => 15, // General merchandise
             'item_description' => $params['description'],
