@@ -112,7 +112,7 @@ class User extends Authenticatable
      */
     public function isTeamLeader()
     {
-        return $this->hasRole('team_leader');
+        return $this->hasRole('label_printer');
     }
 
     /**

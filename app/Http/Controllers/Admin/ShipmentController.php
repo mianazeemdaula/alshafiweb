@@ -56,7 +56,7 @@ class ShipmentController extends Controller
             });
         }
 
-        if(auth()->user()->hasRole('team_leader')) {
+        if(auth()->user()->hasRole('label_printer')) {
             $query->whereHas('order', function($q) {
                 $q->where('order_taker_id', auth()->user()->id);
                 $q->orWhereHas('orderTaker', function($userQuery) {
@@ -213,7 +213,7 @@ class ShipmentController extends Controller
 
                 // Give the bonus to the Team Leader on successful shipment creation or Rs. 5
                 $user = auth()->user();
-                if ($user->hasRole('team_leader')) {
+                if ($user->hasRole('label_printer')) {
                     $bonus = $user->bonuses()->create([
                         'order_taker_id' => $user->id,
                         'order_id' => $order->id,

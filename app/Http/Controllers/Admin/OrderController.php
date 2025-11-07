@@ -74,7 +74,7 @@ class OrderController extends Controller
         // Get team members if user is a team leader
         $teamMembers = collect();
         $defaultOrderTakerId = session('default_order_taker_id');
-        if (auth()->user()->hasRole('team_leader')) {
+        if (auth()->user()->hasRole('label_printer')) {
             $teamMembers = auth()->user()->teamMembers;
         }
 
@@ -217,7 +217,7 @@ class OrderController extends Controller
         
         // Get team members if user is a team leader
         $teamMembers = collect();
-        if (auth()->user()->hasRole('team_leader')) {
+        if (auth()->user()->hasRole('label_printer')) {
             $teamMembers = auth()->user()->teamMembers;
         }
         

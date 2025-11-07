@@ -123,7 +123,7 @@
                                     </select>
                                 </div>
 
-                                @if (auth()->user()->hasRole('team_leader') && $teamMembers->isNotEmpty())
+                                @if (auth()->user()->hasRole('label_printer') && $teamMembers->isNotEmpty())
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-1">Assign Order To</label>
                                         <select name="order_taker_id"

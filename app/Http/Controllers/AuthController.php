@@ -55,7 +55,7 @@ class AuthController extends Controller
         }
         
         // Team Leader Dashboard
-        if($user->hasRole('team_leader')) {
+        if($user->hasRole('label_printer')) {
             // Get team members
             $teamMembers = $user->teamMembers()->with(['manualOrders', 'bonuses'])->get();
             
@@ -113,9 +113,9 @@ class AuthController extends Controller
             
             return view('admin.order-taker-dashboard', compact('stats', 'bonusStats'));
         }
-        
-        // Team Leader Dashboard
-        if($user->hasRole('team_leader')) {
+
+        // Label Printer Dashboard
+        if($user->hasRole('label_printer')) {
             // Get team members
             $teamMembers = $user->teamMembers()->with(['manualOrders', 'bonuses'])->get();
             

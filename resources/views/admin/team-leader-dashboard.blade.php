@@ -9,7 +9,7 @@
             <div class="bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 rounded-2xl p-6 shadow-xl">
                 <div class="flex items-center justify-between">
                     <div class="text-white">
-                        <h1 class="text-3xl font-bold mb-2">👥 Team Leader Dashboard</h1>
+                        <h1 class="text-3xl font-bold mb-2">👥 Label Printer Dashboard</h1>
                         <p class="text-white/90">Welcome back, {{ auth()->user()->name }}!</p>
                         <p class="text-white/80 text-sm mt-1">Manage your team and monitor performance</p>
                     </div>
@@ -99,7 +99,7 @@
                         <div>
                             <h3 class="text-gray-700 dark:text-gray-300 text-sm font-medium">Website Orders</h3>
                             <p class="text-3xl font-bold text-gray-900 dark:text-white">{{ $stats['website_orders'] }}</p>
-                            <p class="text-xs text-gray-500">Available to all team leaders</p>
+                            <p class="text-xs text-gray-500">Available to all Label Printers</p>
                         </div>
                     </div>
                 </div>
