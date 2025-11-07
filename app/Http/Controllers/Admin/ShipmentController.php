@@ -302,7 +302,8 @@ class ShipmentController extends Controller
                     $order = $shipment->order;
                     if ($order->order_taker_id && $order->isManualOrder()) {
                         // Check if bonus already exists for this order
-                        $existingBonus = \App\Models\Bonus::where('order_id', $order->id)->first();
+                        $existingBonus = \App\Models\Bonus::where('order_id', $order->id)
+                        ->where('order_taker_id', $order->order_taker_id)->first();
                         
                         if (!$existingBonus) {
                             $orderTaker = $order->orderTaker;
