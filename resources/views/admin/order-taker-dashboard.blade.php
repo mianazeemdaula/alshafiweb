@@ -121,7 +121,7 @@
                         </div>
                     </div>
                     <h3 class="text-white/90 text-sm font-medium mb-1">Total Bonuses</h3>
-                    <p class="text-3xl font-bold text-white">PKR {{ number_format($bonusStats['total_bonuses'] / 100, 2) }}
+                    <p class="text-3xl font-bold text-white">PKR {{ number_format($bonusStats['total_bonuses'], 2) }}
                     </p>
                     <p class="text-white/70 text-xs mt-1">{{ $bonusStats['bonus_count'] }} bonuses earned</p>
                 </div>
@@ -136,7 +136,7 @@
                     </div>
                     <h3 class="text-white/90 text-sm font-medium mb-1">Pending</h3>
                     <p class="text-3xl font-bold text-white">PKR
-                        {{ number_format($bonusStats['pending_bonuses'] / 100, 2) }}</p>
+                        {{ number_format($bonusStats['pending_bonuses'], 2) }}</p>
                     <p class="text-white/70 text-xs mt-1">Awaiting payment</p>
                 </div>
 
@@ -149,7 +149,7 @@
                         </div>
                     </div>
                     <h3 class="text-white/90 text-sm font-medium mb-1">Paid</h3>
-                    <p class="text-3xl font-bold text-white">PKR {{ number_format($bonusStats['paid_bonuses'] / 100, 2) }}
+                    <p class="text-3xl font-bold text-white">PKR {{ number_format($bonusStats['paid_bonuses'], 2) }}
                     </p>
                     <p class="text-white/70 text-xs mt-1">Successfully received</p>
                 </div>
