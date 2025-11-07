@@ -62,9 +62,9 @@
                             <i class="fa fa-dollar-sign text-2xl text-white"></i>
                         </div>
                     </div>
-                    <h3 class="text-white/90 text-sm font-medium mb-1">Team Bonuses</h3>
+                    <h3 class="text-white/90 text-sm font-medium mb-1">My Bonus</h3>
                     <p class="text-3xl font-bold text-white">PKR
-                        {{ number_format($teamStats['total_team_bonuses'] / 100, 2) }}</p>
+                        {{ auth()->user()->bonuses()->sum('bonus_amount') }}</p>
                 </div>
 
                 <!-- Total Visible Orders -->
