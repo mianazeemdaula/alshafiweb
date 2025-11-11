@@ -169,8 +169,8 @@ class UnifiedCourierService
                         'id' => 'www.alShaafiOnline.com',
                         'address' => 'AL-Shaafi Dawakhana DPA',
                         'city' => [ 'name' =>'DEPAL PUR'],
-                        'person_of_contact' => '03223236262',
-                        'phone_number' => '03223236262'
+                        'person_of_contact' => '03253255555',
+                        'phone_number' => '03253255555'
                     ]
                 ]
             ];
@@ -555,7 +555,7 @@ class UnifiedCourierService
                 'countrycode' => 'PK',
                 'countryname' => 'Pakistan',
                 'cityname' => 'DEPAL PUR',
-                'mobile' => "03223236262",
+                'mobile' => "03253255555",
             ],
             'consigneeinfo' => [
                 'firstname' => $params['delivery_name'],

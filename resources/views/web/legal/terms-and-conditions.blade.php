@@ -330,7 +330,7 @@
                 </p>
                 <div class="space-y-2 text-gray-700 dark:text-gray-300">
                     <p><i class="fas fa-building mr-2 text-blue-600"></i><strong>Al-Shaafi Dawakhana</strong></p>
-                    <p><i class="fas fa-phone mr-2 text-green-600"></i>Phone: +92 325 3257878</p>
+                    <p><i class="fas fa-phone mr-2 text-green-600"></i>Phone: +92 325 325 55 55</p>
                     <p><i class="fas fa-envelope mr-2 text-purple-600"></i>Email: info@alshaafi.com</p>
                     <p><i class="fas fa-map-marker-alt mr-2 text-red-600"></i>Address: Depal Pur, Pakistan</p>
                 </div>

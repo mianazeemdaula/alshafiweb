@@ -227,7 +227,7 @@
                                     Phone Number <span class="text-red-500">*</span>
                                 </label>
                                 <input type="text" name="pickup_phone" id="pickup_phone"
-                                    value="{{ old('pickup_phone', '03223236262') }}"
+                                    value="{{ old('pickup_phone', '03253255555') }}"
                                     class="w-full border border-gray-300 rounded-lg px-2 py-1 focus:ring-blue-500 focus:border-blue-500"
                                     placeholder="Phone number">
                             </div>

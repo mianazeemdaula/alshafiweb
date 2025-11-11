@@ -50,7 +50,7 @@
                     <div class="flex items-center mb-2">
                         <i class="fa fa-phone mx-1 text-gray-500 dark:text-gray-400"></i>
                         <div class="text-gray-700 dark:text-gray-300">
-                            {{ 'Helpline +92-322-3232727' }}</div>
+                            {{ 'Helpline +92 325 325 55 55' }}</div>
                     </div>
                     <div class="border border-slate-100 dark:border-gray-700 h-4 mb-2"></div>
                     <div class="flex items-center mb-2">

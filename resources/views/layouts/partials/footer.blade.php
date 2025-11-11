@@ -142,9 +142,9 @@
                             </div>
                             <div>
                                 <p class="text-xs text-gray-400 mb-0.5">Helpline</p>
-                                <a href="tel:+923253257878"
+                                <a href="tel:+923253255555"
                                     class="text-sm text-gray-300 hover:text-white transition-colors">
-                                    +92 325 3257878
+                                    +92 325 325 55 55
                                 </a>
                             </div>
                         </li>
