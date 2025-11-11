@@ -108,9 +108,9 @@ class User extends Authenticatable
     }
 
     /**
-     * Check if user is a team leader
+     * Check if user is a label printer
      */
-    public function isTeamLeader()
+    public function isLabelPrinter()
     {
         return $this->hasRole('label_printer');
     }

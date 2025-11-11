@@ -56,7 +56,13 @@ class ShipmentController extends Controller
             });
         }
 
-        if(auth()->user()->hasRole('label_printer')) {
+        // Filter shipments based on user role
+        if(auth()->user()->hasRole('order_taker')) {
+            // Order takers see only shipments for orders assigned to them
+            $query->whereHas('order', function($q) {
+                $q->where('order_taker_id', auth()->user()->id);
+            });
+        } elseif(auth()->user()->hasRole('label_printer')) {
             $query->whereHas('order', function($q) {
                 $q->where('order_taker_id', auth()->user()->id);
                 $q->orWhereHas('orderTaker', function($userQuery) {

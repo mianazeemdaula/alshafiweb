@@ -120,8 +120,8 @@ class Order extends Model
         if ($user->isAdmin()) {
             // Admin sees all orders
             return $query;
-        } elseif ($user->isTeamLeader()) {
-            // Team leader: show manual orders created by their team members OR assigned to themselves
+        } elseif ($user->isLabelPrinter()) {
+            // Label printer: show manual orders created by their team members OR assigned to themselves
             return $query->where('order_source', 'manual')
                          ->where(function ($subQ) use ($user) {
                              $subQ->whereHas('orderTaker', function ($q) use ($user) {
