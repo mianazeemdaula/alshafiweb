@@ -106,7 +106,7 @@
     </div>
 </div>
 <!-- Main Header with Glass Effect -->
-<div class="bg-white/95 dark:bg-gray-900/95 backdrop-blur-md w-full z-50 sticky top-0 shadow-lg" id="header">
+<div class="bg-white/95 dark:bg-gray-900/95 backdrop-blur-md w-full z-30 sticky top-0 shadow-lg" id="header">
     <div class="p-4 border-b border-gray-200 dark:border-gray-700">
         <div class="flex flex-col lg:flex-row items-center gap-4">
             <div class="w-full lg:w-2/12 flex justify-center lg:justify-start">

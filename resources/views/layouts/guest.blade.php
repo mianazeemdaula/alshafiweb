@@ -29,7 +29,7 @@
 </head>
 
 <body>
-    <div class="z-50 w-full bg-white">
+    <div class="z-40 w-full bg-white sticky top-0">
         @include('layouts.partials.header')
     </div>
     @yield('content')
@@ -165,57 +165,58 @@
 
     <!-- Quick Checkout Modal -->
     <div id="quickCheckoutModal"
-        class="hidden fixed inset-0 bg-black bg-opacity-50 z-[60] items-center justify-center p-4">
+        class="hidden fixed inset-0 bg-black bg-opacity-50 z-[100] items-center justify-center p-4 sm:p-6">
         <div
-            class="bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto transform transition-all">
+            class="bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] sm:max-h-[85vh] overflow-y-auto transform transition-all">
             <div
-                class="sticky top-0 bg-gradient-to-r from-blue-600 to-purple-600 text-white p-4 rounded-t-2xl flex justify-between items-center">
-                <h3 class="text-xl font-bold">Quick Checkout</h3>
-                <button onclick="closeQuickCheckout()" class="text-white hover:text-gray-200 text-2xl leading-none">
+                class="sticky top-0 bg-gradient-to-r from-blue-600 to-purple-600 text-white p-3 sm:p-4 rounded-t-2xl flex justify-between items-center z-10">
+                <h3 class="text-lg sm:text-xl font-bold">Quick Checkout</h3>
+                <button onclick="closeQuickCheckout()"
+                    class="text-white hover:text-gray-200 text-2xl sm:text-3xl leading-none w-8 h-8 flex items-center justify-center">
                     &times;
                 </button>
             </div>
 
-            <div class="p-6">
+            <div class="p-4 sm:p-6">
                 <form id="quickCheckoutForm" onsubmit="submitQuickCheckout(event)">
                     @csrf
 
-                    <div class="mb-4">
+                    <div class="mb-3 sm:mb-4">
                         <label class="block text-sm font-medium text-gray-700 mb-2">Name *</label>
                         <input type="text" name="customer_name" required
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            class="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base"
                             placeholder="Enter your name">
                     </div>
 
-                    <div class="mb-4">
+                    <div class="mb-3 sm:mb-4">
                         <label class="block text-sm font-medium text-gray-700 mb-2">Phone *</label>
                         <input type="tel" name="customer_phone" required pattern="03[0-9]{9}" maxlength="11"
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            class="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base"
                             placeholder="03123456789">
                         <p class="text-xs text-gray-500 mt-1">Format: 03xxxxxxxxx</p>
                     </div>
 
-                    <div class="mb-4">
+                    <div class="mb-3 sm:mb-4">
                         <label class="block text-sm font-medium text-gray-700 mb-2">City *</label>
                         <input type="text" name="city" required
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            class="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base"
                             placeholder="Enter your city">
                     </div>
 
-                    <div class="mb-4">
+                    <div class="mb-4 sm:mb-5">
                         <label class="block text-sm font-medium text-gray-700 mb-2">Address *</label>
                         <textarea name="address" required rows="3"
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            class="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base resize-none"
                             placeholder="Enter your complete address"></textarea>
                     </div>
 
-                    <div class="flex gap-3">
+                    <div class="flex flex-col sm:flex-row gap-2 sm:gap-3">
                         <button type="button" onclick="continueToFullCheckout()"
-                            class="flex-1 bg-gray-500 hover:bg-gray-600 text-white py-3 rounded-lg font-medium transition-colors">
+                            class="w-full sm:flex-1 bg-gray-500 hover:bg-gray-600 text-white py-3 rounded-lg font-medium transition-colors text-sm sm:text-base">
                             Full Checkout
                         </button>
                         <button type="submit"
-                            class="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white py-3 rounded-lg font-medium transition-all">
+                            class="w-full sm:flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white py-3 rounded-lg font-medium transition-all text-sm sm:text-base">
                             Place Order
                         </button>
                     </div>
