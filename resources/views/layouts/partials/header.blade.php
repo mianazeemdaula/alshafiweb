@@ -9,7 +9,7 @@
         <div class="border border-white/30 h-4 hidden sm:block"></div>
         <div class="flex items-center text-white hover:text-gray-100 transition-colors">
             <i class="fa fa-phone mx-1 animate-pulse"></i>
-            <div class="hidden sm:block font-medium">Helpline +923253255555</div>
+            <div class="hidden sm:block font-medium">Helpline +92 325 325 55 55</div>
         </div>
     </div>
     <div class="flex space-x-3 items-center">
