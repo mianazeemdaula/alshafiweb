@@ -390,10 +390,15 @@
                                 if (quantityInput) {
                                     quantityInput.value = 1;
                                 }
-                                // Redirect user to checkout after a short delay so notification is visible
+
+                                // Show quick checkout modal instead of redirecting
                                 setTimeout(function() {
-                                    window.location.href = '/checkout';
-                                }, 600);
+                                    if (typeof showQuickCheckout === 'function') {
+                                        showQuickCheckout();
+                                    } else {
+                                        window.location.href = '/checkout';
+                                    }
+                                }, 300);
                             } else {
                                 showNotification(data.message ||
                                     'Failed to add product to cart',

@@ -163,6 +163,140 @@
         });
     </script>
 
+    <!-- Quick Checkout Modal -->
+    <div id="quickCheckoutModal"
+        class="hidden fixed inset-0 bg-black bg-opacity-50 z-[60] items-center justify-center p-4">
+        <div
+            class="bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto transform transition-all">
+            <div
+                class="sticky top-0 bg-gradient-to-r from-blue-600 to-purple-600 text-white p-4 rounded-t-2xl flex justify-between items-center">
+                <h3 class="text-xl font-bold">Quick Checkout</h3>
+                <button onclick="closeQuickCheckout()" class="text-white hover:text-gray-200 text-2xl leading-none">
+                    &times;
+                </button>
+            </div>
+
+            <div class="p-6">
+                <form id="quickCheckoutForm" onsubmit="submitQuickCheckout(event)">
+                    @csrf
+
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Name *</label>
+                        <input type="text" name="customer_name" required
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="Enter your name">
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Phone *</label>
+                        <input type="tel" name="customer_phone" required pattern="03[0-9]{9}" maxlength="11"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="03123456789">
+                        <p class="text-xs text-gray-500 mt-1">Format: 03xxxxxxxxx</p>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">City *</label>
+                        <input type="text" name="city" required
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="Enter your city">
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Address *</label>
+                        <textarea name="address" required rows="3"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="Enter your complete address"></textarea>
+                    </div>
+
+                    <div class="flex gap-3">
+                        <button type="button" onclick="continueToFullCheckout()"
+                            class="flex-1 bg-gray-500 hover:bg-gray-600 text-white py-3 rounded-lg font-medium transition-colors">
+                            Full Checkout
+                        </button>
+                        <button type="submit"
+                            class="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white py-3 rounded-lg font-medium transition-all">
+                            Place Order
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showQuickCheckout() {
+            const modal = document.getElementById('quickCheckoutModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeQuickCheckout() {
+            const modal = document.getElementById('quickCheckoutModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            document.body.style.overflow = '';
+        }
+
+        function continueToFullCheckout() {
+            window.location.href = '/checkout';
+        }
+
+        function submitQuickCheckout(event) {
+            event.preventDefault();
+            const form = event.target;
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processing...';
+
+            const formData = new FormData(form);
+            const data = {
+                customer_name: formData.get('customer_name'),
+                customer_phone: formData.get('customer_phone'),
+                shipping: {
+                    city: formData.get('city'),
+                    address: formData.get('address')
+                }
+            };
+
+            fetch('/checkout/place-order', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        window.location.href = '/order-confirmation/' + data.order_id;
+                    } else {
+                        alert(data.message || 'Failed to place order');
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = originalText;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error placing order. Please try again.');
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalText;
+                });
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('quickCheckoutModal')?.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeQuickCheckout();
+            }
+        });
+    </script>
+
     <!-- WhatsApp Floating Button -->
     <div id="whatsapp-button" class="fixed bottom-24 right-6 z-50">
         <a href="https://wa.me/923253255555?text={{ urlencode(__('Hello! I need help with your products.')) }}"

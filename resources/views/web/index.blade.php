@@ -828,10 +828,15 @@
                                 showNotification('✓ ' + productName + ' added to cart!', 'success');
                                 updateCartCount(data.cart_count);
                                 quantityInput.value = 1;
-                                // Redirect to checkout after a short delay so notification is visible
+
+                                // Show quick checkout modal instead of redirecting
                                 setTimeout(function() {
-                                    window.location.href = '/checkout';
-                                }, 600);
+                                    if (typeof showQuickCheckout === 'function') {
+                                        showQuickCheckout();
+                                    } else {
+                                        window.location.href = '/checkout';
+                                    }
+                                }, 300);
                             } else {
                                 showNotification('Error: ' + data.message, 'error');
                             }
