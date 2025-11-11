@@ -153,28 +153,31 @@
                                             class="text-blue-600 hover:text-blue-800 text-sm">
                                             <i class="fas fa-eye"></i>
                                         </a>
+                                        @hasanyrole('admin|label_printer')
+                                            <!-- Edit -->
+                                            @if ($shipment->status !== 'delivered' && $shipment->status !== 'cancelled')
+                                                <a href="{{ route('admin.shipments.edit', $shipment->id) }}"
+                                                    class="text-green-600 hover:text-green-800 text-sm">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                            @endif
 
-                                        <!-- Edit -->
-                                        @if ($shipment->status !== 'delivered' && $shipment->status !== 'cancelled')
-                                            <a href="{{ route('admin.shipments.edit', $shipment->id) }}"
-                                                class="text-green-600 hover:text-green-800 text-sm">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
-                                        @endif
+                                            <!-- Cancel -->
+                                            @if (!in_array($shipment->status, ['delivered', 'cancelled']))
+                                                <button onclick="cancelShipment({{ $shipment->id }})"
+                                                    class="text-red-600 hover:text-red-800 text-sm">
+                                                    <i class="fas fa-ban"></i>
+                                                </button>
+                                            @endif
+                                        @endhasanyrole
+
+
 
                                         <!-- Track -->
                                         @if ($shipment->tracking_number)
                                             <button onclick="trackShipment({{ $shipment->id }})"
                                                 class="text-purple-600 hover:text-purple-800 text-sm">
                                                 <i class="fas fa-search-location"></i>
-                                            </button>
-                                        @endif
-
-                                        <!-- Cancel -->
-                                        @if (!in_array($shipment->status, ['delivered', 'cancelled']))
-                                            <button onclick="cancelShipment({{ $shipment->id }})"
-                                                class="text-red-600 hover:text-red-800 text-sm">
-                                                <i class="fas fa-ban"></i>
                                             </button>
                                         @endif
                                     </div>

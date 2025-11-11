@@ -107,7 +107,9 @@
                     </li>
                 @endif
 
-                @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('label_printer'))
+                @if (auth()->user()->hasRole('admin') ||
+                        auth()->user()->hasRole('label_printer') ||
+                        auth()->user()->hasRole('order_taker'))
                     <li
                         class="p-2 hover:bg-gray-700  hover:animate-pulse @if (request()->routeIs('admin.shipments.*')) bg-green-500 @endif">
                         <a href="{{ route('admin.shipments.index') }}" class="block"><i
