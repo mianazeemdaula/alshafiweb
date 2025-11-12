@@ -93,7 +93,7 @@ class ProductController extends Controller
     public function show(string $id)
     {
         $categories = Category::all();
-        $product = Product::findOrFail($id);
+        $product = Product::with('activeOffers')->findOrFail($id);
         return view('admin.products.show', ['product' => $product, 'categories' => $categories]);
     }
 

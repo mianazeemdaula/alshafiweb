@@ -141,6 +141,11 @@ class Product extends Model
         return $this->hasMany(ReferrProduct::class);
     }
 
+    public function orderDetails()
+    {
+        return $this->hasMany(OrderDetail::class);
+    }
+
     public function media()
     {
         return $this->morphMany(Media::class, 'mediable')->orderBy('sort');

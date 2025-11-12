@@ -24,6 +24,10 @@
                         <button type="submit"
                             class="text-white bg-black px-5 py-2 rounded-lg hover:bg-gray-800">Search</button>
                     </form>
+                    <a href="{{ route('admin.product-offers.index') }}"
+                        class="px-5 text-white bg-orange-500 py-2 rounded-lg hover:bg-orange-600 flex items-center gap-2">
+                        <i class="fas fa-tags"></i> Offers
+                    </a>
                     <a href="{{ route('admin.products.create') }}"
                         class="px-5 text-white bg-black py-2 rounded-lg hover:bg-gray-800">Create</a>
                 </div>

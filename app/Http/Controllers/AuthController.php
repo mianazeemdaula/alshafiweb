@@ -147,14 +147,124 @@ class AuthController extends Controller
         }
         
         // Admin Dashboard - Full Statistics Including Financial Data
+        $orders = \App\Models\Order::query();
+        $todayOrders = \App\Models\Order::whereDate('created_at', today());
+        $monthOrders = \App\Models\Order::whereMonth('created_at', now()->month)
+            ->whereYear('created_at', now()->year);
+        
+        // Basic Stats
         $stats = [
-            'users' => \App\Models\User::count(),
-            'products' => \App\Models\Product::count(),
-            'categories' => \App\Models\Category::count(),
-            'orders' => \App\Models\Order::count(),
-            'revenue' => \App\Models\Order::sum('total'),
+            'total_users' => \App\Models\User::count(),
+            'total_products' => \App\Models\Product::count(),
+            'active_products' => \App\Models\Product::where('is_active', true)->count(),
+            'total_categories' => \App\Models\Category::count(),
+            'total_orders' => $orders->count(),
+            'today_orders' => $todayOrders->count(),
+            'month_orders' => $monthOrders->count(),
         ];
-        return view('admin.dashboard', compact('stats'));
+        
+        // Revenue Stats
+        $revenueStats = [
+            'total_revenue' => $orders->sum('total'),
+            'today_revenue' => $todayOrders->sum('total'),
+            'month_revenue' => $monthOrders->sum('total'),
+            'average_order_value' => $orders->count() > 0 ? $orders->avg('total') : 0,
+        ];
+        
+        // Order Status Breakdown
+        $orderStatus = [
+            'pending' => \App\Models\Order::where('status', 'pending')->count(),
+            'processing' => \App\Models\Order::where('status', 'processing')->count(),
+            'shipped' => \App\Models\Order::where('status', 'shipped')->count(),
+            'delivered' => \App\Models\Order::where('status', 'delivered')->count(),
+            'cancelled' => \App\Models\Order::where('status', 'cancelled')->count(),
+        ];
+        
+        // Order Source Breakdown
+        $orderSource = [
+            'website' => \App\Models\Order::where('order_source', 'website')->count(),
+            'manual' => \App\Models\Order::where('order_source', 'manual')->count(),
+        ];
+        
+        // Top Products
+        $topProducts = \App\Models\Product::withCount(['orderDetails as total_sold' => function($query) {
+            $query->selectRaw('sum(qty)');
+        }])
+        ->withSum('orderDetails as total_revenue', 'price')
+        ->orderBy('total_sold', 'desc')
+        ->take(5)
+        ->get();
+        
+        // Recent Orders
+        $recentOrders = \App\Models\Order::with(['user', 'orderTaker'])
+            ->orderBy('created_at', 'desc')
+            ->take(10)
+            ->get();
+        
+        // Sales Chart Data (Last 30 Days)
+        $salesChartData = [];
+        $ordersChartData = [];
+        $chartLabels = [];
+        
+        for ($i = 29; $i >= 0; $i--) {
+            $date = now()->subDays($i);
+            $chartLabels[] = $date->format('M d');
+            
+            $dayOrders = \App\Models\Order::whereDate('created_at', $date)->get();
+            $salesChartData[] = $dayOrders->sum('total');
+            $ordersChartData[] = $dayOrders->count();
+        }
+        
+        // Team Performance
+        $teamStats = [
+            'order_takers' => \App\Models\User::role('order_taker')->count(),
+            'team_leaders' => \App\Models\User::role('team_leader')->count(),
+            'total_bonuses_paid' => \App\Models\Bonus::where('status', 'paid')->sum('bonus_amount'),
+            'pending_bonuses' => \App\Models\Bonus::where('status', 'pending')->sum('bonus_amount'),
+        ];
+        
+        // Product Offers Stats
+        $offerStats = [
+            'total_offers' => \App\Models\ProductOffer::count(),
+            'active_offers' => \App\Models\ProductOffer::where('is_active', true)->count(),
+            'products_with_offers' => \App\Models\Product::has('activeOffers')->count(),
+        ];
+        
+        // Shipment Stats
+        $shipmentStats = [
+            'total_shipments' => \App\Models\Shipment::count(),
+            'pending_shipments' => \App\Models\Shipment::where('status', 'pending')->count(),
+            'in_transit' => \App\Models\Shipment::where('status', 'in_transit')->count(),
+            'delivered_shipments' => \App\Models\Shipment::where('status', 'delivered')->count(),
+        ];
+        
+        // User Growth (Last 12 Months)
+        $userGrowthData = [];
+        $userGrowthLabels = [];
+        for ($i = 11; $i >= 0; $i--) {
+            $month = now()->subMonths($i);
+            $userGrowthLabels[] = $month->format('M Y');
+            $userGrowthData[] = \App\Models\User::whereYear('created_at', $month->year)
+                ->whereMonth('created_at', $month->month)
+                ->count();
+        }
+        
+        return view('admin.dashboard', compact(
+            'stats',
+            'revenueStats',
+            'orderStatus',
+            'orderSource',
+            'topProducts',
+            'recentOrders',
+            'salesChartData',
+            'ordersChartData',
+            'chartLabels',
+            'teamStats',
+            'offerStats',
+            'shipmentStats',
+            'userGrowthData',
+            'userGrowthLabels'
+        ));
     }
 
     public function register(){

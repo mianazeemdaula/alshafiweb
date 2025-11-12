@@ -33,10 +33,11 @@ class ProductOfferController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
         $products = Product::where('is_active', true)->orderBy('name')->get();
-        return view('admin.product-offers.create', compact('products'));
+        $selectedProductId = $request->input('product_id');
+        return view('admin.product-offers.create', compact('products', 'selectedProductId'));
     }
 
     /**
