@@ -70,8 +70,8 @@
                 <h3 class="text-sm font-medium opacity-90 mb-1">Total Users</h3>
                 <p class="text-3xl font-bold">{{ number_format($stats['total_users']) }}</p>
                 <div class="mt-3 text-sm opacity-75">
-                    <span>Order Takers: {{ $teamStats['order_takers'] }} | Team Leaders:
-                        {{ $teamStats['team_leaders'] }}</span>
+                    <span>Order Takers: {{ $teamStats['order_takers'] }} | Label Printers:
+                        {{ $teamStats['label_printers'] }}</span>
                 </div>
             </div>
         </div>

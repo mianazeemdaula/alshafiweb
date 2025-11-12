@@ -218,7 +218,7 @@ class AuthController extends Controller
         // Team Performance
         $teamStats = [
             'order_takers' => \App\Models\User::role('order_taker')->count(),
-            'team_leaders' => \App\Models\User::role('team_leader')->count(),
+            'label_printers' => \App\Models\User::role('label_printer')->count(),
             'total_bonuses_paid' => \App\Models\Bonus::where('status', 'paid')->sum('bonus_amount'),
             'pending_bonuses' => \App\Models\Bonus::where('status', 'pending')->sum('bonus_amount'),
         ];
