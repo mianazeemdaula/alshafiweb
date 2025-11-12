@@ -163,6 +163,184 @@
         });
     </script>
 
+    <!-- Social Proof Notifications -->
+    <div id="socialProofContainer" class="fixed bottom-6 left-6 z-40 max-w-sm">
+        <!-- Notifications will be inserted here -->
+    </div>
+
+    <script>
+        // Social Proof Notification System
+        const socialProofMessages = [{
+                type: 'viewing',
+                messages: [
+                    '👀 {count} people are viewing this product right now',
+                    '🔥 {count} visitors are checking this out',
+                    '👥 {count} people are currently browsing',
+                ]
+            },
+            {
+                type: 'cart',
+                messages: [
+                    '🛒 Someone in {city} added this to cart {time}',
+                    '✨ {name} just added this to their cart {time}',
+                    '🎯 Someone added this to cart {time}',
+                    '🛍️ A customer in {city} added this {time}',
+                ]
+            },
+            {
+                type: 'purchase',
+                messages: [
+                    '✅ {name} from {city} purchased this {time}',
+                    '🎉 Someone in {city} bought this {time}',
+                    '💚 {name} just ordered this {time}',
+                    '⭐ A customer from {city} purchased {time}',
+                ]
+            },
+            {
+                type: 'stock',
+                messages: [
+                    '⚡ Only {count} left in stock!',
+                    '🔥 Hurry! Only {count} items remaining',
+                    '⏰ Low stock alert: {count} left',
+                ]
+            }
+        ];
+
+        const cities = ['Lahore', 'Karachi', 'Islamabad', 'Faisalabad', 'Multan', 'Rawalpindi', 'Gujranwala', 'Peshawar',
+            'Quetta', 'Sialkot'
+        ];
+        const names = ['Ali', 'Ahmed', 'Fatima', 'Ayesha', 'Hassan', 'Sara', 'Usman', 'Zainab', 'Bilal', 'Maria'];
+        const times = ['just now', '2 minutes ago', '5 minutes ago', '10 minutes ago', '15 minutes ago'];
+
+        function getRandomElement(array) {
+            return array[Math.floor(Math.random() * array.length)];
+        }
+
+        function getRandomCount(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function createNotification() {
+            const type = getRandomElement(socialProofMessages);
+            const template = getRandomElement(type.messages);
+
+            let message = template
+                .replace('{count}', getRandomCount(type.type === 'viewing' ? 15 : 2, type.type === 'viewing' ? 89 : 8))
+                .replace('{city}', getRandomElement(cities))
+                .replace('{name}', getRandomElement(names))
+                .replace('{time}', getRandomElement(times));
+
+            const notification = document.createElement('div');
+            notification.className =
+                'social-proof-notification bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 mb-3 transform translate-x-[-120%] transition-all duration-500 border-l-4 border-blue-500';
+            notification.innerHTML = `
+                <div class="flex items-start gap-3">
+                    <div class="flex-1">
+                        <p class="text-sm text-gray-800 dark:text-gray-200 font-medium">${message}</p>
+                    </div>
+                    <button onclick="this.parentElement.parentElement.remove()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
+                        <i class="fas fa-times text-xs"></i>
+                    </button>
+                </div>
+            `;
+
+            const container = document.getElementById('socialProofContainer');
+            container.appendChild(notification);
+
+            // Animate in
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                notification.style.transform = 'translateX(-120%)';
+                setTimeout(() => {
+                    notification.remove();
+                }, 500);
+            }, 5000);
+
+            // Limit to 3 notifications at a time
+            const notifications = container.querySelectorAll('.social-proof-notification');
+            if (notifications.length > 3) {
+                notifications[0].remove();
+            }
+        }
+
+        // Show notifications at random intervals
+        function startSocialProof() {
+            // Show first notification after 3 seconds
+            setTimeout(() => {
+                createNotification();
+
+                // Then show notifications every 8-15 seconds
+                setInterval(() => {
+                    if (Math.random() > 0.3) { // 70% chance to show
+                        createNotification();
+                    }
+                }, getRandomCount(8, 15) * 1000);
+            }, 3000);
+        }
+
+        // Start social proof notifications when page loads
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', startSocialProof);
+        } else {
+            startSocialProof();
+        }
+    </script>
+
+    <style>
+        .social-proof-notification {
+            animation: slideInLeft 0.5s ease-out;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                transform: translateX(-120%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Mobile responsive */
+        @media (max-width: 640px) {
+            #socialProofContainer {
+                left: 1rem;
+                right: 1rem;
+                max-width: calc(100% - 2rem);
+            }
+        }
+
+        /* RTL Support */
+        html[dir="rtl"] #socialProofContainer {
+            left: auto;
+            right: 1.5rem;
+        }
+
+        html[dir="rtl"] .social-proof-notification {
+            animation: slideInRight 0.5s ease-out;
+            border-left: none;
+            border-right: 4px solid #3b82f6;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(120%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+    </style>
+
     <!-- WhatsApp Floating Button -->
     <div id="whatsapp-button" class="fixed bottom-24 right-6 z-50">
         <a href="https://wa.me/923253255555?text={{ urlencode(__('Hello! I need help with your products.')) }}"
