@@ -88,6 +88,10 @@ Route::middleware('auth')->group(function () {
         Route::post('products/sortmedia', 'App\Http\Controllers\Admin\ProductController@sortmedia')->name('products.sortmedia');
         Route::post('products/defaultimage', 'App\Http\Controllers\Admin\ProductController@defaultimage')->name('products.defaultimage');
         
+        // Product Offers Management
+        Route::resource('product-offers', 'App\Http\Controllers\Admin\ProductOfferController')->names('admin.product-offers');
+        Route::post('product-offers/{productOffer}/toggle', 'App\Http\Controllers\Admin\ProductOfferController@toggle')->name('admin.product-offers.toggle');
+        
         Route::resource('levels', 'App\Http\Controllers\Admin\LevelController');
         Route::resource('users', 'App\Http\Controllers\Admin\UserController');
         

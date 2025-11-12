@@ -52,6 +52,26 @@
             </div>
         @endif
 
+        <!-- Bulk Offer Badge -->
+        @if ($product->activeOffers->count() > 0)
+            @php
+                $bestOffer = $product->activeOffers->sortByDesc('priority')->first();
+            @endphp
+            <div class="absolute top-14 right-3">
+                <div
+                    class="bg-gradient-to-r from-orange-500 to-yellow-500 text-white px-2 py-1 rounded-lg text-xs font-bold shadow-lg flex items-center gap-1">
+                    <i class="fa fa-tags"></i>
+                    <span>
+                        @if ($bestOffer->discount_type === 'percentage')
+                            {{ $bestOffer->discount_value }}% Off on {{ $bestOffer->min_quantity }}+
+                        @else
+                            Rs {{ $bestOffer->discount_value }} Off on {{ $bestOffer->min_quantity }}+
+                        @endif
+                    </span>
+                </div>
+            </div>
+        @endif
+
         <!-- Stock Status Badge -->
         @if ($product->stock <= 0)
             <div class="absolute bottom-3 left-3 right-3">

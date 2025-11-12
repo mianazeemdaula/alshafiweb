@@ -12,7 +12,7 @@ class WebController extends Controller
     public function index()
     {
         // Get products for current country
-        $products = \App\Models\Product::with(['country', 'category']);
+        $products = \App\Models\Product::with(['country', 'category', 'activeOffers']);
         
         // Filter by current country from session
         $currentCountry = session('country');
@@ -64,7 +64,7 @@ class WebController extends Controller
 
     public function products()
     {
-        $products = \App\Models\Product::with(['country', 'category', 'reviews']);
+        $products = \App\Models\Product::with(['country', 'category', 'reviews', 'activeOffers']);
         
         // Filter by current country from session
         $currentCountry = session('country');
@@ -163,7 +163,7 @@ class WebController extends Controller
 
     public function product($slug)
     {
-        $product = \App\Models\Product::with(['country', 'category', 'reviews'])
+        $product = \App\Models\Product::with(['country', 'category', 'reviews', 'activeOffers'])
             ->where('sku', $slug)
             ->firstOrFail();
         

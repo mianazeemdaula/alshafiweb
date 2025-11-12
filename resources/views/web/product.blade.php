@@ -118,6 +118,39 @@
                         @endif
                     </div>
 
+                    <!-- Bulk Offers -->
+                    @if ($product->activeOffers->count() > 0)
+                        <div
+                            class="bg-gradient-to-r from-orange-50 to-yellow-50 dark:from-orange-900/20 dark:to-yellow-900/20 rounded-xl p-4 border border-orange-200 dark:border-orange-800">
+                            <div class="flex items-center gap-2 mb-3">
+                                <i class="fa-solid fa-tags text-orange-600 dark:text-orange-400 text-xl"></i>
+                                <h3 class="text-lg font-bold text-orange-800 dark:text-orange-300">Special Offers Available!
+                                </h3>
+                            </div>
+                            <div class="space-y-2">
+                                @foreach ($product->activeOffers->sortByDesc('priority')->take(3) as $offer)
+                                    <div
+                                        class="flex items-center justify-between bg-white dark:bg-gray-800 rounded-lg p-3 border border-orange-200 dark:border-orange-700">
+                                        <div class="flex items-center gap-3">
+                                            <span class="bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-bold">
+                                                {{ $offer->min_quantity }}+
+                                            </span>
+                                            <span
+                                                class="text-gray-700 dark:text-gray-300 font-medium">{{ $offer->title }}</span>
+                                        </div>
+                                        <span class="text-orange-600 dark:text-orange-400 font-bold text-lg">
+                                            @if ($offer->discount_type === 'percentage')
+                                                {{ $offer->discount_value }}% OFF
+                                            @else
+                                                Rs {{ number_format($offer->discount_value, 0) }} OFF
+                                            @endif
+                                        </span>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
+
                     <!-- Description -->
                     <div class="prose dark:prose-invert max-w-none">
                         <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2 flex items-center">

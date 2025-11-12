@@ -78,6 +78,64 @@ class Product extends Model
         return $this->hasMany(ProductReview::class);
     }
 
+    public function offers()
+    {
+        return $this->hasMany(ProductOffer::class);
+    }
+
+    public function activeOffers()
+    {
+        return $this->hasMany(ProductOffer::class)->active();
+    }
+
+    /**
+     * Get the best offer for a given quantity
+     * Selects the offer that provides the maximum discount amount
+     */
+    public function getBestOffer($quantity)
+    {
+        $applicableOffers = $this->activeOffers()
+            ->where('min_quantity', '<=', $quantity)
+            ->get();
+        
+        if ($applicableOffers->isEmpty()) {
+            return null;
+        }
+        
+        // If only one offer, return it
+        if ($applicableOffers->count() === 1) {
+            return $applicableOffers->first();
+        }
+        
+        // Compare discounts and return the one with maximum savings
+        $bestOffer = null;
+        $maxDiscount = 0;
+        
+        foreach ($applicableOffers as $offer) {
+            $discount = $offer->calculateDiscount($quantity, $this->price);
+            if ($discount > $maxDiscount) {
+                $maxDiscount = $discount;
+                $bestOffer = $offer;
+            }
+        }
+        
+        return $bestOffer;
+    }
+
+    /**
+     * Calculate price with offer discount
+     */
+    public function getPriceWithOffer($quantity)
+    {
+        $offer = $this->getBestOffer($quantity);
+        
+        if (!$offer) {
+            return $this->price * $quantity;
+        }
+
+        return $offer->getFinalPrice($quantity, $this->price);
+    }
+
     public function referrProducts()
     {
         return $this->hasMany(ReferrProduct::class);
