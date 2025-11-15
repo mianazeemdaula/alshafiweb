@@ -326,15 +326,33 @@
                     }
                 }
 
+                // Get payment method
+                const paymentMethod = document.querySelector('input[name="payment_method"]:checked');
+                if (!paymentMethod) {
+                    showNotification('Please select a payment method', 'error');
+                    return;
+                }
+
+                // Disable button and show loading
                 this.disabled = true;
-                this.textContent = 'Placing Order...';
+                this.innerHTML =
+                    '<div class="inline-block animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div> Placing Order...';
                 isPlacingOrder = true;
 
+                // Prepare order data
                 const orderData = {
-                    shipping: Object.fromEntries(formData),
-                    payment_method: 'cod'
+                    shipping: {
+                        first_name: formData.get('first_name'),
+                        last_name: formData.get('last_name'),
+                        phone: formData.get('phone'),
+                        address: formData.get('address'),
+                        city: formData.get('city'),
+                        notes: formData.get('notes')
+                    },
+                    payment_method: paymentMethod.value
                 };
 
+                // Submit order
                 fetch('/checkout/place-order', {
                         method: 'POST',
                         headers: {
@@ -359,7 +377,8 @@
                         }
                     })
                     .catch(error => {
-                        showNotification('Order placement error occurred', 'error');
+                        console.error('Order placement error:', error);
+                        showNotification('Failed to place order. Please try again.', 'error');
                         this.disabled = false;
                         this.textContent = 'Place Order';
                         isPlacingOrder = false;
@@ -434,80 +453,6 @@
             </div>
         `;
                 return div;
-            }
-
-            // Place order functionality
-            const placeOrderBtn = document.getElementById('place-order-btn');
-            if (placeOrderBtn) {
-                placeOrderBtn.addEventListener('click', function() {
-                    const shippingForm = document.getElementById('shipping-form');
-                    const formData = new FormData(shippingForm);
-
-                    // Validate required fields
-                    const requiredFields = ['first_name', 'last_name', 'phone', 'address', 'city'];
-                    for (let field of requiredFields) {
-                        if (!formData.get(field)) {
-                            showNotification(`Please fill in ${field.replace('_', ' ')}`, 'error');
-                            return;
-                        }
-                    }
-
-                    // Get payment method
-                    const paymentMethod = document.querySelector('input[name="payment_method"]:checked');
-                    if (!paymentMethod) {
-                        showNotification('Please select a payment method', 'error');
-                        return;
-                    }
-
-                    // Disable button and show loading
-                    this.disabled = true;
-                    this.innerHTML =
-                        '<div class="inline-block animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div> Placing Order...';
-
-                    // Prepare order data
-                    const orderData = {
-                        shipping: {
-                            first_name: formData.get('first_name'),
-                            last_name: formData.get('last_name'),
-                            phone: formData.get('phone'),
-                            address: formData.get('address'),
-                            city: formData.get('city'),
-                            notes: formData.get('notes')
-                        },
-                        payment_method: paymentMethod.value
-                    };
-
-                    // Submit order
-                    fetch('/checkout/place-order', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': csrfToken,
-                                'Accept': 'application/json'
-                            },
-                            body: JSON.stringify(orderData)
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                                showNotification('Order placed successfully!', 'success');
-                                setTimeout(() => {
-                                    window.location.href =
-                                        `/order-confirmation/${data.order_id}`;
-                                }, 1500);
-                            } else {
-                                showNotification(data.message || 'Failed to place order', 'error');
-                                this.disabled = false;
-                                this.textContent = 'Place Order';
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Order placement error:', error);
-                            showNotification('Failed to place order. Please try again.', 'error');
-                            this.disabled = false;
-                            this.textContent = 'Place Order';
-                        });
-                });
             }
 
             // Notification function
