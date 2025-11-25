@@ -145,7 +145,7 @@
                                                 @if ($offer->discount_type === 'percentage')
                                                     {{ $offer->discount_value }}% OFF
                                                 @else
-                                                    Rs {{ number_format($offer->discount_value, 0) }} OFF
+                                                    RS. {{ number_format($offer->discount_value, 0) }} OFF
                                                 @endif
                                             </span>
                                             <i class="fa-solid fa-arrow-right text-orange-500"></i>
@@ -521,7 +521,7 @@
                                             ` 🎉 ${offer.discount_value}% discount applied!`;
                                     } else {
                                         message +=
-                                            ` 🎉 Rs ${offer.discount_value} discount applied!`;
+                                            ` 🎉 RS. ${offer.discount_value} discount applied!`;
                                     }
                                 }
 

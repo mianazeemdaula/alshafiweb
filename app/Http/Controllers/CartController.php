@@ -67,7 +67,7 @@ class CartController extends Controller
             if ($bestOffer->discount_type === 'percentage') {
                 $message .= sprintf(' with %d%% discount!', $bestOffer->discount_value);
             } else {
-                $message .= sprintf(' with Rs %s discount!', number_format($bestOffer->discount_value, 0));
+                $message .= sprintf(' with RS. %s discount!', number_format($bestOffer->discount_value, 0));
             }
         }
 
