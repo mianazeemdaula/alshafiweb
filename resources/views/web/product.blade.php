@@ -129,8 +129,10 @@
                             </div>
                             <div class="space-y-2">
                                 @foreach ($product->activeOffers->sortByDesc('priority')->take(3) as $offer)
-                                    <div
-                                        class="flex items-center justify-between bg-white dark:bg-gray-800 rounded-lg p-3 border border-orange-200 dark:border-orange-700">
+                                    <button type="button"
+                                        class="offer-card w-full flex items-center justify-between bg-white dark:bg-gray-800 rounded-lg p-3 border-2 border-orange-200 dark:border-orange-700 hover:border-orange-500 dark:hover:border-orange-500 hover:shadow-lg transition-all duration-200 transform hover:scale-[1.02] cursor-pointer"
+                                        data-offer-quantity="{{ $offer->min_quantity }}"
+                                        data-offer-id="{{ $offer->id }}" data-product-id="{{ $product->id }}">
                                         <div class="flex items-center gap-3">
                                             <span class="bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-bold">
                                                 {{ $offer->min_quantity }}+
@@ -138,16 +140,23 @@
                                             <span
                                                 class="text-gray-700 dark:text-gray-300 font-medium">{{ $offer->title }}</span>
                                         </div>
-                                        <span class="text-orange-600 dark:text-orange-400 font-bold text-lg">
-                                            @if ($offer->discount_type === 'percentage')
-                                                {{ $offer->discount_value }}% OFF
-                                            @else
-                                                Rs {{ number_format($offer->discount_value, 0) }} OFF
-                                            @endif
-                                        </span>
-                                    </div>
+                                        <div class="flex items-center gap-2">
+                                            <span class="text-orange-600 dark:text-orange-400 font-bold text-lg">
+                                                @if ($offer->discount_type === 'percentage')
+                                                    {{ $offer->discount_value }}% OFF
+                                                @else
+                                                    Rs {{ number_format($offer->discount_value, 0) }} OFF
+                                                @endif
+                                            </span>
+                                            <i class="fa-solid fa-arrow-right text-orange-500"></i>
+                                        </div>
+                                    </button>
                                 @endforeach
                             </div>
+                            <p class="text-xs text-orange-700 dark:text-orange-400 mt-2 flex items-center gap-1">
+                                <i class="fa-solid fa-info-circle"></i>
+                                Click on an offer to apply it automatically!
+                            </p>
                         </div>
                     @endif
 
@@ -175,7 +184,7 @@
                                     </button>
                                     <input type="number"
                                         class="quantity-input w-16 text-center border-0 bg-transparent text-gray-900 dark:text-gray-100 font-semibold text-lg focus:outline-none"
-                                        value="1" min="1" max="10"
+                                        value="1" min="1" max="{{ min($product->stock, 100) }}"
                                         data-product-card="{{ $product->id }}">
                                     <button type="button"
                                         class="quantity-btn bg-white dark:bg-gray-600 hover:bg-gradient-to-r hover:from-blue-500 hover:to-purple-500 hover:text-white text-gray-700 dark:text-gray-200 w-10 h-10 rounded-lg flex items-center justify-center font-bold transition-all duration-300 transform hover:scale-110"
@@ -361,8 +370,8 @@
                     if (!input) return;
 
                     let currentValue = parseInt(input.value) || 1;
-                    const min = parseInt(input.min) || 1;
-                    const max = parseInt(input.max) || 10;
+                    const min = parseInt(input.getAttribute('min')) || 1;
+                    const max = parseInt(input.getAttribute('max')) || 100;
 
                     if (action === 'plus' && currentValue < max) {
                         input.value = currentValue + 1;
@@ -373,8 +382,96 @@
                     // Add visual feedback
                     input.classList.add('scale-110');
                     setTimeout(() => input.classList.remove('scale-110'), 200);
+
+                    // Update active offer highlight
+                    updateActiveOfferHighlight(input.value);
                 });
             });
+
+            // Update quantity input when changed manually
+            document.querySelectorAll('.quantity-input').forEach(input => {
+                input.addEventListener('input', function() {
+                    updateActiveOfferHighlight(this.value);
+                });
+            });
+
+            // Offer card click functionality
+            document.querySelectorAll('.offer-card').forEach(offerCard => {
+                offerCard.addEventListener('click', function() {
+                    const offerQuantity = parseInt(this.dataset.offerQuantity);
+                    const productId = this.dataset.productId;
+                    const quantityInput = document.querySelector(
+                        `.quantity-input[data-product-card="${productId}"]`);
+
+                    if (quantityInput) {
+                        // Set the quantity to the offer's minimum quantity
+                        quantityInput.value = offerQuantity;
+
+                        // Visual feedback
+                        quantityInput.classList.add('scale-110');
+                        setTimeout(() => quantityInput.classList.remove('scale-110'), 200);
+
+                        // Highlight the clicked offer
+                        document.querySelectorAll('.offer-card').forEach(card => {
+                            card.classList.remove('border-green-500',
+                                'dark:border-green-500', 'bg-green-50',
+                                'dark:bg-green-900/20');
+                            card.classList.add('border-orange-200',
+                                'dark:border-orange-700');
+                        });
+                        this.classList.remove('border-orange-200', 'dark:border-orange-700');
+                        this.classList.add('border-green-500', 'dark:border-green-500',
+                            'bg-green-50', 'dark:bg-green-900/20');
+
+                        // Show notification
+                        showNotification(
+                            `✨ Offer applied! Quantity set to ${offerQuantity} items`,
+                            'success'
+                        );
+
+                        // Scroll to quantity selector
+                        quantityInput.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'center'
+                        });
+                    }
+                });
+            });
+
+            // Function to update active offer highlight based on current quantity
+            function updateActiveOfferHighlight(quantity) {
+                const qty = parseInt(quantity) || 1;
+                let bestOffer = null;
+                let bestOfferElement = null;
+
+                document.querySelectorAll('.offer-card').forEach(card => {
+                    const offerQty = parseInt(card.dataset.offerQuantity);
+
+                    // Reset all offer cards
+                    card.classList.remove('border-green-500', 'dark:border-green-500', 'bg-green-50',
+                        'dark:bg-green-900/20');
+                    card.classList.add('border-orange-200', 'dark:border-orange-700');
+
+                    // Check if this offer is applicable
+                    if (offerQty <= qty) {
+                        if (!bestOffer || offerQty > bestOffer) {
+                            bestOffer = offerQty;
+                            bestOfferElement = card;
+                        }
+                    }
+                });
+
+                // Highlight the best applicable offer
+                if (bestOfferElement) {
+                    bestOfferElement.classList.remove('border-orange-200', 'dark:border-orange-700');
+                    bestOfferElement.classList.add('border-green-500', 'dark:border-green-500', 'bg-green-50',
+                        'dark:bg-green-900/20');
+                }
+            }
+
+            // Initial highlight check
+            const initialQuantity = document.querySelector('.quantity-input')?.value || 1;
+            updateActiveOfferHighlight(initialQuantity);
 
             // Add to cart functionality
             document.querySelectorAll('.add-to-cart-btn').forEach(button => {
@@ -414,14 +511,27 @@
                         .then(response => response.json())
                         .then(data => {
                             if (data.success) {
-                                showNotification(
-                                    `${productName} has been added to your cart! (Qty: ${quantity})`,
-                                    'success');
-                                updateCartCount(data.cartCount || quantity);
+                                let message =
+                                    `${productName} has been added to your cart! (Qty: ${quantity})`;
+
+                                if (data.offer_applied && data.offer_details) {
+                                    const offer = data.offer_details;
+                                    if (offer.discount_type === 'percentage') {
+                                        message +=
+                                            ` 🎉 ${offer.discount_value}% discount applied!`;
+                                    } else {
+                                        message +=
+                                            ` 🎉 Rs ${offer.discount_value} discount applied!`;
+                                    }
+                                }
+
+                                showNotification(message, 'success');
+                                updateCartCount(data.cart_count || quantity);
 
                                 // Reset quantity to 1 after successful add
                                 if (quantityInput) {
                                     quantityInput.value = 1;
+                                    updateActiveOfferHighlight(1);
                                 }
 
                                 // Show quick checkout modal instead of redirecting
