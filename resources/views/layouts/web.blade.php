@@ -141,9 +141,7 @@
                     </li>
                 @endif
 
-                @if (auth()->user()->hasRole('admin') ||
-                        auth()->user()->hasRole('label_printer') ||
-                        auth()->user()->hasRole('order_taker'))
+                @hasanyrole('admin|label_printer|order_taker|web_order_taker')
                     <li
                         class="p-2 hover:bg-gray-700  hover:animate-pulse @if (request()->routeIs('admin.shipments.*')) bg-green-500 @endif">
                         <a href="{{ route('admin.shipments.index') }}" class="block"><i
@@ -156,7 +154,7 @@
                                 class="fa-solid fa-chart-pie mr-2"></i>
                             Shipment Dashboard</a>
                     </li>
-                @endif
+                @endhasanyrole
 
                 <li class="p-2 hover:bg-gray-700  hover:animate-pulse">
                     <form action="{{ url('logout') }}" method="post">
