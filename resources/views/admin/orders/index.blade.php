@@ -6,7 +6,7 @@
             <!-- Header -->
             <div class="flex justify-between items-center mb-6">
                 <h1 class="text-2xl font-bold text-gray-800">Orders Management</h1>
-                @hasanyrole('admin|team_leader')
+                @hasanyrole('admin|label_printer')
                     <div class="flex space-x-3">
                         <a href="{{ route('admin.orders.create') }}"
                             class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition duration-200">
