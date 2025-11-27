@@ -770,6 +770,7 @@ class ShipmentController extends Controller
                     'Customer Name',
                     'Customer Number',
                     'Address',
+                    'City',
                     'Courier Status',
                     'Products',
                     'Amount',
@@ -809,12 +810,13 @@ class ShipmentController extends Controller
                             $customerNumber = $order->shipping_address['phone'];
                         }
 
-                        // Address
+                        // Address and City
                         $address = 'N/A';
+                        $city = 'N/A';
                         if (is_array($order->shipping_address) && isset($order->shipping_address['address'])) {
                             $address = $order->shipping_address['address'];
                             if (isset($order->shipping_address['city'])) {
-                                $address .= ', ' . $order->shipping_address['city'];
+                                $city = $order->shipping_address['city'];
                             }
                         } elseif ($order->street_address) {
                             $address = $order->street_address;
@@ -861,6 +863,7 @@ class ShipmentController extends Controller
                             $customerName,
                             $customerNumber,
                             $address,
+                            $city,
                             $courierStatus,
                             $productsStr,
                             $amount,
