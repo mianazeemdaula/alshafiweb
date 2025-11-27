@@ -132,6 +132,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('orders', 'App\Http\Controllers\Admin\OrderController');
         
         // Shipments Management
+        Route::get('shipments/export', 'App\Http\Controllers\Admin\ShipmentController@exportCsv')->name('shipments.export');
         Route::get('shipments/courier-cities', 'App\Http\Controllers\Admin\ShipmentController@getCities')->name('shipments.courier.cities');
         Route::get('shipments/pickup-addresses', 'App\Http\Controllers\Admin\ShipmentController@getPickupAddresses')->name('shipments.pickup-addresses');
         Route::resource('shipments', 'App\Http\Controllers\Admin\ShipmentController');
