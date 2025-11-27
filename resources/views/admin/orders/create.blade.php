@@ -128,7 +128,8 @@
                                         <label class="block text-sm font-medium text-gray-700 mb-1">Assign Order To</label>
                                         <select name="order_taker_id"
                                             class="compact-input w-full border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
-                                            <option value="">Myself</option>
+                                            <option value="{{ auth()->user()->id }}">Myself {{ auth()->user()->ref_code }}
+                                            </option>
                                             @foreach ($teamMembers as $member)
                                                 <option value="{{ $member->id }}"
                                                     {{ (old('order_taker_id') ?? ($defaultOrderTakerId ?? '')) == $member->id ? 'selected' : '' }}>
