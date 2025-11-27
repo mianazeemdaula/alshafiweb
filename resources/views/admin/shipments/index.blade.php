@@ -15,7 +15,7 @@
             <!-- Filters -->
             <div class="bg-gray-50 rounded-lg p-2 mb-2">
                 <form method="GET" id="filterForm" class="space-y-2">
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-2">
+                    <div class="grid grid-cols-2 md:grid-cols-6 gap-2">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Search</label>
                             <input type="text" name="search" value="{{ request('search') }}"
@@ -55,14 +55,15 @@
                             <input type="date" name="date_from" value="{{ request('date_from') }}"
                                 class="w-full border border-gray-300 rounded-lg px-2 py-1 focus:ring-blue-500 focus:border-blue-500">
                         </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-2">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Date To</label>
                             <input type="date" name="date_to" value="{{ request('date_to') }}"
                                 class="w-full border border-gray-300 rounded-lg px-2 py-1 focus:ring-blue-500 focus:border-blue-500">
                         </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-2">
+
 
                         <div class="col-span-3 flex items-end space-x-2">
                             <button type="submit"
