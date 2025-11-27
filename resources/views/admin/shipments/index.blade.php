@@ -14,54 +14,70 @@
 
             <!-- Filters -->
             <div class="bg-gray-50 rounded-lg p-2 mb-2">
-                <form method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-2">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Search</label>
-                        <input type="text" name="search" value="{{ request('search') }}"
-                            placeholder="Tracking number, Order ID..."
-                            class="w-full border border-gray-300 rounded-lg px-2 py-1 focus:ring-blue-500 focus:border-blue-500">
+                <form method="GET" id="filterForm" class="space-y-2">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-2">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Search</label>
+                            <input type="text" name="search" value="{{ request('search') }}"
+                                placeholder="Tracking number, Order ID..."
+                                class="w-full border border-gray-300 rounded-lg px-2 py-1 focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                            <select name="status"
+                                class="w-full border border-gray-300 rounded-lg px-2 py-1 focus:ring-blue-500 focus:border-blue-500">
+                                <option value="">All Statuses</option>
+                                @foreach (\App\Models\Shipment::getStatuses() as $key => $label)
+                                    <option value="{{ $key }}" {{ request('status') == $key ? 'selected' : '' }}>
+                                        {{ $label }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Courier</label>
+                            <select name="courier"
+                                class="w-full border border-gray-300 rounded-lg px-2 py-1 focus:ring-blue-500 focus:border-blue-500">
+                                <option value="">All Couriers</option>
+                                @foreach ($courierServices as $service)
+                                    <option value="{{ $service->courier }}"
+                                        {{ request('courier') == $service->courier ? 'selected' : '' }}>
+                                        {{ ucfirst($service->courier) }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Date From</label>
+                            <input type="date" name="date_from" value="{{ request('date_from') }}"
+                                class="w-full border border-gray-300 rounded-lg px-2 py-1 focus:ring-blue-500 focus:border-blue-500">
+                        </div>
                     </div>
 
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
-                        <select name="status"
-                            class="w-full border border-gray-300 rounded-lg px-2 py-1 focus:ring-blue-500 focus:border-blue-500">
-                            <option value="">All Statuses</option>
-                            @foreach (\App\Models\Shipment::getStatuses() as $key => $label)
-                                <option value="{{ $key }}" {{ request('status') == $key ? 'selected' : '' }}>
-                                    {{ $label }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-2">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Date To</label>
+                            <input type="date" name="date_to" value="{{ request('date_to') }}"
+                                class="w-full border border-gray-300 rounded-lg px-2 py-1 focus:ring-blue-500 focus:border-blue-500">
+                        </div>
 
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Courier</label>
-                        <select name="courier"
-                            class="w-full border border-gray-300 rounded-lg px-2 py-1 focus:ring-blue-500 focus:border-blue-500">
-                            <option value="">All Couriers</option>
-                            @foreach ($courierServices as $service)
-                                <option value="{{ $service->courier }}"
-                                    {{ request('courier') == $service->courier ? 'selected' : '' }}>
-                                    {{ ucfirst($service->courier) }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div class="flex items-end space-x-2">
-                        <button type="submit"
-                            class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition duration-200">
-                            <i class="fas fa-search mr-1"></i>Filter
-                        </button>
-                        <a href="{{ route('admin.shipments.index') }}"
-                            class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition duration-200">
-                            <i class="fas fa-times mr-1"></i>Clear
-                        </a>
-                        <a href="{{ route('admin.shipments.export', request()->all()) }}"
-                            class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition duration-200">
-                            <i class="fas fa-file-csv mr-1"></i>Export CSV
-                        </a>
+                        <div class="col-span-3 flex items-end space-x-2">
+                            <button type="submit"
+                                class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition duration-200">
+                                <i class="fas fa-search mr-1"></i>Filter
+                            </button>
+                            <a href="{{ route('admin.shipments.index') }}"
+                                class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition duration-200">
+                                <i class="fas fa-times mr-1"></i>Clear
+                            </a>
+                            <button type="button" onclick="exportCSV()"
+                                class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition duration-200">
+                                <i class="fas fa-file-csv mr-1"></i>Export CSV
+                            </button>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -459,5 +475,19 @@
                     alert('An error occurred while cancelling the shipment.');
                 });
         });
+
+        function exportCSV() {
+            const form = document.getElementById('filterForm');
+            const formData = new FormData(form);
+            const params = new URLSearchParams();
+
+            for (const [key, value] of formData.entries()) {
+                if (value) {
+                    params.append(key, value);
+                }
+            }
+
+            window.location.href = '{{ route('admin.shipments.export') }}?' + params.toString();
+        }
     </script>
 @endsection
