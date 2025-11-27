@@ -67,15 +67,15 @@
                         <div class="col-span-3 flex items-end space-x-2">
                             <button type="submit"
                                 class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition duration-200">
-                                <i class="fas fa-search mr-1"></i>Filter
+                                <i class="fas fa-search mr-1"></i>
                             </button>
                             <a href="{{ route('admin.shipments.index') }}"
                                 class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition duration-200">
-                                <i class="fas fa-times mr-1"></i>Clear
+                                <i class="fas fa-times mr-1"></i>
                             </a>
                             <button type="button" onclick="exportCSV()"
                                 class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition duration-200">
-                                <i class="fas fa-file-csv mr-1"></i>Export CSV
+                                <i class="fas fa-file-csv mr-1"></i>
                             </button>
                         </div>
                     </div>
