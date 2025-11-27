@@ -87,6 +87,33 @@ class AuthController extends Controller
             return view('admin.team-leader-dashboard', compact('stats', 'teamStats', 'teamMembers'));
         }
         
+        // Web Order Taker Dashboard - Only Website Orders
+        if($user->hasRole('web_order_taker')) {
+            // Get only website orders
+            $websiteOrders = \App\Models\Order::where('order_source', 'website');
+            
+            $stats = [
+                'total_orders' => $websiteOrders->count(),
+                'pending_orders' => (clone $websiteOrders)->where('status', 'pending')->count(),
+                'processing_orders' => (clone $websiteOrders)->where('status', 'processing')->count(),
+                'shipped_orders' => (clone $websiteOrders)->where('status', 'shipped')->count(),
+                'delivered_orders' => (clone $websiteOrders)->where('status', 'delivered')->count(),
+                'cancelled_orders' => (clone $websiteOrders)->where('status', 'cancelled')->count(),
+                'today_orders' => (clone $websiteOrders)->whereDate('created_at', today())->count(),
+                'week_orders' => (clone $websiteOrders)->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()])->count(),
+                'month_orders' => (clone $websiteOrders)->whereMonth('created_at', now()->month)->count(),
+            ];
+
+            // Revenue stats (website orders only)
+            $revenueStats = [
+                'total_revenue' => (clone $websiteOrders)->sum('total'),
+                'today_revenue' => (clone $websiteOrders)->whereDate('created_at', today())->sum('total'),
+                'month_revenue' => (clone $websiteOrders)->whereMonth('created_at', now()->month)->sum('total'),
+            ];
+            
+            return view('admin.web-order-taker-dashboard', compact('stats', 'revenueStats'));
+        }
+
         // Order Taker Dashboard - Only Order Statistics (No Financial Data)
         if($user->hasRole('order_taker')) {
             // Get only manual orders for this order taker

@@ -27,6 +27,7 @@ class Product extends Model
         'referal_discount',
         'buyer_discount',
         'earn_points',
+        'manual_only',
     ];
 
     public function getCurrencyAttribute()
@@ -149,5 +150,21 @@ class Product extends Model
     public function media()
     {
         return $this->morphMany(Media::class, 'mediable')->orderBy('sort');
+    }
+
+    /**
+     * Scope to get only products visible on website (not manual_only)
+     */
+    public function scopeWebsiteVisible($query)
+    {
+        return $query->where('manual_only', false);
+    }
+
+    /**
+     * Scope to get products for manual orders (includes all products)
+     */
+    public function scopeManualOrdersVisible($query)
+    {
+        return $query; // Returns all products
     }
 }

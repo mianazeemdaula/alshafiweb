@@ -64,7 +64,8 @@ class WebController extends Controller
 
     public function products()
     {
-        $products = \App\Models\Product::with(['country', 'category', 'reviews', 'activeOffers']);
+        $products = \App\Models\Product::with(['country', 'category', 'reviews', 'activeOffers'])
+            ->websiteVisible(); // Only show products not marked as manual_only
         
         // Filter by current country from session
         $currentCountry = session('country');
@@ -164,6 +165,7 @@ class WebController extends Controller
     public function product($slug)
     {
         $product = \App\Models\Product::with(['country', 'category', 'reviews', 'activeOffers'])
+            ->websiteVisible() // Only show products not marked as manual_only
             ->where('sku', $slug)
             ->firstOrFail();
         

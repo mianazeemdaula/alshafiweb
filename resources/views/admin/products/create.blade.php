@@ -101,6 +101,20 @@
                             <option value="0">Inactive</option>
                         </x-select>
                     </div>
+
+                    <div class="flex flex-col gap-2">
+                        <x-label>Visibility</x-label>
+                        <div class="flex items-center gap-3 mt-2">
+                            <input type="checkbox" name="manual_only" id="manual_only"
+                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                                {{ old('manual_only') ? 'checked' : '' }}>
+                            <label for="manual_only" class="text-sm text-gray-700 dark:text-gray-300">
+                                Manual Orders Only (Hidden from website)
+                            </label>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-1">Check this to hide the product from website and show only in
+                            manual orders</p>
+                    </div>
                 </div>
                 <div>
                     <x-label>Description</x-label>

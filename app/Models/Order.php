@@ -120,6 +120,9 @@ class Order extends Model
         if ($user->isAdmin()) {
             // Admin sees all orders
             return $query;
+        } elseif ($user->isWebOrderTaker()) {
+            // Web order taker sees only website orders
+            return $query->where('order_source', 'website');
         } elseif ($user->isLabelPrinter()) {
             // Label printer: show manual orders created by their team members OR assigned to themselves
             return $query->where('order_source', 'manual')

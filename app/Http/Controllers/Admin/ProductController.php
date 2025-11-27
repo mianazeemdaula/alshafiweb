@@ -73,6 +73,7 @@ class ProductController extends Controller
         $product->earn_points = $request->earn_points ?? 0;
         $product->featured = $request->featured;
         $product->is_active = $request->is_active;
+        $product->manual_only = $request->has('manual_only') ? true : false;
         $product->image = "https://via.placeholder.com/640x480.png/000077?text=quas";
         $product->save();
         if($request->has('image')){
@@ -145,6 +146,7 @@ class ProductController extends Controller
         $product->earn_points = $request->earn_points ?? 0;
         $product->featured = $request->featured;
         $product->is_active = $request->is_active;
+        $product->manual_only = $request->has('manual_only') ? true : false;
         $product->save();
         if($request->has('image')){
             $files = $request->file('image');

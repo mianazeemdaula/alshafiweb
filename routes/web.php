@@ -127,8 +127,8 @@ Route::middleware('auth')->group(function () {
         });
     });
     
-    // Routes accessible by admin, order_taker, and label_printer roles
-    Route::middleware('role:admin|order_taker|label_printer')->prefix('admin')->name('admin.')->group(function () {
+    // Routes accessible by admin, order_taker, label_printer, and web_order_taker roles
+    Route::middleware('role:admin|order_taker|label_printer|web_order_taker')->prefix('admin')->name('admin.')->group(function () {
         Route::resource('orders', 'App\Http\Controllers\Admin\OrderController');
         
         // Shipments Management

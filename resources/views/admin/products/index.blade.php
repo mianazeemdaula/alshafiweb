@@ -52,6 +52,9 @@
                                         Status</th>
                                     <th scope="col"
                                         class="px-2 py-2 text-left text-xs font-normal text-gray-700 sm:px-4 sm:py-3.5">
+                                        Visibility</th>
+                                    <th scope="col"
+                                        class="px-2 py-2 text-left text-xs font-normal text-gray-700 sm:px-4 sm:py-3.5">
                                         Discount</th>
                                     <th scope="col"
                                         class="px-2 py-2 text-left text-xs font-normal text-gray-700 sm:px-4 sm:py-3.5">
@@ -100,6 +103,19 @@
                                             <x-status-chip status="{{ $item->is_active ? 'Active' : 'Inactive' }}" />
                                         </td>
                                         <td class="whitespace-nowrap px-2 py-2 text-sm sm:px-4 sm:py-4">
+                                            @if ($item->manual_only)
+                                                <span
+                                                    class="inline-flex items-center px-2 py-1 text-xs font-medium rounded-full bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200">
+                                                    <i class="fas fa-user-tie mr-1"></i> Manual Only
+                                                </span>
+                                            @else
+                                                <span
+                                                    class="inline-flex items-center px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                                                    <i class="fas fa-globe mr-1"></i> Website
+                                                </span>
+                                            @endif
+                                        </td>
+                                        <td class="whitespace-nowrap px-2 py-2 text-sm sm:px-4 sm:py-4">
                                             {{ $item->discount }}%
                                         </td>
                                         <td class="whitespace-nowrap px-2 py-2 text-sm sm:px-4 sm:py-4">
@@ -136,7 +152,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td class="whitespace nowrap px-2 py-4 text-sm sm:px-4 sm:py-4" colspan="9">
+                                        <td class="whitespace nowrap px-2 py-4 text-sm sm:px-4 sm:py-4" colspan="10">
                                             No products found</td>
                                     </tr>
                                 @endforelse

@@ -130,6 +130,14 @@ class User extends Authenticatable
     {
         return $this->hasRole('admin');
     }
+
+    /**
+     * Check if user is a web order taker
+     */
+    public function isWebOrderTaker()
+    {
+        return $this->hasRole('web_order_taker');
+    }
     
     protected static function booted()
     {
