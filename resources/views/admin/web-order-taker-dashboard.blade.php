@@ -22,55 +22,6 @@
             </div>
         </div>
 
-        <!-- Revenue Statistics -->
-        <div class="mb-6">
-            <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-                <i class="fa fa-chart-line text-green-600"></i>
-                Revenue Overview
-            </h2>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <!-- Total Revenue -->
-                <div
-                    class="bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl p-6 shadow-lg hover:shadow-xl transition-all">
-                    <div class="flex items-center justify-between mb-3">
-                        <div class="w-14 h-14 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center">
-                            <i class="fa fa-dollar-sign text-3xl text-white"></i>
-                        </div>
-                    </div>
-                    <h3 class="text-white/90 text-sm font-medium mb-1">Total Revenue</h3>
-                    <p class="text-4xl font-bold text-white">RS. {{ number_format($revenueStats['total_revenue']) }}</p>
-                    <p class="text-white/70 text-xs mt-2">All time website orders</p>
-                </div>
-
-                <!-- Today Revenue -->
-                <div
-                    class="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl p-6 shadow-lg hover:shadow-xl transition-all">
-                    <div class="flex items-center justify-between mb-3">
-                        <div class="w-14 h-14 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center">
-                            <i class="fa fa-calendar-day text-3xl text-white"></i>
-                        </div>
-                    </div>
-                    <h3 class="text-white/90 text-sm font-medium mb-1">Today's Revenue</h3>
-                    <p class="text-4xl font-bold text-white">RS. {{ number_format($revenueStats['today_revenue']) }}</p>
-                    <p class="text-white/70 text-xs mt-2">{{ $stats['today_orders'] }} orders today</p>
-                </div>
-
-                <!-- Monthly Revenue -->
-                <div
-                    class="bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl p-6 shadow-lg hover:shadow-xl transition-all">
-                    <div class="flex items-center justify-between mb-3">
-                        <div class="w-14 h-14 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center">
-                            <i class="fa fa-calendar-alt text-3xl text-white"></i>
-                        </div>
-                    </div>
-                    <h3 class="text-white/90 text-sm font-medium mb-1">This Month</h3>
-                    <p class="text-4xl font-bold text-white">RS. {{ number_format($revenueStats['month_revenue']) }}</p>
-                    <p class="text-white/70 text-xs mt-2">{{ $stats['month_orders'] }} orders this month</p>
-                </div>
-            </div>
-        </div>
-
         <!-- Order Statistics Grid -->
         <div class="mb-6">
             <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">

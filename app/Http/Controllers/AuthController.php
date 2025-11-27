@@ -103,15 +103,8 @@ class AuthController extends Controller
                 'week_orders' => (clone $websiteOrders)->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()])->count(),
                 'month_orders' => (clone $websiteOrders)->whereMonth('created_at', now()->month)->count(),
             ];
-
-            // Revenue stats (website orders only)
-            $revenueStats = [
-                'total_revenue' => (clone $websiteOrders)->sum('total'),
-                'today_revenue' => (clone $websiteOrders)->whereDate('created_at', today())->sum('total'),
-                'month_revenue' => (clone $websiteOrders)->whereMonth('created_at', now()->month)->sum('total'),
-            ];
             
-            return view('admin.web-order-taker-dashboard', compact('stats', 'revenueStats'));
+            return view('admin.web-order-taker-dashboard', compact('stats'));
         }
 
         // Order Taker Dashboard - Only Order Statistics (No Financial Data)
