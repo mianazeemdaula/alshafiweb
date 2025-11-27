@@ -765,18 +765,18 @@ class ShipmentController extends Controller
 
                 // CSV Headers
                 fputcsv($file, [
-                    'ID',
+                    'Tracking Number',
+                    'Referral ID',
                     'Customer Name',
                     'Customer Number',
                     'Address',
-                    'Referral ID',
+                    'Courier Status',
                     'Products',
                     'Amount',
-                    'Courier Service',
-                    'Courier Status',
-                    'Tracking Number',
+                    // 'Courier Service',
                     'Created Date',
-                    'Updated Date'
+                    'Updated Date',
+                    'ID'
                 ]);
 
                 // CSV Data
@@ -822,8 +822,8 @@ class ShipmentController extends Controller
 
                         // Referral ID
                         $referralId = 'N/A';
-                        if ($order->user && $order->user->ref_code) {
-                            $referralId = $order->user->ref_code;
+                        if ($order->order_taker_id) {
+                            $referralId = $order->orderTaker ? $order->orderTaker->name : 'N/A';
                         }
 
                         // Products
@@ -856,18 +856,18 @@ class ShipmentController extends Controller
                         $updatedDate = $shipment->updated_at ? $shipment->updated_at->format('Y-m-d H:i:s') : '';
 
                         fputcsv($file, [
-                            $shipment->id,
+                            $trackingNumber,
+                            $referralId,
                             $customerName,
                             $customerNumber,
                             $address,
-                            $referralId,
+                            $courierStatus,
                             $productsStr,
                             $amount,
-                            $courierService,
-                            $courierStatus,
-                            $trackingNumber,
+                            // $courierService,
                             $createdDate,
-                            $updatedDate
+                            $updatedDate,
+                            $shipment->id
                         ]);
                     } catch (\Exception $e) {
                         // Log error but continue with other records
