@@ -681,177 +681,209 @@ class ShipmentController extends Controller
      */
     public function exportCsv(Request $request)
     {
-        $query = Shipment::with(['order.orderDetails.product', 'order.user', 'courierService']);
+        try {
+            $query = Shipment::with(['order.orderDetails.product', 'order.user', 'order.orderTaker', 'courierService']);
 
-        // Filter by status
-        if ($request->filled('status')) {
-            $query->where('status', $request->status);
-        }
-
-        // Filter by courier
-        if ($request->filled('courier')) {
-            $query->whereHas('courierService', function($q) use ($request) {
-                $q->where('courier', $request->courier);
-            });
-        }
-
-        // Search by tracking number or order ID
-        if ($request->filled('search')) {
-            $search = $request->search;
-            $query->where(function($q) use ($search) {
-                $q->where('tracking_number', 'like', "%{$search}%")
-                  ->orWhereHas('order', function($orderQuery) use ($search) {
-                      $orderQuery->where('id', 'like', "%{$search}%")
-                        ->orWhere('number', 'like', "%{$search}%")
-                        ->orWhere('customer_name', 'like', "%{$search}%")
-                        ->orWhere('customer_phone', 'like', "%{$search}%");
-                  });
-            });
-        }
-
-        // Filter by date range
-        if ($request->filled('date_from')) {
-            $query->whereDate('created_at', '>=', $request->date_from);
-        }
-        if ($request->filled('date_to')) {
-            $query->whereDate('created_at', '<=', $request->date_to);
-        }
-
-        // Apply role-based filtering
-        $user = auth()->user();
-        if($user->hasRole('order_taker')) {
-            // Order takers see only shipments for their orders
-            $query->whereHas('order', function($q) use ($user) {
-                $q->where('order_taker_id', $user->id);
-            });
-        } elseif($user->hasRole('label_printer')) {
-            // Label printers see shipments for their team's orders
-            $query->whereHas('order', function($q) use ($user) {
-                $q->where(function($subQ) use ($user) {
-                    $subQ->where('order_taker_id', $user->id)
-                         ->orWhereHas('orderTaker', function($userQuery) use ($user) {
-                             $userQuery->where('team_leader_id', $user->id);
-                         });
-                });
-            });
-        } elseif($user->hasRole('web_order_taker')) {
-            // Web order takers see only website order shipments
-            $query->whereHas('order', function($q) {
-                $q->where('order_source', 'website');
-            });
-        }
-        // Admins see all shipments (no filter needed)
-
-        $shipments = $query->latest()->get();
-
-        // Generate CSV filename
-        $filename = 'shipments_export_' . date('Y-m-d_His') . '.csv';
-
-        // Set headers for CSV download
-        $headers = [
-            'Content-Type' => 'text/csv; charset=utf-8',
-            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
-            'Pragma' => 'no-cache',
-            'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
-            'Expires' => '0'
-        ];
-
-        $callback = function() use ($shipments) {
-            $file = fopen('php://output', 'w');
-            
-            // Add UTF-8 BOM for proper Excel encoding
-            fprintf($file, chr(0xEF).chr(0xBB).chr(0xBF));
-
-            // CSV Headers
-            fputcsv($file, [
-                'ID',
-                'Customer Name',
-                'Customer Number',
-                'Address',
-                'Referral ID',
-                'Products',
-                'Amount',
-                'Courier Service',
-                'Courier Status',
-                'Tracking Number',
-                'Created Date',
-                'Updated Date'
-            ]);
-
-            // CSV Data
-            foreach ($shipments as $shipment) {
-                $order = $shipment->order;
-                
-                // Customer Name
-                $customerName = $order->customer_name ?? 
-                               (isset($order->shipping_address['first_name']) 
-                                   ? $order->shipping_address['first_name'] . ' ' . ($order->shipping_address['last_name'] ?? '')
-                                   : ($order->user->name ?? 'N/A'));
-
-                // Customer Number
-                $customerNumber = $order->customer_phone ?? 
-                                 ($order->shipping_address['phone'] ?? 'N/A');
-
-                // Address
-                $address = '';
-                if (isset($order->shipping_address['address'])) {
-                    $address = $order->shipping_address['address'];
-                    if (isset($order->shipping_address['city'])) {
-                        $address .= ', ' . $order->shipping_address['city'];
-                    }
-                } else if ($order->street_address) {
-                    $address = $order->street_address;
-                }
-
-                // Referral ID
-                $referralId = $order->user->ref_code ?? 'N/A';
-
-                // Products
-                $products = [];
-                if ($order->orderDetails) {
-                    foreach ($order->orderDetails as $detail) {
-                        $productName = $detail->product->name ?? 'Product';
-                        $products[] = $productName . ' x' . $detail->qty;
-                    }
-                }
-                $productsStr = implode(', ', $products);
-
-                // Amount
-                $amount = 'RS. ' . number_format($order->total ?? 0, 2);
-
-                // Courier Service
-                $courierService = $shipment->courierService->courier ?? 'N/A';
-                $courierService = ucfirst($courierService);
-
-                // Courier Status
-                $courierStatus = ucwords(str_replace('_', ' ', $shipment->status));
-
-                // Tracking Number
-                $trackingNumber = $shipment->tracking_number ?? 'N/A';
-
-                // Dates
-                $createdDate = $shipment->created_at ? $shipment->created_at->format('Y-m-d H:i:s') : '';
-                $updatedDate = $shipment->updated_at ? $shipment->updated_at->format('Y-m-d H:i:s') : '';
-
-                fputcsv($file, [
-                    $shipment->id,
-                    $customerName,
-                    $customerNumber,
-                    $address,
-                    $referralId,
-                    $productsStr,
-                    $amount,
-                    $courierService,
-                    $courierStatus,
-                    $trackingNumber,
-                    $createdDate,
-                    $updatedDate
-                ]);
+            // Filter by status
+            if ($request->filled('status')) {
+                $query->where('status', $request->status);
             }
 
-            fclose($file);
-        };
+            // Filter by courier
+            if ($request->filled('courier')) {
+                $query->whereHas('courierService', function($q) use ($request) {
+                    $q->where('courier', $request->courier);
+                });
+            }
 
-        return response()->stream($callback, 200, $headers);
+            // Search by tracking number or order ID
+            if ($request->filled('search')) {
+                $search = $request->search;
+                $query->where(function($q) use ($search) {
+                    $q->where('tracking_number', 'like', "%{$search}%")
+                      ->orWhereHas('order', function($orderQuery) use ($search) {
+                          $orderQuery->where('id', 'like', "%{$search}%")
+                            ->orWhere('number', 'like', "%{$search}%")
+                            ->orWhere('customer_name', 'like', "%{$search}%")
+                            ->orWhere('customer_phone', 'like', "%{$search}%");
+                      });
+                });
+            }
+
+            // Filter by date range
+            if ($request->filled('date_from')) {
+                $query->whereDate('created_at', '>=', $request->date_from);
+            }
+            if ($request->filled('date_to')) {
+                $query->whereDate('created_at', '<=', $request->date_to);
+            }
+
+            // Apply role-based filtering
+            $user = auth()->user();
+            if($user->hasRole('order_taker')) {
+                // Order takers see only shipments for their orders
+                $query->whereHas('order', function($q) use ($user) {
+                    $q->where('order_taker_id', $user->id);
+                });
+            } elseif($user->hasRole('label_printer')) {
+                // Label printers see shipments for their team's orders
+                $query->whereHas('order', function($q) use ($user) {
+                    $q->where(function($subQ) use ($user) {
+                        $subQ->where('order_taker_id', $user->id)
+                             ->orWhereHas('orderTaker', function($userQuery) use ($user) {
+                                 $userQuery->where('team_leader_id', $user->id);
+                             });
+                    });
+                });
+            } elseif($user->hasRole('web_order_taker')) {
+                // Web order takers see only website order shipments
+                $query->whereHas('order', function($q) {
+                    $q->where('order_source', 'website');
+                });
+            }
+            // Admins see all shipments (no filter needed)
+
+            $shipments = $query->latest()->get();
+
+            // Generate CSV filename
+            $filename = 'shipments_export_' . date('Y-m-d_His') . '.csv';
+
+            // Set headers for CSV download
+            $headers = [
+                'Content-Type' => 'text/csv; charset=utf-8',
+                'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+                'Pragma' => 'no-cache',
+                'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+                'Expires' => '0'
+            ];
+
+            $callback = function() use ($shipments) {
+                $file = fopen('php://output', 'w');
+                
+                // Add UTF-8 BOM for proper Excel encoding
+                fprintf($file, chr(0xEF).chr(0xBB).chr(0xBF));
+
+                // CSV Headers
+                fputcsv($file, [
+                    'ID',
+                    'Customer Name',
+                    'Customer Number',
+                    'Address',
+                    'Referral ID',
+                    'Products',
+                    'Amount',
+                    'Courier Service',
+                    'Courier Status',
+                    'Tracking Number',
+                    'Created Date',
+                    'Updated Date'
+                ]);
+
+                // CSV Data
+                foreach ($shipments as $shipment) {
+                    try {
+                        $order = $shipment->order;
+                        
+                        if (!$order) {
+                            continue; // Skip if no order
+                        }
+                        
+                        // Customer Name
+                        $customerName = 'N/A';
+                        if ($order->customer_name) {
+                            $customerName = $order->customer_name;
+                        } elseif (is_array($order->shipping_address) && isset($order->shipping_address['first_name'])) {
+                            $customerName = $order->shipping_address['first_name'];
+                            if (isset($order->shipping_address['last_name'])) {
+                                $customerName .= ' ' . $order->shipping_address['last_name'];
+                            }
+                        } elseif ($order->user) {
+                            $customerName = $order->user->name;
+                        }
+
+                        // Customer Number
+                        $customerNumber = 'N/A';
+                        if ($order->customer_phone) {
+                            $customerNumber = $order->customer_phone;
+                        } elseif (is_array($order->shipping_address) && isset($order->shipping_address['phone'])) {
+                            $customerNumber = $order->shipping_address['phone'];
+                        }
+
+                        // Address
+                        $address = 'N/A';
+                        if (is_array($order->shipping_address) && isset($order->shipping_address['address'])) {
+                            $address = $order->shipping_address['address'];
+                            if (isset($order->shipping_address['city'])) {
+                                $address .= ', ' . $order->shipping_address['city'];
+                            }
+                        } elseif ($order->street_address) {
+                            $address = $order->street_address;
+                        }
+
+                        // Referral ID
+                        $referralId = 'N/A';
+                        if ($order->user && $order->user->ref_code) {
+                            $referralId = $order->user->ref_code;
+                        }
+
+                        // Products
+                        $products = [];
+                        if ($order->orderDetails && count($order->orderDetails) > 0) {
+                            foreach ($order->orderDetails as $detail) {
+                                $productName = $detail->product ? $detail->product->name : 'Product';
+                                $products[] = $productName . ' x' . $detail->qty;
+                            }
+                        }
+                        $productsStr = count($products) > 0 ? implode(', ', $products) : 'N/A';
+
+                        // Amount
+                        $amount = 'RS. ' . number_format($order->total ?? 0, 2);
+
+                        // Courier Service
+                        $courierService = 'N/A';
+                        if ($shipment->courierService && $shipment->courierService->courier) {
+                            $courierService = ucfirst($shipment->courierService->courier);
+                        }
+
+                        // Courier Status
+                        $courierStatus = ucwords(str_replace('_', ' ', $shipment->status ?? 'unknown'));
+
+                        // Tracking Number
+                        $trackingNumber = $shipment->tracking_number ?? 'N/A';
+
+                        // Dates
+                        $createdDate = $shipment->created_at ? $shipment->created_at->format('Y-m-d H:i:s') : '';
+                        $updatedDate = $shipment->updated_at ? $shipment->updated_at->format('Y-m-d H:i:s') : '';
+
+                        fputcsv($file, [
+                            $shipment->id,
+                            $customerName,
+                            $customerNumber,
+                            $address,
+                            $referralId,
+                            $productsStr,
+                            $amount,
+                            $courierService,
+                            $courierStatus,
+                            $trackingNumber,
+                            $createdDate,
+                            $updatedDate
+                        ]);
+                    } catch (\Exception $e) {
+                        // Log error but continue with other records
+                        \Log::error('Error exporting shipment ' . $shipment->id . ': ' . $e->getMessage());
+                        continue;
+                    }
+                }
+
+                fclose($file);
+            };
+
+            return response()->stream($callback, 200, $headers);
+            
+        } catch (\Exception $e) {
+            \Log::error('CSV Export Error: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to export CSV: ' . $e->getMessage());
+        }
     }
 }
