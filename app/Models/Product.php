@@ -32,7 +32,7 @@ class Product extends Model
 
     public function getCurrencyAttribute()
     {
-        return $this->country ? $this->country->currency_symbol : '$';
+        return $this->country ? $this->country->currency_symbol : 'RS.';
     }
 
     public function getFormattedPriceAttribute()

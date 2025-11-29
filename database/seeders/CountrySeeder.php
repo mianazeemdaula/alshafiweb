@@ -76,7 +76,7 @@ class CountrySeeder extends Seeder
                 'iso3' => 'WLD',
                 'phone_code' => '+1',
                 'currency' => 'USD',
-                'currency_symbol' => '$',
+                'currency_symbol' => 'RS.',
             ],
         ];
 

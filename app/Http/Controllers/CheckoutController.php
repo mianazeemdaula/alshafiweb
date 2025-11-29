@@ -191,7 +191,7 @@ class CheckoutController extends Controller
                 'zip_code' => $request->input('shipping.postal_code') ? (int)$request->input('shipping.postal_code') : 0,
                 'shipping_cost' => 0, // Free shipping
                 'discount' => 0,
-                'total' => floatval(str_replace(['$', ','], '', $cartTotal)), // Keep as rupees
+                'total' => floatval(str_replace(['RS.', 'Rs.', '$', ',', ' '], '', $cartTotal)), // Keep as rupees
                 'extra_note' => $request->input('shipping.notes') ?? null,
                 'order_source' => 'website', // Orders from website checkout
                 'order_taker_id' => null, // No order taker for website orders

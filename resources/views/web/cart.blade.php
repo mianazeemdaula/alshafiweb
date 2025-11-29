@@ -43,7 +43,7 @@
                     <div class="border-t border-gray-200 dark:border-gray-600 pt-4">
                         <div class="flex justify-between items-center text-xl font-bold text-gray-900 dark:text-gray-100">
                             <span>{{ __('cart.total') }}</span>
-                            <span id="cart-total">$0.00</span>
+                            <span id="cart-total">RS. 0.00</span>
                         </div>
                     </div>
 
@@ -131,7 +131,7 @@
                     });
 
                     // Update total
-                    cartTotal.textContent = '$' + data.total;
+                    cartTotal.textContent = 'RS. ' + data.total;
                 }
             }
 
@@ -147,7 +147,7 @@
                     </div>
                     <div>
                         <h4 class="font-medium">${item.name[0]}</h4>
-                        <p class="text-gray-600">$${item.price.toFixed(2)} ${cartLang.each}</p>
+                        <p class="text-gray-600">RS. ${item.price.toFixed(2)} ${cartLang.each}</p>
                     </div>
                 </div>
                 
@@ -165,7 +165,7 @@
                     </div>
                     
                     <div class="text-right">
-                        <p class="font-medium">$${(item.price * item.quantity).toFixed(2)}</p>
+                        <p class="font-medium">RS. ${(item.price * item.quantity).toFixed(2)}</p>
                     </div>
                     
                     <button class="remove-item text-red-600 hover:text-red-800 ml-4" data-id="${id}">
