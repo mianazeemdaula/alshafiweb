@@ -113,6 +113,14 @@ class Order extends Model
     }
 
     /**
+     * Scope to get only specialist orders
+     */
+    public function scopeSpecialistOrders($query)
+    {
+        return $query->where('order_source', 'specialist');
+    }
+
+    /**
      * Scope to get orders visible to a specific user based on their role
      */
     public function scopeVisibleTo($query, User $user)
@@ -136,6 +144,10 @@ class Order extends Model
             // Order taker sees only their own manual orders
             return $query->where('order_source', 'manual')
                          ->where('order_taker_id', $user->id);
+        } elseif ($user->isSpecialist()) {
+            // Specialist sees only their own specialist orders
+            return $query->where('order_source', 'specialist')
+                         ->where('order_taker_id', $user->id);
         }
 
         // Default: no orders visible
@@ -156,6 +168,22 @@ class Order extends Model
     public function isWebsiteOrder()
     {
         return $this->order_source === 'website';
+    }
+
+    /**
+     * Check if this is a specialist order
+     */
+    public function isSpecialistOrder()
+    {
+        return $this->order_source === 'specialist';
+    }
+
+    /**
+     * Get penalty for this order (if it's a specialist order with non-delivery)
+     */
+    public function penalty()
+    {
+        return $this->hasOne(SpecialistPenalty::class);
     }
 
     /**

@@ -98,11 +98,19 @@
 
                 {{-- @hasanyrole('admin|label_printer|order_taker|web_order_taker') --}}
                 <li
-                    class="p-2 hover:bg-gray-700 hover:animate-pulse @if (request()->routeIs('admin.orders.*')) bg-green-500 @endif">
+                    class="p-2 hover:bg-gray-700 hover:animate-pulse @if (request()->routeIs('admin.orders.*') && !request()->routeIs('admin.specialist-orders.*')) bg-green-500 @endif">
                     <a href="{{ route('admin.orders.index') }}" class="block"><i
                             class="fa-solid fa-cart-shopping mr-2"></i> Orders</a>
                 </li>
                 {{-- @endhasanyrole --}}
+
+                @hasanyrole('admin|specialist')
+                    <li
+                        class="p-2 hover:bg-gray-700 hover:animate-pulse @if (request()->routeIs('admin.specialist-orders.*')) bg-green-500 @endif">
+                        <a href="{{ route('admin.specialist-orders.index') }}" class="block"><i
+                                class="fa-solid fa-user-tie mr-2"></i> Specialist Orders</a>
+                    </li>
+                @endhasanyrole
 
                 @if (auth()->user()->hasRole('admin'))
                     <li

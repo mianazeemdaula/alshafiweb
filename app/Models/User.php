@@ -108,6 +108,22 @@ class User extends Authenticatable
     }
 
     /**
+     * Penalties received by this specialist
+     */
+    public function specialistPenalties()
+    {
+        return $this->hasMany(SpecialistPenalty::class, 'specialist_id');
+    }
+
+    /**
+     * Orders created by this specialist
+     */
+    public function specialistOrders()
+    {
+        return $this->hasMany(Order::class, 'order_taker_id')->where('order_source', 'specialist');
+    }
+
+    /**
      * Check if user is a label printer
      */
     public function isLabelPrinter()
@@ -137,6 +153,14 @@ class User extends Authenticatable
     public function isWebOrderTaker()
     {
         return $this->hasRole('web_order_taker');
+    }
+
+    /**
+     * Check if user is a specialist
+     */
+    public function isSpecialist()
+    {
+        return $this->hasRole('specialist');
     }
     
     protected static function booted()

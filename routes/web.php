@@ -149,6 +149,12 @@ Route::middleware('auth')->group(function () {
         // Team leader self view
         Route::get('teams/my', 'App\Http\Controllers\Admin\TeamController@myTeam')->name('teams.my');
     });
+
+    // Routes accessible by specialist and admin roles
+    Route::middleware('role:admin|specialist')->prefix('admin')->name('admin.')->group(function () {
+        Route::get('specialist-orders/penalties', 'App\Http\Controllers\Admin\SpecialistOrderController@penalties')->name('specialist-orders.penalties');
+        Route::resource('specialist-orders', 'App\Http\Controllers\Admin\SpecialistOrderController');
+    });
     
     Route::post('logout', 'App\Http\Controllers\AuthController@logout')->name('logout');
 });

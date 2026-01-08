@@ -23,12 +23,13 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        Role::create(['name' => 'admin']);
-        Role::create(['name' => 'team_leader']);
-        Role::create(['name' => 'order_taker']);
-        Role::create(['name' => 'web_order_taker']);
-        Role::create(['name' => 'support']);
-        Role::create(['name' => 'user']);
+        Role::firstOrCreate(['name' => 'admin']);
+        Role::firstOrCreate(['name' => 'team_leader']);
+        Role::firstOrCreate(['name' => 'order_taker']);
+        Role::firstOrCreate(['name' => 'web_order_taker']);
+        Role::firstOrCreate(['name' => 'specialist']);
+        Role::firstOrCreate(['name' => 'support']);
+        Role::firstOrCreate(['name' => 'user']);
 
         // User Levels
         $levels = ['Sliver', 'Gold', 'Platinum', 'Diamond'];
