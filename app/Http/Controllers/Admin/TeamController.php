@@ -15,7 +15,7 @@ class TeamController extends Controller
      */
     public function index()
     {
-        $teamLeaders = User::role('team_leader')
+        $teamLeaders = User::role('label_printer')
             ->with(['teamMembers' => function($query) {
                 $query->with(['manualOrders', 'bonuses']);
             }])
@@ -34,7 +34,7 @@ class TeamController extends Controller
     public function myTeam()
     {
         $user = auth()->user();
-        if (!$user->hasRole('team_leader')) {
+        if (!$user->hasRole('label_printer')) {
             abort(403);
         }
 
@@ -52,7 +52,7 @@ class TeamController extends Controller
      */
     public function assign()
     {
-        $teamLeaders = User::role('team_leader')->get();
+        $teamLeaders = User::role('label_printer')->get();
         $orderTakers = User::role('order_taker')->get();
 
         return view('admin.teams.assign', compact('teamLeaders', 'orderTakers'));
@@ -75,10 +75,10 @@ class TeamController extends Controller
             return back()->with('error', 'Selected user is not an order taker.');
         }
 
-        // Verify team leader has team_leader role
+        // Verify team leader has label_printer role
         $teamLeader = User::findOrFail($request->team_leader_id);
-        if (!$teamLeader->hasRole('team_leader')) {
-            return back()->with('error', 'Selected user is not a team leader.');
+        if (!$teamLeader->hasRole('label_printer')) {
+            return back()->with('error', 'Selected user is not a label printer.');
         }
 
         $orderTaker->team_leader_id = $request->team_leader_id;
@@ -106,11 +106,11 @@ class TeamController extends Controller
     }
 
     /**
-     * Show team leader details with team members
+     * Show label printer details with team members
      */
     public function show($id)
     {
-        $teamLeader = User::role('team_leader')
+        $teamLeader = User::role('label_printer')
             ->with(['teamMembers' => function($query) {
                 $query->with(['manualOrders' => function($q) {
                     $q->latest()->limit(10);
