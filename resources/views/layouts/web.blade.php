@@ -83,6 +83,12 @@
                             Products</a>
                     </li>
                     <li
+                        class="p-2 hover:bg-gray-700 hover:animate-pulse @if (request()->routeIs('admin.settings.*')) bg-green-500 @endif">
+                        <a href="{{ route('admin.settings.index') }}" class="block"><i
+                                class="fa-solid fa-cog mr-2"></i>
+                            Settings</a>
+                    </li>
+                    <li
                         class="p-2 hover:bg-gray-700 hover:animate-pulse @if (request()->routeIs('admin.users.*')) bg-green-500 @endif">
                         <a href="{{ route('admin.users.index') }}" class="block"><i class="fa-solid fa-users mr-2"></i>
                             Users</a>
