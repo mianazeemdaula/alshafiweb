@@ -15,6 +15,10 @@
 
     @vite(['resources/css/app.css', 'resources/css/admin.css', 'resources/js/app.js', 'resources/js/admin.js'])
     @yield('head')
+
+    <!-- Custom Header Code -->
+    {!! setting('header_code') !!}
+
     <!-- TikTok Pixel Code Start -->
     <script>
         ! function(w, d, t) {
@@ -242,6 +246,9 @@
     </script>
     @yield('js')
     @stack('scripts')
+
+    <!-- Custom Footer Code -->
+    {!! setting('footer_code') !!}
 </body>
 
 </html>

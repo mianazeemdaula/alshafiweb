@@ -125,6 +125,19 @@ Route::middleware('auth')->group(function () {
             Route::get('/', 'App\Http\Controllers\Admin\TeamController@bonuses')->name('index');
             Route::patch('/{bonus}/status', 'App\Http\Controllers\Admin\TeamController@updateBonusStatus')->name('update-status');
         });
+        
+        // Site Settings Management
+        Route::prefix('settings')->name('settings.')->group(function () {
+            Route::get('/', 'App\Http\Controllers\Admin\SettingsController@index')->name('index');
+            Route::get('/create', 'App\Http\Controllers\Admin\SettingsController@create')->name('create');
+            Route::post('/', 'App\Http\Controllers\Admin\SettingsController@store')->name('store');
+            Route::get('/{group}/edit', 'App\Http\Controllers\Admin\SettingsController@edit')->name('edit');
+            Route::put('/{group}', 'App\Http\Controllers\Admin\SettingsController@update')->name('update');
+            Route::get('/single/{id}/edit', 'App\Http\Controllers\Admin\SettingsController@editSingle')->name('edit-single');
+            Route::put('/single/{id}', 'App\Http\Controllers\Admin\SettingsController@updateSingle')->name('update-single');
+            Route::delete('/{id}', 'App\Http\Controllers\Admin\SettingsController@destroy')->name('destroy');
+            Route::post('/clear-cache', 'App\Http\Controllers\Admin\SettingsController@clearCache')->name('clear-cache');
+        });
     });
     
     // Routes accessible by admin, order_taker, label_printer, and web_order_taker roles
