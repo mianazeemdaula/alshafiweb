@@ -26,6 +26,7 @@
     @endif
     @livewireStyles
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    {!! setting('header_code', '') !!}
     <!-- TikTok Pixel Code Start -->
     <script>
         ! function(w, d, t) {

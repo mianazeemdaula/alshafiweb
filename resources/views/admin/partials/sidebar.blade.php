@@ -82,6 +82,10 @@
             <a href="{{ route('admin.courier-services.index') }}" class="block"><i class="fa-solid fa-truck mr-2"></i>
                 Courier Services</a>
         </li>
+        <li class="p-2 hover:bg-gray-700 hover:animate-pulse @if (request()->routeIs('admin.settings.*')) bg-green-500 @endif">
+            <a href="{{ route('admin.settings.index') }}" class="block"><i class="fa-solid fa-chart-line mr-2"></i>
+                Side Settings</a>
+        </li>
     @endrole
 
     {{-- Admin, Order Taker & Team Leader Menu Items --}}
