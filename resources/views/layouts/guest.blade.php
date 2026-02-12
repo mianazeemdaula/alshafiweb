@@ -501,6 +501,7 @@
 
             const formData = new FormData(form);
             const data = {
+                payment_method: 'cod',
                 shipping: {
                     first_name: formData.get('customer_name'),
                     phone: formData.get('customer_phone'),
