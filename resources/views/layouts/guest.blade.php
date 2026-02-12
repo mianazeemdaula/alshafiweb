@@ -501,9 +501,9 @@
 
             const formData = new FormData(form);
             const data = {
-                customer_name: formData.get('customer_name'),
-                customer_phone: formData.get('customer_phone'),
                 shipping: {
+                    first_name: formData.get('customer_name'),
+                    phone: formData.get('customer_phone'),
                     city: formData.get('city'),
                     address: formData.get('address')
                 }
