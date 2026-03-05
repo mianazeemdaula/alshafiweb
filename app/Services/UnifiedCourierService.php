@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Log;
 
 class UnifiedCourierService
 {
-    const COURIERS = ['trax', 'tcs', 'leopards', 'manual'];
+    const COURIERS = ['trax', 'tcs', 'leopards', 'manual','postex'];
 
     /**
      * Book a shipment with unified parameters
@@ -18,9 +18,10 @@ class UnifiedCourierService
      */
     public function bookShipment($courier, $params)
     {
+        Log::info('Booking shipment with courier:', ['courier' => $courier, 'params' => $params]);
         $requiredParams = [];
-        if($courier === 'trax'){
-            // remove pickup details because of Trax API requirements
+        if($courier === 'trax' || $courier === 'postex'){
+            // remove pickup details because of Trax and Postex API requirements
             $requiredParams[] = 'pickup_address_id';
         }else if($courier == 'leopards'){
             $requiredParams = ['pickup_name', 'pickup_phone', 'pickup_address', 'pickup_city_id'];
@@ -48,6 +49,8 @@ class UnifiedCourierService
                 return $this->bookTcsShipment($params);
             case 'leopards':
                 return $this->bookLeopardsShipment($params);
+            case 'postex':
+                return $this->bookPostexShipment($params);
             case 'manual':
                 return [
                     'success' => true,
@@ -141,6 +144,8 @@ class UnifiedCourierService
                 return $this->getTcsCities();
             case 'leopards':
                 return $this->getLeopardsCities();
+            case 'postex':
+                return $this->getPostexCities();
             case 'manual':
                 return [
                     'success' => true,
@@ -153,11 +158,13 @@ class UnifiedCourierService
         }
     }
 
+
     /**
      * Get pickup addresses for a courier
      */
     public function getPickupAddresses($courier)
     {
+        Log::error('Fetching pickup addresses for courier:', ['courier' => $courier]);
         switch ($courier) {
             case 'trax':
                 return $this->getTraxPickupAddresses();
@@ -176,6 +183,9 @@ class UnifiedCourierService
             ];
             case 'leopards':
                 return ['error' => 'Pickup addresses not supported by this courier', 'addresses' => []];
+            case 'postex':
+                return $this->getPostexPickupAddresses();
+
             case 'manual':
                 return [
                     'success' => true,
@@ -492,6 +502,39 @@ class UnifiedCourierService
         return ['error' => 'Failed to fetch pickup addresses', 'addresses' => []];
     }
 
+    protected function getPostexPickupAddresses()
+    {
+        $config = $this->getConfig('postex');
+        if (!$config) return ['error' => 'Postex config not found', 'addresses' => []];
+
+        $baseUrl = $this->getBaseUrl('postex', $config);
+        
+        $response = Http::withHeaders([
+            'token' => $config->api_key,
+            'accept' => 'application/json'
+        ])->get("$baseUrl/order/v1/get-merchant-address");
+        
+        $result = $response->json();
+
+
+        if ($response->successful() && isset($result['dist'])) {
+            return [
+                'success' => true,
+                'addresses' =>array_map(function($addr) {
+                    return [
+                        'id' => $addr['merchantAddressId'] ?? null,
+                        'address' => $addr['address'] ?? null,
+                        'city' => $addr['cityName'] ?? null,
+                        'person_of_contact' => $addr['contactPersonName'] ?? null,
+                        'phone_number' => $addr['phone1'] ?? null
+                    ];
+                }, $result['dist'])
+            ];
+        }
+        
+        return ['error' => 'Failed to fetch pickup addresses', 'addresses' => []];
+    }
+
     protected function addTraxPickupAddress($params)
     {
         $config = $this->getConfig('trax');
@@ -623,6 +666,56 @@ class UnifiedCourierService
         }
     }
 
+    
+    protected function bookPostexShipment($params)
+    {
+        $config = $this->getConfig('postex');
+        if (!$config) return ['error' => 'PostEx config not found'];
+
+        $baseUrl = $this->getBaseUrl('postex', $config);
+        
+        $payload = [
+            'orderRefNumber' => $params['order_id'],
+            'invoicePayment' => (float) $params['cod_amount'],
+            'orderDetail' => $params['delivery_city_id'],
+            'customerName' => $params['delivery_name'],
+            'customerPhone' => $params['delivery_phone'],
+            'deliveryAddress' => $params['delivery_address'],
+            'transactionNotes' => $params['special_instructions'] ?? '',
+            'cityName' => $params['delivery_city_id'],
+            'invoiceDivision' => 0,
+            'items' => (float) $params['pieces'],
+            'pickupAddressCode' => $params['pickup_address_id'] ?? "11183", // Fallback to default if not provided
+            'storeAddressCode' => $params['pickup_address_id'] ?? "7159", // Fallback to default if not provided
+            'orderType' => 'Normal',
+        ];
+
+        Log::info('PostEx Booking Payload:', $payload);
+        $response = Http::withHeaders([
+            'token' => $config->api_key,
+            'accept' => 'application/json'
+        ])->post("$baseUrl/order/v3/create-order", $payload);
+
+        $responseData = $response->json();
+        Log::info('PostEx Booking Response:', $responseData);
+        
+        if ($response->successful() && isset($responseData['statusCode']) && $responseData['statusCode'] === 200) {
+            return [
+                'success' => true,
+                'tracking_number' => $responseData['dist']['trackingNumber'] ?? null,
+                'message' => $responseData['statusMessage'] ?? 'Shipment booked successfully',
+                'raw_response' => $responseData
+            ];
+        } else {
+            return [
+                'success' => false,
+                'message' => $responseData['statusMessage'] ?? 'Unknown error occurred',
+                'raw_response' => $responseData
+            ];
+        }
+    }
+
+
     protected function trackTcsShipment($trackingNumber)
     {
         $config = $this->getConfig('tcs');
@@ -751,6 +844,30 @@ class UnifiedCourierService
         ->get("$baseUrl/setup/citylistbycountry", ['countrycode' => "PK"]);
         
         return $response->json()['data'] ?? [];
+    }
+
+    
+    public function getPostexCities()  {
+        $config = $this->getConfig('postex');
+        if (!$config) return ['error' => 'PostEx config not found'];
+
+        $baseUrl = $this->getBaseUrl('postex', $config);
+        
+        $response = Http::withHeaders([
+            'token' => $config->api_key,
+            'accept' => 'application/json'
+        ])->get("$baseUrl/order/v2/get-operational-city");
+
+        if($response->successful()){
+            $cities = array_map(function($city) {
+                return [
+                    'id' => $city['operationalCityName'] ?? '',
+                    'name' => $city['operationalCityName'] ?? ''
+                ];
+            }, $response->json()['dist'] ?? []);
+            return ['data' => $cities];
+        }
+        return ['error' => 'Failed to fetch cities'];
     }
 
     /**
@@ -1052,6 +1169,10 @@ class UnifiedCourierService
             'leopards' => [
                 'sandbox' => 'https://merchantapistaging.leopardscourier.com/api',
                 'production' => 'https://merchantapi.leopardscourier.com/api'
+            ],
+            'postex' => [
+                'sandbox' => 'https://sandbox.postex.pk/api',
+                'production' => 'https://api.postex.pk/services/integration/api'
             ]
         ];
 

@@ -326,7 +326,6 @@
     <script>
         let currentPickupAddresses = [];
 
-        console.log(`{{ route('admin.shipments.courier.cities') }}`);
 
         function loadOrderDetails() {
             const orderId = document.getElementById('order_id').value;
@@ -504,7 +503,6 @@
         }
 
         function loadPickupAddresses() {
-            console.log('Loading pickup addresses...');
             const courierSelect = document.getElementById('courier_service_config_id');
             const courier = courierSelect.options[courierSelect.selectedIndex]?.getAttribute('data-courier');
             const pickupSelect = document.getElementById('pickup_address_id');

@@ -646,7 +646,7 @@ class ShipmentController extends Controller
     public function getPickupAddresses(Request $request)
     {
         $request->validate([
-            'courier' => 'required|string|in:trax,tcs,leopards'
+            'courier' => 'required|string|in:trax,tcs,leopards,postex'
         ]);
 
         try {

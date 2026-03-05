@@ -207,6 +207,14 @@
                                     <span>Add to Cart</span>
                                 @endif
                             </button>
+
+                            <!-- Order on WhatsApp -->
+                            <a href="https://wa.me/923253255555?text={{ urlencode('I want to order: ' . $product->name) }}"
+                                target="_blank"
+                                class="bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-lg font-bold text-lg transition-all duration-300 flex items-center justify-center gap-3 shadow-lg hover:shadow-xl transform hover:scale-105">
+                                <i class="fa-brands fa-whatsapp text-xl"></i>
+                                <span>Order on WhatsApp</span>
+                            </a>
                         </div>
                     </div>
                 </div>

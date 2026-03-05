@@ -57,6 +57,11 @@
                                                 class="bg-orange-100 text-orange-800 px-2 py-1 rounded-full text-xs font-medium">
                                                 <i class="fas fa-box mr-1"></i>Manual
                                             </span>
+                                        @elseif($courier->courier == 'postex')
+                                            <span
+                                                class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-medium">
+                                                <i class="fas fa-box mr-1"></i>PostEx
+                                            </span>
                                         @endif
                                     </div>
                                 </td>
