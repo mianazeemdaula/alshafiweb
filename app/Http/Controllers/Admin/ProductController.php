@@ -54,6 +54,7 @@ class ProductController extends Controller
             'referrer_discount' => 'nullable|numeric',
             'referal_discount' => 'nullable|numeric',
             'buyer_discount' => 'nullable|numeric',
+            'whatsapp_contact' => 'nullable|string|max:20',
             'image.*' => 'image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
         ]);
 
@@ -74,6 +75,7 @@ class ProductController extends Controller
         $product->featured = $request->featured;
         $product->is_active = $request->is_active;
         $product->manual_only = $request->has('manual_only') ? true : false;
+        $product->whatsapp_contact = $request->whatsapp_contact;
         $product->image = "https://via.placeholder.com/640x480.png/000077?text=quas";
         $product->save();
         if($request->has('image')){
@@ -128,6 +130,7 @@ class ProductController extends Controller
             'referal_discount' => 'nullable|numeric',
             'buyer_discount' => 'nullable|numeric',
             'earn_points' => 'nullable|numeric',
+            'whatsapp_contact' => 'nullable|string|max:20',
             'image.*' => 'image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
         ]);
 
@@ -147,6 +150,7 @@ class ProductController extends Controller
         $product->featured = $request->featured;
         $product->is_active = $request->is_active;
         $product->manual_only = $request->has('manual_only') ? true : false;
+        $product->whatsapp_contact = $request->whatsapp_contact;
         $product->save();
         if($request->has('image')){
             $files = $request->file('image');

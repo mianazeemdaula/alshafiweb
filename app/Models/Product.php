@@ -28,6 +28,7 @@ class Product extends Model
         'buyer_discount',
         'earn_points',
         'manual_only',
+        'whatsapp_contact',
     ];
 
     public function getCurrencyAttribute()

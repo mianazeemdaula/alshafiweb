@@ -59,6 +59,12 @@
                         <x-input name="discount" value="{{ $product->discount }}" />
                     </div>
 
+                    <div class="flex flex-col gap-2">
+                        <x-label>WhatsApp Contact (optional)</x-label>
+                        <x-input name="whatsapp_contact" value="{{ $product->whatsapp_contact }}"
+                            placeholder="e.g. 923001234567" />
+                    </div>
+
                     <div class="flex flex-col gap-2 ">
                         <x-label>VAT</x-label>
                         <x-input name="vat" value="{{ $product->vat }}" />
