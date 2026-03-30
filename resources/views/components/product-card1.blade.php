@@ -186,7 +186,7 @@
         <a href="https://wa.me/{{ $whatsapp }}?text={{ urlencode('I want to order: ' . $product->name) }}"
             target="_blank"
             class="w-full bg-green-500 hover:bg-green-600 text-white py-2 rounded-xl font-medium transition-all duration-300 flex items-center justify-center gap-2 text-sm shadow-md hover:shadow-lg">
-            <i class="fa-brands fa-whatsapp text-base"></i>
+            {{-- <i class="fa-brands fa-whatsapp text-base"></i> --}}
             <span>Order Now</span>
         </a>
     </div>
