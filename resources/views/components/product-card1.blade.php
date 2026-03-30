@@ -187,7 +187,7 @@
             target="_blank"
             class="w-full bg-green-500 hover:bg-green-600 text-white py-2 rounded-xl font-medium transition-all duration-300 flex items-center justify-center gap-2 text-sm shadow-md hover:shadow-lg">
             <i class="fa-brands fa-whatsapp text-base"></i>
-            <span>Order on WhatsApp</span>
+            <span>Order Now</span>
         </a>
     </div>
 </div>

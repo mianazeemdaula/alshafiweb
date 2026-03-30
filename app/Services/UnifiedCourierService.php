@@ -685,8 +685,10 @@ class UnifiedCourierService
             'cityName' => $params['delivery_city_id'],
             'invoiceDivision' => 0,
             'items' => (float) $params['pieces'],
-            'pickupAddressCode' => $params['pickup_address_id'] ?? "11183", // Fallback to default if not provided
-            'storeAddressCode' => $params['pickup_address_id'] ?? "7159", // Fallback to default if not provided
+            // 'pickupAddressCode' => $params['pickup_address_id'] ?? "11183", // Fallback to default if not provided
+            // 'storeAddressCode' => $params['store_address_id'] ?? "7159", // Fallback to default if not provided
+            'pickupAddressCode' => "001", // Fallback to default if not provided
+            'storeAddressCode' => "001", // Fallback to default if not provided
             'orderType' => 'Normal',
         ];
 
