@@ -18,7 +18,6 @@ class UnifiedCourierService
      */
     public function bookShipment($courier, $params)
     {
-        Log::info('Booking shipment with courier:', ['courier' => $courier, 'params' => $params]);
         $requiredParams = [];
         if($courier === 'trax' || $courier === 'postex'){
             // remove pickup details because of Trax and Postex API requirements
@@ -217,7 +216,6 @@ class UnifiedCourierService
                 'password' => env('TCS_API_PASSWORD'),
             ]);
             $resData = $res->json();
-            Log::info('TCS Auth Response:', $resData);
             $sessionToken = $resData['accesstoken'] ?? null;
             $config->api_key = $sessionToken;
             $config->save();
@@ -232,7 +230,6 @@ class UnifiedCourierService
         ]);
         
         $result = $response->json();
-        Log::info('TCS Pickup Addresses Response:', $result);
         if ($response->successful() && isset($result['message']) && $result['message'] === 'success') {
             return [
                 'success' => true,
@@ -303,7 +300,6 @@ class UnifiedCourierService
         ])->post("$baseUrl/shipment/book", $payload);
 
         $responseData = $response->json();
-        Log::info('Trax Booking Response:', $responseData);
         
         // Normalize Trax response format to match expected format
         if (isset($responseData['status']) && $responseData['status'] === 0) {
@@ -339,7 +335,6 @@ class UnifiedCourierService
         if (isset($responseData['status']) && $responseData['status'] === 0) {
             $details = $responseData['details'] ?? [];
             $trackingHistory = $details['tracking_history'] ?? [];
-            Log::info('Trax Tracking History:', $trackingHistory);
             
             // Get the latest status
             $latestStatus = !empty($trackingHistory) ? $trackingHistory[0]['status'] : 'Unknown';
@@ -419,14 +414,11 @@ class UnifiedCourierService
             'in transit' => 'in_transit',
             'shipment picked up' => 'picked_up',
         ];
-        Log::info('Mapping TCS Status:', ['status' => $status]);
         // Check direct match first
         if (isset($statusMap[$status])) {
             return $statusMap[$status];
         }
 
-        Log::info('Mapping TCS Status fallback:', ['status' => $status]);
-        
         // Pattern matching for complex statuses
         if (stripos($status, 'delivered') !== false) {
             return 'delivered';
@@ -643,12 +635,10 @@ class UnifiedCourierService
             ]
         ];
 
-        Log::info('TCS Booking Payload:', $payload);
         $response = Http::withToken($config->token)
         ->post("$baseUrl/booking/create", $payload);
 
         $responseData = $response->json();
-        Log::info('TCS Booking Response:', $responseData);
         // Normalize TCS response format to match expected format
         if (isset($responseData['message']) && $responseData['message'] === "SUCCESS") {
             return [
@@ -728,7 +718,6 @@ class UnifiedCourierService
         $response = Http::withToken($config->token)
             ->get("https://ociconnect.tcscourier.com/tracking/api/Tracking/GetDynamicTrackDetail", ['consignee' => "$trackingNumber"]);
         $data = $response->json();
-        Log::info('TCS Tracking Response:', $data);
         
         // Normalize TCS tracking response to match Leopards format
         if (isset($data['message']) && $data['message'] === 'SUCCESS') {
@@ -761,7 +750,6 @@ class UnifiedCourierService
             }
             
             // Map TCS status to standard status
-            Log::info('Current TCS Status Text:', ['status' => $currentStatusText]);
             $mappedStatus = $this->mapTcsStatus($currentStatusText);
             
             // Format tracking history from checkpoints
@@ -893,13 +881,11 @@ class UnifiedCourierService
                 'accountNumber' => 'MG03794',
                 'accesstoken' => $token
             ]);
-            Log::info('TCS Cost Center Generation Response:', $response->json());
             if ($response->successful()) {
                 $data = $response->json();
                 // Try common keys
                 $code = $data['data']['costcentercode'] ?? $data['costcentercode'] ?? $data['costCenterCode'] ?? null;
                 if ($code) {
-                    Log::info('Generated TCS cost center code: '.$code);
                     return $code;
                 }
             }
@@ -940,11 +926,9 @@ class UnifiedCourierService
             'shipment_type' => 'overnight' // Default shipment type
         ];
 
-        Log::info('Leopards Booking payload:', $payload);
         $response = Http::post("$baseUrl/bookPacket/format/json", $payload);
 
         $responseData = $response->json();
-        Log::info('Leopards Booking Response:', $responseData);
         
         // Normalize Leopards response format to match expected format
         if (isset($responseData['status']) && $responseData['status'] === 1) {
@@ -979,7 +963,6 @@ class UnifiedCourierService
 
         $response = Http::post("$baseUrl/trackBookedPacket/format/json", $payload);
         $responseData = $response->json();
-        Log::info('Leopards Tracking Response:', $responseData);
         
         // Normalize Leopards tracking response
         if (isset($responseData['status']) && $responseData['status'] === 1) {
