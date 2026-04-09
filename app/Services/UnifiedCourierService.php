@@ -18,7 +18,6 @@ class UnifiedCourierService
      */
     public function bookShipment($courier, $params)
     {
-        Log::info('Booking shipment with courier:', ['courier' => $courier, 'params' => $params]);
         $requiredParams = [];
         if($courier === 'trax' || $courier === 'postex'){
             // remove pickup details because of Trax and Postex API requirements
@@ -164,7 +163,6 @@ class UnifiedCourierService
      */
     public function getPickupAddresses($courier)
     {
-        Log::error('Fetching pickup addresses for courier:', ['courier' => $courier]);
         switch ($courier) {
             case 'trax':
                 return $this->getTraxPickupAddresses();
@@ -683,14 +681,14 @@ class UnifiedCourierService
             'orderType' => 'Normal',
         ];
 
-        Log::info('PostEx Booking Payload:', $payload);
+        // Log::info('PostEx Booking Payload:', $payload);
         $response = Http::withHeaders([
             'token' => $config->api_key,
             'accept' => 'application/json'
         ])->post("$baseUrl/order/v3/create-order", $payload);
 
         $responseData = $response->json();
-        Log::info('PostEx Booking Response:', $responseData);
+        // Log::info('PostEx Booking Response:', $responseData);
         
         if ($response->successful() && isset($responseData['statusCode']) && (int) $responseData['statusCode'] === 200) {
             return [
