@@ -18,6 +18,7 @@ class UnifiedCourierService
      */
     public function bookShipment($courier, $params)
     {
+        Log::info('Booking shipment with courier:', ['courier' => $courier, 'params' => $params]);
         $requiredParams = [];
         if($courier === 'trax' || $courier === 'postex'){
             // remove pickup details because of Trax and Postex API requirements
@@ -678,7 +679,7 @@ class UnifiedCourierService
             // 'pickupAddressCode' => $params['pickup_address_id'] ?? "11183", // Fallback to default if not provided
             // 'storeAddressCode' => $params['store_address_id'] ?? "7159", // Fallback to default if not provided
             'pickupAddressCode' => "001", // Fallback to default if not provided
-            'storeAddressCode' => "001", // Fallback to default if not provided
+            // 'storeAddressCode' => "001", // Fallback to default if not provided
             'orderType' => 'Normal',
         ];
 
@@ -691,7 +692,7 @@ class UnifiedCourierService
         $responseData = $response->json();
         Log::info('PostEx Booking Response:', $responseData);
         
-        if ($response->successful() && isset($responseData['statusCode']) && $responseData['statusCode'] === 200) {
+        if ($response->successful() && isset($responseData['statusCode']) && (int) $responseData['statusCode'] === 200) {
             return [
                 'success' => true,
                 'tracking_number' => $responseData['dist']['trackingNumber'] ?? null,
