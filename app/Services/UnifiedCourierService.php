@@ -761,7 +761,7 @@ class UnifiedCourierService
         $payload = [
             'orderRefNumber' => $params['order_id'],
             'invoicePayment' => (float) $params['cod_amount'],
-            'orderDetail' => $params['delivery_city_id'],
+            'orderDetail' => $params['description'] ?? $params['special_instructions'] ?? '',
             'customerName' => $params['delivery_name'],
             'customerPhone' => $params['delivery_phone'],
             'deliveryAddress' => $params['delivery_address'],
