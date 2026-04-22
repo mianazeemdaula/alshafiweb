@@ -33,7 +33,7 @@
                 <div
                     class="bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-3 py-1.5 rounded-lg text-xs font-bold shadow-lg flex items-center gap-1">
                     <i class="fa fa-star"></i>
-                    <span>Featured</span>
+                    {{-- <span>Featured</span> --}}
                 </div>
             </div>
         @endif
