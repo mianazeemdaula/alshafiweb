@@ -105,7 +105,7 @@ class WebController extends Controller
             });
         }
 
-        // Default order is sorting asc, then newest first for ties
+        // Default order is sorting asc
         $allProducts = $products->orderBy('sorting', 'asc')->get();
 
         // Apply rating filter
@@ -118,7 +118,7 @@ class WebController extends Controller
 
         // Apply sorting
         $sortBy = request()->get('sort', 'default');
-        if($sortBy !== 'default'){
+        if($sortBy != 'default'){
             switch($sortBy) {
                 case 'price_low':
                     $allProducts = $allProducts->sortBy('price');
