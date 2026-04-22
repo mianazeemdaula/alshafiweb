@@ -118,29 +118,30 @@ class WebController extends Controller
 
         // Apply sorting
         $sortBy = request()->get('sort', 'default');
-        
-        switch($sortBy) {
-            case 'price_low':
-                $allProducts = $allProducts->sortBy('price');
-                break;
-            case 'price_high':
-                $allProducts = $allProducts->sortByDesc('price');
-                break;
-            case 'name':
-                $allProducts = $allProducts->sortBy('name');
-                break;
-            case 'rating':
-                $allProducts = $allProducts->sortByDesc('average_rating');
-                break;
-            case 'newest':
-                $allProducts = $allProducts->sortByDesc('created_at');
-                break;
-            case 'default':
-                // Keep default database order: sorting asc, then created_at desc
-                break;
-            default:
-                // Keep default database order: sorting asc, then created_at desc
-                break;
+        if($sortBy !== 'default'){
+            switch($sortBy) {
+                case 'price_low':
+                    $allProducts = $allProducts->sortBy('price');
+                    break;
+                case 'price_high':
+                    $allProducts = $allProducts->sortByDesc('price');
+                    break;
+                case 'name':
+                    $allProducts = $allProducts->sortBy('name');
+                    break;
+                case 'rating':
+                    $allProducts = $allProducts->sortByDesc('average_rating');
+                    break;
+                case 'newest':
+                    $allProducts = $allProducts->sortByDesc('created_at');
+                    break;
+                case 'default':
+                    // Keep default database order: sorting asc, then created_at desc
+                    break;
+                default:
+                    // Keep default database order: sorting asc, then created_at desc
+                    break;
+            }
         }
 
         // Manual pagination
