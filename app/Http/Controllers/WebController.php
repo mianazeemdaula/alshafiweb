@@ -23,7 +23,11 @@ class WebController extends Controller
             }
         }
         
-        $products = $products->take(10)->orderBy('featured', 'desc')->get();
+        $products = $products->orderBy('sorting', 'asc')
+                     ->orderBy('featured', 'desc')
+                     ->orderBy('created_at', 'desc')
+                     ->take(10)
+                     ->get();
         
         // Get recent blog posts for current country
         $blogPosts = \App\Models\BlogPost::with(['country', 'category']);
@@ -101,8 +105,10 @@ class WebController extends Controller
             });
         }
 
-        // Get all products
-        $allProducts = $products->get();
+        // Default order is sorting asc, then newest first for ties
+        $allProducts = $products->orderBy('sorting', 'asc')
+            ->orderBy('created_at', 'desc')
+            ->get();
 
         // Apply rating filter
         if(request()->has('rating') && request()->rating != ''){
@@ -113,7 +119,7 @@ class WebController extends Controller
         }
 
         // Apply sorting
-        $sortBy = request()->get('sort', 'created_at');
+        $sortBy = request()->get('sort', 'default');
         
         switch($sortBy) {
             case 'price_low':
@@ -131,8 +137,12 @@ class WebController extends Controller
             case 'newest':
                 $allProducts = $allProducts->sortByDesc('created_at');
                 break;
+            case 'default':
+                // Keep default database order: sorting asc, then created_at desc
+                break;
             default:
-                $allProducts = $allProducts->sortByDesc('created_at');
+                // Keep default database order: sorting asc, then created_at desc
+                break;
         }
 
         // Manual pagination

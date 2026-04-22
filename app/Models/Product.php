@@ -21,6 +21,7 @@ class Product extends Model
         'stock',
         'sales_count',
         'featured',
+        'sorting',
         'description',
         'extra_info',
         'referrer_discount',

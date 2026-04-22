@@ -100,6 +100,12 @@
                     </div>
 
                     <div class="flex flex-col gap-2 ">
+                        <x-label>Sorting Order</x-label>
+                        <x-input name="sorting" type="number" min="0"
+                            value="{{ old('sorting', $product->sorting ?? 0) }}" />
+                    </div>
+
+                    <div class="flex flex-col gap-2 ">
                         <x-label>Active</x-label>
                         <x-select name="is_active">
                             <option value="1" {{ $product->is_active == 1 ? 'selected' : '' }}>Active</option>

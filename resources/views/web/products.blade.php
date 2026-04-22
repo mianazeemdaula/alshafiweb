@@ -33,6 +33,8 @@
                         <select name="sort"
                             class="px-4 py-2.5 rounded-xl bg-white/20 backdrop-blur-sm text-white font-medium border-2 border-white/30 focus:border-white focus:ring-4 focus:ring-white/20 transition-all cursor-pointer w-full sm:w-48"
                             onchange="this.form.submit()">
+                            <option value="default" {{ in_array(request('sort'), [null, '', 'default']) ? 'selected' : '' }}
+                                class="text-gray-900">{{ __('Default') }}</option>
                             <option value="newest" {{ request('sort') == 'newest' ? 'selected' : '' }}
                                 class="text-gray-900">{{ __('Newest') }}</option>
                             <option value="price_low" {{ request('sort') == 'price_low' ? 'selected' : '' }}

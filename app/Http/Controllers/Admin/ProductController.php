@@ -48,6 +48,7 @@ class ProductController extends Controller
             'price' => 'required|numeric',
             'sku' => 'required|unique:products,sku',
             'discount' => 'nullable|numeric',
+            'sorting' => 'nullable|integer|min:0',
             'description' => 'required',
             'vat' => 'nullable|numeric',
             'stock' => 'required|numeric',
@@ -66,6 +67,7 @@ class ProductController extends Controller
         $product->country_id = $request->country_id;
         $product->description = $request->description;
         $product->discount = $request->discount;
+        $product->sorting = $request->sorting ?? 0;
         $product->vat = $request->vat ?? 0;
         $product->stock = $request->stock;
         $product->referrer_discount = $request->referrer_discount ?? 0;
@@ -123,6 +125,7 @@ class ProductController extends Controller
             'category_id' => 'required|exists:categories,id',
             'country_id' => 'required|exists:countries,id',
             'discount' => 'nullable|numeric',
+            'sorting' => 'nullable|integer|min:0',
             'description' => 'required',
             'vat' => 'nullable|numeric',
             'stock' => 'required|numeric',
@@ -140,6 +143,7 @@ class ProductController extends Controller
         $product->category_id = $request->category_id;
         $product->country_id = $request->country_id;
         $product->discount = $request->discount ?? 0;
+        $product->sorting = $request->sorting ?? 0;
         $product->description = $request->description;
         $product->vat = $request->vat ?? 0;
         $product->stock = $request->stock;
