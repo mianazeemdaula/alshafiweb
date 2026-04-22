@@ -178,13 +178,24 @@ class UnifiedCourierService
                         'id' => 'www.alShaafiOnline.com',
                         'address' => 'AL-Shaafi Dawakhana DPA',
                         'city' => [ 'name' =>'DEPAL PUR'],
-                        'person_of_contact' => '03253255555',
-                        'phone_number' => '03253255555'
+                        'person_of_contact' => '03223236262',
+                        'phone_number' => '03223236262'
                     ]
                 ]
             ];
             case 'leopards':
-                return ['error' => 'Pickup addresses not supported by this courier', 'addresses' => []];
+                return [
+                    'success' => true,
+                    'addresses' => [
+                        [
+                            'id' => 'www.alShaafiOnline.com',
+                            'address' => '205481 / AL SHAAFI ONLINE',
+                            'city' => [ 'name' =>'DEPALPUR'],
+                            'person_of_contact' => '03223236262',
+                            'phone_number' => '03223236262'
+                        ]
+                    ]
+                ];
             case 'postex':
                 return $this->getPostexPickupAddresses();
 
