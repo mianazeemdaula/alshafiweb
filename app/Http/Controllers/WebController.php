@@ -106,9 +106,7 @@ class WebController extends Controller
         }
 
         // Default order is sorting asc, then newest first for ties
-        $allProducts = $products->orderBy('sorting', 'asc')
-            ->orderBy('created_at', 'desc')
-            ->get();
+        $allProducts = $products->orderBy('sorting', 'asc')->get();
 
         // Apply rating filter
         if(request()->has('rating') && request()->rating != ''){
