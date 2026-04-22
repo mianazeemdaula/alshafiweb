@@ -168,6 +168,8 @@ class WebController extends Controller
             ->websiteVisible() // Only show products not marked as manual_only
             ->where('sku', $slug)
             ->firstOrFail();
+
+        $floatingWhatsapp = $product->whatsapp_contact ?: '923253255555';
         
         // Check if product belongs to current country
         // $currentCountry = session('country');
@@ -178,7 +180,7 @@ class WebController extends Controller
         //     }
         // }
         
-        return view('web.product', compact('product'));
+        return view('web.product', compact('product', 'floatingWhatsapp'));
     }
 
     public function contactus()

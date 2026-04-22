@@ -150,6 +150,11 @@
                                             class="bg-orange-100 text-orange-800 px-2 py-1 rounded-full text-xs font-medium">
                                             <i class="fas fa-box mr-1"></i>Manual
                                         </span>
+                                    @elseif($shipment->courierService->courier == 'postex')
+                                        <span class="bg-gray-100 text-gray-800 px-2 py-1 rounded-full text-xs font-medium">
+                                            <i
+                                                class="fas fa-truck mr-1"></i>{{ ucfirst($shipment->courierService->courier) }}
+                                        </span>
                                     @endif
                                 </td>
                                 <td class="px-4 py-3">

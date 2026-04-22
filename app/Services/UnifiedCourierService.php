@@ -78,6 +78,8 @@ class UnifiedCourierService
                 return $this->trackTcsShipment($trackingNumber);
             case 'leopards':
                 return $this->trackLeopardsShipment($trackingNumber);
+            case 'postex':
+                return $this->trackPostexShipment($trackingNumber);
             case 'manual':
                 return [
                     'success' => true,
@@ -126,6 +128,8 @@ class UnifiedCourierService
                 return $this->downloadTcsSlip($trackingNumber);
             case 'leopards':
                 return $this->downloadLeopardsSlip($trackingNumber, $shipmentData);
+            case 'postex':
+                return $this->downloadPostexSlip($trackingNumber, $shipmentData);
             default:
                 return ['error' => 'Unsupported courier'];
         }
@@ -468,6 +472,97 @@ class UnifiedCourierService
         ])->get("$baseUrl/cities");
 
         return $response->json();
+    }
+
+    protected function trackPostexShipment($trackingNumber)
+    {
+        $config = $this->getConfig('postex');
+        if (!$config) return ['error' => 'PostEx config not found'];
+
+        $baseUrl = $this->getBaseUrl('postex', $config);
+        
+        $response = Http::withHeaders([
+            'token' => $config->api_key,
+            'accept' => 'application/json'
+        ])->get("$baseUrl/order/v1/track-order/$trackingNumber");
+
+        $responseData = $response->json();
+
+        if (!$response->successful()) {
+            return [
+                'success' => false,
+                'message' => $responseData['statusMessage'] ?? 'Failed to track shipment',
+                'raw_response' => $responseData
+            ];
+        }
+
+        $details = $responseData['dist'] ?? null;
+
+        if (!is_array($details)) {
+            return [
+                'success' => false,
+                'message' => $responseData['statusMessage'] ?? 'No tracking information found for this tracking number',
+                'raw_response' => $responseData
+            ];
+        }
+
+        $history = $details['transactionStatusHistory'] ?? [];
+        $trackingHistory = array_map(function ($event) {
+            $statusText = $event['transactionStatusMessage'] ?? 'Unknown';
+
+            return [
+                'status' => $statusText,
+                'datetime' => $this->normalizeTrackingDatetime($event['updatedAt'] ?? null),
+                'location' => null,
+                'remarks' => $event['transactionStatusMessageCode'] ?? null,
+                'status_code' => $event['transactionStatusMessageCode'] ?? null,
+            ];
+        }, $history);
+
+        $latestHistory = !empty($history) ? end($history) : null;
+        $latestStatusText = $latestHistory['transactionStatusMessage']
+            ?? $details['transactionStatus']
+            ?? 'Unknown';
+        $mappedStatus = $this->mapPostexStatus($latestStatusText);
+
+        return [
+            'success' => true,
+            'status' => $mappedStatus,
+            'tracking_number' => $details['trackingNumber'] ?? $trackingNumber,
+            'current_status' => $mappedStatus,
+            'current_status_label' => $latestStatusText,
+            'shipper' => [
+                'name' => $details['merchantName'] ?? null,
+                'phone' => null,
+                'address' => $details['pickupAddress'] ?? null,
+            ],
+            'consignee' => [
+                'name' => $details['customerName'] ?? null,
+                'phone' => $details['customerPhone'] ?? null,
+                'address' => $details['deliveryAddress'] ?? null,
+            ],
+            'pickup' => [
+                'city' => $details['cityName'] ?? null,
+                'country' => 'Pakistan',
+                'address' => $details['pickupAddress'] ?? null,
+            ],
+            'delivery' => [
+                'city' => $details['cityName'] ?? null,
+                'address' => $details['deliveryAddress'] ?? null,
+                'status' => $details['transactionStatus'] ?? null,
+            ],
+            'order_info' => [
+                'booking_date' => $this->normalizeTrackingDatetime($details['transactionDate'] ?? null),
+                'order_id' => $details['orderRefNumber'] ?? null,
+                'description' => $details['orderDetail'] ?? null,
+                'pieces' => $details['items'] ?? null,
+                'cod_amount' => $details['invoicePayment'] ?? null,
+                'special_instructions' => $details['transactionNotes'] ?? null,
+            ],
+            'tracking_history' => $trackingHistory,
+            'message' => $responseData['statusMessage'] ?? 'Tracking information retrieved successfully',
+            'raw_response' => $responseData
+        ];
     }
 
     protected function getTraxPickupAddresses()
@@ -1094,6 +1189,48 @@ class UnifiedCourierService
         return $statusMap[$leopardsStatus] ?? 'unknown';
     }
 
+    private function mapPostexStatus($postexStatus)
+    {
+        $status = strtolower((string) $postexStatus);
+
+        if (str_contains($status, 'delivered')) {
+            return 'delivered';
+        }
+
+        if (str_contains($status, 'cancel')) {
+            return 'cancelled';
+        }
+
+        if (str_contains($status, 'return')) {
+            return 'returned';
+        }
+
+        if (str_contains($status, 'assign') || str_contains($status, 'book') || str_contains($status, 'warehouse')) {
+            return 'booked';
+        }
+
+        if (str_contains($status, 'transit') || str_contains($status, 'route') || str_contains($status, 'dispatch')) {
+            return 'in_transit';
+        }
+
+        if (str_contains($status, 'hold') || str_contains($status, 'pending')) {
+            return 'on_hold';
+        }
+
+        return 'unknown';
+    }
+
+    private function normalizeTrackingDatetime($datetime)
+    {
+        if (!$datetime) {
+            return null;
+        }
+
+        $timestamp = strtotime($datetime);
+
+        return $timestamp !== false ? date('Y-m-d H:i:s', $timestamp) : $datetime;
+    }
+
     protected function cancelLeopardsShipment($trackingNumber)
     {
         $config = $this->getConfig('leopards');
@@ -1265,5 +1402,84 @@ class UnifiedCourierService
         }
 
         return ['error' => 'Slip link not available from Leopards booking response'];
+    }
+
+    /**
+     * Download PostEx shipment slip
+     */
+    private function downloadPostexSlip($trackingNumber, $shipmentData = null)
+    {
+        $config = $this->getConfig('postex');
+        if (!$config) {
+            return ['error' => 'PostEx configuration not found'];
+        }
+
+        $baseUrl = $this->getBaseUrl('postex', $config);
+        $sanitizedTrackingNumber = trim((string) $trackingNumber);
+        $pickupAddress = $this->resolvePostexPickupAddress($shipmentData);
+
+        $payload = [
+            'trackingNumbers' => [$sanitizedTrackingNumber],
+        ];
+
+        if (!empty($pickupAddress)) {
+            $payload['pickupAddress'] = trim((string) $pickupAddress);
+        }
+
+        Log::info('PostEx Slip Generation Payload:', $payload);
+
+        $res = Http::withHeaders([
+            'token' => $config->api_key,
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json'
+        ])->post($baseUrl . '/order/v2/generate-load-sheet', $payload);
+
+        $responseData = $res->json();
+        Log::info('PostEx Slip Generation Response:', is_array($responseData) ? $responseData : ['body' => $res->body()]);
+
+        // return pdf file content if successful, else return error message
+        if ($res->successful() && isset($responseData['dist'][0]['loadSheetUrl'])) {
+            return [
+                'type' => 'redirect',
+                'url' => $responseData['dist'][0]['loadSheetUrl']
+            ];
+        }
+
+        return ['error' => 'Failed to generate slip: ' . ($responseData['statusMessage'] ?? $responseData['message'] ?? 'Unknown error')];
+    }
+
+    private function resolvePostexPickupAddress($shipmentData = null)
+    {
+        if (!is_array($shipmentData)) {
+            return null;
+        }
+
+        $pickupAddress = $shipmentData['raw_response']['dist']['pickupAddress']
+            ?? $shipmentData['pickup_address']['address']
+            ?? null;
+
+        if (!empty($pickupAddress)) {
+            return trim((string) $pickupAddress);
+        }
+
+        $pickupAddressId = $shipmentData['pickup_address']['pickup_address_id'] ?? null;
+
+        if (empty($pickupAddressId)) {
+            return null;
+        }
+
+        $addresses = $this->getPostexPickupAddresses();
+
+        if (empty($addresses['success']) || empty($addresses['addresses'])) {
+            return null;
+        }
+
+        foreach ($addresses['addresses'] as $address) {
+            if ((string) ($address['id'] ?? '') === (string) $pickupAddressId) {
+                return !empty($address['address']) ? trim((string) $address['address']) : null;
+            }
+        }
+
+        return null;
     }
 }

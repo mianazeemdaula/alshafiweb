@@ -444,7 +444,10 @@ class ShipmentController extends Controller
             $courier = $shipment->courierService->courier;
             
             // Get slip download information from unified courier service
-            $result = $this->courierService->downloadSlip($courier, $trackingNumber, $shipment->courier_response);
+            $slipContext = is_array($shipment->courier_response) ? $shipment->courier_response : [];
+            $slipContext['pickup_address'] = $shipment->pickup_address;
+
+            $result = $this->courierService->downloadSlip($courier, $trackingNumber, $slipContext);
 
             if (isset($result['error'])) {
                 return back()->with('error', $result['error']);
