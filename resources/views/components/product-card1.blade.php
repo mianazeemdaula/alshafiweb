@@ -46,7 +46,7 @@
             @endphp
             <div class="absolute top-3 right-3">
                 <div
-                    class="bg-gradient-to-r from-red-500 to-pink-500 text-white px-3 py-1.5 rounded-lg text-xs font-bold shadow-lg opacity-20">
+                    class="bg-gradient-to-r from-red-500 to-pink-500 text-white px-3 py-1.5 rounded-lg text-xs font-bold shadow-lg opacity-50">
                     -{{ $discountPercent }}% OFF
                 </div>
             </div>
