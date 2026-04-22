@@ -28,15 +28,15 @@
         </a>
 
         <!-- Featured Badge -->
-        @if ($product->featured)
-            <div class="absolute top-3 left-3">
-                <div
-                    class="bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-3 py-1.5 rounded-lg text-xs font-bold shadow-lg flex items-center gap-1">
-                    <i class="fa fa-star"></i>
-                    {{-- <span>Featured</span> --}}
-                </div>
+        {{-- @if ($product->featured) --}}
+        {{-- <div class="absolute top-3 left-3">
+            <div
+                class="bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-3 py-1.5 rounded-lg text-xs font-bold shadow-lg flex items-center gap-1">
+                <i class="fa fa-star"></i>
+                <span>Featured</span>
             </div>
-        @endif
+        </div> --}}
+        {{-- @endif --}}
 
         <!-- Discount Badge -->
         @if (isset($product->discount) && $product->discount > 0)
@@ -46,7 +46,7 @@
             @endphp
             <div class="absolute top-3 right-3">
                 <div
-                    class="bg-gradient-to-r from-red-500 to-pink-500 text-white px-3 py-1.5 rounded-lg text-xs font-bold shadow-lg">
+                    class="bg-gradient-to-r from-red-500 to-pink-500 text-white px-3 py-1.5 rounded-lg text-xs font-bold shadow-lg opacity-20">
                     -{{ $discountPercent }}% OFF
                 </div>
             </div>
