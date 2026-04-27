@@ -1444,19 +1444,19 @@ class UnifiedCourierService
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
         ])->post($baseUrl . '/order/v2/generate-load-sheet', $payload);
-
+        Log::info('PostEx Slip Generation Response status:', ['status' => $res->status()]);
         $responseData = $res->json();
         Log::info('PostEx Slip Generation Response:', is_array($responseData) ? $responseData : ['body' => $res->body()]);
-
-        // return pdf file content if successful, else return error message
-        if ($res->successful() && isset($responseData['dist'][0]['loadSheetUrl'])) {
+        if ($res->successful() && str_starts_with($res->body(), '%PDF')) {
+            $filename = "postex-waybill-{$trackingNumber}.pdf";
+            // Return the raw PDF bytes directly to the browser
             return [
-                'type' => 'redirect',
-                'url' => $responseData['dist'][0]['loadSheetUrl']
+                'type' => 'content',
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'inline; filename="' . $filename . '"' // Use 'attachment' to force download
             ];
         }
-
-        return ['error' => 'Failed to generate slip: ' . ($responseData['statusMessage'] ?? $responseData['message'] ?? 'Unknown error')];
+        return ['error' => 'Failed to get valid PDF from PostEx API'];
     }
 
     private function resolvePostexPickupAddress($shipmentData = null)
