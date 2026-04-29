@@ -82,6 +82,10 @@
                                     <span class="bg-orange-100 text-orange-800 px-2 py-1 rounded-full text-xs font-medium">
                                         <i class="fas fa-box mr-1"></i>Leopards
                                     </span>
+                                @elseif($shipment->courierService->courier == 'postex')
+                                    <span class="bg-purple-100 text-purple-800 px-2 py-1 rounded-full text-xs font-medium">
+                                        <i class="fas fa-box mr-1"></i>PostEx
+                                    </span>
                                 @endif
                             </div>
                         </div>

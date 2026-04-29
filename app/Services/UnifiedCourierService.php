@@ -1426,25 +1426,18 @@ class UnifiedCourierService
         }
 
         $baseUrl = $this->getBaseUrl('postex', $config);
-        $sanitizedTrackingNumber = trim((string) $trackingNumber);
-        $pickupAddress = $this->resolvePostexPickupAddress($shipmentData);
-
-        $payload = [
-            'trackingNumbers' => [$sanitizedTrackingNumber],
-        ];
-
-        if (!empty($pickupAddress)) {
-            $payload['pickupAddress'] = trim((string) $pickupAddress);
-        }
-
-        Log::info('PostEx Slip Generation Payload:', $payload);
-
+        
+        // $res = Http::withHeaders([
+        //     'token' => $config->api_key,
+        //     'Accept' => 'application/json',
+        //     'Content-Type' => 'application/json'
+        // ])->post($baseUrl . '/order/v2/generate-load-sheet', $payload);
+        $url = $baseUrl . '/order/v1/get-invoice?trackingNumbers=27071590005383';
+        Log::info('PostEx Slip Generation URL:', ['url' => $url]);
         $res = Http::withHeaders([
             'token' => $config->api_key,
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json'
-        ])->post($baseUrl . '/order/v2/generate-load-sheet', $payload);
-        Log::info('PostEx Slip Generation Response status:', ['status' => $res->status()]);
+        ])->get($url);
+        
         $responseData = $res->json();
         Log::info('PostEx Slip Generation Response:', is_array($responseData) ? $responseData : ['body' => $res->body()]);
         if ($res->successful() && str_starts_with($res->body(), '%PDF')) {
@@ -1452,8 +1445,9 @@ class UnifiedCourierService
             // Return the raw PDF bytes directly to the browser
             return [
                 'type' => 'content',
-                'Content-Type' => 'application/pdf',
-                'Content-Disposition' => 'inline; filename="' . $filename . '"' // Use 'attachment' to force download
+                'content_type' => 'application/pdf',
+                'filename' => $filename, // Use 'attachment' to force download
+                'content' => $res->body(),
             ];
         }
         return ['error' => 'Failed to get valid PDF from PostEx API'];
