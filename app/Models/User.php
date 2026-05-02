@@ -27,6 +27,7 @@ class User extends Authenticatable
         'level_id',
         'referrer',
         'extra_discount',
+        'shipment_price',
         'team_leader_id',
     ];
 
@@ -50,6 +51,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'shipment_price' => 'decimal:2',
         ];
     }
 

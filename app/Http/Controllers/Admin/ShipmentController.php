@@ -220,13 +220,14 @@ class ShipmentController extends Controller
                 // Give the bonus to the Team Leader on successful shipment creation or Rs. 5
                 $user = auth()->user();
                 if ($user->hasRole('label_printer')) {
+                    $bonusAmount = $user->shipment_price ?? 5;
                     $bonus = $user->bonuses()->create([
                         'order_taker_id' => $user->id,
                         'order_id' => $order->id,
                         'order_amount' => $order->total,
-                        'bonus_amount' => 5, // Fixed Rs. 5 bonus
+                        'bonus_amount' => $bonusAmount,
                         'status' => 'pending',
-                        'notes' => 'Auto-generated Rs. 5 bonus for shipment creation of order #' . $order->number,
+                        'notes' => 'Auto-generated Rs. ' . $bonusAmount . ' bonus for shipment creation of order #' . $order->number,
                     ]);
                 }
                 
@@ -328,6 +329,16 @@ class ShipmentController extends Controller
                     break;
                 case Shipment::STATUS_CANCELLED:
                     $shipment->update(['cancelled_at' => now()]);
+                    $shipment->order->update(['status' => 'cancelled']);
+
+                    // Reverse label_printer bonus if it exists
+                    $cancelBonus = \App\Models\Bonus::where('order_id', $shipment->order_id)->first();
+                    if ($cancelBonus && $cancelBonus->status !== 'cancelled') {
+                        $cancelBonus->update([
+                            'status' => 'cancelled',
+                            'notes' => $cancelBonus->notes . ' | Reversed: shipment cancelled on ' . now()->format('Y-m-d H:i:s'),
+                        ]);
+                    }
                     break;
             }
         }
@@ -574,6 +585,15 @@ class ShipmentController extends Controller
 
             // Update order status
             $shipment->order->update(['status' => 'cancelled']);
+
+            // Reverse label_printer bonus if it exists and is not already cancelled
+            $bonus = \App\Models\Bonus::where('order_id', $shipment->order_id)->first();
+            if ($bonus && $bonus->status !== 'cancelled') {
+                $bonus->update([
+                    'status' => 'cancelled',
+                    'notes' => $bonus->notes . ' | Reversed: shipment cancelled on ' . now()->format('Y-m-d H:i:s'),
+                ]);
+            }
 
             return response()->json([
                 'success' => true,

@@ -34,6 +34,15 @@
                         <x-input name="extra_discount" value="{{ $user->extra_discount }}" type="number" step="0.1" />
                     </div>
 
+                    <div class="flex flex-col gap-2" id="shipment_price_field"
+                        style="{{ $user->hasRole('label_printer') ? '' : 'display:none' }}">
+                        <x-label>Per Shipment Price (Rs.)</x-label>
+                        <x-input name="shipment_price" value="{{ $user->shipment_price ?? 5 }}" type="number"
+                            step="0.01" min="0" />
+                        <span class="text-xs text-gray-500">Bonus amount credited per shipment created by this label
+                            printer.</span>
+                    </div>
+
                     <div class="flex flex-col gap-2">
                         <x-label>Role <span class="text-red-500">*</span></x-label>
                         <select name="role"
@@ -61,4 +70,18 @@
             </form>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const roleSelect = document.querySelector('select[name="role"]');
+            const shipmentPriceField = document.getElementById('shipment_price_field');
+
+            function toggleShipmentPrice() {
+                shipmentPriceField.style.display = roleSelect.value === 'label_printer' ? '' : 'none';
+            }
+
+            roleSelect.addEventListener('change', toggleShipmentPrice);
+            toggleShipmentPrice();
+        });
+    </script>
 @endsection

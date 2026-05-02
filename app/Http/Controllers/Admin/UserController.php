@@ -40,6 +40,7 @@ class UserController extends Controller
             'mobile' => 'required|unique:users,mobile',
             'ref_code' => 'nullable',
             'extra_discount' => 'nullable|numeric',
+            'shipment_price' => 'nullable|numeric|min:0',
             'password' => 'required|min:6|confirmed',
             'role' => 'required|exists:roles,name',
         ]);
@@ -49,6 +50,7 @@ class UserController extends Controller
         $user->mobile = $request->mobile;
         $user->ref_code = $request->ref_code;
         $user->extra_discount = $request->extra_discount ?? 0;
+        $user->shipment_price = $request->shipment_price ?? 5;
         $user->password = bcrypt($request->password);
         $user->save();
         
@@ -87,6 +89,7 @@ class UserController extends Controller
             'mobile' => 'required|unique:users,mobile,' . $id,
             'ref_code' => 'nullable',
             'extra_discount' => 'nullable|numeric',
+            'shipment_price' => 'nullable|numeric|min:0',
             'role' => 'required|exists:roles,name',
         ]);
         $user = User::find($id);
@@ -95,6 +98,7 @@ class UserController extends Controller
         $user->mobile = $request->mobile;
         $user->ref_code = $request->ref_code;
         $user->extra_discount = $request->extra_discount ?? 0;
+        $user->shipment_price = $request->shipment_price ?? 5;
         $user->save();
         
         // Update user role

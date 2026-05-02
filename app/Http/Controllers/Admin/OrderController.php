@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\City;
+use App\Models\Bonus;
 use App\Mail\OrderStatus;
 use Illuminate\Support\Facades\Mail;
 
@@ -256,6 +257,18 @@ class OrderController extends Controller
             // \Mail::to($order->user->email, $order->user->name)->send(new OrderStatus($order));
         }
         $order->save();
+
+        // Reverse label_printer bonus if order is being cancelled
+        if ($request->status === 'cancelled') {
+            $bonus = Bonus::where('order_id', $order->id)->first();
+            if ($bonus && $bonus->status !== 'cancelled') {
+                $bonus->update([
+                    'status' => 'cancelled',
+                    'notes' => $bonus->notes . ' | Reversed: order cancelled on ' . now()->format('Y-m-d H:i:s'),
+                ]);
+            }
+        }
+
         return redirect()->route('admin.orders.index');
     }
 
