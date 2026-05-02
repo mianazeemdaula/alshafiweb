@@ -54,6 +54,14 @@ class OrderController extends Controller
             $query->where('order_source', $source);
         }
 
+        if ($dateFrom = request('date_from')) {
+            $query->whereDate('created_at', '>=', $dateFrom);
+        }
+
+        if ($dateTo = request('date_to')) {
+            $query->whereDate('created_at', '<=', $dateTo);
+        }
+
         $orders = $query->orderBy('id', 'desc')->paginate(10)->withQueryString();
         $types = Order::getTypes();
 
@@ -320,6 +328,14 @@ class OrderController extends Controller
         }
         if ($source = $request->order_source) {
             $query->where('order_source', $source);
+        }
+
+        if ($dateFrom = $request->date_from) {
+            $query->whereDate('created_at', '>=', $dateFrom);
+        }
+
+        if ($dateTo = $request->date_to) {
+            $query->whereDate('created_at', '<=', $dateTo);
         }
 
         $orders = $query->orderBy('id', 'desc')->get();

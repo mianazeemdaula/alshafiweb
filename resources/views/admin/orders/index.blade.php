@@ -7,7 +7,7 @@
             <div class="flex justify-between items-center mb-6">
                 <h1 class="text-2xl font-bold text-gray-800">Orders Management</h1>
                 <div class="flex space-x-3">
-                    <a href="{{ route('admin.orders.export', request()->only(['search', 'status', 'payment_status', 'type', 'order_source'])) }}"
+                    <a href="{{ route('admin.orders.export', request()->only(['search', 'status', 'payment_status', 'type', 'order_source', 'date_from', 'date_to'])) }}"
                         class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition duration-200">
                         <i class="fas fa-download mr-2"></i>Download CSV
                     </a>
@@ -62,6 +62,12 @@
                                 {{ $v }}</option>
                         @endforeach
                     </select>
+
+                    <input type="date" name="date_from" value="{{ request('date_from') }}" title="From date"
+                        class="border border-gray-300 rounded-md px-2 py-2 w-36" />
+
+                    <input type="date" name="date_to" value="{{ request('date_to') }}" title="To date"
+                        class="border border-gray-300 rounded-md px-2 py-2 w-36" />
 
                     <div class="ml-auto flex items-center space-x-2">
                         <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-md">
