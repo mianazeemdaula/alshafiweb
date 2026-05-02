@@ -787,7 +787,7 @@ class UnifiedCourierService
             'orderType' => 'Normal',
         ];
 
-        // Log::info('PostEx Booking Payload:', $payload);
+        Log::info('PostEx Booking Payload:', $payload);
         $response = Http::withHeaders([
             'token' => $config->api_key,
             'accept' => 'application/json'
@@ -1427,19 +1427,12 @@ class UnifiedCourierService
 
         $baseUrl = $this->getBaseUrl('postex', $config);
         
-        // $res = Http::withHeaders([
-        //     'token' => $config->api_key,
-        //     'Accept' => 'application/json',
-        //     'Content-Type' => 'application/json'
-        // ])->post($baseUrl . '/order/v2/generate-load-sheet', $payload);
         $url = $baseUrl . '/order/v1/get-invoice?trackingNumbers=27071590005383';
-        Log::info('PostEx Slip Generation URL:', ['url' => $url]);
         $res = Http::withHeaders([
             'token' => $config->api_key,
         ])->get($url);
         
         $responseData = $res->json();
-        Log::info('PostEx Slip Generation Response:', is_array($responseData) ? $responseData : ['body' => $res->body()]);
         if ($res->successful() && str_starts_with($res->body(), '%PDF')) {
             $filename = "postex-waybill-{$trackingNumber}.pdf";
             // Return the raw PDF bytes directly to the browser
