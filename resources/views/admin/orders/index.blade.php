@@ -6,14 +6,18 @@
             <!-- Header -->
             <div class="flex justify-between items-center mb-6">
                 <h1 class="text-2xl font-bold text-gray-800">Orders Management</h1>
-                @hasanyrole('admin|label_printer')
-                    <div class="flex space-x-3">
+                <div class="flex space-x-3">
+                    <a href="{{ route('admin.orders.export', request()->only(['search', 'status', 'payment_status', 'type', 'order_source'])) }}"
+                        class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition duration-200">
+                        <i class="fas fa-download mr-2"></i>Download CSV
+                    </a>
+                    @hasanyrole('admin|label_printer')
                         <a href="{{ route('admin.orders.create') }}"
                             class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition duration-200">
                             <i class="fas fa-plus mr-2"></i>New Order
                         </a>
-                    </div>
-                @endhasanyrole
+                    @endhasanyrole
+                </div>
             </div>
 
             <!-- Filters (minimal single-line) -->

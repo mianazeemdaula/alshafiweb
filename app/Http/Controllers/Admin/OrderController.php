@@ -293,6 +293,96 @@ class OrderController extends Controller
     }
 
     /**
+     * Export orders as CSV, respecting active filters and role visibility.
+     */
+    public function export(Request $request)
+    {
+        $user = auth()->user();
+        $query = Order::visibleTo($user)->with(['user', 'city', 'paymentMethod', 'shipment.courierService', 'orderTaker']);
+
+        if ($search = $request->search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('id', $search)
+                    ->orWhere('number', 'like', "%{$search}%")
+                    ->orWhere('customer_name', 'like', "%{$search}%")
+                    ->orWhere('customer_phone', 'like', "%{$search}%")
+                    ->orWhere('customer_email', 'like', "%{$search}%");
+            });
+        }
+        if ($status = $request->status) {
+            $query->where('status', $status);
+        }
+        if ($payment = $request->payment_status) {
+            $query->where('payment_status', $payment);
+        }
+        if ($type = $request->type) {
+            $query->where('type', $type);
+        }
+        if ($source = $request->order_source) {
+            $query->where('order_source', $source);
+        }
+
+        $orders = $query->orderBy('id', 'desc')->get();
+
+        $filename = 'orders_' . now()->format('Y-m-d_His') . '.csv';
+
+        $headers = [
+            'Content-Type'        => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+            'Pragma'              => 'no-cache',
+            'Cache-Control'       => 'must-revalidate, post-check=0, pre-check=0',
+            'Expires'             => '0',
+        ];
+
+        $callback = function () use ($orders) {
+            $handle = fopen('php://output', 'w');
+
+            // UTF-8 BOM for Excel compatibility
+            fwrite($handle, "\xEF\xBB\xBF");
+
+            fputcsv($handle, [
+                'Order ID', 'Order Number', 'Reference No.', 'Source',
+                'Customer Name', 'Customer Phone', 'Customer Email',
+                'City', 'Street Address',
+                'Status', 'Payment Status', 'Payment Method',
+                'Subtotal (Rs.)', 'Shipping (Rs.)', 'Discount (Rs.)', 'Total (Rs.)',
+                'Courier', 'Tracking Number', 'Shipment Status',
+                'Order Taker', 'Date',
+            ]);
+
+            foreach ($orders as $order) {
+                fputcsv($handle, [
+                    $order->id,
+                    $order->number,
+                    $order->reference_number ?? '',
+                    ucfirst($order->order_source ?? ''),
+                    $order->user->name ?? $order->customer_name ?? 'Guest',
+                    $order->user->mobile ?? $order->customer_phone ?? '',
+                    $order->user->email ?? $order->customer_email ?? '',
+                    $order->city->name ?? '',
+                    $order->street_address ?? '',
+                    ucfirst($order->status),
+                    ucfirst($order->payment_status),
+                    $order->paymentMethod->name ?? '',
+                    $order->total - ($order->shipping_cost ?? 0) + ($order->discount ?? 0),
+                    $order->shipping_cost ?? 0,
+                    $order->discount ?? 0,
+                    $order->total,
+                    $order->shipment ? ucfirst($order->shipment->courierService->courier ?? '') : '',
+                    $order->shipment->tracking_number ?? '',
+                    $order->shipment ? ucfirst($order->shipment->status) : '',
+                    $order->orderTaker->name ?? '',
+                    $order->created_at->format('Y-m-d H:i:s'),
+                ]);
+            }
+
+            fclose($handle);
+        };
+
+        return response()->stream($callback, 200, $headers);
+    }
+
+    /**
      * Return order data as JSON for API calls
      */
     public function apiShow(Order $order)
