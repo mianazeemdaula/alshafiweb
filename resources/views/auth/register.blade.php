@@ -1,12 +1,18 @@
 @extends('layouts.guest')
 @section('content')
-    <div class="min-h-screen flex items-center justify-center bg-white dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-emerald-50 via-white to-teal-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800 py-12 px-4 sm:px-6 lg:px-8">
         <div
-            class="max-w-md w-full space-y-8 bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 border border-gray-200 dark:border-gray-700">
+            class="max-w-md w-full space-y-8 bg-white dark:bg-gray-800 rounded-2xl shadow-xl shadow-emerald-900/5 p-8 border border-gray-100 dark:border-gray-700">
             <div>
+                <div class="flex justify-center">
+                    <span class="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shadow-lg shadow-emerald-500/20">
+                        <i class="fa-solid fa-leaf text-white text-2xl"></i>
+                    </span>
+                </div>
                 <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-gray-100">
                     {{ __('register.title') }}
                 </h2>
+                <p class="mt-2 text-center text-sm text-gray-500 dark:text-gray-400">alshaafi<span class="text-emerald-600 dark:text-emerald-400 font-semibold">online</span></p>
             </div>
             <form class="mt-8 space-y-6" action="{{ route('register') }}" method="POST">
                 @csrf

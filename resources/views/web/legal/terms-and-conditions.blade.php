@@ -1,14 +1,15 @@
 @extends('layouts.guest')
 
 @section('content')
-    <!-- Header Section with Gradient -->
-    <div class="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 py-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center">
-                <h1 class="text-4xl font-bold text-white mb-4">
-                    <i class="fas fa-file-contract mr-3"></i>Terms and Conditions
+    <!-- Header Section -->
+    <div class="bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+            <div class="max-w-2xl">
+                <span class="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-600 dark:text-emerald-400">Legal</span>
+                <h1 class="mt-3 text-3xl sm:text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white">
+                    Terms and Conditions
                 </h1>
-                <p class="text-white/90 text-lg">Last Updated: {{ date('F d, Y') }}</p>
+                <p class="mt-3 text-sm text-gray-500 dark:text-gray-400">Last Updated: {{ date('F d, Y') }}</p>
             </div>
         </div>
     </div>

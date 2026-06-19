@@ -16,10 +16,10 @@
                 <div class="space-y-4">
                     <div class="flex items-center space-x-2 mb-4">
                         <div
-                            class="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-                            <i class="fa fa-store text-white text-xl"></i>
+                            class="w-10 h-10 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/20">
+                            <i class="fa fa-leaf text-white text-lg"></i>
                         </div>
-                        <h1 class="text-xl font-bold text-white">{{ __('About Us') }}</h1>
+                        <h1 class="text-xl font-extrabold text-white">alshaafi<span class="text-emerald-400">online</span></h1>
                     </div>
                     <p class="text-sm text-gray-300 leading-relaxed">
                         {{ __('Your trusted online shopping destination for quality products and exceptional service.') }}
@@ -48,8 +48,8 @@
                 <div class="space-y-4">
                     <div class="flex items-center space-x-2 mb-4">
                         <div
-                            class="w-10 h-10 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg flex items-center justify-center">
-                            <i class="fa fa-link text-white text-xl"></i>
+                            class="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center">
+                            <i class="fa fa-link text-emerald-400 text-lg"></i>
                         </div>
                         <h1 class="text-xl font-bold text-white">{{ __('Quick Links') }}</h1>
                     </div>
@@ -93,8 +93,8 @@
                 <div class="space-y-4">
                     <div class="flex items-center space-x-2 mb-4">
                         <div
-                            class="w-10 h-10 bg-gradient-to-r from-pink-600 to-red-600 rounded-lg flex items-center justify-center">
-                            <i class="fa fa-th-large text-white text-xl"></i>
+                            class="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center">
+                            <i class="fa fa-th-large text-emerald-400 text-lg"></i>
                         </div>
                         <h1 class="text-xl font-bold text-white">{{ __('Categories') }}</h1>
                     </div>
@@ -116,8 +116,8 @@
                 <div class="space-y-4">
                     <div class="flex items-center space-x-2 mb-4">
                         <div
-                            class="w-10 h-10 bg-gradient-to-r from-green-600 to-emerald-600 rounded-lg flex items-center justify-center">
-                            <i class="fa fa-phone text-white text-xl"></i>
+                            class="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center">
+                            <i class="fa fa-phone text-emerald-400 text-lg"></i>
                         </div>
                         <h1 class="text-xl font-bold text-white">{{ __('Contact Info') }}</h1>
                     </div>
@@ -174,7 +174,7 @@
                         <input type="email" placeholder="{{ __('Enter your email') }}"
                             class="flex-1 px-4 py-3 rounded-lg bg-white/10 border border-gray-600 text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
                         <button
-                            class="px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-medium rounded-lg transition-all transform hover:scale-105 shadow-lg whitespace-nowrap">
+                            class="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-lg transition-colors whitespace-nowrap">
                             <i class="fa fa-paper-plane mr-2"></i>{{ __('Subscribe') }}
                         </button>
                     </div>

@@ -1,16 +1,16 @@
 @extends('layouts.guest')
 @section('content')
-    <!-- Breadcrumb with Gradient -->
-    <div class="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 py-4">
+    <!-- Breadcrumb -->
+    <div class="bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 py-4">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <nav class="flex items-center text-white text-sm">
-                <a href="{{ url('/') }}" class="hover:text-gray-200 transition-colors">
-                    <i class="fa-solid fa-home mr-2"></i>Home
+            <nav class="flex items-center text-xs text-gray-500 dark:text-gray-400">
+                <a href="{{ url('/') }}" class="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
+                    <i class="fa-solid fa-home mr-1.5"></i>Home
                 </a>
-                <span class="mx-2">/</span>
-                <a href="{{ route('web.products') }}" class="hover:text-gray-200 transition-colors">Products</a>
-                <span class="mx-2">/</span>
-                <span class="text-gray-200">{{ $product->name }}</span>
+                <span class="mx-2 text-gray-300">/</span>
+                <a href="{{ route('web.products') }}" class="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">Products</a>
+                <span class="mx-2 text-gray-300">/</span>
+                <span class="text-gray-700 dark:text-gray-300 truncate">{{ $product->name }}</span>
             </nav>
         </div>
     </div>
@@ -196,7 +196,7 @@
 
                             <!-- Add to Cart Button -->
                             <button type="button"
-                                class="add-to-cart-btn flex-1 {{ $product->stock <= 0 ? 'bg-gray-400 dark:bg-gray-600 cursor-not-allowed' : 'bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 transform hover:scale-105 hover:shadow-xl' }} text-white px-8 py-4 rounded-lg font-bold text-lg transition-all duration-300 flex items-center justify-center gap-3"
+                                class="add-to-cart-btn flex-1 {{ $product->stock <= 0 ? 'bg-gray-300 dark:bg-gray-600 cursor-not-allowed' : 'bg-emerald-600 hover:bg-emerald-700' }} text-white px-8 py-4 rounded-xl font-semibold text-base transition-colors flex items-center justify-center gap-3"
                                 data-product-id="{{ $product->id }}" data-product-name="{{ $product->name }}"
                                 data-product-price="{{ $product->price }}" {{ $product->stock <= 0 ? 'disabled' : '' }}>
                                 @if ($product->stock <= 0)

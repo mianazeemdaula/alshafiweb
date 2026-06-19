@@ -1,15 +1,15 @@
-<!-- Top Bar with Gradient -->
+<!-- Top Bar -->
 <div
-    class="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 p-2 flex items-center justify-between text-sm flex-col sm:flex-row">
-    <div class="flex space-x-4 items-center mb-2 sm:mb-0">
-        <div class="flex items-center text-white hover:text-gray-100 transition-colors">
-            <i class="fa-regular fa-envelope mx-1 animate-pulse"></i>
-            <div class="hidden sm:block font-medium">info@alshafionline.com</div>
+    class="bg-gray-900 dark:bg-black py-2 px-4 flex items-center justify-between text-xs flex-col sm:flex-row gap-2">
+    <div class="flex space-x-4 items-center">
+        <div class="flex items-center text-gray-300 hover:text-white transition-colors">
+            <i class="fa-regular fa-envelope mx-1"></i>
+            <div class="hidden sm:block">info@alshafionline.com</div>
         </div>
-        <div class="border border-white/30 h-4 hidden sm:block"></div>
-        <div class="flex items-center text-white hover:text-gray-100 transition-colors">
-            <i class="fa fa-phone mx-1 animate-pulse"></i>
-            <div class="hidden sm:block font-medium">Helpline +92 325 325 55 55</div>
+        <div class="border-l border-white/15 h-4 hidden sm:block"></div>
+        <div class="flex items-center text-gray-300 hover:text-white transition-colors">
+            <i class="fa fa-phone mx-1"></i>
+            <div class="hidden sm:block">Helpline +92 325 325 55 55</div>
         </div>
     </div>
     <div class="flex space-x-3 items-center">
@@ -109,10 +109,21 @@
 <div class="bg-white/95 dark:bg-gray-900/95 backdrop-blur-md w-full z-30 sticky top-0 shadow-lg" id="header">
     <div class="p-4 border-b border-gray-200 dark:border-gray-700">
         <div class="flex flex-col lg:flex-row items-center gap-4">
-            <div class="w-full lg:w-2/12 flex justify-center lg:justify-start">
-                {{-- <img src="{{ asset('images/logo/logo.svg') }}" alt="logo"
-                    class="h-10 dark:filter dark:brightness-0 dark:invert transition-transform hover:scale-105"> --}}
-                <span class="text-lg font-semibold">Alshaafi</span>
+            <div class="w-full lg:w-auto flex justify-center lg:justify-start">
+                <a href="{{ url('/') }}" class="flex items-center gap-2.5 group">
+                    <span
+                        class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shadow-lg shadow-emerald-500/20 group-hover:scale-105 transition-transform">
+                        <i class="fa-solid fa-leaf text-white text-lg"></i>
+                    </span>
+                    <span class="leading-none">
+                        <span class="block text-xl font-extrabold tracking-tight text-gray-900 dark:text-white">
+                            alshaafi<span
+                                class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-600">online</span>
+                        </span>
+                        <span
+                            class="block text-[10px] font-semibold uppercase tracking-[0.2em] text-gray-400 dark:text-gray-500">{{ __('Health & Wellness') }}</span>
+                    </span>
+                </a>
             </div>
             <div class="w-full lg:flex-1">
                 <form action="/products" method="get" class="flex items-center gap-2">
@@ -123,9 +134,9 @@
                         <i class="fa fa-search absolute right-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
                     </div>
                     <button type="submit"
-                        class="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-6 py-3 rounded-xl whitespace-nowrap text-sm transition-all transform hover:scale-105 shadow-lg hover:shadow-xl">
+                        class="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-xl whitespace-nowrap text-sm font-medium transition-colors">
                         <i class="fa fa-search lg:hidden"></i>
-                        <span class="hidden lg:inline font-medium">{{ __('search_placeholder') }}</span>
+                        <span class="hidden lg:inline">{{ __('search_placeholder') }}</span>
                     </button>
                 </form>
             </div>
@@ -133,9 +144,9 @@
                 <div class="border border-slate-200 dark:border-gray-700 h-8 hidden lg:block"></div>
                 <a href="{{ url('/cart') }}" class="relative group">
                     <div
-                        class="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-gray-800 dark:to-gray-700 p-3 rounded-xl hover:shadow-lg transition-all transform hover:scale-110">
-                        <i class="fa-solid fa-basket-shopping text-xl text-blue-600 dark:text-blue-400"></i>
-                        <div class="cart-count absolute -top-2 -right-2 border-2 border-white dark:border-gray-900 p-2 rounded-full bg-gradient-to-r from-red-500 to-pink-500 text-white text-[10px] size-5 flex items-center justify-center font-bold shadow-lg"
+                        class="bg-gray-50 dark:bg-gray-800 p-3 rounded-xl hover:bg-emerald-50 dark:hover:bg-gray-700 transition-colors">
+                        <i class="fa-solid fa-basket-shopping text-xl text-emerald-600 dark:text-emerald-400"></i>
+                        <div class="cart-count absolute -top-2 -right-2 border-2 border-white dark:border-gray-900 p-2 rounded-full bg-red-500 text-white text-[10px] size-5 flex items-center justify-center font-bold"
                             style="display: none;">
                             0
                         </div>
@@ -143,9 +154,9 @@
                 </a>
                 <div class="border border-slate-200 dark:border-gray-700 h-8"></div>
                 <a href="{{ url('/checkout') }}"
-                    class="text-sm bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white px-5 py-3 rounded-xl transition-all transform hover:scale-105 shadow-lg hover:shadow-xl">
+                    class="text-sm bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-3 rounded-xl transition-colors font-medium">
                     <i class="fa fa-shopping-cart lg:hidden"></i>
-                    <span class="hidden lg:inline font-medium">{{ __('checkout') }}</span>
+                    <span class="hidden lg:inline">{{ __('checkout') }}</span>
                 </a>
             </div>
         </div>

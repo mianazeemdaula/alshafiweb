@@ -1,166 +1,112 @@
 @extends('layouts.guest')
 
 @section('content')
-    <!-- Hero Section with Modern Animation -->
-    <div
-        class="relative overflow-hidden bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-purple-900 dark:to-blue-900">
-        <!-- Animated Background Shapes -->
-        <div class="absolute inset-0 overflow-hidden">
-            <div
-                class="absolute -top-40 -right-40 w-80 h-80 bg-purple-300 dark:bg-purple-600 rounded-full mix-blend-multiply dark:mix-blend-soft-light filter blur-xl opacity-70 animate-blob">
-            </div>
-            <div
-                class="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-300 dark:bg-blue-600 rounded-full mix-blend-multiply dark:mix-blend-soft-light filter blur-xl opacity-70 animate-blob animation-delay-2000">
-            </div>
-            <div
-                class="absolute top-40 left-40 w-80 h-80 bg-pink-300 dark:bg-pink-600 rounded-full mix-blend-multiply dark:mix-blend-soft-light filter blur-xl opacity-70 animate-blob animation-delay-4000">
-            </div>
-        </div>
-
-        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+    <!-- Hero -->
+    <div class="relative overflow-hidden bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800">
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
                 <!-- Left Content -->
                 <div class="text-center lg:text-left fade-in-up">
-                    <div class="inline-block mb-4 sm:mb-6">
-                        <span
-                            class="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-full text-xs sm:text-sm font-semibold shadow-lg animate-pulse">
-                            ✨ {{ __('Trusted by 10,000+ Customers') }}
-                        </span>
-                    </div>
+                    <span
+                        class="inline-flex items-center gap-2 mb-5 text-xs font-semibold uppercase tracking-[0.2em] text-emerald-600 dark:text-emerald-400">
+                        <span class="h-px w-6 bg-emerald-500"></span>
+                        {{ __('Trusted by 10,000+ Customers') }}
+                    </span>
                     <h1
-                        class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 dark:text-white mb-4 sm:mb-6 leading-tight">
+                        class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-gray-900 dark:text-white mb-5 leading-[1.1]">
                         {{ __('Welcome to') }}
-                        <span
-                            class="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 animate-gradient">
-                            {{ __('Al Shaafi') }}
-                        </span>
+                        <span class="text-emerald-600 dark:text-emerald-400">{{ __('Al Shaafi') }}</span>
                     </h1>
-                    <p
-                        class="text-base sm:text-lg md:text-xl text-gray-600 dark:text-gray-300 mb-6 sm:mb-8 max-w-2xl mx-auto lg:mx-0">
+                    <p class="text-base sm:text-lg text-gray-500 dark:text-gray-400 mb-8 max-w-xl mx-auto lg:mx-0 leading-relaxed">
                         {{ __('Your trusted health and wellness partner. Discover premium quality products with fast delivery and exceptional service.') }}
                     </p>
-                    <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                    <div class="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
                         <a href="{{ route('web.products') }}"
-                            class="group relative inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-bold text-white bg-gradient-to-r from-blue-600 to-purple-600 rounded-full overflow-hidden shadow-2xl transform hover:scale-105 transition-all duration-300">
-                            <span
-                                class="absolute w-0 h-0 transition-all duration-500 ease-out bg-white rounded-full group-hover:w-56 group-hover:h-56 opacity-10"></span>
-                            <span class="relative flex items-center gap-2">
-                                {{ __('Shop Now') }}
-                                <i
-                                    class="fa-solid fa-arrow-right group-hover:translate-x-2 transition-transform duration-300"></i>
-                            </span>
+                            class="group inline-flex items-center justify-center gap-2 px-7 py-3.5 text-sm font-semibold text-white bg-emerald-600 hover:bg-emerald-700 rounded-xl transition-colors">
+                            {{ __('Shop Now') }}
+                            <i class="fa-solid fa-arrow-right text-xs group-hover:translate-x-1 transition-transform"></i>
                         </a>
                         <a href="#products"
-                            class="inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-bold text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-600 rounded-full hover:border-purple-600 dark:hover:border-purple-500 transition-all duration-300 shadow-lg hover:shadow-xl">
+                            class="inline-flex items-center justify-center px-7 py-3.5 text-sm font-semibold text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl hover:border-emerald-500 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
                             {{ __('Learn More') }}
                         </a>
                     </div>
 
                     <!-- Stats -->
-                    <div class="grid grid-cols-3 gap-4 mt-8 sm:mt-12">
-                        <div class="text-center counter-item" data-target="10000">
-                            <div
-                                class="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-600 dark:text-blue-400 counter">
-                                0</div>
-                            <div class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-1">{{ __('Customers') }}
-                            </div>
+                    <div
+                        class="grid grid-cols-3 gap-6 mt-12 pt-8 border-t border-gray-100 dark:border-gray-800 max-w-md mx-auto lg:mx-0">
+                        <div class="text-center lg:text-left counter-item" data-target="10000">
+                            <div class="text-3xl font-extrabold text-gray-900 dark:text-white counter">0</div>
+                            <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">{{ __('Customers') }}</div>
                         </div>
-                        <div class="text-center counter-item" data-target="500">
-                            <div
-                                class="text-2xl sm:text-3xl md:text-4xl font-bold text-purple-600 dark:text-purple-400 counter">
-                                0</div>
-                            <div class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-1">{{ __('Products') }}</div>
+                        <div class="text-center lg:text-left counter-item" data-target="500">
+                            <div class="text-3xl font-extrabold text-gray-900 dark:text-white counter">0</div>
+                            <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">{{ __('Products') }}</div>
                         </div>
-                        <div class="text-center counter-item" data-target="99">
-                            <div
-                                class="text-2xl sm:text-3xl md:text-4xl font-bold text-pink-600 dark:text-pink-400 counter">
-                                0</div>
-                            <div class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-1">{{ __('Satisfaction') }}%
-                            </div>
+                        <div class="text-center lg:text-left counter-item" data-target="99">
+                            <div class="text-3xl font-extrabold text-gray-900 dark:text-white counter">0</div>
+                            <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">{{ __('Satisfaction') }}%</div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Right Content - Hero Image/Illustration -->
+                <!-- Right Content -->
                 <div class="relative fade-in-up animation-delay-200">
-                    <div class="relative z-10">
+                    <div class="grid grid-cols-2 gap-4 sm:gap-5">
                         <div
-                            class="bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 rounded-3xl shadow-2xl p-1 transform hover:rotate-1 transition-transform duration-500">
-                            <div class="bg-white dark:bg-gray-800 rounded-3xl p-6 sm:p-8">
-                                <!-- Feature Cards Grid -->
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div
-                                        class="group bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900 dark:to-blue-800 p-4 sm:p-6 rounded-2xl hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-                                        <div
-                                            class="w-12 h-12 sm:w-16 sm:h-16 bg-blue-500 rounded-2xl flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 transition-transform">
-                                            <i class="fa-solid fa-shield-heart text-white text-xl sm:text-2xl"></i>
-                                        </div>
-                                        <h3 class="font-bold text-sm sm:text-base text-gray-800 dark:text-white mb-1">
-                                            {{ __('Quality') }}</h3>
-                                        <p class="text-xs text-gray-600 dark:text-gray-300">{{ __('Certified Products') }}
-                                        </p>
-                                    </div>
-                                    <div
-                                        class="group bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900 dark:to-purple-800 p-4 sm:p-6 rounded-2xl hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 animation-delay-100">
-                                        <div
-                                            class="w-12 h-12 sm:w-16 sm:h-16 bg-purple-500 rounded-2xl flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 transition-transform">
-                                            <i class="fa-solid fa-rocket text-white text-xl sm:text-2xl"></i>
-                                        </div>
-                                        <h3 class="font-bold text-sm sm:text-base text-gray-800 dark:text-white mb-1">
-                                            {{ __('Fast') }}</h3>
-                                        <p class="text-xs text-gray-600 dark:text-gray-300">{{ __('Same Day Delivery') }}
-                                        </p>
-                                    </div>
-                                    <div
-                                        class="group bg-gradient-to-br from-pink-50 to-pink-100 dark:from-pink-900 dark:to-pink-800 p-4 sm:p-6 rounded-2xl hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 animation-delay-200">
-                                        <div
-                                            class="w-12 h-12 sm:w-16 sm:h-16 bg-pink-500 rounded-2xl flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 transition-transform">
-                                            <i class="fa-solid fa-percent text-white text-xl sm:text-2xl"></i>
-                                        </div>
-                                        <h3 class="font-bold text-sm sm:text-base text-gray-800 dark:text-white mb-1">
-                                            {{ __('Offers') }}</h3>
-                                        <p class="text-xs text-gray-600 dark:text-gray-300">{{ __('Up to 50% Off') }}</p>
-                                    </div>
-                                    <div
-                                        class="group bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900 dark:to-green-800 p-4 sm:p-6 rounded-2xl hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 animation-delay-300">
-                                        <div
-                                            class="w-12 h-12 sm:w-16 sm:h-16 bg-green-500 rounded-2xl flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 transition-transform">
-                                            <i class="fa-solid fa-headset text-white text-xl sm:text-2xl"></i>
-                                        </div>
-                                        <h3 class="font-bold text-sm sm:text-base text-gray-800 dark:text-white mb-1">
-                                            {{ __('Support') }}</h3>
-                                        <p class="text-xs text-gray-600 dark:text-gray-300">{{ __('24/7 Available') }}</p>
-                                    </div>
-                                </div>
+                            class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 p-6 rounded-2xl hover:border-emerald-300 dark:hover:border-emerald-700 transition-colors">
+                            <div
+                                class="w-12 h-12 bg-emerald-50 dark:bg-emerald-900/40 rounded-xl flex items-center justify-center mb-4">
+                                <i class="fa-solid fa-shield-heart text-emerald-600 dark:text-emerald-400 text-xl"></i>
                             </div>
+                            <h3 class="font-semibold text-gray-900 dark:text-white mb-1">{{ __('Quality') }}</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('Certified Products') }}</p>
                         </div>
-                    </div>
-                    <!-- Floating Elements -->
-                    <div
-                        class="absolute -top-4 -right-4 w-20 h-20 bg-yellow-400 rounded-full animate-bounce opacity-80 hidden sm:block">
-                    </div>
-                    <div
-                        class="absolute -bottom-4 -left-4 w-16 h-16 bg-blue-400 rounded-full animate-pulse opacity-80 hidden sm:block">
+                        <div
+                            class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 p-6 rounded-2xl hover:border-emerald-300 dark:hover:border-emerald-700 transition-colors sm:translate-y-6">
+                            <div
+                                class="w-12 h-12 bg-emerald-50 dark:bg-emerald-900/40 rounded-xl flex items-center justify-center mb-4">
+                                <i class="fa-solid fa-rocket text-emerald-600 dark:text-emerald-400 text-xl"></i>
+                            </div>
+                            <h3 class="font-semibold text-gray-900 dark:text-white mb-1">{{ __('Fast') }}</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('Same Day Delivery') }}</p>
+                        </div>
+                        <div
+                            class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 p-6 rounded-2xl hover:border-emerald-300 dark:hover:border-emerald-700 transition-colors">
+                            <div
+                                class="w-12 h-12 bg-emerald-50 dark:bg-emerald-900/40 rounded-xl flex items-center justify-center mb-4">
+                                <i class="fa-solid fa-percent text-emerald-600 dark:text-emerald-400 text-xl"></i>
+                            </div>
+                            <h3 class="font-semibold text-gray-900 dark:text-white mb-1">{{ __('Offers') }}</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('Up to 50% Off') }}</p>
+                        </div>
+                        <div
+                            class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 p-6 rounded-2xl hover:border-emerald-300 dark:hover:border-emerald-700 transition-colors sm:translate-y-6">
+                            <div
+                                class="w-12 h-12 bg-emerald-50 dark:bg-emerald-900/40 rounded-xl flex items-center justify-center mb-4">
+                                <i class="fa-solid fa-headset text-emerald-600 dark:text-emerald-400 text-xl"></i>
+                            </div>
+                            <h3 class="font-semibold text-gray-900 dark:text-white mb-1">{{ __('Support') }}</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('24/7 Available') }}</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Products Section with Modern Design -->
-    <div id="products" class="py-12 sm:py-16 bg-white dark:bg-gray-900">
+    <!-- Products Section -->
+    <div id="products" class="py-16 sm:py-24 bg-white dark:bg-gray-900">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-8 sm:mb-12 fade-in-up">
-                <h2 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white mb-4">
-                    {{ __('Our') }}
-                    <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">
-                        {{ __('Products') }}
-                    </span>
+            <div class="text-center mb-10 sm:mb-14 fade-in-up">
+                <span
+                    class="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-600 dark:text-emerald-400">{{ __('Shop') }}</span>
+                <h2 class="mt-3 text-3xl sm:text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white">
+                    {{ __('Our') }} {{ __('Products') }}
                 </h2>
-                <p class="text-base sm:text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                <p class="mt-3 text-base text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
                     {{ __('Discover our premium collection of health and wellness products') }}
                 </p>
-                <div class="mt-6 h-1 w-24 bg-gradient-to-r from-blue-600 to-purple-600 mx-auto rounded-full"></div>
             </div>
 
             @if (isset($products) && $products->count() > 0)
@@ -172,49 +118,47 @@
                     @endforeach
                 </div>
 
-                <div class="text-center mt-10 sm:mt-12">
+                <div class="text-center mt-12">
                     <a href="{{ route('web.products') }}"
-                        class="group inline-flex items-center gap-3 px-8 py-4 text-lg font-bold text-white bg-gradient-to-r from-blue-600 to-purple-600 rounded-full shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300">
+                        class="group inline-flex items-center gap-2 px-7 py-3.5 text-sm font-semibold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/30 hover:bg-emerald-100 dark:hover:bg-emerald-900/50 rounded-xl transition-colors">
                         {{ __('View All Products') }}
-                        <i class="fa-solid fa-arrow-right group-hover:translate-x-2 transition-transform duration-300"></i>
+                        <i class="fa-solid fa-arrow-right text-xs group-hover:translate-x-1 transition-transform"></i>
                     </a>
                 </div>
             @else
-                <div class="text-center py-12 sm:py-16 fade-in-up">
+                <div class="text-center py-16 fade-in-up">
                     <div
-                        class="inline-block p-6 bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-900 dark:to-purple-900 rounded-3xl mb-6">
-                        <i class="fa-solid fa-box-open text-6xl sm:text-7xl text-blue-600 dark:text-blue-400"></i>
+                        class="inline-flex items-center justify-center w-20 h-20 bg-gray-50 dark:bg-gray-800 rounded-2xl mb-6">
+                        <i class="fa-solid fa-box-open text-3xl text-gray-300 dark:text-gray-600"></i>
                     </div>
-                    <h3 class="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-white mb-3">
+                    <h3 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-2">
                         {{ __('No products available for your country') }}
                     </h3>
-                    <p class="text-gray-600 dark:text-gray-400 mb-8 text-lg">
+                    <p class="text-gray-500 dark:text-gray-400 mb-8">
                         {{ __('Check back soon for exciting new products!') }}
                     </p>
                     <a href="{{ route('web.products') }}"
-                        class="inline-flex items-center gap-2 px-8 py-4 text-lg font-bold text-white bg-gradient-to-r from-blue-600 to-purple-600 rounded-full shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300">
+                        class="inline-flex items-center gap-2 px-7 py-3.5 text-sm font-semibold text-white bg-emerald-600 hover:bg-emerald-700 rounded-xl transition-colors">
                         {{ __('Browse all products') }}
-                        <i class="fa-solid fa-arrow-right"></i>
+                        <i class="fa-solid fa-arrow-right text-xs"></i>
                     </a>
                 </div>
             @endif
         </div>
     </div>
 
-    <!-- Blog Section with Modern Design -->
-    <div class="py-12 sm:py-16 bg-gradient-to-br from-gray-50 to-blue-50 dark:from-gray-900 dark:to-blue-900">
+    <!-- Blog Section -->
+    <div class="py-16 sm:py-24 bg-gray-50 dark:bg-gray-950">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-8 sm:mb-12 fade-in-up">
-                <h2 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white mb-4">
-                    {{ __('Latest') }}
-                    <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">
-                        {{ __('Articles') }}
-                    </span>
+            <div class="text-center mb-10 sm:mb-14 fade-in-up">
+                <span
+                    class="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-600 dark:text-emerald-400">{{ __('Blog') }}</span>
+                <h2 class="mt-3 text-3xl sm:text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white">
+                    {{ __('Latest') }} {{ __('Articles') }}
                 </h2>
-                <p class="text-base sm:text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                <p class="mt-3 text-base text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
                     {{ __('Stay updated with the latest health tips and wellness insights') }}
                 </p>
-                <div class="mt-6 h-1 w-24 bg-gradient-to-r from-blue-600 to-purple-600 mx-auto rounded-full"></div>
             </div>
 
             @if (isset($blogPosts) && $blogPosts->count() > 0)
@@ -230,9 +174,9 @@
                                         class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                                 @else
                                     <div
-                                        class="w-full h-full bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 flex items-center justify-center">
-                                        <div class="text-white text-center">
-                                            <i class="fa-solid fa-newspaper text-4xl sm:text-5xl mb-3 opacity-80"></i>
+                                        class="w-full h-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
+                                        <div class="text-gray-400 dark:text-gray-500 text-center">
+                                            <i class="fa-solid fa-newspaper text-4xl sm:text-5xl mb-3"></i>
                                             <p class="text-sm font-medium">{{ $post->category->name }}</p>
                                         </div>
                                     </div>
@@ -277,150 +221,124 @@
                     @endforeach
                 </div>
 
-                <div class="text-center mt-10 sm:mt-12">
+                <div class="text-center mt-12">
                     <a href="{{ route('blog.index') }}"
-                        class="group inline-flex items-center gap-3 px-8 py-4 text-lg font-bold text-white bg-gradient-to-r from-blue-600 to-purple-600 rounded-full shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300">
+                        class="group inline-flex items-center gap-2 px-7 py-3.5 text-sm font-semibold text-emerald-700 dark:text-emerald-400 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:border-emerald-400 rounded-xl transition-colors">
                         {{ __('View All Articles') }}
-                        <i class="fa-solid fa-arrow-right group-hover:translate-x-2 transition-transform duration-300"></i>
+                        <i class="fa-solid fa-arrow-right text-xs group-hover:translate-x-1 transition-transform"></i>
                     </a>
                 </div>
             @else
-                <div class="text-center py-12 sm:py-16 fade-in-up">
-                    <div class="inline-block p-8 bg-white dark:bg-gray-800 rounded-3xl shadow-xl mb-6">
-                        <i class="fa-solid fa-newspaper text-6xl sm:text-7xl text-gray-400"></i>
+                <div class="text-center py-16 fade-in-up">
+                    <div
+                        class="inline-flex items-center justify-center w-20 h-20 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl mb-6">
+                        <i class="fa-solid fa-newspaper text-3xl text-gray-300 dark:text-gray-600"></i>
                     </div>
-                    <h3 class="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-white mb-3">
+                    <h3 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-2">
                         {{ __('No Articles Yet') }}
                     </h3>
-                    <p class="text-gray-600 dark:text-gray-400 mb-8 text-lg">
+                    <p class="text-gray-500 dark:text-gray-400 mb-8">
                         {{ __('No articles available for your region') }}
                     </p>
                     <a href="{{ route('blog.index') }}"
-                        class="inline-flex items-center gap-2 px-8 py-4 text-lg font-bold text-white bg-gradient-to-r from-blue-600 to-purple-600 rounded-full shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300">
+                        class="inline-flex items-center gap-2 px-7 py-3.5 text-sm font-semibold text-white bg-emerald-600 hover:bg-emerald-700 rounded-xl transition-colors">
                         {{ __('View All Articles') }}
-                        <i class="fa-solid fa-arrow-right"></i>
+                        <i class="fa-solid fa-arrow-right text-xs"></i>
                     </a>
                 </div>
             @endif
         </div>
     </div>
 
-    <!-- Features Section with Modern Design -->
-    <div class="py-12 sm:py-16 bg-white dark:bg-gray-900">
+    <!-- Features Section -->
+    <div class="py-16 sm:py-24 bg-white dark:bg-gray-900">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12 fade-in-up">
-                <h2 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white mb-4">
-                    {{ __('Why Choose') }}
-                    <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">
-                        {{ __('Al Shaafi?') }}
-                    </span>
+            <div class="text-center mb-12 sm:mb-14 fade-in-up">
+                <span
+                    class="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-600 dark:text-emerald-400">{{ __('Why Us') }}</span>
+                <h2 class="mt-3 text-3xl sm:text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white">
+                    {{ __('Why Choose') }} {{ __('Al Shaafi?') }}
                 </h2>
-                <p class="text-base sm:text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                <p class="mt-3 text-base text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
                     {{ __('We provide the best shopping experience with premium quality and service') }}
                 </p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
                 <!-- Feature 1 -->
                 <div
-                    class="group relative bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900 dark:to-orange-800 rounded-2xl p-6 sm:p-8 transform hover:-translate-y-2 hover:shadow-2xl transition-all duration-500 fade-in-up">
+                    class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl p-7 hover:border-emerald-300 dark:hover:border-emerald-700 transition-colors fade-in-up">
                     <div
-                        class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-orange-400 rounded-full opacity-20 group-hover:scale-150 transition-transform duration-500">
+                        class="w-12 h-12 bg-emerald-50 dark:bg-emerald-900/40 rounded-xl flex items-center justify-center mb-5">
+                        <i class="fa-solid fa-bullhorn text-emerald-600 dark:text-emerald-400 text-lg"></i>
                     </div>
-                    <div class="relative">
-                        <div
-                            class="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-orange-500 to-red-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 shadow-xl">
-                            <i class="fa-solid fa-bullhorn text-white text-2xl sm:text-3xl"></i>
-                        </div>
-                        <h3 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-3">
-                            {{ __('Special Offers') }}</h3>
-                        <p class="text-gray-600 dark:text-gray-300">
-                            {{ __('Exclusive deals and discounts up to 50% off on selected products') }}</p>
-                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">{{ __('Special Offers') }}</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
+                        {{ __('Exclusive deals and discounts up to 50% off on selected products') }}</p>
                 </div>
 
                 <!-- Feature 2 -->
                 <div
-                    class="group relative bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900 dark:to-blue-800 rounded-2xl p-6 sm:p-8 transform hover:-translate-y-2 hover:shadow-2xl transition-all duration-500 fade-in-up animation-delay-100">
+                    class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl p-7 hover:border-emerald-300 dark:hover:border-emerald-700 transition-colors fade-in-up animation-delay-100">
                     <div
-                        class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-blue-400 rounded-full opacity-20 group-hover:scale-150 transition-transform duration-500">
+                        class="w-12 h-12 bg-emerald-50 dark:bg-emerald-900/40 rounded-xl flex items-center justify-center mb-5">
+                        <i class="fa-solid fa-shipping-fast text-emerald-600 dark:text-emerald-400 text-lg"></i>
                     </div>
-                    <div class="relative">
-                        <div
-                            class="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 shadow-xl">
-                            <i class="fa-solid fa-shipping-fast text-white text-2xl sm:text-3xl"></i>
-                        </div>
-                        <h3 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-3">
-                            {{ __('Fast Delivery') }}</h3>
-                        <p class="text-gray-600 dark:text-gray-300">
-                            {{ __('Same-day delivery available for urgent orders in major cities') }}</p>
-                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">{{ __('Fast Delivery') }}</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
+                        {{ __('Same-day delivery available for urgent orders in major cities') }}</p>
                 </div>
 
                 <!-- Feature 3 -->
                 <div
-                    class="group relative bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900 dark:to-green-800 rounded-2xl p-6 sm:p-8 transform hover:-translate-y-2 hover:shadow-2xl transition-all duration-500 fade-in-up animation-delay-200">
+                    class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl p-7 hover:border-emerald-300 dark:hover:border-emerald-700 transition-colors fade-in-up animation-delay-200">
                     <div
-                        class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-green-400 rounded-full opacity-20 group-hover:scale-150 transition-transform duration-500">
+                        class="w-12 h-12 bg-emerald-50 dark:bg-emerald-900/40 rounded-xl flex items-center justify-center mb-5">
+                        <i class="fa-solid fa-heart text-emerald-600 dark:text-emerald-400 text-lg"></i>
                     </div>
-                    <div class="relative">
-                        <div
-                            class="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 shadow-xl">
-                            <i class="fa-solid fa-heart text-white text-2xl sm:text-3xl"></i>
-                        </div>
-                        <h3 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-3">
-                            {{ __('Trusted Quality') }}</h3>
-                        <p class="text-gray-600 dark:text-gray-300">
-                            {{ __('100% authentic products certified by health authorities') }}</p>
-                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">{{ __('Trusted Quality') }}</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
+                        {{ __('100% authentic products certified by health authorities') }}</p>
                 </div>
 
                 <!-- Feature 4 -->
                 <div
-                    class="group relative bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900 dark:to-purple-800 rounded-2xl p-6 sm:p-8 transform hover:-translate-y-2 hover:shadow-2xl transition-all duration-500 fade-in-up animation-delay-300">
+                    class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl p-7 hover:border-emerald-300 dark:hover:border-emerald-700 transition-colors fade-in-up animation-delay-300">
                     <div
-                        class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-purple-400 rounded-full opacity-20 group-hover:scale-150 transition-transform duration-500">
+                        class="w-12 h-12 bg-emerald-50 dark:bg-emerald-900/40 rounded-xl flex items-center justify-center mb-5">
+                        <i class="fa-solid fa-headset text-emerald-600 dark:text-emerald-400 text-lg"></i>
                     </div>
-                    <div class="relative">
-                        <div
-                            class="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 shadow-xl">
-                            <i class="fa-solid fa-headset text-white text-2xl sm:text-3xl"></i>
-                        </div>
-                        <h3 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-3">
-                            {{ __('24/7 Support') }}</h3>
-                        <p class="text-gray-600 dark:text-gray-300">
-                            {{ __('Our dedicated team is always ready to assist you anytime') }}</p>
-                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">{{ __('24/7 Support') }}</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
+                        {{ __('Our dedicated team is always ready to assist you anytime') }}</p>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Customer Reviews Section with Modern Carousel -->
-    <div class="py-12 sm:py-16 bg-gradient-to-br from-gray-50 to-purple-50 dark:from-gray-900 dark:to-purple-900">
+    <!-- Customer Reviews Section -->
+    <div class="py-16 sm:py-24 bg-gray-50 dark:bg-gray-950">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12 fade-in-up">
-                <h2 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white mb-4">
-                    {{ __('Customer') }}
-                    <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">
-                        {{ __('Reviews') }}
-                    </span>
+            <div class="text-center mb-12 sm:mb-14 fade-in-up">
+                <span
+                    class="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-600 dark:text-emerald-400">{{ __('Reviews') }}</span>
+                <h2 class="mt-3 text-3xl sm:text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white">
+                    {{ __('Customer') }} {{ __('Reviews') }}
                 </h2>
-                <p class="text-base sm:text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                <p class="mt-3 text-base text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
                     {{ __('See what our customers say about their experience with us') }}
                 </p>
-                <div class="mt-6 h-1 w-24 bg-gradient-to-r from-blue-600 to-purple-600 mx-auto rounded-full"></div>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
                 @foreach (range(1, 5) as $index => $item)
-                    <div class="group bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-500 fade-in-up"
+                    <div class="group bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl p-6 hover:border-emerald-300 dark:hover:border-emerald-700 transition-colors fade-in-up"
                         style="animation-delay: {{ $index * 100 }}ms;">
                         <!-- User Avatar and Info -->
                         <div class="flex items-center mb-6">
                             <div class="relative">
                                 <div
-                                    class="w-14 h-14 bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-lg group-hover:scale-110 transition-transform duration-300">
+                                    class="w-14 h-14 bg-emerald-100 dark:bg-emerald-900/40 rounded-full flex items-center justify-center text-emerald-700 dark:text-emerald-300 font-bold text-lg">
                                     {{ substr('User Name ' . $item, 0, 2) }}
                                 </div>
                                 <div
@@ -482,48 +400,38 @@
             <!-- View All Reviews Button -->
             <div class="text-center mt-12">
                 <button
-                    class="group inline-flex items-center gap-3 px-8 py-4 text-lg font-bold text-white bg-gradient-to-r from-blue-600 to-purple-600 rounded-full shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300">
+                    class="group inline-flex items-center gap-2 px-7 py-3.5 text-sm font-semibold text-emerald-700 dark:text-emerald-400 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:border-emerald-400 rounded-xl transition-colors">
                     {{ __('View All Reviews') }}
-                    <i class="fa-solid fa-arrow-right group-hover:translate-x-2 transition-transform duration-300"></i>
+                    <i class="fa-solid fa-arrow-right text-xs group-hover:translate-x-1 transition-transform"></i>
                 </button>
             </div>
         </div>
     </div>
 
     <!-- Newsletter Section -->
-    <div class="py-12 sm:py-16 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 relative overflow-hidden">
-        <!-- Animated Background -->
-        <div class="absolute inset-0">
-            <div
-                class="absolute top-0 left-0 w-96 h-96 bg-white rounded-full opacity-10 -translate-x-1/2 -translate-y-1/2 animate-pulse">
-            </div>
-            <div
-                class="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full opacity-10 translate-x-1/2 translate-y-1/2 animate-pulse animation-delay-2000">
-            </div>
-        </div>
-
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <div class="py-16 sm:py-20 bg-gray-900 dark:bg-black">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center fade-in-up">
-                <div class="inline-block p-4 bg-white/20 backdrop-blur-sm rounded-2xl mb-6">
-                    <i class="fa-solid fa-envelope text-5xl sm:text-6xl text-white"></i>
+                <div class="inline-flex items-center justify-center w-12 h-12 bg-emerald-500/15 rounded-xl mb-6">
+                    <i class="fa-solid fa-envelope text-xl text-emerald-400"></i>
                 </div>
-                <h2 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white mb-4">
+                <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-white mb-3">
                     {{ __('Stay Updated!') }}
                 </h2>
-                <p class="text-lg sm:text-xl text-white/90 mb-8 max-w-2xl mx-auto">
+                <p class="text-base text-gray-400 mb-8 max-w-xl mx-auto">
                     {{ __('Subscribe to our newsletter and get exclusive offers, health tips, and product updates') }}
                 </p>
 
                 <form class="max-w-md mx-auto">
                     <div class="flex flex-col sm:flex-row gap-3">
                         <input type="email" placeholder="{{ __('Enter your email') }}"
-                            class="flex-1 px-6 py-4 rounded-full text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-4 focus:ring-white/50 text-base sm:text-lg shadow-lg">
+                            class="flex-1 px-5 py-3.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent">
                         <button type="submit"
-                            class="px-8 py-4 bg-gray-900 hover:bg-gray-800 text-white font-bold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
+                            class="px-7 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold rounded-xl transition-colors whitespace-nowrap">
                             {{ __('Subscribe') }}
                         </button>
                     </div>
-                    <p class="text-sm text-white/80 mt-4">
+                    <p class="text-xs text-gray-500 mt-4">
                         {{ __('🔒 We respect your privacy. Unsubscribe anytime.') }}
                     </p>
                 </form>
@@ -534,8 +442,8 @@
     <!-- Scroll to Top Button -->
     <div class="fixed bottom-6 right-6 z-40">
         <a href="#"
-            class="w-14 h-14 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full shadow-2xl flex items-center justify-center text-white hover:scale-110 transition-transform duration-300 animate-bounce">
-            <i class="fa-solid fa-arrow-up text-xl"></i>
+            class="w-12 h-12 bg-emerald-600 hover:bg-emerald-700 rounded-xl shadow-lg flex items-center justify-center text-white transition-colors">
+            <i class="fa-solid fa-arrow-up"></i>
         </a>
     </div>
 @endsection
@@ -637,12 +545,12 @@
         }
 
         ::-webkit-scrollbar-thumb {
-            background: linear-gradient(to bottom, #3b82f6, #9333ea);
+            background: #059669;
             border-radius: 10px;
         }
 
         ::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(to bottom, #2563eb, #7c3aed);
+            background: #047857;
         }
 
         /* Dark mode scrollbar */

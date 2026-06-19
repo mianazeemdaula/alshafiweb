@@ -1,5 +1,5 @@
 <div
-    class="group relative overflow-hidden transition-all duration-500 hover:scale-105 bg-white dark:bg-gray-800 rounded-2xl shadow-md hover:shadow-2xl border border-gray-100 dark:border-gray-700">
+    class="group relative overflow-hidden transition-colors duration-300 bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 hover:border-emerald-300 dark:hover:border-emerald-700">
 
     <!-- Product Image with Overlay -->
     <div class="relative aspect-square overflow-hidden bg-gray-100 dark:bg-gray-700">
@@ -46,7 +46,7 @@
             @endphp
             <div class="absolute top-3 right-3">
                 <div
-                    class="bg-gradient-to-r from-red-500 to-pink-500 text-white px-3 py-1.5 rounded-lg text-xs font-bold shadow-lg opacity-50">
+                    class="bg-red-500 text-white px-2.5 py-1 rounded-md text-xs font-bold">
                     -{{ $discountPercent }}% OFF
                 </div>
             </div>
@@ -59,7 +59,7 @@
             @endphp
             <div class="absolute top-14 right-3">
                 <div
-                    class="bg-gradient-to-r from-orange-500 to-yellow-500 text-white px-2 py-1 rounded-lg text-xs font-bold shadow-lg flex items-center gap-1">
+                    class="bg-amber-500 text-white px-2 py-1 rounded-md text-xs font-semibold flex items-center gap-1">
                     <i class="fa fa-tags"></i>
                     <span>
                         @if ($bestOffer->discount_type === 'percentage')
@@ -126,8 +126,7 @@
         <div class="flex items-center gap-2 flex-wrap">
             @if (isset($product->discount) && $product->discount > 0)
                 <div class="flex items-baseline gap-2">
-                    <span
-                        class="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
+                    <span class="text-xl font-bold text-emerald-600 dark:text-emerald-400">
                         {{ $product->currency }} {{ number_format($product->price, 2) }}
                     </span>
                     <span class="text-xs text-gray-400 dark:text-gray-500 line-through">
@@ -147,7 +146,7 @@
             <!-- Quantity Selector -->
             <div class="flex items-center bg-gray-100 dark:bg-gray-700 rounded-xl p-1">
                 <button type="button"
-                    class="quantity-btn bg-white dark:bg-gray-600 hover:bg-gradient-to-r hover:from-blue-500 hover:to-purple-500 hover:text-white text-gray-700 dark:text-gray-200 w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-300 shadow-sm"
+                    class="quantity-btn bg-white dark:bg-gray-600 hover:bg-emerald-600 hover:text-white text-gray-700 dark:text-gray-200 w-7 h-7 rounded-lg flex items-center justify-center transition-colors"
                     data-action="minus" data-product-card="{{ $product->id }}">
                     <i class="fa-solid fa-minus text-xs"></i>
                 </button>
@@ -155,7 +154,7 @@
                     class="quantity-input w-10 text-center bg-transparent text-gray-900 dark:text-gray-100 font-semibold text-sm focus:outline-none"
                     value="1" min="1" max="10" data-product-card="{{ $product->id }}" readonly>
                 <button type="button"
-                    class="quantity-btn bg-white dark:bg-gray-600 hover:bg-gradient-to-r hover:from-blue-500 hover:to-purple-500 hover:text-white text-gray-700 dark:text-gray-200 w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-300 shadow-sm"
+                    class="quantity-btn bg-white dark:bg-gray-600 hover:bg-emerald-600 hover:text-white text-gray-700 dark:text-gray-200 w-7 h-7 rounded-lg flex items-center justify-center transition-colors"
                     data-action="plus" data-product-card="{{ $product->id }}">
                     <i class="fa-solid fa-plus text-xs"></i>
                 </button>
@@ -164,9 +163,9 @@
             <!-- Add to Cart Button -->
             <button type="button"
                 class="add-to-cart-btn flex-1 {{ $product->stock <= 0
-                    ? 'bg-gray-400 dark:bg-gray-600 cursor-not-allowed'
-                    : 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-lg hover:shadow-xl' }} 
-                    text-white px-4 py-2.5 rounded-xl font-medium transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2"
+                    ? 'bg-gray-300 dark:bg-gray-600 cursor-not-allowed'
+                    : 'bg-emerald-600 hover:bg-emerald-700' }} 
+                    text-white px-4 py-2.5 rounded-xl font-medium transition-colors flex items-center justify-center gap-2"
                 data-product-id="{{ $product->id }}" data-product-name="{{ $product->name }}"
                 data-product-price="{{ $product->price }}" {{ $product->stock <= 0 ? 'disabled' : '' }}
                 title="{{ $product->stock <= 0 ? 'Out of Stock' : 'Add to Cart' }}">

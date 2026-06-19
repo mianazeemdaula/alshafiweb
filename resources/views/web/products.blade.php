@@ -1,16 +1,15 @@
 @extends('layouts.guest')
 @section('content')
-    <!-- Modern Header Bar with Gradient -->
-    <div class="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 shadow-lg">
-        <div class="container mx-auto px-4 py-6">
+    <!-- Page Header -->
+    <div class="bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
             <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                <!-- Page Title & Stats -->
-                <div class="text-white">
-                    <h1 class="text-2xl sm:text-3xl font-bold mb-2 flex items-center gap-3">
-                        <i class="fa fa-store"></i>
+                <div>
+                    <span class="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-600 dark:text-emerald-400">{{ __('Shop') }}</span>
+                    <h1 class="mt-2 text-2xl sm:text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white">
                         {{ __('Our Products') }}
                     </h1>
-                    <p class="text-white/90 text-sm">
+                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
                         {{ __('showing_entries', [
                             'first' => $products->firstItem() ?? 0,
                             'last' => $products->lastItem() ?? 0,
@@ -19,35 +18,25 @@
                     </p>
                 </div>
 
-                <!-- Sort Dropdown with Modern Style -->
+                <!-- Sort Dropdown -->
                 <div class="w-full sm:w-auto">
                     <form action="{{ route('web.products') }}" method="get" class="flex items-center gap-3">
-                        {{-- Preserve existing filters --}}
                         @foreach (collect(request()->query())->except(['sort', 'order']) as $key => $value)
                             <input type="hidden" name="{{ $key }}" value="{{ $value }}">
                         @endforeach
 
-                        <label class="text-white text-sm font-medium hidden sm:block">
-                            <i class="fa fa-sort mr-1"></i>{{ __('sort_by') }}
+                        <label class="text-xs font-medium text-gray-500 dark:text-gray-400 hidden sm:block">
+                            {{ __('sort_by') }}
                         </label>
                         <select name="sort"
-                            class="px-4 py-2.5 rounded-xl bg-white/20 backdrop-blur-sm text-white font-medium border-2 border-white/30 focus:border-white focus:ring-4 focus:ring-white/20 transition-all cursor-pointer w-full sm:w-48"
+                            class="px-4 py-2.5 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 text-sm font-medium border border-gray-200 dark:border-gray-700 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 dark:focus:ring-emerald-900/50 transition-colors cursor-pointer w-full sm:w-52"
                             onchange="this.form.submit()">
-                            <option value="default" {{ in_array(request('sort'), [null, '', 'default']) ? 'selected' : '' }}
-                                class="text-gray-900">{{ __('Default') }}</option>
-                            <option value="newest" {{ request('sort') == 'newest' ? 'selected' : '' }}
-                                class="text-gray-900">{{ __('Newest') }}</option>
-                            <option value="price_low" {{ request('sort') == 'price_low' ? 'selected' : '' }}
-                                class="text-gray-900">
-                                {{ __('Price: Low to High') }}</option>
-                            <option value="price_high" {{ request('sort') == 'price_high' ? 'selected' : '' }}
-                                class="text-gray-900">
-                                {{ __('Price: High to Low') }}</option>
-                            <option value="name" {{ request('sort') == 'name' ? 'selected' : '' }} class="text-gray-900">
-                                {{ __('name') }}</option>
-                            <option value="rating" {{ request('sort') == 'rating' ? 'selected' : '' }}
-                                class="text-gray-900">{{ __('rating') }}
-                            </option>
+                            <option value="default" {{ in_array(request('sort'), [null, '', 'default']) ? 'selected' : '' }}>{{ __('Default') }}</option>
+                            <option value="newest" {{ request('sort') == 'newest' ? 'selected' : '' }}>{{ __('Newest') }}</option>
+                            <option value="price_low" {{ request('sort') == 'price_low' ? 'selected' : '' }}>{{ __('Price: Low to High') }}</option>
+                            <option value="price_high" {{ request('sort') == 'price_high' ? 'selected' : '' }}>{{ __('Price: High to Low') }}</option>
+                            <option value="name" {{ request('sort') == 'name' ? 'selected' : '' }}>{{ __('name') }}</option>
+                            <option value="rating" {{ request('sort') == 'rating' ? 'selected' : '' }}>{{ __('rating') }}</option>
                         </select>
                     </form>
                 </div>
@@ -55,39 +44,39 @@
         </div>
     </div>
 
-    <!-- Main Container with 30/70 Layout -->
-    <div class="bg-gray-50 dark:bg-gray-900 min-h-screen">
-        <div class="container mx-auto px-4 py-6">
+    <!-- Main Container -->
+    <div class="bg-white dark:bg-gray-900 min-h-screen">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
             <!-- Mobile Filter Button -->
             <div class="lg:hidden mb-4">
                 <button id="mobile-filter-toggle"
-                    class="flex items-center justify-between w-full px-4 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-medium shadow-lg hover:shadow-xl transition-all transform hover:scale-[1.02]">
+                    class="flex items-center justify-between w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 rounded-xl text-sm font-medium hover:border-emerald-400 transition-colors">
                     <span class="flex items-center gap-2">
-                        <i class="fa fa-sliders-h"></i>
+                        <i class="fa fa-sliders-h text-emerald-600 dark:text-emerald-400"></i>
                         {{ __('Filters & Categories') }}
                     </span>
-                    <i class="fa fa-chevron-down transition-transform duration-300 filter-toggle-icon"></i>
+                    <i class="fa fa-chevron-down transition-transform duration-300 filter-toggle-icon text-gray-400"></i>
                 </button>
             </div>
 
-            <!-- 30/70 Grid Layout -->
+            <!-- Grid Layout -->
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
-                <!-- LEFT SIDEBAR - 30% on Desktop (4 columns out of 12) -->
+                <!-- LEFT SIDEBAR -->
                 <aside id="filter-sidebar" class="lg:col-span-4 xl:col-span-3 hidden lg:block">
-                    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg sticky top-4 overflow-hidden">
+                    <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 sticky top-4 overflow-hidden">
 
                         <!-- Filter Header -->
-                        <div class="bg-gradient-to-r from-blue-600 to-purple-600 px-4 py-4">
+                        <div class="px-5 py-4 border-b border-gray-100 dark:border-gray-700">
                             <div class="flex items-center justify-between">
-                                <h2 class="text-lg font-bold text-white flex items-center gap-2">
-                                    <i class="fa fa-filter"></i>
+                                <h2 class="text-sm font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                                    <i class="fa fa-filter text-emerald-600 dark:text-emerald-400"></i>
                                     {{ __('Filters') }}
                                 </h2>
                                 @if (request('min') || request('max') || request('rating') || request('category'))
                                     <a href="{{ route('web.products') }}"
-                                        class="text-xs text-white/90 hover:text-white font-medium flex items-center gap-1 hover:gap-2 transition-all">
+                                        class="text-xs text-emerald-600 dark:text-emerald-400 hover:underline font-medium flex items-center gap-1">
                                         <i class="fa fa-times-circle"></i> {{ __('Clear') }}
                                     </a>
                                 @endif
@@ -95,126 +84,108 @@
                         </div>
 
                         <!-- Scrollable Filter Content -->
-                        <div class="max-h-[calc(100vh-180px)] overflow-y-auto p-4 space-y-4 custom-scrollbar">
+                        <div class="max-h-[calc(100vh-180px)] overflow-y-auto p-5 space-y-6 custom-scrollbar">
 
                             {{-- Price Range Filter --}}
-                            <div
-                                class="bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-700 dark:to-gray-800 rounded-xl p-4 shadow-sm border border-blue-100 dark:border-gray-600">
-                                <h3
-                                    class="font-semibold text-sm text-gray-900 dark:text-white mb-3 flex items-center gap-2">
-                                    <div
-                                        class="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-                                        <i class="fa fa-dollar-sign text-white text-xs"></i>
-                                    </div>
+                            <div>
+                                <h3 class="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-3">
                                     {{ __('Price Range') }}
                                 </h3>
                                 <form action="{{ route('web.products') }}" method="get" class="space-y-3">
-                                    {{-- Preserve other filters --}}
                                     @foreach (collect(request()->query())->except(['min', 'max']) as $key => $value)
                                         <input type="hidden" name="{{ $key }}" value="{{ $value }}">
                                     @endforeach
 
-                                    <!-- Price Input Fields - Responsive Stack on Mobile -->
                                     <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
                                         <div class="flex-1">
-                                            <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">
+                                            <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
                                                 {{ __('Min Price') }}
                                             </label>
                                             <input type="number" name="min"
-                                                class="w-full rounded-lg px-3 py-2.5 text-sm bg-white dark:bg-gray-700 dark:text-white border-2 border-gray-200 dark:border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-900 transition-all"
+                                                class="w-full rounded-lg px-3 py-2 text-sm bg-white dark:bg-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 dark:focus:ring-emerald-900/50 transition-colors"
                                                 min="0" placeholder="0" value="{{ request('min') }}">
                                         </div>
                                         <span
-                                            class="hidden sm:block text-gray-500 dark:text-gray-400 font-bold self-end pb-2.5">—</span>
+                                            class="hidden sm:block text-gray-400 dark:text-gray-500 self-end pb-2">—</span>
                                         <div class="flex-1">
-                                            <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">
+                                            <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
                                                 {{ __('Max Price') }}
                                             </label>
                                             <input type="number" name="max"
-                                                class="w-full rounded-lg px-3 py-2.5 text-sm bg-white dark:bg-gray-700 dark:text-white border-2 border-gray-200 dark:border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-900 transition-all"
+                                                class="w-full rounded-lg px-3 py-2 text-sm bg-white dark:bg-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 dark:focus:ring-emerald-900/50 transition-colors"
                                                 min="0" placeholder="∞" value="{{ request('max') }}">
                                         </div>
                                     </div>
 
                                     <button type="submit"
-                                        class="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-4 py-2.5 rounded-lg font-medium transition-all transform hover:scale-[1.02] shadow-md hover:shadow-lg">
-                                        <i class="fa fa-check mr-2"></i>{{ __('Apply') }}
+                                        class="w-full bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2.5 rounded-lg text-sm font-medium transition-colors">
+                                        {{ __('Apply') }}
                                     </button>
 
                                     {{-- Clear price filter --}}
                                     @if (request('min') || request('max'))
                                         <a href="{{ request()->fullUrlWithQuery(['min' => null, 'max' => null]) }}"
-                                            class="block text-center text-xs text-red-600 dark:text-red-400 hover:underline font-medium">
-                                            <i class="fa fa-times-circle mr-1"></i>{{ __('Clear Price Filter') }}
+                                            class="block text-center text-xs text-gray-500 hover:text-red-600 dark:hover:text-red-400 hover:underline">
+                                            {{ __('Clear Price Filter') }}
                                         </a>
                                     @endif
                                 </form>
                             </div>
 
+                            <div class="border-t border-gray-100 dark:border-gray-700"></div>
+
                             {{-- Rating Filter --}}
-                            <div
-                                class="bg-gradient-to-br from-yellow-50 to-orange-50 dark:from-gray-700 dark:to-gray-800 rounded-xl p-4 shadow-sm border border-yellow-100 dark:border-gray-600">
-                                <h3
-                                    class="font-semibold text-sm text-gray-900 dark:text-white mb-3 flex items-center gap-2">
-                                    <div
-                                        class="w-8 h-8 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-lg flex items-center justify-center">
-                                        <i class="fa fa-star text-white text-xs"></i>
-                                    </div>
+                            <div>
+                                <h3 class="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-3">
                                     {{ __('Customer Rating') }}
                                 </h3>
-                                <div class="space-y-2">
+                                <div class="space-y-1.5">
                                     @for ($i = 5; $i >= 1; $i--)
                                         <a href="{{ request()->fullUrlWithQuery(['rating' => $i]) }}"
-                                            class="flex items-center justify-between px-3 py-2.5 rounded-lg border-2 transition-all transform hover:scale-[1.02] {{ request('rating') == $i
-                                                ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white border-blue-600 shadow-lg'
-                                                : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-600 hover:border-blue-400 dark:hover:border-blue-500' }}">
-                                            <div class="flex items-center gap-1">
+                                            class="flex items-center justify-between px-3 py-2 rounded-lg border transition-colors text-sm {{ request('rating') == $i
+                                                ? 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 border-emerald-300 dark:border-emerald-700 font-semibold'
+                                                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-100 dark:border-gray-700 hover:border-emerald-300 dark:hover:border-emerald-700' }}">
+                                            <div class="flex items-center gap-0.5">
                                                 @for ($j = 1; $j <= 5; $j++)
                                                     <i
-                                                        class="fa-solid fa-star text-xs {{ $i >= $j ? 'text-yellow-400' : 'text-gray-300 dark:text-gray-500' }}"></i>
+                                                        class="fa-solid fa-star text-xs {{ $i >= $j ? 'text-amber-400' : 'text-gray-200 dark:text-gray-600' }}"></i>
                                                 @endfor
                                             </div>
-                                            <span class="text-xs font-bold">{{ $i }}+</span>
+                                            <span class="text-xs font-medium">{{ $i }}+</span>
                                         </a>
                                     @endfor
                                 </div>
 
-                                {{-- Clear rating filter --}}
                                 @if (request('rating'))
                                     <a href="{{ request()->fullUrlWithQuery(['rating' => null]) }}"
-                                        class="block text-center text-xs text-red-600 dark:text-red-400 hover:underline font-medium mt-3">
-                                        <i class="fa fa-times-circle mr-1"></i>{{ __('Clear Rating') }}
+                                        class="block text-center text-xs text-gray-500 hover:text-red-600 dark:hover:text-red-400 hover:underline mt-3">
+                                        {{ __('Clear Rating') }}
                                     </a>
                                 @endif
                             </div>
 
+                            <div class="border-t border-gray-100 dark:border-gray-700"></div>
+
                             {{-- Categories Filter --}}
-                            <div
-                                class="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-gray-700 dark:to-gray-800 rounded-xl p-4 shadow-sm border border-purple-100 dark:border-gray-600">
-                                <h3
-                                    class="font-semibold text-sm text-gray-900 dark:text-white mb-3 flex items-center gap-2">
-                                    <div
-                                        class="w-8 h-8 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg flex items-center justify-center">
-                                        <i class="fa fa-th-large text-white text-xs"></i>
-                                    </div>
+                            <div>
+                                <h3 class="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-3">
                                     {{ __('Categories') }}
                                 </h3>
-                                <div class="space-y-2">
-                                    {{-- All categories option --}}
+                                <div class="space-y-1.5">
                                     <a href="{{ request()->fullUrlWithQuery(['category' => null]) }}"
-                                        class="block px-3 py-2.5 rounded-lg border-2 transition-all font-medium text-sm transform hover:scale-[1.02] {{ !request('category')
-                                            ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white border-blue-600 shadow-lg'
-                                            : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-600 hover:border-purple-400 dark:hover:border-purple-500' }}">
-                                        <i class="fa fa-list mr-2"></i>{{ __('All Categories') }}
+                                        class="block px-3 py-2 rounded-lg border transition-colors text-sm {{ !request('category')
+                                            ? 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 border-emerald-300 dark:border-emerald-700 font-semibold'
+                                            : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-100 dark:border-gray-700 hover:border-emerald-300 dark:hover:border-emerald-700' }}">
+                                        {{ __('All Categories') }}
                                     </a>
 
                                     @if (isset($categories))
                                         @foreach ($categories as $item)
                                             <a href="{{ request()->fullUrlWithQuery(['category' => $item->slug]) }}"
-                                                class="block px-3 py-2.5 rounded-lg border-2 transition-all text-sm transform hover:scale-[1.02] {{ request('category') == $item->slug
-                                                    ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white border-blue-600 shadow-lg font-bold'
-                                                    : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-600 hover:border-purple-400 dark:hover:border-purple-500' }}">
-                                                <i class="fa fa-tag mr-2 text-xs"></i>{{ $item->name }}
+                                                class="block px-3 py-2 rounded-lg border transition-colors text-sm {{ request('category') == $item->slug
+                                                    ? 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 border-emerald-300 dark:border-emerald-700 font-semibold'
+                                                    : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-100 dark:border-gray-700 hover:border-emerald-300 dark:hover:border-emerald-700' }}">
+                                                {{ $item->name }}
                                             </a>
                                         @endforeach
                                     @endif
@@ -229,16 +200,15 @@
 
                     <!-- Active Filters Display -->
                     @if (request('category') || request('min') || request('max') || request('rating'))
-                        <div class="mb-6 bg-white dark:bg-gray-800 rounded-xl p-4 shadow-md">
+                        <div class="mb-6 bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700">
                             <div class="flex flex-wrap items-center gap-2">
-                                <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
-                                    <i class="fa fa-filter mr-1"></i>Active Filters:
+                                <span class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                    {{ __('Active') }}:
                                 </span>
 
                                 @if (request('category'))
                                     <span
-                                        class="inline-flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-purple-100 to-pink-100 dark:from-purple-900 dark:to-pink-900 text-purple-700 dark:text-purple-300 rounded-lg text-xs font-medium">
-                                        <i class="fa fa-tag"></i>
+                                        class="inline-flex items-center gap-2 px-3 py-1.5 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 rounded-lg text-xs font-medium">
                                         {{ $categories->where('slug', request('category'))->first()->name ?? request('category') }}
                                         <a href="{{ request()->fullUrlWithQuery(['category' => null]) }}"
                                             class="hover:text-red-600">
@@ -249,8 +219,7 @@
 
                                 @if (request('min') || request('max'))
                                     <span
-                                        class="inline-flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-900 dark:to-purple-900 text-blue-700 dark:text-blue-300 rounded-lg text-xs font-medium">
-                                        <i class="fa fa-dollar-sign"></i>
+                                        class="inline-flex items-center gap-2 px-3 py-1.5 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 rounded-lg text-xs font-medium">
                                         {{ request('min') ?? '0' }} - {{ request('max') ?? '∞' }}
                                         <a href="{{ request()->fullUrlWithQuery(['min' => null, 'max' => null]) }}"
                                             class="hover:text-red-600">
@@ -261,9 +230,9 @@
 
                                 @if (request('rating'))
                                     <span
-                                        class="inline-flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-yellow-100 to-orange-100 dark:from-yellow-900 dark:to-orange-900 text-yellow-700 dark:text-yellow-300 rounded-lg text-xs font-medium">
+                                        class="inline-flex items-center gap-2 px-3 py-1.5 bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800 rounded-lg text-xs font-medium">
                                         <i class="fa fa-star"></i>
-                                        {{ request('rating') }}+ Stars
+                                        {{ request('rating') }}+
                                         <a href="{{ request()->fullUrlWithQuery(['rating' => null]) }}"
                                             class="hover:text-red-600">
                                             <i class="fa fa-times-circle"></i>
@@ -272,8 +241,8 @@
                                 @endif
 
                                 <a href="{{ route('web.products') }}"
-                                    class="inline-flex items-center gap-1 px-3 py-1.5 bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300 rounded-lg text-xs font-bold hover:bg-red-200 dark:hover:bg-red-800 transition-all">
-                                    <i class="fa fa-times-circle"></i> Clear All
+                                    class="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-red-600 dark:text-red-400 hover:underline">
+                                    {{ __('Clear All') }}
                                 </a>
                             </div>
                         </div>
@@ -291,28 +260,25 @@
                         </div>
 
                         <!-- Pagination -->
-                        <div class="mt-8 bg-white dark:bg-gray-800 rounded-xl p-4 shadow-md">
+                        <div class="mt-8 bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700">
                             <div class="text-gray-700 dark:text-gray-300">
                                 {{ $products->links() }}
                             </div>
                         </div>
                     @else
                         <!-- Empty State -->
-                        <div class="text-center py-16 bg-white dark:bg-gray-800 rounded-2xl shadow-lg">
-                            <div class="mb-6">
-                                <div
-                                    class="w-24 h-24 mx-auto bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-900 dark:to-purple-900 rounded-full flex items-center justify-center">
-                                    <i class="fa-solid fa-box-open text-5xl text-gray-400 dark:text-gray-500"></i>
-                                </div>
+                        <div class="text-center py-16 bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700">
+                            <div class="inline-flex items-center justify-center w-20 h-20 bg-gray-50 dark:bg-gray-900 rounded-2xl mb-6">
+                                <i class="fa-solid fa-box-open text-3xl text-gray-300 dark:text-gray-600"></i>
                             </div>
-                            <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-3">
+                            <h3 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-2">
                                 {{ __('No Products Found') }}</h3>
                             <p class="text-gray-500 dark:text-gray-400 mb-6">
                                 {{ __('No products match your current filters.') }}
                             </p>
                             <a href="{{ route('web.products') }}"
-                                class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-xl font-medium transition-all transform hover:scale-105 shadow-lg">
-                                <i class="fa fa-redo"></i> Clear Filters & Show All
+                                class="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-semibold transition-colors">
+                                {{ __('Clear Filters & Show All') }}
                             </a>
                         </div>
                     @endif
@@ -335,12 +301,12 @@
         }
 
         .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: linear-gradient(to bottom, #3b82f6, #8b5cf6);
+            background: #10b981;
             border-radius: 10px;
         }
 
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(to bottom, #2563eb, #7c3aed);
+            background: #059669;
         }
 
         /* Mobile Filter Sidebar Animation */
@@ -478,13 +444,13 @@
                 let iconClass = '';
 
                 if (type === 'success') {
-                    bgClass = 'bg-gradient-to-r from-green-500 to-emerald-500';
+                    bgClass = 'bg-emerald-600';
                     iconClass = 'fa-check-circle';
                 } else if (type === 'error') {
-                    bgClass = 'bg-gradient-to-r from-red-500 to-pink-500';
+                    bgClass = 'bg-red-600';
                     iconClass = 'fa-exclamation-circle';
                 } else {
-                    bgClass = 'bg-gradient-to-r from-blue-500 to-purple-500';
+                    bgClass = 'bg-gray-900';
                     iconClass = 'fa-info-circle';
                 }
 
