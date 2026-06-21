@@ -41,7 +41,6 @@
         // Load cart count on page load
         document.addEventListener('DOMContentLoaded', function() {
             loadCartCount();
-            initializeLanguageCountrySelectors();
         });
 
         function loadCartCount() {
@@ -70,71 +69,6 @@
                 element.textContent = count;
                 element.style.display = count > 0 ? 'flex' : 'none';
             });
-        }
-
-        function initializeLanguageCountrySelectors() {
-            // Language and Country selectors are completely independent
-            // No automatic associations between country and language selection
-
-            const countrySelector = document.getElementById('country-selector');
-            const localeSelector = document.getElementById('locale-selector');
-
-            // Country selector - only changes country, never affects language
-            if (countrySelector) {
-                countrySelector.addEventListener('change', function() {
-                    const selectedCountry = this.value;
-                    if (selectedCountry) {
-                        // Show loading state
-                        this.disabled = true;
-                        // Store country preference independently
-                        localStorage.setItem('preferred_country', selectedCountry);
-                        // Reset session storage flag on manual change
-                        sessionStorage.removeItem('country_restored');
-                        window.location.href = '/change-country/' + selectedCountry;
-                    }
-                });
-            }
-
-            // Language selector - only changes language, never affects country
-            if (localeSelector) {
-                localeSelector.addEventListener('change', function() {
-                    const selectedLocale = this.value;
-                    if (selectedLocale) {
-                        // Show loading state
-                        this.disabled = true;
-                        // Store language preference independently
-                        localStorage.setItem('preferred_locale', selectedLocale);
-                        // Reset session storage flag on manual change
-                        sessionStorage.removeItem('locale_restored');
-                        window.location.href = '/change-locale/' + selectedLocale;
-                    }
-                });
-            }
-
-            // Restore preferences independently - no cross-dependencies
-            // Language restoration
-            const preferredLocale = localStorage.getItem('preferred_locale');
-            const currentLocale = '{{ $currentLocale }}';
-
-            // Only restore language if it differs from current, we have a selector, and we haven't tried in this session
-            if (preferredLocale && preferredLocale !== currentLocale && localeSelector &&
-                !sessionStorage.getItem('locale_restored')) {
-                // Set flag to prevent loop
-                sessionStorage.setItem('locale_restored', 'true');
-                window.location.href = '/change-locale/' + preferredLocale;
-            }
-
-            // Country restoration (independent of language)
-            const preferredCountry = localStorage.getItem('preferred_country');
-            const currentCountry = '{{ $currentCountry }}';
-
-            // Only restore country if it differs from current, we have a selector, and we haven't tried in this session
-            if (preferredCountry && preferredCountry !== currentCountry && countrySelector &&
-                !sessionStorage.getItem('country_restored')) {
-                // Set flag to prevent loop
-                sessionStorage.setItem('country_restored', 'true');
-                window.location.href = '/change-country/' + preferredCountry;
-            }
         }
 
         // Mobile Menu Toggle
@@ -231,7 +165,7 @@
 
             const notification = document.createElement('div');
             notification.className =
-                'social-proof-notification bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 mb-3 transform translate-x-[-120%] transition-all duration-500 border-l-4 border-blue-500';
+                'social-proof-notification bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 mb-3 transform translate-x-[-120%] transition-all duration-500 border-l-4 border-emerald-600';
             notification.innerHTML = `
                 <div class="flex items-start gap-3">
                     <div class="flex-1">
@@ -324,7 +258,7 @@
         html[dir="rtl"] .social-proof-notification {
             animation: slideInRight 0.5s ease-out;
             border-left: none;
-            border-right: 4px solid #3b82f6;
+            border-right: 4px solid #059669;
         }
 
         @keyframes slideInRight {
@@ -412,13 +346,13 @@
 
     <!-- Quick Checkout Modal -->
     <div id="quickCheckoutModal"
-        class="hidden fixed inset-0 bg-black bg-opacity-50 items-center justify-center p-4 sm:p-6"
+        class="hidden fixed inset-0 bg-black bg-opacity-60 items-center justify-center p-4 sm:p-6"
         style="z-index: 9999;">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] sm:max-h-[85vh] overflow-y-auto transform transition-all relative"
+        <div class="bg-white dark:bg-emerald-950/95 border border-emerald-900/10 dark:border-emerald-800/30 rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] sm:max-h-[85vh] overflow-y-auto transform transition-all relative"
             style="z-index: 10000;">
             <div
-                class="sticky top-0 bg-gradient-to-r from-blue-600 to-purple-600 text-white p-3 sm:p-4 rounded-t-2xl flex justify-between items-center z-10">
-                <h3 class="text-lg sm:text-xl font-bold">Quick Checkout</h3>
+                class="sticky top-0 bg-gradient-to-r from-emerald-800 to-emerald-950 text-white p-3 sm:p-4 rounded-t-2xl flex justify-between items-center z-10">
+                <h3 class="text-lg sm:text-xl font-bold font-serif">Quick Checkout</h3>
                 <button onclick="closeQuickCheckout()"
                     class="text-white hover:text-gray-200 text-2xl sm:text-3xl leading-none w-8 h-8 flex items-center justify-center">
                     &times;
@@ -430,41 +364,41 @@
                     @csrf
 
                     <div class="mb-3 sm:mb-4">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Name *</label>
+                        <label class="block text-sm font-medium text-gray-800 dark:text-emerald-200 mb-2">Name *</label>
                         <input type="text" name="customer_name" required
-                            class="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base"
+                            class="w-full px-4 py-2.5 border border-emerald-900/10 dark:border-emerald-800/40 bg-emerald-50/10 dark:bg-emerald-950/20 rounded-xl focus:ring-4 focus:ring-emerald-100 dark:focus:ring-emerald-950/50 focus:border-emerald-600 dark:text-white transition-all text-base outline-none"
                             placeholder="Enter your name">
                     </div>
 
                     <div class="mb-3 sm:mb-4">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Phone *</label>
+                        <label class="block text-sm font-medium text-gray-800 dark:text-emerald-200 mb-2">Phone *</label>
                         <input type="tel" name="customer_phone" required pattern="03[0-9]{9}" maxlength="11"
-                            class="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base"
+                            class="w-full px-4 py-2.5 border border-emerald-900/10 dark:border-emerald-800/40 bg-emerald-50/10 dark:bg-emerald-950/20 rounded-xl focus:ring-4 focus:ring-emerald-100 dark:focus:ring-emerald-950/50 focus:border-emerald-600 dark:text-white transition-all text-base outline-none"
                             placeholder="03123456789">
-                        <p class="text-xs text-gray-500 mt-1">Format: 03xxxxxxxxx</p>
+                        <p class="text-xs text-emerald-600 dark:text-emerald-400 mt-1">Format: 03xxxxxxxxx</p>
                     </div>
 
                     <div class="mb-3 sm:mb-4">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">City *</label>
+                        <label class="block text-sm font-medium text-gray-800 dark:text-emerald-200 mb-2">City *</label>
                         <input type="text" name="city" required
-                            class="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base"
+                            class="w-full px-4 py-2.5 border border-emerald-900/10 dark:border-emerald-800/40 bg-emerald-50/10 dark:bg-emerald-950/20 rounded-xl focus:ring-4 focus:ring-emerald-100 dark:focus:ring-emerald-950/50 focus:border-emerald-600 dark:text-white transition-all text-base outline-none"
                             placeholder="Enter your city">
                     </div>
 
                     <div class="mb-4 sm:mb-5">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Address *</label>
+                        <label class="block text-sm font-medium text-gray-800 dark:text-emerald-200 mb-2">Address *</label>
                         <textarea name="address" required rows="3"
-                            class="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base resize-none"
+                            class="w-full px-4 py-2.5 border border-emerald-900/10 dark:border-emerald-800/40 bg-emerald-50/10 dark:bg-emerald-950/20 rounded-xl focus:ring-4 focus:ring-emerald-100 dark:focus:ring-emerald-950/50 focus:border-emerald-600 dark:text-white transition-all text-base resize-none outline-none"
                             placeholder="Enter your complete address"></textarea>
                     </div>
 
                     <div class="flex flex-col sm:flex-row gap-2 sm:gap-3">
                         <button type="button" onclick="continueToFullCheckout()"
-                            class="w-full sm:flex-1 bg-gray-500 hover:bg-gray-600 text-white py-3 rounded-lg font-medium transition-colors text-sm sm:text-base">
+                            class="w-full sm:flex-1 bg-emerald-100 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900/50 hover:bg-emerald-200 dark:hover:bg-emerald-900/50 text-emerald-800 dark:text-emerald-200 py-3 rounded-xl font-medium transition-all text-sm sm:text-base">
                             Full Checkout
                         </button>
                         <button type="submit"
-                            class="w-full sm:flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white py-3 rounded-lg font-medium transition-all text-sm sm:text-base">
+                            class="w-full sm:flex-1 bg-emerald-700 hover:bg-emerald-800 text-white py-3 rounded-xl font-medium transition-all text-sm sm:text-base shadow-md shadow-emerald-700/10">
                             Place Order
                         </button>
                     </div>

@@ -1,5 +1,5 @@
 /* Import Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Urdu:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700&family=Noto+Sans+Urdu:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
 @import "@fortawesome/fontawesome-free/css/all.css";
 @tailwind base;
 @tailwind components;
@@ -7,91 +7,80 @@
 
 /* Theme variables */
 :root {
-    /* Light theme variables */
-    --bg-primary: #ffffff;
-    --bg-secondary: #f8fafc;
-    --bg-tertiary: #f1f5f9;
-    --bg-hover: #e2e8f0;
-    --text-primary: #1f2937;
-    --text-secondary: #6b7280;
-    --text-muted: #9ca3af;
-    --border-color: #e5e7eb;
-    --border-light: #f3f4f6;
-    --shadow-color: rgba(0, 0, 0, 0.1);
-    --shadow-hover: rgba(0, 0, 0, 0.15);
-    --accent-blue: #3b82f6;
-    --accent-blue-hover: #2563eb;
-    --accent-green: #059669;
-    --accent-green-hover: #047857;
-    --accent-red: #dc2626;
-    --accent-orange: #ea580c;
+    /* Light theme variables (Organic Linen & Forest Green) */
+    --bg-primary: #fdfcf9;
+    --bg-secondary: #f6f3eb;
+    --bg-tertiary: #edeae0;
+    --bg-hover: #e5e0d4;
+    --text-primary: #1b221e;
+    --text-secondary: #48544f;
+    --text-muted: #8d9a94;
+    --border-color: #e2dcce;
+    --border-light: #ece7db;
+    --shadow-color: rgba(27, 34, 30, 0.05);
+    --shadow-hover: rgba(27, 34, 30, 0.08);
+    --accent-blue: #326273;
+    --accent-blue-hover: #21404c;
+    --accent-green: #2d6a4f;
+    --accent-green-hover: #1b4332;
+    --accent-red: #c94a4a;
+    --accent-orange: #d4a373;
+    --accent-gold: #c5a059;
 }
 
-/* Dark theme variables */
+/* Dark theme variables (Dark Pine & Sage) */
 .dark {
-    --bg-primary: #111827;
-    --bg-secondary: #1f2937;
-    --bg-tertiary: #374151;
-    --bg-hover: #4b5563;
-    --text-primary: #f9fafb;
-    --text-secondary: #d1d5db;
-    --text-muted: #9ca3af;
-    --border-color: #374151;
-    --border-light: #4b5563;
-    --shadow-color: rgba(0, 0, 0, 0.3);
-    --shadow-hover: rgba(0, 0, 0, 0.4);
-    --accent-blue: #60a5fa;
-    --accent-blue-hover: #3b82f6;
-    --accent-green: #10b981;
-    --accent-green-hover: #059669;
+    --bg-primary: #0c120f;
+    --bg-secondary: #141f1a;
+    --bg-tertiary: #1b2c24;
+    --bg-hover: #263d33;
+    --text-primary: #e6ece8;
+    --text-secondary: #a3b2aa;
+    --text-muted: #72847b;
+    --border-color: #1e332a;
+    --border-light: #284438;
+    --shadow-color: rgba(0, 0, 0, 0.4);
+    --shadow-hover: rgba(0, 0, 0, 0.5);
+    --accent-blue: #70a9a1;
+    --accent-blue-hover: #4e878c;
+    --accent-green: #52b788;
+    --accent-green-hover: #40916c;
     --accent-red: #f87171;
-    --accent-orange: #fb923c;
+    --accent-orange: #e9c46a;
+    --accent-gold: #c5a059;
 }
 
 /* Base theme styles */
 body {
     background-color: var(--bg-primary);
     color: var(--text-primary);
+    font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
     transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', serif;
 }
 
 /* Enhanced theme toggle styles */
 .theme-toggle {
     position: relative;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 1.7rem;
-    height: 1.7rem;
-    border: 1px solid;
-    border-radius: 0.5rem;
-    background: transparent;
     cursor: pointer;
     overflow: hidden;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.4, 1);
 }
 
-.theme-toggle {
-    border-color: #e5e7eb;
-    color: #6b7280;
-}
-
 .dark .theme-toggle {
-    border-color: #374151;
-    color: #9ca3af;
 }
 
 .theme-toggle:hover {
-    border-color: #3b82f6;
-    color: #3b82f6;
     transform: scale(1.05);
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
 }
 
 .dark .theme-toggle:hover {
-    border-color: #60a5fa;
-    color: #60a5fa;
-    box-shadow: 0 4px 12px rgba(96, 165, 250, 0.15);
 }
 
 .theme-toggle i {

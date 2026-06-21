@@ -2,30 +2,30 @@
 
 @section('content')
     <!-- Header Section -->
-    <div class="bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800">
+    <div class="border-b border-emerald-900/10 dark:border-emerald-800/20 bg-[#fdfcf9]/30">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
             <div class="max-w-2xl">
-                <span class="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-600 dark:text-emerald-400">Legal</span>
-                <h1 class="mt-3 text-3xl sm:text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white">
+                <span class="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-600 dark:text-emerald-455">Legal</span>
+                <h1 class="mt-3 text-3xl sm:text-4xl font-extrabold tracking-tight text-emerald-955 dark:text-white font-playfair font-serif">
                     Terms and Conditions
                 </h1>
-                <p class="mt-3 text-sm text-gray-500 dark:text-gray-400">Last Updated: {{ date('F d, Y') }}</p>
+                <p class="mt-3 text-xs text-emerald-850/60 dark:text-emerald-450 font-semibold">Last Updated: {{ date('F d, Y') }}</p>
             </div>
         </div>
     </div>
 
     <!-- Main Content -->
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 lg:p-12">
+        <div class="bg-white/90 dark:bg-emerald-950/20 rounded-2xl border border-emerald-900/10 dark:border-emerald-800/30 p-8 lg:p-12 shadow-sm">
 
             <!-- Introduction -->
             <div class="mb-12">
-                <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Welcome to Al-Shaafi Dawakhana</h2>
-                <p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+                <h2 class="text-2xl font-bold text-emerald-950 dark:text-white mb-4 font-serif">Welcome to Al-Shaafi Dawakhana</h2>
+                <p class="text-sm text-emerald-850/80 dark:text-emerald-300 leading-relaxed mb-4">
                     These Terms and Conditions ("Terms", "Terms and Conditions") govern your relationship with
                     the Al-Shaafi Dawakhana website and services operated by Al-Shaafi Dawakhana ("us", "we", or "our").
                 </p>
-                <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+                <p class="text-sm text-emerald-850/80 dark:text-emerald-300 leading-relaxed">
                     Please read these Terms and Conditions carefully before using our Service. Your access to and use
                     of the Service is conditioned on your acceptance of and compliance with these Terms.
                 </p>
@@ -35,12 +35,12 @@
             <section class="mb-10">
                 <div class="flex items-center mb-4">
                     <div
-                        class="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-white font-bold mr-4">
+                        class="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-900/10 dark:bg-emerald-900/30 dark:border-emerald-800/20 flex items-center justify-center text-emerald-700 dark:text-emerald-300 font-extrabold mr-4 flex-shrink-0">
                         1
                     </div>
-                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Acceptance of Terms</h3>
+                    <h3 class="text-lg font-bold text-emerald-955 dark:text-white font-serif">Acceptance of Terms</h3>
                 </div>
-                <div class="ml-14 text-gray-700 dark:text-gray-300 space-y-3">
+                <div class="ml-14 text-sm text-emerald-850/80 dark:text-emerald-300 space-y-3 leading-relaxed">
                     <p>By accessing or using our services, you agree to be bound by these Terms. If you disagree with any
                         part of the terms, you may not access the service.</p>
                     <p>These Terms apply to all visitors, users, and others who access or use the Service.</p>
@@ -51,12 +51,12 @@
             <section class="mb-10">
                 <div class="flex items-center mb-4">
                     <div
-                        class="w-10 h-10 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold mr-4">
+                        class="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-900/10 dark:bg-emerald-900/30 dark:border-emerald-800/20 flex items-center justify-center text-emerald-700 dark:text-emerald-300 font-extrabold mr-4 flex-shrink-0">
                         2
                     </div>
-                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Use of Service</h3>
+                    <h3 class="text-lg font-bold text-emerald-955 dark:text-white font-serif">Use of Service</h3>
                 </div>
-                <div class="ml-14 text-gray-700 dark:text-gray-300 space-y-3">
+                <div class="ml-14 text-sm text-emerald-850/80 dark:text-emerald-300 space-y-3 leading-relaxed">
                     <p>You agree to use our services only for lawful purposes and in accordance with these Terms. You agree
                         not to use the service:</p>
                     <ul class="list-disc pl-6 space-y-2">
@@ -75,12 +75,12 @@
             <section class="mb-10">
                 <div class="flex items-center mb-4">
                     <div
-                        class="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-white font-bold mr-4">
+                        class="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-900/10 dark:bg-emerald-900/30 dark:border-emerald-800/20 flex items-center justify-center text-emerald-700 dark:text-emerald-300 font-extrabold mr-4 flex-shrink-0">
                         3
                     </div>
-                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Account Registration</h3>
+                    <h3 class="text-lg font-bold text-emerald-955 dark:text-white font-serif">Account Registration</h3>
                 </div>
-                <div class="ml-14 text-gray-700 dark:text-gray-300 space-y-3">
+                <div class="ml-14 text-sm text-emerald-850/80 dark:text-emerald-300 space-y-3 leading-relaxed">
                     <p>To access certain features of our Service, you may be required to create an account. You agree to:
                     </p>
                     <ul class="list-disc pl-6 space-y-2">
@@ -97,12 +97,12 @@
             <section class="mb-10">
                 <div class="flex items-center mb-4">
                     <div
-                        class="w-10 h-10 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold mr-4">
+                        class="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-900/10 dark:bg-emerald-900/30 dark:border-emerald-800/20 flex items-center justify-center text-emerald-700 dark:text-emerald-300 font-extrabold mr-4 flex-shrink-0">
                         4
                     </div>
-                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Products and Services</h3>
+                    <h3 class="text-lg font-bold text-emerald-955 dark:text-white font-serif">Products and Services</h3>
                 </div>
-                <div class="ml-14 text-gray-700 dark:text-gray-300 space-y-3">
+                <div class="ml-14 text-sm text-emerald-850/80 dark:text-emerald-300 space-y-3 leading-relaxed">
                     <p>All products and services are subject to availability. We reserve the right to:</p>
                     <ul class="list-disc pl-6 space-y-2">
                         <li>Limit the quantities of any products or services we offer</li>
@@ -118,12 +118,12 @@
             <section class="mb-10">
                 <div class="flex items-center mb-4">
                     <div
-                        class="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-white font-bold mr-4">
+                        class="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-900/10 dark:bg-emerald-900/30 dark:border-emerald-800/20 flex items-center justify-center text-emerald-700 dark:text-emerald-300 font-extrabold mr-4 flex-shrink-0">
                         5
                     </div>
-                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Pricing and Payment</h3>
+                    <h3 class="text-lg font-bold text-emerald-955 dark:text-white font-serif">Pricing and Payment</h3>
                 </div>
-                <div class="ml-14 text-gray-700 dark:text-gray-300 space-y-3">
+                <div class="ml-14 text-sm text-emerald-850/80 dark:text-emerald-300 space-y-3 leading-relaxed">
                     <p>All prices are listed in Pakistani Rupees (PKR) and are subject to change without notice.</p>
                     <ul class="list-disc pl-6 space-y-2">
                         <li>Prices include applicable taxes unless otherwise stated</li>
@@ -138,12 +138,12 @@
             <section class="mb-10">
                 <div class="flex items-center mb-4">
                     <div
-                        class="w-10 h-10 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold mr-4">
+                        class="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-900/10 dark:bg-emerald-900/30 dark:border-emerald-800/20 flex items-center justify-center text-emerald-700 dark:text-emerald-300 font-extrabold mr-4 flex-shrink-0">
                         6
                     </div>
-                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Shipping and Delivery</h3>
+                    <h3 class="text-lg font-bold text-emerald-955 dark:text-white font-serif">Shipping and Delivery</h3>
                 </div>
-                <div class="ml-14 text-gray-700 dark:text-gray-300 space-y-3">
+                <div class="ml-14 text-sm text-emerald-850/80 dark:text-emerald-300 space-y-3 leading-relaxed">
                     <p>We ship products using various courier services including TCS, Trax, and Leopards.</p>
                     <ul class="list-disc pl-6 space-y-2">
                         <li>Delivery times are estimates and not guaranteed</li>
@@ -159,12 +159,12 @@
             <section class="mb-10">
                 <div class="flex items-center mb-4">
                     <div
-                        class="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-white font-bold mr-4">
+                        class="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-900/10 dark:bg-emerald-900/30 dark:border-emerald-800/20 flex items-center justify-center text-emerald-700 dark:text-emerald-300 font-extrabold mr-4 flex-shrink-0">
                         7
                     </div>
-                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Returns and Refunds</h3>
+                    <h3 class="text-lg font-bold text-emerald-955 dark:text-white font-serif">Returns and Refunds</h3>
                 </div>
-                <div class="ml-14 text-gray-700 dark:text-gray-300 space-y-3">
+                <div class="ml-14 text-sm text-emerald-850/80 dark:text-emerald-300 space-y-3 leading-relaxed">
                     <p>Our return and refund policy is subject to the following conditions:</p>
                     <ul class="list-disc pl-6 space-y-2">
                         <li>Products must be returned in original condition and packaging</li>
@@ -179,12 +179,12 @@
             <section class="mb-10">
                 <div class="flex items-center mb-4">
                     <div
-                        class="w-10 h-10 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold mr-4">
+                        class="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-900/10 dark:bg-emerald-900/30 dark:border-emerald-800/20 flex items-center justify-center text-emerald-700 dark:text-emerald-300 font-extrabold mr-4 flex-shrink-0">
                         8
                     </div>
-                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Intellectual Property</h3>
+                    <h3 class="text-lg font-bold text-emerald-955 dark:text-white font-serif">Intellectual Property</h3>
                 </div>
-                <div class="ml-14 text-gray-700 dark:text-gray-300 space-y-3">
+                <div class="ml-14 text-sm text-emerald-850/80 dark:text-emerald-300 space-y-3 leading-relaxed">
                     <p>The Service and its original content, features, and functionality are and will remain the exclusive
                         property of Al-Shaafi Dawakhana.</p>
                     <p>Our trademarks and trade dress may not be used in connection with any product or service without our
@@ -196,12 +196,12 @@
             <section class="mb-10">
                 <div class="flex items-center mb-4">
                     <div
-                        class="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-white font-bold mr-4">
+                        class="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-900/10 dark:bg-emerald-900/30 dark:border-emerald-800/20 flex items-center justify-center text-emerald-700 dark:text-emerald-300 font-extrabold mr-4 flex-shrink-0">
                         9
                     </div>
-                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">User Content and Reviews</h3>
+                    <h3 class="text-lg font-bold text-emerald-955 dark:text-white font-serif">User Content and Reviews</h3>
                 </div>
-                <div class="ml-14 text-gray-700 dark:text-gray-300 space-y-3">
+                <div class="ml-14 text-sm text-emerald-850/80 dark:text-emerald-300 space-y-3 leading-relaxed">
                     <p>You may submit reviews, comments, and other content. By submitting content, you grant us:</p>
                     <ul class="list-disc pl-6 space-y-2">
                         <li>A worldwide, non-exclusive, royalty-free license to use, reproduce, and display such content
@@ -216,23 +216,23 @@
             <section class="mb-10">
                 <div class="flex items-center mb-4">
                     <div
-                        class="w-10 h-10 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold mr-4">
+                        class="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-900/10 dark:bg-emerald-900/30 dark:border-emerald-800/20 flex items-center justify-center text-emerald-700 dark:text-emerald-300 font-extrabold mr-4 flex-shrink-0">
                         10
                     </div>
-                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Third-Party Verification Services</h3>
+                    <h3 class="text-lg font-bold text-emerald-955 dark:text-white font-serif">Third-Party Verification Services</h3>
                 </div>
-                <div class="ml-14 text-gray-700 dark:text-gray-300 space-y-3">
+                <div class="ml-14 text-sm text-emerald-850/80 dark:text-emerald-300 space-y-3 leading-relaxed">
                     <p>When you use third-party services (such as Facebook Login, Google Sign-In, etc.) to access our
                         platform:</p>
                     <ul class="list-disc pl-6 space-y-2">
                         <li>You authorize us to access and use certain information from your third-party account as
-                            permitted by that service</li>
+                        permitted by that service</li>
                         <li>We are not responsible for the privacy practices or content of third-party services</li>
                         <li>Your use of third-party services is subject to their respective terms and privacy policies</li>
                         <li>We may collect profile information, email address, and other publicly available information as
-                            permitted</li>
+                        permitted</li>
                         <li>You can revoke our access to your third-party account at any time through that service's
-                            settings</li>
+                        settings</li>
                     </ul>
                     <p class="mt-3 font-semibold">Supported Verification Platforms:</p>
                     <ul class="list-disc pl-6 space-y-1">
@@ -247,12 +247,12 @@
             <section class="mb-10">
                 <div class="flex items-center mb-4">
                     <div
-                        class="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-white font-bold mr-4">
+                        class="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-900/10 dark:bg-emerald-900/30 dark:border-emerald-800/20 flex items-center justify-center text-emerald-700 dark:text-emerald-300 font-extrabold mr-4 flex-shrink-0">
                         11
                     </div>
-                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Limitation of Liability</h3>
+                    <h3 class="text-lg font-bold text-emerald-955 dark:text-white font-serif">Limitation of Liability</h3>
                 </div>
-                <div class="ml-14 text-gray-700 dark:text-gray-300 space-y-3">
+                <div class="ml-14 text-sm text-emerald-850/80 dark:text-emerald-300 space-y-3 leading-relaxed">
                     <p>In no event shall Al-Shaafi Dawakhana be liable for any indirect, incidental, special, consequential,
                         or punitive damages resulting from:</p>
                     <ul class="list-disc pl-6 space-y-2">
@@ -268,15 +268,15 @@
             <section class="mb-10">
                 <div class="flex items-center mb-4">
                     <div
-                        class="w-10 h-10 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold mr-4">
+                        class="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-900/10 dark:bg-emerald-900/30 dark:border-emerald-800/20 flex items-center justify-center text-emerald-700 dark:text-emerald-300 font-extrabold mr-4 flex-shrink-0">
                         12
                     </div>
-                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Disclaimer</h3>
+                    <h3 class="text-lg font-bold text-emerald-955 dark:text-white font-serif">Disclaimer</h3>
                 </div>
-                <div class="ml-14 text-gray-700 dark:text-gray-300 space-y-3">
+                <div class="ml-14 text-sm text-emerald-850/80 dark:text-emerald-300 space-y-3 leading-relaxed">
                     <p>Your use of the Service is at your sole risk. The Service is provided on an "AS IS" and "AS
                         AVAILABLE" basis without warranties of any kind.</p>
-                    <p class="font-semibold text-red-600 dark:text-red-400">Health Disclaimer:</p>
+                    <p class="font-semibold text-rose-600 dark:text-rose-400">Health Disclaimer:</p>
                     <p>Our products are traditional herbal remedies. Always consult with a qualified healthcare professional
                         before using any herbal products, especially if you have existing medical conditions or are taking
                         medications.</p>
@@ -287,12 +287,12 @@
             <section class="mb-10">
                 <div class="flex items-center mb-4">
                     <div
-                        class="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-white font-bold mr-4">
+                        class="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-900/10 dark:bg-emerald-900/30 dark:border-emerald-800/20 flex items-center justify-center text-emerald-700 dark:text-emerald-300 font-extrabold mr-4 flex-shrink-0">
                         13
                     </div>
-                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Governing Law</h3>
+                    <h3 class="text-lg font-bold text-emerald-955 dark:text-white font-serif">Governing Law</h3>
                 </div>
-                <div class="ml-14 text-gray-700 dark:text-gray-300 space-y-3">
+                <div class="ml-14 text-sm text-emerald-850/80 dark:text-emerald-300 space-y-3 leading-relaxed">
                     <p>These Terms shall be governed by and construed in accordance with the laws of Pakistan, without
                         regard to its conflict of law provisions.</p>
                 </div>
@@ -302,12 +302,12 @@
             <section class="mb-10">
                 <div class="flex items-center mb-4">
                     <div
-                        class="w-10 h-10 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold mr-4">
+                        class="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-900/10 dark:bg-emerald-900/30 dark:border-emerald-800/20 flex items-center justify-center text-emerald-700 dark:text-emerald-300 font-extrabold mr-4 flex-shrink-0">
                         14
                     </div>
-                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Changes to Terms</h3>
+                    <h3 class="text-lg font-bold text-emerald-955 dark:text-white font-serif">Changes to Terms</h3>
                 </div>
-                <div class="ml-14 text-gray-700 dark:text-gray-300 space-y-3">
+                <div class="ml-14 text-sm text-emerald-850/80 dark:text-emerald-300 space-y-3 leading-relaxed">
                     <p>We reserve the right to modify or replace these Terms at any time. We will provide notice of any
                         material changes by:</p>
                     <ul class="list-disc pl-6 space-y-2">
@@ -322,18 +322,18 @@
 
             <!-- Contact Information -->
             <section
-                class="mt-12 p-6 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-gray-700 dark:to-gray-600 rounded-xl">
-                <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-                    <i class="fas fa-envelope mr-2"></i>Contact Us
+                class="mt-12 p-6 bg-emerald-50/20 dark:bg-[#0c120f]/30 border border-emerald-900/10 dark:border-emerald-800/30 rounded-2xl shadow-sm">
+                <h3 class="text-xl font-bold text-emerald-955 dark:text-white mb-4 font-serif">
+                    <i class="fas fa-envelope mr-2 text-emerald-700 dark:text-emerald-400"></i>Contact Us
                 </h3>
-                <p class="text-gray-700 dark:text-gray-300 mb-4">
+                <p class="text-sm text-emerald-850/80 dark:text-emerald-300 mb-4 leading-relaxed">
                     If you have any questions about these Terms and Conditions, please contact us:
                 </p>
-                <div class="space-y-2 text-gray-700 dark:text-gray-300">
-                    <p><i class="fas fa-building mr-2 text-blue-600"></i><strong>Al-Shaafi Dawakhana</strong></p>
-                    <p><i class="fas fa-phone mr-2 text-green-600"></i>Phone: +92 325 325 55 55</p>
-                    <p><i class="fas fa-envelope mr-2 text-purple-600"></i>Email: info@alshaafi.com</p>
-                    <p><i class="fas fa-map-marker-alt mr-2 text-red-600"></i>Address: Depal Pur, Pakistan</p>
+                <div class="space-y-3.5 text-sm text-emerald-850 dark:text-emerald-300">
+                    <p><i class="fas fa-building mr-3 text-emerald-700"></i><strong>Al-Shaafi Dawakhana</strong></p>
+                    <p><i class="fas fa-phone mr-3 text-emerald-700"></i>Phone: +92 325 325 55 55</p>
+                    <p><i class="fas fa-envelope mr-3 text-emerald-700"></i>Email: info@alshaafi.com</p>
+                    <p><i class="fas fa-map-marker-alt mr-3 text-emerald-700"></i>Address: Depal Pur, Pakistan</p>
                 </div>
             </section>
         </div>
@@ -341,8 +341,8 @@
         <!-- Back to Home Button -->
         <div class="text-center mt-8">
             <a href="{{ route('web.home') }}"
-                class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg">
-                <i class="fas fa-home mr-2"></i>
+                class="h-11 px-5 inline-flex items-center justify-center bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl font-bold text-sm transition-all shadow-sm hover:shadow-md shadow-emerald-700/10 cursor-pointer">
+                <i class="fas fa-home mr-2 text-xs"></i>
                 Back to Home
             </a>
         </div>

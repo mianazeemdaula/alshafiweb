@@ -1,16 +1,16 @@
 @extends('layouts.guest')
 @section('content')
     <!-- Breadcrumb -->
-    <div class="bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 py-4">
+    <div class="bg-[#fdfcf9] dark:bg-[#0c120f] border-b border-emerald-900/5 dark:border-emerald-800/10 py-4">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <nav class="flex items-center text-xs text-gray-500 dark:text-gray-400">
-                <a href="{{ url('/') }}" class="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
+            <nav class="flex items-center text-xs text-[#555f5b] dark:text-[#a3b2aa]">
+                <a href="{{ url('/') }}" class="hover:text-emerald-750 dark:hover:text-emerald-400 transition-colors">
                     <i class="fa-solid fa-home mr-1.5"></i>Home
                 </a>
-                <span class="mx-2 text-gray-300">/</span>
-                <a href="{{ route('web.products') }}" class="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">Products</a>
-                <span class="mx-2 text-gray-300">/</span>
-                <span class="text-gray-700 dark:text-gray-300 truncate">{{ $product->name }}</span>
+                <span class="mx-2 text-emerald-900/20">/</span>
+                <a href="{{ route('web.products') }}" class="hover:text-emerald-750 dark:hover:text-emerald-400 transition-colors">Products</a>
+                <span class="mx-2 text-emerald-900/20">/</span>
+                <span class="text-gray-700 dark:text-gray-300 truncate font-medium">{{ $product->name }}</span>
             </nav>
         </div>
     </div>
@@ -18,14 +18,14 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-fade-in">
         <!-- Main Product Card -->
         <div
-            class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl overflow-hidden mb-8 transform hover:scale-[1.01] transition-transform duration-300">
+            class="bg-[#fdfcf9] dark:bg-[#141f1a] border border-emerald-900/5 dark:border-emerald-800/20 rounded-2xl shadow-lg shadow-emerald-950/5 overflow-hidden mb-8 transform hover:scale-[1.01] transition-transform duration-300">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 p-6 lg:p-10">
                 <!-- Product Images Section -->
                 <div class="space-y-4">
                     @if ($product->media->count() > 0)
                         <!-- Main Image with Gradient Overlay on Hover -->
                         <div
-                            class="relative group rounded-2xl overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600">
+                            class="relative group rounded-2xl overflow-hidden bg-gradient-to-br from-emerald-50/50 to-emerald-100/50 dark:from-[#1b2c24] dark:to-[#141f1a] border border-emerald-900/5 dark:border-emerald-800/10">
                             <img src="{{ asset($product->media->first()->file_path) }}" alt="{{ $product->name }}"
                                 class="main-product-image w-full h-96 object-cover transition-transform duration-500 group-hover:scale-110">
                             <div
@@ -35,10 +35,10 @@
 
                         <!-- Thumbnail Gallery -->
                         <div
-                            class="flex gap-3 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600">
+                            class="flex gap-3 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-emerald-900/10 dark:scrollbar-thumb-emerald-800/40">
                             @foreach ($product->media as $index => $media)
                                 <button type="button"
-                                    class="thumbnail-btn flex-shrink-0 rounded-lg overflow-hidden border-2 {{ $index === 0 ? 'border-blue-500 dark:border-blue-400' : 'border-gray-300 dark:border-gray-600' }} hover:border-blue-500 dark:hover:border-blue-400 transition-all duration-200 transform hover:scale-105"
+                                    class="thumbnail-btn flex-shrink-0 rounded-xl overflow-hidden border-2 {{ $index === 0 ? 'border-emerald-600 dark:border-emerald-400' : 'border-emerald-900/10 dark:border-emerald-800/30' }} hover:border-emerald-600 dark:hover:border-emerald-400 transition-all duration-200 transform hover:scale-105"
                                     data-image="{{ asset($media->file_path) }}">
                                     <img src="{{ asset($media->file_path) }}" alt="{{ $product->name }}"
                                         class="w-20 h-20 object-cover">
@@ -60,24 +60,24 @@
                 <div class="flex flex-col space-y-6">
                     <!-- Product Title -->
                     <div>
-                        <h1 class="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-3 leading-tight">
+                        <h1 class="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-3 leading-tight font-serif">
                             {{ $product->name }}
                         </h1>
                         <div class="flex items-center gap-3 flex-wrap">
                             @if ($product->category)
                                 <span
-                                    class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-blue-500 to-purple-500 text-white">
+                                    class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-200 border border-emerald-900/10 dark:border-emerald-800/20">
                                     <i class="fa-solid fa-tag mr-1.5"></i>{{ $product->category->name }}
                                 </span>
                             @endif
                             @if ($product->brand)
                                 <span
-                                    class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-purple-500 to-pink-500 text-white">
+                                    class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-200 border border-amber-900/10 dark:border-amber-800/20">
                                     <i class="fa-solid fa-certificate mr-1.5"></i>{{ $product->brand->name }}
                                 </span>
                             @endif
                             <span
-                                class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+                                class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-[#f6f3eb] dark:bg-[#1b2c24] text-emerald-800/80 dark:text-emerald-200/85">
                                 SKU: {{ $product->sku }}
                             </span>
                         </div>
@@ -85,17 +85,17 @@
 
                     <!-- Price Section -->
                     <div
-                        class="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-xl p-5 border border-green-200 dark:border-green-800">
+                        class="bg-gradient-to-r from-emerald-50/50 to-emerald-100/30 dark:from-[#1b2c24]/50 dark:to-[#141f1a]/50 rounded-xl p-5 border border-emerald-900/10 dark:border-emerald-800/30">
                         <div class="flex items-baseline gap-3">
                             <span
-                                class="text-4xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
+                                class="text-4xl font-bold text-emerald-800 dark:text-emerald-400 font-serif">
                                 RS. {{ number_format($product->price, 2) }}
                             </span>
                             @if ($product->old_price)
-                                <span class="text-xl line-through text-gray-500 dark:text-gray-400">
+                                <span class="text-xl line-through text-[#8d9a94] dark:text-[#72847b]">
                                     RS. {{ number_format($product->old_price, 2) }}
                                 </span>
-                                <span class="ml-auto px-3 py-1 rounded-full text-sm font-bold bg-red-500 text-white">
+                                <span class="ml-auto px-3 py-1 rounded-full text-sm font-bold bg-[#c94a4a] text-white">
                                     -{{ round((($product->old_price - $product->price) / $product->old_price) * 100) }}%
                                 </span>
                             @endif
@@ -162,8 +162,8 @@
 
                     <!-- Description -->
                     <div class="prose dark:prose-invert max-w-none">
-                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2 flex items-center">
-                            <i class="fa-solid fa-align-left mr-2 text-blue-500"></i>Product Description
+                        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-3 flex items-center font-serif">
+                            <i class="fa-solid fa-align-left mr-2 text-emerald-600"></i>Product Description
                         </h3>
                         <div class="text-gray-700 dark:text-gray-300 leading-relaxed">
                             {!! $product->description !!}
@@ -172,53 +172,52 @@
 
                     <!-- Add to Cart Section -->
                     <div class="pt-6 border-t border-gray-200 dark:border-gray-700">
-                        <div class="flex items-center gap-4 flex-wrap">
+                        <div class="flex items-center gap-3.5 flex-wrap">
                             <!-- Quantity Selector -->
                             <div class="flex items-center gap-3">
-                                <label class="text-gray-700 dark:text-gray-300 font-medium">Quantity:</label>
-                                <div class="flex items-center bg-gray-100 dark:bg-gray-700 rounded-lg p-1">
+                                <div class="flex items-center bg-[#f6f3eb] dark:bg-[#1b2c24] rounded-xl p-1 border border-emerald-900/10 dark:border-emerald-800/30">
                                     <button type="button"
-                                        class="quantity-btn bg-white dark:bg-gray-600 hover:bg-gradient-to-r hover:from-blue-500 hover:to-purple-500 hover:text-white text-gray-700 dark:text-gray-200 w-10 h-10 rounded-lg flex items-center justify-center font-bold transition-all duration-300 transform hover:scale-110"
+                                        class="quantity-btn bg-white dark:bg-emerald-950 text-emerald-800 dark:text-emerald-100 hover:bg-emerald-700 hover:text-white dark:hover:bg-emerald-600 w-9 h-9 rounded-lg flex items-center justify-center font-bold transition-all shadow-sm border border-emerald-900/5 dark:border-emerald-800/10"
                                         data-action="minus" data-product-card="{{ $product->id }}">
-                                        <i class="fa-solid fa-minus"></i>
+                                        <i class="fa-solid fa-minus text-xs"></i>
                                     </button>
                                     <input type="number"
-                                        class="quantity-input w-16 text-center border-0 bg-transparent text-gray-900 dark:text-gray-100 font-semibold text-lg focus:outline-none"
+                                        class="quantity-input w-10 text-center border-0 bg-transparent text-gray-900 dark:text-gray-100 font-bold text-base focus:outline-none"
                                         value="1" min="1" max="{{ min($product->stock, 100) }}"
                                         data-product-card="{{ $product->id }}">
                                     <button type="button"
-                                        class="quantity-btn bg-white dark:bg-gray-600 hover:bg-gradient-to-r hover:from-blue-500 hover:to-purple-500 hover:text-white text-gray-700 dark:text-gray-200 w-10 h-10 rounded-lg flex items-center justify-center font-bold transition-all duration-300 transform hover:scale-110"
+                                        class="quantity-btn bg-white dark:bg-emerald-950 text-emerald-800 dark:text-emerald-100 hover:bg-emerald-700 hover:text-white dark:hover:bg-emerald-600 w-9 h-9 rounded-lg flex items-center justify-center font-bold transition-all shadow-sm border border-emerald-900/5 dark:border-emerald-800/10"
                                         data-action="plus" data-product-card="{{ $product->id }}">
-                                        <i class="fa-solid fa-plus"></i>
+                                        <i class="fa-solid fa-plus text-xs"></i>
                                     </button>
                                 </div>
                             </div>
-
+ 
                             <!-- Add to Cart Button -->
                             <button type="button"
-                                class="add-to-cart-btn flex-1 {{ $product->stock <= 0 ? 'bg-gray-300 dark:bg-gray-600 cursor-not-allowed' : 'bg-emerald-600 hover:bg-emerald-700' }} text-white px-8 py-4 rounded-xl font-semibold text-base transition-colors flex items-center justify-center gap-3"
+                                class="add-to-cart-btn flex-1 h-11 inline-flex items-center justify-center {{ $product->stock <= 0 ? 'bg-gray-300 dark:bg-gray-600 cursor-not-allowed' : 'bg-emerald-700 hover:bg-emerald-800 dark:bg-emerald-600 dark:hover:bg-emerald-500 shadow-sm shadow-emerald-700/5' }} text-white px-5 rounded-xl font-bold text-sm transition-all gap-2"
                                 data-product-id="{{ $product->id }}" data-product-name="{{ $product->name }}"
                                 data-product-price="{{ $product->price }}" {{ $product->stock <= 0 ? 'disabled' : '' }}>
                                 @if ($product->stock <= 0)
-                                    <i class="fa-solid fa-ban text-xl"></i>
+                                    <i class="fa-solid fa-ban text-base"></i>
                                     <span>Out of Stock</span>
                                 @else
-                                    <i class="fa-solid fa-cart-plus text-xl"></i>
+                                    <i class="fa-solid fa-cart-plus text-base"></i>
                                     <span>Add to Cart</span>
                                 @endif
                             </button>
-
+ 
                             <!-- Order on WhatsApp -->
                             @php
                                 $whatsapp = $product->whatsapp_contact ?? '923253255555';
                             @endphp
                             <a href="https://wa.me/{{ $whatsapp }}?text={{ urlencode('I want to order: ' . $product->name) }}"
                                 target="_blank"
-                                class="bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-lg font-bold text-lg transition-all duration-300 flex items-center justify-center gap-3 shadow-lg hover:shadow-xl transform hover:scale-105">
-                                {{-- <i class="fa-brands fa-whatsapp text-xl"></i> --}}
-                                <span>Chat with us</span>
+                                class="h-11 px-5 inline-flex items-center justify-center bg-[#25d366] hover:bg-[#20ba5a] text-white rounded-xl font-bold text-sm transition-all duration-300 gap-2 shadow-sm">
+                                <i class="fa-brands fa-whatsapp text-lg"></i>
+                                <span>Order</span>
                             </a>
-
+ 
                             <!-- Share & Earn Button -->
                             @php
                                 $shareUrl = auth()->check()
@@ -227,11 +226,11 @@
                                 $shareText = 'Check out ' . $product->name . ' on Alshaafi Online!';
                             @endphp
                             <button type="button" id="share-product-btn"
-                                class="bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white px-6 py-4 rounded-lg font-bold text-base transition-all duration-300 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transform hover:scale-105"
+                                class="h-11 px-4 inline-flex items-center justify-center bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-800/50 text-emerald-800 dark:text-emerald-200 hover:bg-emerald-100 dark:hover:bg-emerald-900/50 rounded-xl font-bold text-sm transition-all duration-300 gap-2 shadow-sm"
                                 data-share-url="{{ $shareUrl }}"
                                 data-share-text="{{ $shareText }}"
                                 title="{{ auth()->check() ? 'Share this product and earn referral rewards!' : 'Share this product' }}">
-                                <i class="fa-solid fa-share-nodes text-lg"></i>
+                                <i class="fa-solid fa-share-nodes text-base text-emerald-700 dark:text-emerald-450"></i>
                                 <span>{{ auth()->check() ? 'Share & Earn' : 'Share' }}</span>
                             </button>
                         </div>
@@ -241,15 +240,15 @@
         </div>
 
         <!-- Customer Reviews Section -->
-        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-6 lg:p-10 animate-slide-up">
+        <div class="bg-[#fdfcf9] dark:bg-[#141f1a] border border-emerald-900/5 dark:border-emerald-800/20 rounded-2xl shadow-lg shadow-emerald-950/5 p-6 lg:p-10 animate-slide-up">
             <div class="flex items-center justify-between mb-8">
-                <h2 class="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white flex items-center">
-                    <i class="fa-solid fa-star text-yellow-400 mr-3"></i>
+                <h2 class="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white flex items-center font-serif">
+                    <i class="fa-solid fa-star text-amber-500 mr-3"></i>
                     Customer Reviews
                 </h2>
                 @if ($product->reviews->count() > 0)
                     <div
-                        class="flex items-center gap-2 bg-gradient-to-r from-yellow-400 to-orange-400 text-white px-4 py-2 rounded-lg">
+                        class="flex items-center gap-2 bg-amber-500 text-white px-4 py-2 rounded-xl shadow-sm shadow-amber-500/10 font-sans">
                         <i class="fa-solid fa-star"></i>
                         <span class="font-bold">
                             {{ number_format($product->reviews->avg('rating'), 1) }} / 5
@@ -263,16 +262,16 @@
                 <div class="space-y-4">
                     @foreach ($product->reviews as $review)
                         <div
-                            class="bg-gradient-to-r from-gray-50 to-white dark:from-gray-700 dark:to-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-600 hover:shadow-lg transition-all duration-300 transform hover:scale-[1.02]">
+                            class="bg-[#f6f3eb] dark:bg-[#1b2c24]/40 rounded-xl p-6 border border-emerald-900/10 dark:border-emerald-800/20 hover:shadow-md transition-all duration-300 transform hover:scale-[1.01] font-sans">
                             <div class="flex items-start justify-between mb-3">
                                 <div class="flex items-center gap-3">
                                     <div
-                                        class="w-12 h-12 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-white font-bold text-lg">
+                                        class="w-12 h-12 rounded-full bg-emerald-600 flex items-center justify-center text-white font-bold text-lg font-serif">
                                         {{ strtoupper(substr($review->user->name, 0, 1)) }}
                                     </div>
                                     <div>
                                         <p class="font-bold text-gray-900 dark:text-white">{{ $review->user->name }}</p>
-                                        <p class="text-sm text-gray-500 dark:text-gray-400">
+                                        <p class="text-sm text-[#555f5b] dark:text-[#a3b2aa]">
                                             <i class="fa-regular fa-calendar mr-1"></i>
                                             {{ $review->created_at->format('M d, Y') }}
                                         </p>
@@ -281,11 +280,11 @@
                                 <div class="flex items-center gap-1">
                                     @for ($i = 1; $i <= 5; $i++)
                                         <i
-                                            class="fa{{ $i <= $review->rating ? 's' : 'r' }} fa-star text-yellow-400 text-lg"></i>
+                                            class="fa{{ $i <= $review->rating ? 's' : 'r' }} fa-star text-amber-500 text-lg"></i>
                                     @endfor
                                 </div>
                             </div>
-                            <p class="text-gray-700 dark:text-gray-300 leading-relaxed pl-15">{{ $review->comment }}</p>
+                            <p class="text-gray-700 dark:text-[#a3b2aa] leading-relaxed pl-15">{{ $review->comment }}</p>
                         </div>
                     @endforeach
                 </div>
@@ -378,11 +377,11 @@
 
                     // Update active state
                     thumbnails.forEach(t => {
-                        t.classList.remove('border-blue-500', 'dark:border-blue-400');
-                        t.classList.add('border-gray-300', 'dark:border-gray-600');
+                        t.classList.remove('border-emerald-600', 'dark:border-emerald-400');
+                        t.classList.add('border-emerald-900/10', 'dark:border-emerald-800/30');
                     });
-                    this.classList.remove('border-gray-300', 'dark:border-gray-600');
-                    this.classList.add('border-blue-500', 'dark:border-blue-400');
+                    this.classList.remove('border-emerald-900/10', 'dark:border-emerald-800/30');
+                    this.classList.add('border-emerald-600', 'dark:border-emerald-400');
                 });
             });
 
@@ -596,18 +595,18 @@
                 let iconClass = '';
 
                 if (type === 'success') {
-                    bgClass = 'bg-gradient-to-r from-green-500 to-emerald-500';
+                    bgClass = 'bg-gradient-to-r from-emerald-600 to-emerald-800';
                     iconClass = 'fa-check-circle';
                 } else if (type === 'error') {
-                    bgClass = 'bg-gradient-to-r from-red-500 to-pink-500';
+                    bgClass = 'bg-gradient-to-r from-rose-600 to-red-700';
                     iconClass = 'fa-exclamation-circle';
                 } else {
-                    bgClass = 'bg-gradient-to-r from-blue-500 to-purple-500';
+                    bgClass = 'bg-gradient-to-r from-emerald-800 to-emerald-950';
                     iconClass = 'fa-info-circle';
                 }
 
                 notification.className =
-                    `cart-notification fixed top-4 right-4 z-50 px-6 py-4 rounded-xl shadow-2xl text-white font-medium transition-all duration-300 transform ${bgClass}`;
+                    `cart-notification fixed top-4 right-4 z-50 px-6 py-4 rounded-2xl shadow-2xl text-white font-medium transition-all duration-300 transform ${bgClass} backdrop-blur-sm`;
                 notification.innerHTML = `
                     <div class="flex items-center gap-3">
                         <i class="fa ${iconClass} text-2xl"></i>

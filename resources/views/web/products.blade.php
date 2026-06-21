@@ -1,12 +1,12 @@
 @extends('layouts.guest')
 @section('content')
     <!-- Page Header -->
-    <div class="bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800">
+    <div class="bg-[#fdfcf9] dark:bg-[#0c120f] border-b border-emerald-900/5 dark:border-emerald-800/10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
             <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
-                    <span class="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-600 dark:text-emerald-400">{{ __('Shop') }}</span>
-                    <h1 class="mt-2 text-2xl sm:text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white">
+                    <span class="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-700 dark:text-emerald-400">{{ __('Shop') }}</span>
+                    <h1 class="mt-2 text-2xl sm:text-3xl font-bold tracking-tight text-gray-900 dark:text-white font-serif">
                         {{ __('Our Products') }}
                     </h1>
                     <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
@@ -29,7 +29,7 @@
                             {{ __('sort_by') }}
                         </label>
                         <select name="sort"
-                            class="px-4 py-2.5 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 text-sm font-medium border border-gray-200 dark:border-gray-700 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 dark:focus:ring-emerald-900/50 transition-colors cursor-pointer w-full sm:w-52"
+                            class="px-4 py-2.5 rounded-xl bg-[#fdfcf9] dark:bg-[#1b2c24] text-gray-900 dark:text-gray-100 text-sm font-semibold border border-emerald-900/10 dark:border-emerald-800/30 focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100 dark:focus:ring-emerald-950/30 transition-colors cursor-pointer w-full sm:w-52 outline-none"
                             onchange="this.form.submit()">
                             <option value="default" {{ in_array(request('sort'), [null, '', 'default']) ? 'selected' : '' }}>{{ __('Default') }}</option>
                             <option value="newest" {{ request('sort') == 'newest' ? 'selected' : '' }}>{{ __('Newest') }}</option>
@@ -51,9 +51,9 @@
             <!-- Mobile Filter Button -->
             <div class="lg:hidden mb-4">
                 <button id="mobile-filter-toggle"
-                    class="flex items-center justify-between w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 rounded-xl text-sm font-medium hover:border-emerald-400 transition-colors">
+                    class="flex items-center justify-between w-full px-4 py-3 bg-[#fdfcf9] dark:bg-[#1b2c24] border border-emerald-900/10 dark:border-emerald-800/30 text-gray-900 dark:text-gray-100 rounded-xl text-sm font-semibold hover:border-emerald-400 transition-colors">
                     <span class="flex items-center gap-2">
-                        <i class="fa fa-sliders-h text-emerald-600 dark:text-emerald-400"></i>
+                        <i class="fa fa-sliders-h text-emerald-700 dark:text-emerald-400"></i>
                         {{ __('Filters & Categories') }}
                     </span>
                     <i class="fa fa-chevron-down transition-transform duration-300 filter-toggle-icon text-gray-400"></i>
@@ -65,13 +65,13 @@
 
                 <!-- LEFT SIDEBAR -->
                 <aside id="filter-sidebar" class="lg:col-span-4 xl:col-span-3 hidden lg:block">
-                    <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 sticky top-4 overflow-hidden">
+                    <div class="bg-[#fdfcf9] dark:bg-[#141f1a] rounded-2xl border border-emerald-900/5 dark:border-emerald-800/20 sticky top-4 overflow-hidden shadow-sm">
 
                         <!-- Filter Header -->
-                        <div class="px-5 py-4 border-b border-gray-100 dark:border-gray-700">
+                        <div class="px-5 py-4 border-b border-emerald-900/5 dark:border-emerald-800/10">
                             <div class="flex items-center justify-between">
-                                <h2 class="text-sm font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-                                    <i class="fa fa-filter text-emerald-600 dark:text-emerald-400"></i>
+                                <h2 class="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-2 font-serif">
+                                    <i class="fa fa-filter text-emerald-700 dark:text-emerald-400"></i>
                                     {{ __('Filters') }}
                                 </h2>
                                 @if (request('min') || request('max') || request('rating') || request('category'))
@@ -96,29 +96,29 @@
                                         <input type="hidden" name="{{ $key }}" value="{{ $value }}">
                                     @endforeach
 
-                                    <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+                                    <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 font-sans">
                                         <div class="flex-1">
-                                            <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
+                                            <label class="block text-xs font-semibold text-[#48544f] dark:text-[#a3b2aa] mb-1">
                                                 {{ __('Min Price') }}
                                             </label>
                                             <input type="number" name="min"
-                                                class="w-full rounded-lg px-3 py-2 text-sm bg-white dark:bg-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 dark:focus:ring-emerald-900/50 transition-colors"
+                                                class="w-full rounded-xl px-3 py-2 text-sm bg-[#f6f3eb]/45 dark:bg-[#0c120f] dark:text-white border border-emerald-900/10 dark:border-emerald-800/40 focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100 dark:focus:ring-emerald-950/30 transition-all outline-none"
                                                 min="0" placeholder="0" value="{{ request('min') }}">
                                         </div>
                                         <span
-                                            class="hidden sm:block text-gray-400 dark:text-gray-500 self-end pb-2">—</span>
+                                            class="hidden sm:block text-emerald-900/20 self-end pb-2">—</span>
                                         <div class="flex-1">
-                                            <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
+                                            <label class="block text-xs font-semibold text-[#48544f] dark:text-[#a3b2aa] mb-1">
                                                 {{ __('Max Price') }}
                                             </label>
                                             <input type="number" name="max"
-                                                class="w-full rounded-lg px-3 py-2 text-sm bg-white dark:bg-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 dark:focus:ring-emerald-900/50 transition-colors"
+                                                class="w-full rounded-xl px-3 py-2 text-sm bg-[#f6f3eb]/45 dark:bg-[#0c120f] dark:text-white border border-emerald-900/10 dark:border-emerald-800/40 focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100 dark:focus:ring-emerald-950/30 transition-all outline-none"
                                                 min="0" placeholder="∞" value="{{ request('max') }}">
                                         </div>
                                     </div>
-
+ 
                                     <button type="submit"
-                                        class="w-full bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2.5 rounded-lg text-sm font-medium transition-colors">
+                                        class="w-full bg-emerald-700 hover:bg-emerald-800 dark:bg-emerald-600 dark:hover:bg-emerald-500 text-white px-4 py-2.5 rounded-xl text-sm font-bold transition-all shadow-sm shadow-emerald-700/5">
                                         {{ __('Apply') }}
                                     </button>
 
@@ -139,19 +139,19 @@
                                 <h3 class="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-3">
                                     {{ __('Customer Rating') }}
                                 </h3>
-                                <div class="space-y-1.5">
+                                <div class="space-y-1.5 font-sans">
                                     @for ($i = 5; $i >= 1; $i--)
                                         <a href="{{ request()->fullUrlWithQuery(['rating' => $i]) }}"
-                                            class="flex items-center justify-between px-3 py-2 rounded-lg border transition-colors text-sm {{ request('rating') == $i
-                                                ? 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 border-emerald-300 dark:border-emerald-700 font-semibold'
-                                                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-100 dark:border-gray-700 hover:border-emerald-300 dark:hover:border-emerald-700' }}">
+                                            class="flex items-center justify-between px-3 py-2 rounded-xl border transition-all text-sm {{ request('rating') == $i
+                                                ? 'bg-emerald-100/50 dark:bg-emerald-950/60 text-emerald-850 dark:text-emerald-250 border-emerald-600 dark:border-emerald-450 font-bold'
+                                                : 'bg-[#fdfcf9] dark:bg-[#1b2c24] text-emerald-900/80 dark:text-emerald-100 border-emerald-900/5 dark:border-emerald-800/20 hover:border-emerald-300' }}">
                                             <div class="flex items-center gap-0.5">
                                                 @for ($j = 1; $j <= 5; $j++)
                                                     <i
-                                                        class="fa-solid fa-star text-xs {{ $i >= $j ? 'text-amber-400' : 'text-gray-200 dark:text-gray-600' }}"></i>
+                                                        class="fa-solid fa-star text-xs {{ $i >= $j ? 'text-amber-500' : 'text-[#edeae0] dark:text-[#284438]' }}"></i>
                                                 @endfor
                                             </div>
-                                            <span class="text-xs font-medium">{{ $i }}+</span>
+                                            <span class="text-xs font-semibold">{{ $i }}+</span>
                                         </a>
                                     @endfor
                                 </div>
@@ -171,20 +171,20 @@
                                 <h3 class="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-3">
                                     {{ __('Categories') }}
                                 </h3>
-                                <div class="space-y-1.5">
+                                <div class="space-y-1.5 font-sans">
                                     <a href="{{ request()->fullUrlWithQuery(['category' => null]) }}"
-                                        class="block px-3 py-2 rounded-lg border transition-colors text-sm {{ !request('category')
-                                            ? 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 border-emerald-300 dark:border-emerald-700 font-semibold'
-                                            : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-100 dark:border-gray-700 hover:border-emerald-300 dark:hover:border-emerald-700' }}">
+                                        class="block px-3 py-2 rounded-xl border transition-all text-sm {{ !request('category')
+                                            ? 'bg-emerald-100/50 dark:bg-emerald-950/60 text-emerald-850 dark:text-emerald-250 border-emerald-600 dark:border-emerald-450 font-bold'
+                                            : 'bg-[#fdfcf9] dark:bg-[#1b2c24] text-emerald-900/80 dark:text-emerald-100 border-emerald-900/5 dark:border-emerald-800/20 hover:border-emerald-300' }}">
                                         {{ __('All Categories') }}
                                     </a>
-
+ 
                                     @if (isset($categories))
                                         @foreach ($categories as $item)
                                             <a href="{{ request()->fullUrlWithQuery(['category' => $item->slug]) }}"
-                                                class="block px-3 py-2 rounded-lg border transition-colors text-sm {{ request('category') == $item->slug
-                                                    ? 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 border-emerald-300 dark:border-emerald-700 font-semibold'
-                                                    : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-100 dark:border-gray-700 hover:border-emerald-300 dark:hover:border-emerald-700' }}">
+                                                class="block px-3 py-2 rounded-xl border transition-all text-sm {{ request('category') == $item->slug
+                                                    ? 'bg-emerald-100/50 dark:bg-emerald-950/60 text-emerald-850 dark:text-emerald-250 border-emerald-600 dark:border-emerald-450 font-bold'
+                                                    : 'bg-[#fdfcf9] dark:bg-[#1b2c24] text-emerald-900/80 dark:text-emerald-100 border-emerald-900/5 dark:border-emerald-800/20 hover:border-emerald-300' }}">
                                                 {{ $item->name }}
                                             </a>
                                         @endforeach
@@ -200,18 +200,18 @@
 
                     <!-- Active Filters Display -->
                     @if (request('category') || request('min') || request('max') || request('rating'))
-                        <div class="mb-6 bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700">
+                        <div class="mb-6 bg-[#fdfcf9] dark:bg-[#141f1a] rounded-xl p-4 border border-emerald-900/5 dark:border-emerald-800/20 shadow-sm font-sans">
                             <div class="flex flex-wrap items-center gap-2">
-                                <span class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                <span class="text-xs font-semibold text-[#555f5b] dark:text-[#a3b2aa] uppercase tracking-wider">
                                     {{ __('Active') }}:
                                 </span>
 
                                 @if (request('category'))
                                     <span
-                                        class="inline-flex items-center gap-2 px-3 py-1.5 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 rounded-lg text-xs font-medium">
+                                        class="inline-flex items-center gap-2 px-3 py-1.5 bg-emerald-100/50 dark:bg-emerald-950/60 text-emerald-850 dark:text-emerald-250 border border-emerald-900/10 dark:border-emerald-800/30 rounded-xl text-xs font-semibold">
                                         {{ $categories->where('slug', request('category'))->first()->name ?? request('category') }}
                                         <a href="{{ request()->fullUrlWithQuery(['category' => null]) }}"
-                                            class="hover:text-red-600">
+                                            class="hover:text-[#c94a4a] transition-colors">
                                             <i class="fa fa-times-circle"></i>
                                         </a>
                                     </span>
@@ -219,10 +219,10 @@
 
                                 @if (request('min') || request('max'))
                                     <span
-                                        class="inline-flex items-center gap-2 px-3 py-1.5 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 rounded-lg text-xs font-medium">
+                                        class="inline-flex items-center gap-2 px-3 py-1.5 bg-emerald-100/50 dark:bg-emerald-950/60 text-emerald-850 dark:text-emerald-250 border border-emerald-900/10 dark:border-emerald-800/30 rounded-xl text-xs font-semibold">
                                         {{ request('min') ?? '0' }} - {{ request('max') ?? '∞' }}
                                         <a href="{{ request()->fullUrlWithQuery(['min' => null, 'max' => null]) }}"
-                                            class="hover:text-red-600">
+                                            class="hover:text-[#c94a4a] transition-colors">
                                             <i class="fa fa-times-circle"></i>
                                         </a>
                                     </span>
@@ -230,18 +230,18 @@
 
                                 @if (request('rating'))
                                     <span
-                                        class="inline-flex items-center gap-2 px-3 py-1.5 bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800 rounded-lg text-xs font-medium">
-                                        <i class="fa fa-star"></i>
+                                        class="inline-flex items-center gap-2 px-3 py-1.5 bg-amber-100/50 dark:bg-amber-950/60 text-amber-800 dark:text-amber-200 border border-amber-900/10 dark:border-amber-800/30 rounded-xl text-xs font-semibold">
+                                        <i class="fa fa-star text-amber-500"></i>
                                         {{ request('rating') }}+
                                         <a href="{{ request()->fullUrlWithQuery(['rating' => null]) }}"
-                                            class="hover:text-red-600">
+                                            class="hover:text-[#c94a4a] transition-colors">
                                             <i class="fa fa-times-circle"></i>
                                         </a>
                                     </span>
                                 @endif
 
                                 <a href="{{ route('web.products') }}"
-                                    class="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-red-600 dark:text-red-400 hover:underline">
+                                    class="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-bold text-[#c94a4a] hover:underline">
                                     {{ __('Clear All') }}
                                 </a>
                             </div>
@@ -260,24 +260,24 @@
                         </div>
 
                         <!-- Pagination -->
-                        <div class="mt-8 bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700">
+                        <div class="mt-8 bg-[#fdfcf9] dark:bg-[#141f1a] rounded-xl p-4 border border-emerald-900/5 dark:border-emerald-800/20 shadow-sm font-sans">
                             <div class="text-gray-700 dark:text-gray-300">
                                 {{ $products->links() }}
                             </div>
                         </div>
                     @else
                         <!-- Empty State -->
-                        <div class="text-center py-16 bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700">
-                            <div class="inline-flex items-center justify-center w-20 h-20 bg-gray-50 dark:bg-gray-900 rounded-2xl mb-6">
-                                <i class="fa-solid fa-box-open text-3xl text-gray-300 dark:text-gray-600"></i>
+                        <div class="text-center py-16 bg-[#fdfcf9] dark:bg-[#141f1a] rounded-2xl border border-emerald-900/5 dark:border-emerald-800/20 shadow-sm font-sans">
+                            <div class="inline-flex items-center justify-center w-20 h-20 bg-[#f6f3eb] dark:bg-[#0c120f] rounded-2xl mb-6">
+                                <i class="fa-solid fa-box-open text-3xl text-emerald-800/40 dark:text-emerald-500/30"></i>
                             </div>
-                            <h3 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-2">
+                            <h3 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-2 font-serif">
                                 {{ __('No Products Found') }}</h3>
-                            <p class="text-gray-500 dark:text-gray-400 mb-6">
+                            <p class="text-[#48544f] dark:text-[#a3b2aa] mb-6">
                                 {{ __('No products match your current filters.') }}
                             </p>
                             <a href="{{ route('web.products') }}"
-                                class="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-semibold transition-colors">
+                                class="inline-flex items-center gap-2 px-6 py-3 bg-emerald-700 hover:bg-emerald-800 dark:bg-emerald-600 dark:hover:bg-emerald-500 text-white rounded-xl text-sm font-bold transition-all shadow-sm shadow-emerald-700/10">
                                 {{ __('Clear Filters & Show All') }}
                             </a>
                         </div>
@@ -444,18 +444,18 @@
                 let iconClass = '';
 
                 if (type === 'success') {
-                    bgClass = 'bg-emerald-600';
+                    bgClass = 'bg-gradient-to-r from-emerald-600 to-emerald-800';
                     iconClass = 'fa-check-circle';
                 } else if (type === 'error') {
-                    bgClass = 'bg-red-600';
+                    bgClass = 'bg-gradient-to-r from-rose-600 to-red-700';
                     iconClass = 'fa-exclamation-circle';
                 } else {
-                    bgClass = 'bg-gray-900';
+                    bgClass = 'bg-gradient-to-r from-emerald-800 to-emerald-950';
                     iconClass = 'fa-info-circle';
                 }
-
+ 
                 notification.className =
-                    `cart-notification fixed top-4 right-4 z-50 px-6 py-4 rounded-xl shadow-2xl text-white font-medium transition-all duration-300 transform ${bgClass}`;
+                    `cart-notification fixed top-4 right-4 z-50 px-6 py-4 rounded-2xl shadow-2xl text-white font-medium transition-all duration-300 transform ${bgClass} backdrop-blur-sm`;
                 notification.innerHTML = `
                     <div class="flex items-center gap-3">
                         <i class="fa ${iconClass} text-2xl"></i>
