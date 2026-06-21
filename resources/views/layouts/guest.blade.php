@@ -88,6 +88,8 @@
                         this.disabled = true;
                         // Store country preference independently
                         localStorage.setItem('preferred_country', selectedCountry);
+                        // Reset session storage flag on manual change
+                        sessionStorage.removeItem('country_restored');
                         window.location.href = '/change-country/' + selectedCountry;
                     }
                 });
@@ -102,6 +104,8 @@
                         this.disabled = true;
                         // Store language preference independently
                         localStorage.setItem('preferred_locale', selectedLocale);
+                        // Reset session storage flag on manual change
+                        sessionStorage.removeItem('locale_restored');
                         window.location.href = '/change-locale/' + selectedLocale;
                     }
                 });
@@ -110,31 +114,25 @@
             // Restore preferences independently - no cross-dependencies
             // Language restoration
             const preferredLocale = localStorage.getItem('preferred_locale');
-            const currentLocale = '{{ App::getLocale() }}';
+            const currentLocale = '{{ $currentLocale }}';
 
-            // Only restore language if it differs from current and we have a selector
+            // Only restore language if it differs from current, we have a selector, and we haven't tried in this session
             if (preferredLocale && preferredLocale !== currentLocale && localeSelector &&
-                !document.querySelector('meta[name="locale-changed"]')) {
-                // Add meta tag to prevent loop
-                const meta = document.createElement('meta');
-                meta.name = 'locale-changed';
-                meta.content = 'true';
-                document.head.appendChild(meta);
+                !sessionStorage.getItem('locale_restored')) {
+                // Set flag to prevent loop
+                sessionStorage.setItem('locale_restored', 'true');
                 window.location.href = '/change-locale/' + preferredLocale;
             }
 
             // Country restoration (independent of language)
             const preferredCountry = localStorage.getItem('preferred_country');
-            const currentCountry = '{{ Session::get('country', 'WW') }}';
+            const currentCountry = '{{ $currentCountry }}';
 
-            // Only restore country if it differs from current and we have a selector
+            // Only restore country if it differs from current, we have a selector, and we haven't tried in this session
             if (preferredCountry && preferredCountry !== currentCountry && countrySelector &&
-                !document.querySelector('meta[name="country-changed"]')) {
-                // Add meta tag to prevent loop
-                const meta = document.createElement('meta');
-                meta.name = 'country-changed';
-                meta.content = 'true';
-                document.head.appendChild(meta);
+                !sessionStorage.getItem('country_restored')) {
+                // Set flag to prevent loop
+                sessionStorage.setItem('country_restored', 'true');
                 window.location.href = '/change-country/' + preferredCountry;
             }
         }
