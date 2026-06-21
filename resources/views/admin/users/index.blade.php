@@ -5,7 +5,10 @@
         <!-- Header Section -->
         <div class="flex flex-col space-y-4 md:flex-row md:items-center md:justify-between md:space-y-0">
             <div>
-                <h2 class="text-lg font-semibold">Users</h2>
+                <div class="flex">
+                    <h2 class="text-lg font-semibold">Users</h2>
+                    <a href="{{ route('admin.teams.index') }}" class="text-xs text-primary hover:text-gray-900 ml-2">Teams</a>
+                </div>
                 <div class="flex items center">
                     @foreach (\Spatie\Permission\Models\Role::get() as $item)
                         <div class="px-1 @if (!$loop->last) border-r @endif">
@@ -49,6 +52,9 @@
                                         Phone
                                     </th>
                                     <th scope="col" class="px-4 py-3.5 text-left text-sm font-normal text-gray-700">
+                                        Role
+                                    </th>
+                                    <th scope="col" class="px-4 py-3.5 text-left text-sm font-normal text-gray-700">
                                         Level
                                     </th>
                                     <th scope="col" class="px-4 py-3.5 text-left text-sm font-normal text-gray-700">
@@ -87,6 +93,17 @@
                                                 {{ $item->mobile }}
                                             </span>
                                         </td>
+                                        <td class="whitespace-nowrap px-4 py-2">
+                                            <span
+                                                class="inline-flex rounded-full px-2 text-xs font-semibold leading-5 
+                                                {{ $item->roles->first()?->name == 'admin' ? 'bg-red-100 text-red-800' : '' }}
+                                                {{ $item->roles->first()?->name == 'order_taker' ? 'bg-blue-100 text-blue-800' : '' }}
+                                                {{ $item->roles->first()?->name == 'support' ? 'bg-yellow-100 text-yellow-800' : '' }}
+                                                {{ $item->roles->first()?->name == 'user' ? 'bg-gray-100 text-gray-800' : '' }}
+                                            ">
+                                                {{ ucfirst($item->roles->first()?->name ?? 'N/A') }}
+                                            </span>
+                                        </td>
                                         <td class="whitespace-nowrap px-4 py-2 text-sm text-gray-700">
                                             {{ $item->level->name ?? '' }}
                                         </td>
@@ -97,11 +114,10 @@
                                             <a href="#" class="">
                                                 <i class="fa fa-eye"></i>
                                             </a>
-                                            <a href="{{ route('admin.categories.edit', $item->id) }}">
+                                            <a href="{{ route('admin.users.edit', $item->id) }}">
                                                 <i class="fa fa-pencil"></i>
                                             </a>
-                                            <form action="{{ route('admin.categories.destroy', $item->id) }}"
-                                                method="post">
+                                            <form action="{{ route('admin.users.destroy', $item->id) }}" method="post">
                                                 @csrf
                                                 @method('delete')
                                                 <button type="submit">

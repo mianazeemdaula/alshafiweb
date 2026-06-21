@@ -21,7 +21,7 @@ class ProductController extends Controller
         if(request()->has('country') && request()->country != ''){
             $products = $products->where('country_id', request()->country);
         }
-        $products = $products->paginate();
+        $products = $products->orderBy('id','desc')->paginate();
         return view('admin.products.index', ['products' => $products]);
     }
 
@@ -47,13 +47,15 @@ class ProductController extends Controller
             'name' => 'required|max:255',
             'price' => 'required|numeric',
             'sku' => 'required|unique:products,sku',
-            'discount' => 'required|numeric',
+            'discount' => 'nullable|numeric',
+            'sorting' => 'nullable|integer|min:0',
             'description' => 'required',
-            'vat' => 'required|numeric',
+            'vat' => 'nullable|numeric',
             'stock' => 'required|numeric',
-            'referrer_discount' => 'required|numeric',
-            'referal_discount' => 'required|numeric',
-            'buyer_discount' => 'required|numeric',
+            'referrer_discount' => 'nullable|numeric',
+            'referal_discount' => 'nullable|numeric',
+            'buyer_discount' => 'nullable|numeric',
+            'whatsapp_contact' => 'nullable|string|max:20',
             'image.*' => 'image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
         ]);
 
@@ -65,14 +67,17 @@ class ProductController extends Controller
         $product->country_id = $request->country_id;
         $product->description = $request->description;
         $product->discount = $request->discount;
-        $product->vat = $request->vat;
+        $product->sorting = $request->sorting ?? 0;
+        $product->vat = $request->vat ?? 0;
         $product->stock = $request->stock;
-        $product->referrer_discount = $request->referrer_discount;
-        $product->referal_discount = $request->referal_discount;
-        $product->buyer_discount = $request->buyer_discount;
-        $product->earn_points = $request->earn_points;
+        $product->referrer_discount = $request->referrer_discount ?? 0;
+        $product->referal_discount = $request->referal_discount ?? 0;
+        $product->buyer_discount = $request->buyer_discount ?? 0;
+        $product->earn_points = $request->earn_points ?? 0;
         $product->featured = $request->featured;
         $product->is_active = $request->is_active;
+        $product->manual_only = $request->has('manual_only') ? true : false;
+        $product->whatsapp_contact = $request->whatsapp_contact;
         $product->image = "https://via.placeholder.com/640x480.png/000077?text=quas";
         $product->save();
         if($request->has('image')){
@@ -93,7 +98,7 @@ class ProductController extends Controller
     public function show(string $id)
     {
         $categories = Category::all();
-        $product = Product::findOrFail($id);
+        $product = Product::with('activeOffers')->findOrFail($id);
         return view('admin.products.show', ['product' => $product, 'categories' => $categories]);
     }
 
@@ -119,14 +124,16 @@ class ProductController extends Controller
             'price' => 'required|numeric',
             'category_id' => 'required|exists:categories,id',
             'country_id' => 'required|exists:countries,id',
-            'discount' => 'required|numeric',
+            'discount' => 'nullable|numeric',
+            'sorting' => 'nullable|integer|min:0',
             'description' => 'required',
-            'vat' => 'required|numeric',
+            'vat' => 'nullable|numeric',
             'stock' => 'required|numeric',
-            'referrer_discount' => 'required|numeric',
-            'referal_discount' => 'required|numeric',
-            'buyer_discount' => 'required|numeric',
-            'earn_points' => 'required|numeric',
+            'referrer_discount' => 'nullable|numeric',
+            'referal_discount' => 'nullable|numeric',
+            'buyer_discount' => 'nullable|numeric',
+            'earn_points' => 'nullable|numeric',
+            'whatsapp_contact' => 'nullable|string|max:20',
             'image.*' => 'image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
         ]);
 
@@ -135,16 +142,19 @@ class ProductController extends Controller
         $product->price = $request->price;
         $product->category_id = $request->category_id;
         $product->country_id = $request->country_id;
-        $product->discount = $request->discount;
+        $product->discount = $request->discount ?? 0;
+        $product->sorting = $request->sorting ?? 0;
         $product->description = $request->description;
-        $product->vat = $request->vat;
+        $product->vat = $request->vat ?? 0;
         $product->stock = $request->stock;
-        $product->referrer_discount = $request->referrer_discount;
-        $product->referal_discount = $request->referal_discount;
-        $product->buyer_discount = $request->buyer_discount;
-        $product->earn_points = $request->earn_points;
+        $product->referrer_discount = $request->referrer_discount ?? 0;
+        $product->referal_discount = $request->referal_discount ?? 0;
+        $product->buyer_discount = $request->buyer_discount ?? 0;
+        $product->earn_points = $request->earn_points ?? 0;
         $product->featured = $request->featured;
         $product->is_active = $request->is_active;
+        $product->manual_only = $request->has('manual_only') ? true : false;
+        $product->whatsapp_contact = $request->whatsapp_contact;
         $product->save();
         if($request->has('image')){
             $files = $request->file('image');
@@ -163,7 +173,18 @@ class ProductController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $product = Product::findOrFail($id);
+        $product->delete();
+        // Delete associated media
+        foreach ($product->media as $media) {
+            // Delete the media file from storage
+            if (file_exists(public_path($media->file_path))) {
+                unlink(public_path($media->file_path));
+            }
+            // Delete the media record from the database
+            $media->delete();
+        }
+        return redirect()->route('admin.products.index')->with('success', 'Product deleted successfully');
     }
 
     public function filter(Request $request)

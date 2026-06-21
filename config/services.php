@@ -35,4 +35,16 @@ return [
         ],
     ],
 
+    'trax' => [
+        'webhook_secret' => env('TRAX_WEBHOOK_SECRET'),
+    ],
+
+    'tcs' => [
+        'webhook_secret' => env('TCS_WEBHOOK_SECRET'),
+    ],
+
+    'leopards' => [
+        'webhook_secret' => env('LEOPARDS_WEBHOOK_SECRET'),
+    ],
+
 ];

@@ -24,6 +24,10 @@
                         <button type="submit"
                             class="text-white bg-black px-5 py-2 rounded-lg hover:bg-gray-800">Search</button>
                     </form>
+                    <a href="{{ route('admin.product-offers.index') }}"
+                        class="px-5 text-white bg-orange-500 py-2 rounded-lg hover:bg-orange-600 flex items-center gap-2">
+                        <i class="fas fa-tags"></i> Offers
+                    </a>
                     <a href="{{ route('admin.products.create') }}"
                         class="px-5 text-white bg-black py-2 rounded-lg hover:bg-gray-800">Create</a>
                 </div>
@@ -46,6 +50,9 @@
                                     <th scope="col"
                                         class="px-2 py-2 text-left text-xs font-normal text-gray-700 sm:px-4 sm:py-3.5">
                                         Status</th>
+                                    <th scope="col"
+                                        class="px-2 py-2 text-left text-xs font-normal text-gray-700 sm:px-4 sm:py-3.5">
+                                        Visibility</th>
                                     <th scope="col"
                                         class="px-2 py-2 text-left text-xs font-normal text-gray-700 sm:px-4 sm:py-3.5">
                                         Discount</th>
@@ -71,9 +78,14 @@
                                     <tr>
                                         <td class="whitespace-nowrap px-2 py-4 text-sm sm:px-4 sm:py-4">
                                             <div class="flex items-center space-x-4">
-                                                <img class="h-10 w-10 rounded-full object-cover"
-                                                    src="https://images.unsplash.com/photo-1628157588553-5eeea00af15c?ixlib=rb-4.0.3&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1160&amp;q=80"
-                                                    alt="Product Image" />
+                                                @if ($item->media->isNotEmpty())
+                                                    <img class="h-10 w-10 rounded-full object-cover"
+                                                        src="{{ asset($item->media->first()->file_path) }}"
+                                                        alt="Product Image" />
+                                                @else
+                                                    <img class="h-10 w-10 rounded-full object-cover"
+                                                        src="https://via.placeholder.com/40" alt="No Image" />
+                                                @endif
                                                 <div>
                                                     <div class="text-sm font-medium text-gray-900">
                                                         {{ $item->name }}
@@ -89,6 +101,19 @@
                                         </td>
                                         <td class="whitespace-nowrap px-2 py-2 text-sm sm:px-4 sm:py-4">
                                             <x-status-chip status="{{ $item->is_active ? 'Active' : 'Inactive' }}" />
+                                        </td>
+                                        <td class="whitespace-nowrap px-2 py-2 text-sm sm:px-4 sm:py-4">
+                                            @if ($item->manual_only)
+                                                <span
+                                                    class="inline-flex items-center px-2 py-1 text-xs font-medium rounded-full bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200">
+                                                    <i class="fas fa-user-tie mr-1"></i> Manual Only
+                                                </span>
+                                            @else
+                                                <span
+                                                    class="inline-flex items-center px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                                                    <i class="fas fa-globe mr-1"></i> Website
+                                                </span>
+                                            @endif
                                         </td>
                                         <td class="whitespace-nowrap px-2 py-2 text-sm sm:px-4 sm:py-4">
                                             {{ $item->discount }}%
@@ -113,14 +138,21 @@
                                             <a href="{{ route('admin.products.edit', $item->id) }}">
                                                 <i class="fa fa-pencil"></i>
                                             </a>
-                                            <a href="http://">
-                                                <i class="fa fa-trash"></i>
-                                            </a>
+                                            <form action="{{ route('admin.products.destroy', $item->id) }}" method="POST"
+                                                onsubmit="return confirm('Are you sure you want to delete this product?');"
+                                                style="display:inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit"
+                                                    style="background:none;border:none;padding:0;cursor:pointer;">
+                                                    <i class="fa fa-trash text-red-600"></i>
+                                                </button>
+                                            </form>
                                         </td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td class="whitespace nowrap px-2 py-4 text-sm sm:px-4 sm:py-4" colspan="9">
+                                        <td class="whitespace nowrap px-2 py-4 text-sm sm:px-4 sm:py-4" colspan="10">
                                             No products found</td>
                                     </tr>
                                 @endforelse

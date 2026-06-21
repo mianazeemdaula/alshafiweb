@@ -60,6 +60,12 @@
                         <x-input name="vat" value="{{ old('vat') }}" />
                     </div>
 
+                    <div class="flex flex-col gap-2">
+                        <x-label>WhatsApp Contact (optional)</x-label>
+                        <x-input name="whatsapp_contact" value="{{ old('whatsapp_contact') }}"
+                            placeholder="e.g. 923001234567" />
+                    </div>
+
                     <div class="flex flex-col gap-2 ">
                         <x-label>Stock</x-label>
                         <x-input name="stock" value="{{ old('stock') }}" />
@@ -94,12 +100,32 @@
                             <option value="0">No</option>
                         </x-select>
                     </div>
+
+                    <div class="flex flex-col gap-2 ">
+                        <x-label>Sorting Order</x-label>
+                        <x-input name="sorting" type="number" min="0" value="{{ old('sorting', 0) }}" />
+                    </div>
+
                     <div class="flex flex-col gap-2 ">
                         <x-label>Active</x-label>
                         <x-select name="is_active">
                             <option value="1">Active</option>
                             <option value="0">Inactive</option>
                         </x-select>
+                    </div>
+
+                    <div class="flex flex-col gap-2">
+                        <x-label>Visibility</x-label>
+                        <div class="flex items-center gap-3 mt-2">
+                            <input type="checkbox" name="manual_only" id="manual_only"
+                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                                {{ old('manual_only') ? 'checked' : '' }}>
+                            <label for="manual_only" class="text-sm text-gray-700 dark:text-gray-300">
+                                Manual Orders Only (Hidden from website)
+                            </label>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-1">Check this to hide the product from website and show only in
+                            manual orders</p>
                     </div>
                 </div>
                 <div>
@@ -129,7 +155,8 @@
 @endsection
 
 @section('head')
-    <script src="https://cdn.tiny.cloud/1/kput55tw7sf7m8nadh5lth5ghsdshrjgwfbj9ju8hcdigf4a/tinymce/7/tinymce.min.js"
+    <script
+        src="https://cdn.tiny.cloud/1/{{ config('app.env') === 'production' ? 'qxsiixa2mkq6u711kgpc20nafpny7wpufinm5gdvvytgryxh' : env('TINYMCE_API_KEY') }}/tinymce/7/tinymce.min.js"
         referrerpolicy="origin"></script>
     <script>
         tinymce.init({

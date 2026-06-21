@@ -1,4 +1,511 @@
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700&family=Noto+Sans+Urdu:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
 @import "@fortawesome/fontawesome-free/css/all.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Theme variables */
+:root {
+    /* Light theme variables (Organic Linen & Forest Green) */
+    --bg-primary: #fdfcf9;
+    --bg-secondary: #f6f3eb;
+    --bg-tertiary: #edeae0;
+    --bg-hover: #e5e0d4;
+    --text-primary: #1b221e;
+    --text-secondary: #48544f;
+    --text-muted: #8d9a94;
+    --border-color: #e2dcce;
+    --border-light: #ece7db;
+    --shadow-color: rgba(27, 34, 30, 0.05);
+    --shadow-hover: rgba(27, 34, 30, 0.08);
+    --accent-blue: #326273;
+    --accent-blue-hover: #21404c;
+    --accent-green: #2d6a4f;
+    --accent-green-hover: #1b4332;
+    --accent-red: #c94a4a;
+    --accent-orange: #d4a373;
+    --accent-gold: #c5a059;
+}
+
+/* Dark theme variables (Dark Pine & Sage) */
+.dark {
+    --bg-primary: #0c120f;
+    --bg-secondary: #141f1a;
+    --bg-tertiary: #1b2c24;
+    --bg-hover: #263d33;
+    --text-primary: #e6ece8;
+    --text-secondary: #a3b2aa;
+    --text-muted: #72847b;
+    --border-color: #1e332a;
+    --border-light: #284438;
+    --shadow-color: rgba(0, 0, 0, 0.4);
+    --shadow-hover: rgba(0, 0, 0, 0.5);
+    --accent-blue: #70a9a1;
+    --accent-blue-hover: #4e878c;
+    --accent-green: #52b788;
+    --accent-green-hover: #40916c;
+    --accent-red: #f87171;
+    --accent-orange: #e9c46a;
+    --accent-gold: #c5a059;
+}
+
+/* Base theme styles */
+body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', serif;
+}
+
+/* Enhanced theme toggle styles */
+.theme-toggle {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.4, 1);
+}
+
+.dark .theme-toggle {
+}
+
+.theme-toggle:hover {
+    transform: scale(1.05);
+}
+
+.dark .theme-toggle:hover {
+}
+
+.theme-toggle i {
+    font-size: 1.1rem;
+    transition: transform 0.3s ease;
+}
+
+.theme-toggle:hover i {
+    transform: rotate(180deg);
+}
+
+/* Smooth transitions for all theme changes */
+*, *::before, *::after {
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+/* Header theming */
+.header-section {
+    background-color: var(--bg-primary);
+    border-color: var(--border-color);
+    color: var(--text-primary);
+}
+
+.header-link {
+    color: var(--text-secondary);
+    transition: color 0.2s ease;
+}
+
+.header-link:hover {
+    color: var(--text-primary);
+    background-color: var(--bg-hover);
+}
+
+/* Product card theming */
+.product-card {
+    background-color: var(--bg-primary);
+    border-color: var(--border-light);
+    box-shadow: 0 1px 3px var(--shadow-color);
+    transition: all 0.3s ease;
+}
+
+.product-card:hover {
+    box-shadow: 0 4px 12px var(--shadow-hover);
+    transform: translateY(-2px);
+}
+
+.product-price {
+    color: var(--accent-green);
+}
+
+.product-original-price {
+    color: var(--text-muted);
+}
+
+/* Blog card theming */
+.blog-card {
+    background-color: var(--bg-secondary);
+    border-color: var(--border-light);
+    transition: all 0.3s ease;
+}
+
+.blog-card:hover {
+    box-shadow: 0 4px 12px var(--shadow-hover);
+}
+
+/* Form elements theming */
+input, select, textarea {
+    background-color: var(--bg-secondary);
+    border-color: var(--border-color);
+    color: var(--text-primary);
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: var(--accent-blue);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Button theming */
+.btn-primary {
+    background-color: var(--accent-blue);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: var(--accent-blue-hover);
+}
+
+.btn-success {
+    background-color: var(--accent-green);
+    color: white;
+}
+
+.btn-success:hover {
+    background-color: var(--accent-green-hover);
+}
+
+/* Section backgrounds */
+.section-bg {
+    background-color: var(--bg-secondary);
+}
+
+.section-bg-alt {
+    background-color: var(--bg-tertiary);
+}
+
+/* Global Font Awesome icon styles - ensures icons work everywhere */
+.fa,
+.fas,
+.far,
+.fab,
+.fad,
+.fal,
+[class^="fa-"],
+[class*=" fa-"] {
+    font-family: "Font Awesome 6 Free", "Font Awesome 6 Pro", "Font Awesome 6 Brands" !important;
+    font-weight: 900 !important;
+    speak: none;
+    font-style: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Brand icons specific weight */
+.fa-brands,
+.fab {
+    font-weight: 400 !important;
+}
+
+/* Regular icons specific weight */
+.fa-regular,
+.far {
+    font-weight: 400 !important;
+}
+
+/* Arabic language font configuration */
+html[lang="ar"] body,
+html[lang="ar"] p,
+html[lang="ar"] div,
+html[lang="ar"] span,
+html[lang="ar"] h1,
+html[lang="ar"] h2,
+html[lang="ar"] h3,
+html[lang="ar"] h4,
+html[lang="ar"] h5,
+html[lang="ar"] h6,
+html[lang="ar"] a,
+html[lang="ar"] button,
+html[lang="ar"] input,
+html[lang="ar"] textarea,
+html[lang="ar"] select,
+html[lang="ar"] label,
+html[lang="ar"] .text-sm,
+html[lang="ar"] .text-base,
+html[lang="ar"] .text-lg,
+html[lang="ar"] .text-xl,
+html[lang="ar"] .text-2xl {
+    font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+}
+
+/* Urdu language font configuration */
+html[lang="ur"] body,
+html[lang="ur"] p,
+html[lang="ur"] div,
+html[lang="ur"] span,
+html[lang="ur"] h1,
+html[lang="ur"] h2,
+html[lang="ur"] h3,
+html[lang="ur"] h4,
+html[lang="ur"] h5,
+html[lang="ur"] h6,
+html[lang="ur"] a,
+html[lang="ur"] button,
+html[lang="ur"] input,
+html[lang="ur"] textarea,
+html[lang="ur"] select,
+html[lang="ur"] label,
+html[lang="ur"] .text-sm,
+html[lang="ur"] .text-base,
+html[lang="ur"] .text-lg,
+html[lang="ur"] .text-xl,
+html[lang="ur"] .text-2xl {
+    font-family: 'Noto Sans Urdu', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+}
+
+/* Ensure Font Awesome icons maintain their font family even in Arabic and Urdu */
+html[lang="ar"] .fa,
+html[lang="ar"] .fas,
+html[lang="ar"] .far,
+html[lang="ar"] .fab,
+html[lang="ar"] .fad,
+html[lang="ar"] .fal,
+html[lang="ar"] [class^="fa-"],
+html[lang="ar"] [class*=" fa-"],
+html[lang="ur"] .fa,
+html[lang="ur"] .fas,
+html[lang="ur"] .far,
+html[lang="ur"] .fab,
+html[lang="ur"] .fad,
+html[lang="ur"] .fal,
+html[lang="ur"] [class^="fa-"],
+html[lang="ur"] [class*=" fa-"] {
+    font-family: "Font Awesome 6 Free", "Font Awesome 6 Pro", "Font Awesome 6 Brands" !important;
+}
+
+/* Arabic text styling */
+html[lang="ar"] .arabic-text,
+html[lang="ur"] .arabic-text {
+    font-weight: 400;
+    line-height: 1.6;
+}
+
+html[lang="ar"] .arabic-heading,
+html[lang="ur"] .arabic-heading {
+    font-weight: 600;
+}
+
+/* RTL text alignment */
+html[lang="ar"] .rtl-text,
+html[lang="ur"] .rtl-text {
+    text-align: right;
+}
+
+/* RTL flex direction */
+html[lang="ar"] .rtl-flex,
+html[lang="ur"] .rtl-flex {
+    flex-direction: row-reverse;
+}
+
+/* Ensure icons display properly in all contexts */
+i[class^="fa-"],
+i[class*=" fa-"] {
+    display: inline-block;
+    width: auto;
+    height: 1em;
+    vertical-align: -0.125em;
+}
+
+/* Fix icon alignment in buttons and links */
+button i,
+a i {
+    margin-right: 0.5rem;
+}
+
+/* RTL icon spacing */
+html[lang="ar"] button i,
+html[lang="ar"] a i,
+html[lang="ur"] button i,
+html[lang="ur"] a i {
+    margin-right: 0;
+    margin-left: 0.5rem;
+}
+
+/* Social media icons specific styling */
+.social-icon {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.social-icon i {
+    width: 1.2em;
+    text-align: center;
+}
+
+/* Product card button icon centering */
+.quantity-btn,
+.add-to-cart-btn {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.quantity-btn i,
+.add-to-cart-btn i {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    margin: 0 !important;
+}
+
+/* Additional Font Awesome CDN fallback styles */
+@supports not (font-family: "Font Awesome 6 Free") {
+    .fa,
+    .fas,
+    .far,
+    .fab,
+    .fad,
+    .fal,
+    [class^="fa-"],
+    [class*=" fa-"] {
+        font-family: "Font Awesome 5 Free", "Font Awesome 5 Pro", "Font Awesome 5 Brands", "FontAwesome" !important;
+    }
+}
+
+/* Text truncation utilities */
+.line-clamp-1 {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Responsive product card improvements */
+@media (max-width: 640px) {
+    .product-card-mobile {
+        min-height: auto;
+    }
+    
+    .product-card-image {
+        height: 8rem; /* 128px */
+    }
+}
+
+/* Custom scrollbar for dark mode */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted);
+}
+
+/* Notification styles for dark mode */
+.cart-notification {
+    backdrop-filter: blur(10px);
+    border: 1px solid;
+}
+
+.cart-notification.bg-green-500 {
+    border-color: rgba(34, 197, 94, 0.3);
+}
+
+.cart-notification.bg-red-500 {
+    border-color: rgba(239, 68, 68, 0.3);
+}
+
+.cart-notification.bg-blue-500 {
+    border-color: rgba(59, 130, 246, 0.3);
+}
+
+/* Loading states for dark mode */
+.add-to-cart-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.dark .add-to-cart-btn:disabled {
+    opacity: 0.5;
+}
+
+/* Pagination styles for dark mode */
+.dark .pagination {
+    background-color: var(--bg-secondary);
+    border-color: var(--border-color);
+}
+
+.dark .pagination a,
+.dark .pagination span {
+    background-color: var(--bg-primary);
+    border-color: var(--border-color);
+    color: var(--text-primary);
+}
+
+.dark .pagination a:hover {
+    background-color: var(--bg-hover);
+}
+
+/* Line clamp utilities for text truncation */
+.line-clamp-1 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+}
+
+.line-clamp-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+
+.line-clamp-3 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+}
+
+/* Responsive product card improvements */
+@media (max-width: 640px) {
+    .product-card-mobile {
+        min-height: auto;
+    }
+    
+    .product-card-image {
+        height: 8rem; /* 128px */
+    }
+}

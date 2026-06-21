@@ -6,7 +6,14 @@
             <form action="{{ route('admin.posts.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="main grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-4">
-
+                    <div class="flex flex-col gap-2">
+                        <x-label>Country</x-label>
+                        <x-select name="country_id">
+                            @foreach ($countries as $country)
+                                <option value="{{ $country->id }}">{{ $country->name }}</option>
+                            @endforeach
+                        </x-select>
+                    </div>
                     <div class="flex flex-col gap-2">
                         <x-label>Category</x-label>
                         <x-select name="category_id">
@@ -37,6 +44,21 @@
                     <textarea name="content" id="mytextarea" cols="30" rows="10"
                         class="w-full border border-gray-300 rounded-md p-2">{{ old('content') }}</textarea>
                 </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-4 pb-4">
+                    <div class="flex flex-col gap-2">
+                        <x-label>Meta Title</x-label>
+                        <x-input name="meta_title" value="{{ old('meta_title') }}" placeholder="Meta Title" />
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <x-label>Meta Description</x-label>
+                        <x-input name="meta_description" value="{{ old('meta_description') }}"
+                            placeholder="Meta Description" />
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <x-label>Meta Keywords</x-label>
+                        <x-input name="meta_keywords" value="{{ old('meta_keywords') }}" placeholder="Meta Keywords" />
+                    </div>
+                </div>
                 <div class="flex py-6 space-x-4">
                     <button type="submit"
                         class="font-poppins py-2 px-4 rounded-md bg-green-500 text-white hover:bg-green-600 cursor-pointer">Create
@@ -51,7 +73,7 @@
 @endsection
 
 @section('head')
-    <script src="https://cdn.tiny.cloud/1/kput55tw7sf7m8nadh5lth5ghsdshrjgwfbj9ju8hcdigf4a/tinymce/7/tinymce.min.js"
+    <script src="https://cdn.tiny.cloud/1/qxsiixa2mkq6u711kgpc20nafpny7wpufinm5gdvvytgryxh/tinymce/7/tinymce.min.js"
         referrerpolicy="origin"></script>
     <script>
         tinymce.init({

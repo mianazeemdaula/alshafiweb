@@ -27,6 +27,8 @@ class User extends Authenticatable
         'level_id',
         'referrer',
         'extra_discount',
+        'shipment_price',
+        'team_leader_id',
     ];
 
     /**
@@ -49,6 +51,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'shipment_price' => 'decimal:2',
         ];
     }
 
@@ -68,6 +71,140 @@ class User extends Authenticatable
     {
         return $this->hasMany(ReferrProduct::class);
     }
-    
 
+    /**
+     * Orders placed via this user's shared referral links
+     */
+    public function referredOrders()
+    {
+        return $this->hasMany(Order::class, 'referrer_id');
+    }
+    
+    public function userLevel()
+    {
+        return $this->belongsTo(UserLevel::class, 'level_id');
+    }
+
+    /**
+     * Team leader relationship - the team leader this user reports to
+     */
+    public function teamLeader()
+    {
+        return $this->belongsTo(User::class, 'team_leader_id');
+    }
+
+    /**
+     * Team members relationship - order takers assigned to this team leader
+     */
+    public function teamMembers()
+    {
+        return $this->hasMany(User::class, 'team_leader_id');
+    }
+
+    /**
+     * Manual orders created by this order taker
+     */
+    public function manualOrders()
+    {
+        return $this->hasMany(Order::class, 'order_taker_id');
+    }
+
+    /**
+     * Bonuses earned by this order taker
+     */
+    public function bonuses()
+    {
+        return $this->hasMany(Bonus::class, 'order_taker_id');
+    }
+
+    /**
+     * Penalties received by this specialist
+     */
+    public function specialistPenalties()
+    {
+        return $this->hasMany(SpecialistPenalty::class, 'specialist_id');
+    }
+
+    /**
+     * Orders created by this specialist
+     */
+    public function specialistOrders()
+    {
+        return $this->hasMany(Order::class, 'order_taker_id')->where('order_source', 'specialist');
+    }
+
+    /**
+     * Check if user is a label printer
+     */
+    public function isLabelPrinter()
+    {
+        return $this->hasRole('label_printer');
+    }
+
+    /**
+     * Check if user is an order taker
+     */
+    public function isOrderTaker()
+    {
+        return $this->hasRole('order_taker');
+    }
+
+    /**
+     * Check if user is an admin
+     */
+    public function isAdmin()
+    {
+        return $this->hasRole('admin');
+    }
+
+    /**
+     * Check if user is a web order taker
+     */
+    public function isWebOrderTaker()
+    {
+        return $this->hasRole('web_order_taker');
+    }
+
+    /**
+     * Check if user is a specialist
+     */
+    public function isSpecialist()
+    {
+        return $this->hasRole('specialist');
+    }
+    
+    protected static function booted()
+    {
+        static::creating(function ($user) {
+            if (empty($user->ref_code)) {
+                do {
+                    $code = strtoupper(substr(md5(uniqid(mt_rand(), true)), 0, 8));
+                } while (self::where('ref_code', $code)->exists());
+                $user->ref_code = $code;
+            }
+        });
+    }
+
+    public function getTotalShoppingAttribute()
+    {
+        return $this->orders()->sum('total');
+    }
+
+    public function getLevelByShopping()
+    {
+        $shopping = $this->total_shopping;
+        return UserLevel::where('min_points', '<=', $shopping)
+            ->orderByDesc('min_points')
+            ->first();
+    }
+    
+    public function getLevelBenefitsAttribute()
+    {
+        $level = $this->getLevelByShopping();
+        if (!$level) return null;
+        return [
+            'discount' => $level->discount,
+            'cashback' => $level->cashback,
+        ];
+    }
 }

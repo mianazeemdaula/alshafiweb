@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('iso3', 3);
             $table->string('phone_code');
             $table->string('currency',10);
-            $table->string('currency_symbol',3);
+            $table->string('currency_symbol',10);
             $table->timestamps();
         });
     }

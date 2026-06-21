@@ -22,6 +22,7 @@ class ProductFactory extends Factory
             'sku' => "SKU-".Str::upper($this->faker->unique()->word),
             'description' => $this->faker->text,
             'featured' => $this->faker->boolean,
+            'sorting' => $this->faker->numberBetween(0, 100),
             'category_id' => $this->faker->numberBetween(1, 10),
             'country_id' => $this->faker->numberBetween(1, 2),
             'discount' => $this->faker->randomFloat(2, 1, 100),

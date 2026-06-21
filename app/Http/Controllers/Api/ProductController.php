@@ -8,15 +8,22 @@ use App\Models\Product;
 
 class ProductController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::all();
+        $country = $request->country ?? session('country', 'pakistan');
+        $products = Product::whereHas('country', function($query) use ($country) {
+            $query->where('name', 'like', '%' . $country . '%');
+        })->get();
         return response()->json($products, 200);
     }
 
-    public function featured()
+    public function featured(Request $request)
     {
-        $products = Product::where('featured', true)->get();
+        $country = $request->country ?? session('country', 'pakistan');
+        $products = Product::where('featured', true)
+            ->whereHas('country', function($query) use ($country) {
+                $query->where('name', 'like', '%' . $country . '%');
+            })->get();
         return response()->json($products, 200);
     }
 }

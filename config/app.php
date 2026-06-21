@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Application Name
@@ -86,6 +85,41 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Available Locales
+    |--------------------------------------------------------------------------
+    |
+    | These are the available locales for the application
+    |
+    */
+
+    'available_locales' => [
+        'en' => ['name' => 'English', 'flag' => '��'],
+        'ar' => ['name' => 'Arabic', 'flag' => '🇸🇦'],
+        'ur' => ['name' => 'Urdu', 'flag' => '��'],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Available Countries
+    |--------------------------------------------------------------------------
+    |
+    | These are the available countries for the application
+    |
+    */
+
+    'available_countries' => [
+        'PK' => ['name' => 'Pakistan', 'currency' => 'PKR', 'locale' => 'ur'],
+        'BH' => ['name' => 'Bahrain', 'currency' => 'BHD', 'locale' => 'ar'],
+        'KW' => ['name' => 'Kuwait', 'currency' => 'KWD', 'locale' => 'ar'],
+        'OM' => ['name' => 'Oman', 'currency' => 'OMR', 'locale' => 'ar'],
+        'QA' => ['name' => 'Qatar', 'currency' => 'QAR', 'locale' => 'ar'],
+        'SA' => ['name' => 'Saudi Arabia', 'currency' => 'SAR', 'locale' => 'ar'],
+        'AE' => ['name' => 'United Arab Emirates', 'currency' => 'AED', 'locale' => 'ar'],
+        'WW' => ['name' => 'Rest of the World', 'currency' => 'USD', 'locale' => 'en'],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Encryption Key
     |--------------------------------------------------------------------------
     |
@@ -123,4 +157,15 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | WhatsApp Configuration
+    |--------------------------------------------------------------------------
+    |
+    | WhatsApp number for customer support. Include country code without + sign.
+    | Example: 923001234567 for Pakistan number
+    |
+    */
+
+    'whatsapp_number' => env('WHATSAPP_NUMBER', '+923253257878'),
 ];

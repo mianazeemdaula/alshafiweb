@@ -31,7 +31,8 @@ class CheckoutController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'mobile' => 'required|string|max:18|unique:users',
+            // Enforce mobile format starting with 03 and 11 digits total (e.g., 03123456789)
+            'mobile' => ['required', 'regex:/^03[0-9]{9}$/', 'unique:users'],
             'password' => 'required|string|min:8|confirmed',
         ]);
 
@@ -50,6 +51,9 @@ class CheckoutController extends Controller
         ]);
 
         Auth::login($user);
+
+        // assign user role
+        $user->assignRole('user');
 
         return response()->json([
             'success' => true,
@@ -92,31 +96,26 @@ class CheckoutController extends Controller
      */
     public function placeOrder(Request $request): JsonResponse
     {
-        if (!Auth::check()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Please login to place an order'
-            ], 401);
-        }
-
+        // Allow guest checkout: require minimal shipping info (name, phone, city, address)
         // If last_name is not provided, use first_name for both
-        if (empty($request->shipping['last_name'])) {
-            $request->merge([
-                'shipping' => array_merge($request->shipping, [
-                    'last_name' => $request->shipping['first_name'] ?? ''
-                ])
-            ]);
+        if (empty($request->input('shipping.last_name'))) {
+            $shipping = $request->input('shipping', []);
+            $shipping['last_name'] = $shipping['first_name'] ?? '';
+            $request->merge(['shipping' => $shipping]);
         }
 
         $validator = Validator::make($request->all(), [
             'shipping.first_name' => 'required|string|max:255',
-            'shipping.last_name' => 'required|string|max:255',
-            'shipping.phone' => 'required|string|max:20',
+            // Enforce phone format starting with 03 and 11 digits total (e.g., 03123456789)
+            'shipping.phone' => ['required', 'regex:/^03[0-9]{9}$/'],
             'shipping.address' => 'required|string|max:500',
             'shipping.city' => 'required|string|max:100',
             'shipping.postal_code' => 'nullable|string|max:20',
             'shipping.notes' => 'nullable|string|max:1000',
             'payment_method' => 'required|in:cod',
+        ], [
+            'shipping.phone.regex' => 'Phone number must start with 03 and contain 11 digits, e.g. 03123456789',
+            'mobile.regex' => 'Mobile number must start with 03 and contain 11 digits, e.g. 03123456789',
         ]);
 
         if ($validator->fails()) {
@@ -180,20 +179,43 @@ class CheckoutController extends Controller
             $orderNumber = 'ORD-' . date('Ymd') . '-' . str_pad(rand(1, 9999), 4, '0', STR_PAD_LEFT);
 
             // Create order
-            $order = Order::create([
+            $orderData = [
                 'number' => $orderNumber,
-                'user_id' => Auth::id(),
                 'payment_method_id' => $paymentMethod->id,
                 'status' => 'open',
                 'payment_status' => 'pending',
-                'street_address' => $request->shipping['address'],
+                'street_address' => $request->input('shipping.address'),
+                'shipping_address' => $request->input('shipping'),
                 'city_id' => $city->id, // You might want to make this dynamic based on user selection
-                'zip_code' => $request->shipping['postal_code'] ? (int)$request->shipping['postal_code'] : 0,
+                'country_id' => session('country_id'),
+                'zip_code' => $request->input('shipping.postal_code') ? (int)$request->input('shipping.postal_code') : 0,
                 'shipping_cost' => 0, // Free shipping
                 'discount' => 0,
-                'total' => (int)(floatval(str_replace(['$', ','], '', $cartTotal)) * 100), // Convert to cents, removing any currency symbols
-                'extra_note' => $request->shipping['notes'] ?? null,
-            ]);
+                'total' => floatval(str_replace(['RS.', 'Rs.', '$', ',', ' '], '', $cartTotal)), // Keep as rupees
+                'extra_note' => $request->input('shipping.notes') ?? null,
+                'order_source' => 'website', // Orders from website checkout
+                'order_taker_id' => null, // No order taker for website orders
+            ];
+
+            // If user is authenticated, associate; otherwise leave as guest order
+            if (Auth::check()) {
+                $orderData['user_id'] = Auth::id();
+            } else {
+                $orderData['user_id'] = null;
+                $orderData['customer_name'] = $request->input('shipping.first_name');
+                $orderData['customer_phone'] = $request->input('shipping.phone');
+            }
+
+            // Attach referral if a referral session exists
+            if (session()->has('referral_user_id')) {
+                $referrerId = session('referral_user_id');
+                // Don't let a user refer themselves
+                if (!Auth::check() || Auth::id() !== $referrerId) {
+                    $orderData['referrer_id'] = $referrerId;
+                }
+            }
+
+            $order = Order::create($orderData);
 
             // Create order details and update stock
             foreach ($cartItems as $item) {
@@ -202,9 +224,8 @@ class CheckoutController extends Controller
                 OrderDetail::create([
                     'order_id' => $order->id,
                     'product_id' => $product->id,
-                    'quantity' => $item['quantity'],
+                    'qty' => $item['quantity'],
                     'price' => $product->price,
-                    'total' => $product->price * $item['quantity'],
                 ]);
 
                 // Update product stock and sales count
@@ -215,6 +236,9 @@ class CheckoutController extends Controller
             // Clear cart
             Cart::clear();
 
+            // Clear referral session after order is placed
+            session()->forget(['referral_code', 'referral_user_id', 'referral_product_id']);
+
             return response()->json([
                 'success' => true,
                 'message' => 'Order placed successfully',
@@ -224,7 +248,7 @@ class CheckoutController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to place order. Please try again.'
+                'message' => 'An error occurred while placing the order: ' . $e->getMessage()
             ], 500);
         }
     }
@@ -234,15 +258,25 @@ class CheckoutController extends Controller
      */
     public function orderConfirmation($orderId)
     {
-        $order = Order::with(['orderDetails.product', 'user'])
-                     ->where('id', $orderId)
-                     ->where('user_id', Auth::id())
-                     ->first();
+        $order = Order::with(['orderDetails.product', 'user'])->find($orderId);
 
         if (!$order) {
             abort(404, 'Order not found');
         }
 
+        // If the order belongs to an authenticated user, only that user or an admin can view it.
+        if ($order->user_id) {
+            if (!Auth::check()) {
+                abort(403, 'Forbidden');
+            }
+
+            $current = Auth::user();
+            if ($current->id !== $order->user_id && !$current->hasRole('admin')) {
+                abort(403, 'Forbidden');
+            }
+        }
+
+        // Guest orders (user_id == null) are viewable without authentication via order id.
         return view('web.order-confirmation', compact('order'));
     }
 }

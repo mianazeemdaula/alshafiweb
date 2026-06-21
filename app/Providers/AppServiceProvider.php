@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Route;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -17,6 +18,11 @@ class AppServiceProvider extends ServiceProvider
         });
         
         $this->app->alias(\App\Services\CartService::class, 'cart');
+        
+        // Register UnifiedCourierService
+        $this->app->singleton(\App\Services\UnifiedCourierService::class, function ($app) {
+            return new \App\Services\UnifiedCourierService();
+        });
     }
 
     /**
@@ -25,5 +31,11 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Schema::defaultStringLength(191);
+        
+        // Register Order observer for bonus calculation
+        \App\Models\Order::observe(\App\Observers\OrderObserver::class);
+        
+        // Register webhook middleware alias (currently not needed based on courier docs)
+        // Route::aliasMiddleware('webhook.verify', \App\Http\Middleware\VerifyWebhookSignature::class);
     }
 }

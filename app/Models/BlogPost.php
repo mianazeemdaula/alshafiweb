@@ -12,6 +12,7 @@ class BlogPost extends Model
     protected $fillable = [
         'user_id',
         'blog_category_id',
+        'country_id',
         'title',
         'slug',
         'content',
@@ -31,5 +32,10 @@ class BlogPost extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function country()
+    {
+        return $this->belongsTo(Country::class);
     }
 }

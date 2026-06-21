@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('blog_category_id');
+            $table->unsignedBigInteger('country_id')->nullable();
             $table->string('title');
             $table->string('slug')->unique();
             $table->text('content');
@@ -27,6 +28,7 @@ return new class extends Migration
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('blog_category_id')->references('id')->on('blog_categories')->onDelete('cascade');
+            $table->foreign('country_id')->references('id')->on('countries');
         });
     }
 

@@ -25,7 +25,8 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('admin.users.create');
+        $roles = \Spatie\Permission\Models\Role::all();
+        return view('admin.users.create', compact('roles'));
     }
 
     /**
@@ -35,22 +36,28 @@ class UserController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'email' => 'required|email',
-            'mobile' => 'required',
-            'ref_code' => 'required',
-            'extra_discount' => 'required',
+            'email' => 'required|email|unique:users,email',
+            'mobile' => 'required|unique:users,mobile',
+            'ref_code' => 'nullable',
+            'extra_discount' => 'nullable|numeric',
+            'shipment_price' => 'nullable|numeric|min:0',
             'password' => 'required|min:6|confirmed',
+            'role' => 'required|exists:roles,name',
         ]);
         $user = new User();
         $user->name = $request->name;
         $user->email = $request->email;
         $user->mobile = $request->mobile;
         $user->ref_code = $request->ref_code;
-        $user->extra_discount = $request->extra_discount;
+        $user->extra_discount = $request->extra_discount ?? 0;
+        $user->shipment_price = $request->shipment_price ?? 5;
         $user->password = bcrypt($request->password);
         $user->save();
+        
+        // Assign role to user
+        $user->assignRole($request->role);
 
-        return redirect()->route('admin.users.index');
+        return redirect()->route('admin.users.index')->with('success', 'User created successfully');
     }
 
     /**
@@ -67,7 +74,8 @@ class UserController extends Controller
     public function edit(string $id)
     {
         $user = User::find($id);
-        return view('admin.users.edit', ['user' => $user]);
+        $roles = \Spatie\Permission\Models\Role::all();
+        return view('admin.users.edit', compact('user', 'roles'));
     }
 
     /**
@@ -77,19 +85,26 @@ class UserController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'email' => 'required|email',
-            'mobile' => 'required',
-            'ref_code' => 'required',
-            'extra_discount' => 'required',
+            'email' => 'required|email|unique:users,email,' . $id,
+            'mobile' => 'required|unique:users,mobile,' . $id,
+            'ref_code' => 'nullable',
+            'extra_discount' => 'nullable|numeric',
+            'shipment_price' => 'nullable|numeric|min:0',
+            'role' => 'required|exists:roles,name',
         ]);
         $user = User::find($id);
         $user->name = $request->name;
         $user->email = $request->email;
         $user->mobile = $request->mobile;
         $user->ref_code = $request->ref_code;
-        $user->extra_discount = $request->extra_discount;
+        $user->extra_discount = $request->extra_discount ?? 0;
+        $user->shipment_price = $request->shipment_price ?? 5;
         $user->save();
-        return redirect()->route('admin.users.index');
+        
+        // Update user role
+        $user->syncRoles([$request->role]);
+        
+        return redirect()->route('admin.users.index')->with('success', 'User updated successfully');
     }
 
     /**
@@ -97,6 +112,16 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $user = User::find($id);
+        
+        // Prevent deleting own account
+        if ($user->id === auth()->id()) {
+            return redirect()->route('admin.users.index')->with('error', 'You cannot delete your own account');
+        }
+        
+        // Delete the user
+        $user->delete();
+        
+        return redirect()->route('admin.users.index')->with('success', 'User deleted successfully');
     }
 }

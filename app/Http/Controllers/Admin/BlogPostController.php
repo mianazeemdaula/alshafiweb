@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\BlogPost;
 use App\Models\BlogCategory;
+use App\Models\Country;
 use Illuminate\Support\Str;
 use App\Helper\MediaHelper;
 use Illuminate\Support\Facades\File;
@@ -27,7 +28,8 @@ class BlogPostController extends Controller
     public function create()
     {
         $categories = BlogCategory::all();
-        return view('admin.blogposts.create', compact('categories'));
+        $countries = Country::all();
+        return view('admin.blogposts.create', compact('categories', 'countries'));
     }
 
     /**
@@ -39,17 +41,19 @@ class BlogPostController extends Controller
             'title' => 'required',
             'content' => 'required',
             'category_id' => 'required',
+            'country_id' => 'required',
         ]);
         $post = new BlogPost();
         $post->title = $request->title;
         $post->slug = Str::slug($request->title);
         $post->content = $request->content;
         $post->blog_category_id = $request->category_id;
+        $post->country_id = $request->country_id;
         $post->user_id = auth()->user()->id;
         $post->status = 'published';
-        $post->meta_title = $request->title;
-        $post->meta_description = $request->title;
-        $post->meta_keywords = "blog, alshaafi, health";
+        $post->meta_title = $request->meta_title ?? $request->title;
+        $post->meta_description = $request->meta_description ?? $request->title;
+        $post->meta_keywords = $request->meta_keywords ?? "blog, alshaafi, health";
         if($request->hasFile('image')) {
             $post->image = MediaHelper::upload($request->file('image'));
         }
@@ -71,8 +75,9 @@ class BlogPostController extends Controller
     public function edit(string $id)
     {
         $categories = BlogCategory::all();
+        $countries = Country::all();
         $post = BlogPost::find($id);
-        return view('admin.blogposts.edit', ['post' => $post, 'categories' => $categories]);
+        return view('admin.blogposts.edit', ['post' => $post, 'categories' => $categories, 'countries' => $countries]);
     }
 
     /**
@@ -84,6 +89,7 @@ class BlogPostController extends Controller
             'title' => 'required',
             'content' => 'required',
             'category_id' => 'required',
+            'country_id' => 'required',
             'image' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
         ]);
         $post = BlogPost::find($id);
@@ -91,10 +97,11 @@ class BlogPostController extends Controller
         $post->slug = Str::slug($request->title);
         $post->content = $request->content;
         $post->blog_category_id = $request->category_id;
+        $post->country_id = $request->country_id;
         $post->status = 'published';
-        $post->meta_title = $request->title;
-        $post->meta_description = $request->title;
-        $post->meta_keywords = "blog, alshaafi, health";
+        $post->meta_title = $request->meta_title ?? $request->title;
+        $post->meta_description = $request->meta_description ?? $request->title;
+        $post->meta_keywords = $request->meta_keywords ?? "blog, alshaafi, health";
         if($request->hasFile('image')) {
             if(File::exists(public_path('uploads/' . $post->image))) {
                 File::delete(public_path('uploads/' . $post->image));

@@ -16,10 +16,10 @@ class CartController extends Controller
     {
         $request->validate([
             'product_id' => 'required|exists:products,id',
-            'quantity' => 'integer|min:1|max:10'
+            'quantity' => 'integer|min:1|max:100'
         ]);
 
-        $product = Product::find($request->product_id);
+        $product = Product::with('activeOffers')->find($request->product_id);
         $quantity = $request->quantity ?? 1;
 
         // Check if product is in stock
@@ -30,20 +30,54 @@ class CartController extends Controller
             ], 400);
         }
 
+        // Check for applicable offers
+        $bestOffer = $product->getBestOffer($quantity);
+        $finalPrice = $product->price;
+        $appliedOffer = null;
+
+        if ($bestOffer) {
+            if ($bestOffer->discount_type === 'percentage') {
+                $finalPrice = $product->price - ($product->price * $bestOffer->discount_value / 100);
+            } else {
+                $finalPrice = $product->price - $bestOffer->discount_value;
+            }
+            $finalPrice = max(0, $finalPrice); // Ensure price doesn't go negative
+            
+            $appliedOffer = [
+                'id' => $bestOffer->id,
+                'title' => $bestOffer->title,
+                'discount_type' => $bestOffer->discount_type,
+                'discount_value' => $bestOffer->discount_value,
+                'original_price' => $product->price
+            ];
+        }
+
         Cart::add(
             $product->id,
             [$product->name],
             [str()->slug($product->name)],
-            $product->price,
+            $finalPrice,
             $product->media->first()?->path ?? '',
-            $quantity
+            $quantity,
+            ['offer' => $appliedOffer]
         );
+
+        $message = 'Product added to cart successfully';
+        if ($bestOffer) {
+            if ($bestOffer->discount_type === 'percentage') {
+                $message .= sprintf(' with %d%% discount!', $bestOffer->discount_value);
+            } else {
+                $message .= sprintf(' with RS. %s discount!', number_format($bestOffer->discount_value, 0));
+            }
+        }
 
         return response()->json([
             'success' => true,
-            'message' => 'Product added to cart successfully',
+            'message' => $message,
             'cart_count' => Cart::items(),
-            'cart_total' => Cart::total()
+            'cart_total' => Cart::total(),
+            'offer_applied' => $bestOffer ? true : false,
+            'offer_details' => $appliedOffer
         ]);
     }
 

@@ -8,6 +8,16 @@
                 @method('PUT')
                 <div class="main grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-4">
                     <div class="flex flex-col gap-2">
+                        <x-label>Country</x-label>
+                        <x-select name="country_id">
+                            @foreach ($countries as $country)
+                                <option value="{{ $country->id }}"
+                                    {{ $post->country_id == $country->id ? 'selected' : '' }}>{{ $country->name }}
+                                </option>
+                            @endforeach
+                        </x-select>
+                    </div>
+                    <div class="flex flex-col gap-2">
                         <x-label>Category</x-label>
                         <x-select name="category_id">
                             @foreach ($categories as $category)
@@ -32,28 +42,44 @@
                 </div>
                 <div class="my-2">
                     <x-label>Image</x-label>
-                    <x-input type="file" name="image" />
+                    <x-input type="file" name="image" @required(false) />
                 </div>
                 <div>
                     <x-label>Content</x-label>
                     <textarea name="content" id="mytextarea" cols="30" rows="10"
                         class="w-full border border-gray-300 rounded-md p-2">{!! $post->content !!}</textarea>
                 </div>
-                <div class="flex py-6 space-x-4">
-                    <button type="submit"
-                        class="font-poppins py-2 px-4 rounded-md bg-green-500 text-white hover:bg-green-600 cursor-pointer">Update
-                        Post</button>
-
-                    <button type="submit"
-                        class="font-poppins py-2 px-4 rounded-md bg-red-500 text-white hover:bg-green-600 cursor-pointer">Cancel</button>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-4 pb-4">
+                    <div class="flex flex-col gap-2">
+                        <x-label>Meta Title</x-label>
+                        <x-input name="meta_title" value="{{ $post->meta_title }}" placeholder="Meta Title" />
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <x-label>Meta Description</x-label>
+                        <x-input name="meta_description" value="{{ $post->meta_description }}"
+                            placeholder="Meta Description" />
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <x-label>Meta Keywords</x-label>
+                        <x-input name="meta_keywords" value="{{ $post->meta_keywords }}" placeholder="Meta Keywords" />
+                    </div>
                 </div>
-            </form>
         </div>
+        <div class="flex py-6 space-x-4">
+            <button type="submit"
+                class="font-poppins py-2 px-4 rounded-md bg-green-500 text-white hover:bg-green-600 cursor-pointer">Update
+                Post</button>
+
+            <button type="submit"
+                class="font-poppins py-2 px-4 rounded-md bg-red-500 text-white hover:bg-green-600 cursor-pointer">Cancel</button>
+        </div>
+        </form>
+    </div>
     </div>
 @endsection
 
 @section('head')
-    <script src="https://cdn.tiny.cloud/1/kput55tw7sf7m8nadh5lth5ghsdshrjgwfbj9ju8hcdigf4a/tinymce/7/tinymce.min.js"
+    <script src="https://cdn.tiny.cloud/1/qxsiixa2mkq6u711kgpc20nafpny7wpufinm5gdvvytgryxh/tinymce/7/tinymce.min.js"
         referrerpolicy="origin"></script>
     <script>
         tinymce.init({
