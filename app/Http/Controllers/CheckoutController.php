@@ -206,6 +206,15 @@ class CheckoutController extends Controller
                 $orderData['customer_phone'] = $request->input('shipping.phone');
             }
 
+            // Attach referral if a referral session exists
+            if (session()->has('referral_user_id')) {
+                $referrerId = session('referral_user_id');
+                // Don't let a user refer themselves
+                if (!Auth::check() || Auth::id() !== $referrerId) {
+                    $orderData['referrer_id'] = $referrerId;
+                }
+            }
+
             $order = Order::create($orderData);
 
             // Create order details and update stock
@@ -226,6 +235,9 @@ class CheckoutController extends Controller
 
             // Clear cart
             Cart::clear();
+
+            // Clear referral session after order is placed
+            session()->forget(['referral_code', 'referral_user_id', 'referral_product_id']);
 
             return response()->json([
                 'success' => true,

@@ -20,6 +20,7 @@ class Order extends Model
         'type',
         'order_source',
         'order_taker_id',
+        'referrer_id',
         'status',
         'delivery_date',
         'payment_date',
@@ -86,6 +87,14 @@ class Order extends Model
     public function orderTaker()
     {
         return $this->belongsTo(User::class, 'order_taker_id');
+    }
+
+    /**
+     * Get the user whose referral link led to this order
+     */
+    public function referrer()
+    {
+        return $this->belongsTo(User::class, 'referrer_id');
     }
 
     /**

@@ -71,6 +71,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(ReferrProduct::class);
     }
+
+    /**
+     * Orders placed via this user's shared referral links
+     */
+    public function referredOrders()
+    {
+        return $this->hasMany(Order::class, 'referrer_id');
+    }
     
     public function userLevel()
     {

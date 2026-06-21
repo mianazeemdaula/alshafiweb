@@ -179,15 +179,18 @@ class WebController extends Controller
             ->firstOrFail();
 
         $floatingWhatsapp = $product->whatsapp_contact ?: '923253255555';
-        
-        // Check if product belongs to current country
-        // $currentCountry = session('country');
-        // if ($currentCountry) {
-        //     $country = \App\Models\Country::where('iso2', $currentCountry)->first();
-        //     if ($country && $product->country_id !== $country->id) {
-        //         abort(404);
-        //     }
-        // }
+
+        // Capture referral code from URL if present
+        if (request()->filled('ref')) {
+            $refUser = \App\Models\User::where('ref_code', request('ref'))->first();
+            if ($refUser) {
+                session([
+                    'referral_code' => $refUser->ref_code,
+                    'referral_user_id' => $refUser->id,
+                    'referral_product_id' => $product->id,
+                ]);
+            }
+        }
         
         return view('web.product', compact('product', 'floatingWhatsapp'));
     }

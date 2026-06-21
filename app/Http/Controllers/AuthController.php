@@ -23,6 +23,13 @@ class AuthController extends Controller
             'email' => 'required',
             'password' => 'required',
         ]);
+
+        // Preserve referral session across authentication (session regeneration)
+        $referralData = [
+            'referral_code' => session('referral_code'),
+            'referral_user_id' => session('referral_user_id'),
+            'referral_product_id' => session('referral_product_id'),
+        ];
         
         if (!auth()->attempt($request->only('email', 'password'))) {
             if ($request->expectsJson()) {
@@ -32,6 +39,13 @@ class AuthController extends Controller
                 ], 401);
             }
             return redirect()->back()->withErrors(['password' => 'Invalid Credentials']);
+        }
+
+        // Restore referral session after login
+        foreach ($referralData as $key => $value) {
+            if ($value !== null) {
+                session([$key => $value]);
+            }
         }
         
         if ($request->expectsJson()) {
@@ -303,6 +317,13 @@ class AuthController extends Controller
             'password' => 'required|string|min:8|confirmed',
         ]);
 
+        // Preserve referral session across authentication (session regeneration)
+        $referralData = [
+            'referral_code' => session('referral_code'),
+            'referral_user_id' => session('referral_user_id'),
+            'referral_product_id' => session('referral_product_id'),
+        ];
+
         $referrerId = null;
         if ($request->filled('ref_code')) {
             $refUser = \App\Models\User::where('ref_code', $request->ref_code)->first();
@@ -311,13 +332,10 @@ class AuthController extends Controller
             }
         }
 
-        // Generate a unique random ref_code if not provided
-        $ref_code = $request->input('ref_code');
-        if (empty($ref_code)) {
-            do {
-                $ref_code = strtoupper(substr(bin2hex(random_bytes(4)), 0, 8));
-            } while (\App\Models\User::where('ref_code', $ref_code)->exists());
-        }
+        // Generate a unique random ref_code (never reuse the referral code as the new user's own code)
+        do {
+            $newRefCode = strtoupper(substr(bin2hex(random_bytes(4)), 0, 8));
+        } while (\App\Models\User::where('ref_code', $newRefCode)->exists());
 
         $user = \App\Models\User::create([
             'name' => $request->name,
@@ -325,13 +343,20 @@ class AuthController extends Controller
             'mobile' => $request->mobile,
             'password' => \Hash::make($request->password),
             'referrer' => $referrerId,
-            'ref_code' => $ref_code,
+            'ref_code' => $newRefCode,
         ]);
 
         // Assign the 'user' role to the newly registered user
         $user->assignRole('user');
 
         auth()->login($user);
+
+        // Restore referral session after login
+        foreach ($referralData as $key => $value) {
+            if ($value !== null) {
+                session([$key => $value]);
+            }
+        }
 
         if ($request->expectsJson()) {
             return response()->json([
@@ -346,6 +371,8 @@ class AuthController extends Controller
     public function referrals()
     {
         $user = auth()->user();
+
+        // Users who registered via this user's referral code
         $referrals = \App\Models\User::where('referrer', $user->id)
             ->with(['orders' => function($q) { $q->select('user_id', 'total'); }])
             ->get()
@@ -360,6 +387,16 @@ class AuthController extends Controller
                     'earning' => $earning,
                 ];
             });
-        return view('user.referrals', compact('referrals'));
+
+        // Orders placed via this user's shared product links
+        $referredOrders = \App\Models\Order::where('referrer_id', $user->id)
+            ->with(['orderDetails.product', 'user'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $referredOrdersTotal = $referredOrders->sum('total');
+        $referredOrdersCount = $referredOrders->count();
+
+        return view('user.referrals', compact('referrals', 'referredOrders', 'referredOrdersTotal', 'referredOrdersCount'));
     }
 }

@@ -218,6 +218,22 @@
                                 {{-- <i class="fa-brands fa-whatsapp text-xl"></i> --}}
                                 <span>Chat with us</span>
                             </a>
+
+                            <!-- Share & Earn Button -->
+                            @php
+                                $shareUrl = auth()->check()
+                                    ? url('/product/' . $product->sku . '?ref=' . auth()->user()->ref_code)
+                                    : url('/product/' . $product->sku);
+                                $shareText = 'Check out ' . $product->name . ' on Alshaafi Online!';
+                            @endphp
+                            <button type="button" id="share-product-btn"
+                                class="bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white px-6 py-4 rounded-lg font-bold text-base transition-all duration-300 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transform hover:scale-105"
+                                data-share-url="{{ $shareUrl }}"
+                                data-share-text="{{ $shareText }}"
+                                title="{{ auth()->check() ? 'Share this product and earn referral rewards!' : 'Share this product' }}">
+                                <i class="fa-solid fa-share-nodes text-lg"></i>
+                                <span>{{ auth()->check() ? 'Share & Earn' : 'Share' }}</span>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -618,6 +634,48 @@
                 cartCountElements.forEach(element => {
                     element.textContent = count;
                     element.style.display = count > 0 ? 'flex' : 'none';
+                });
+            }
+
+            // Share & Earn button handler
+            const shareBtn = document.getElementById('share-product-btn');
+            if (shareBtn) {
+                shareBtn.addEventListener('click', async function() {
+                    const shareUrl = this.dataset.shareUrl;
+                    const shareText = this.dataset.shareText;
+
+                    // Try Web Share API first (mobile browsers)
+                    if (navigator.share) {
+                        try {
+                            await navigator.share({
+                                title: shareText,
+                                text: shareText,
+                                url: shareUrl,
+                            });
+                            showNotification('🎉 Shared successfully!', 'success');
+                            return;
+                        } catch (err) {
+                            // User cancelled or share failed — fall through to clipboard
+                            if (err.name === 'AbortError') return;
+                        }
+                    }
+
+                    // Fallback: copy to clipboard
+                    try {
+                        await navigator.clipboard.writeText(shareUrl);
+                        showNotification('✅ Link copied to clipboard!', 'success');
+                    } catch (err) {
+                        // Final fallback for older browsers
+                        const textarea = document.createElement('textarea');
+                        textarea.value = shareUrl;
+                        textarea.style.position = 'fixed';
+                        textarea.style.opacity = '0';
+                        document.body.appendChild(textarea);
+                        textarea.select();
+                        document.execCommand('copy');
+                        document.body.removeChild(textarea);
+                        showNotification('✅ Link copied to clipboard!', 'success');
+                    }
                 });
             }
         });
